@@ -3,15 +3,12 @@
 #include "contacts/contact.h"
 #include "contacts/client.h"
 #include "contacts/imcontact.h"
+#include "mockprotocol.h"
+#include "mockclient.h"
 
 namespace testContact
 {
     using namespace SIM;
-
-    struct testClientData : public IMContact
-    {
-
-    };
 
     void Test::init()
     {
@@ -58,7 +55,42 @@ namespace testContact
 
     void Test::testClientData()
     {
-        //Contact* c = getContacts()->contact(1, true);
+        Contact* c = getContacts()->contact(1, true);
+        test::MockProtocol p;
+        ClientPtr client = p.createClient("mock", 0);
+        test::MockUserData* d = (test::MockUserData*)c->createData(client.data());
+        test::MockUserData* d2 = (test::MockUserData*)c->getData(client.data());
+        QCOMPARE(d, d2);
+        QVERIFY(c->have(d));
+        QCOMPARE(c->size(), (unsigned int)1);
+
+        Contact* c2 = getContacts()->contact(2, true);
+        test::MockUserData* d3 = (test::MockUserData*)c2->createData(client.data());
+        c->join(c2);
+
+        QVERIFY(c->have(d3));
+    }
+
+    void Test::testClientDataPartialJoin()
+    {
+        Contact* c1 = getContacts()->contact(1, true);
+        Contact* c2 = getContacts()->contact(2, true);
+        test::MockProtocol p;
+        ClientPtr client1 = p.createClient("mock1", 0);
+        ClientPtr client2 = p.createClient("mock2", 0);
+
+        test::MockUserData* d = (test::MockUserData*)c1->createData(client1.data());
+
+        test::MockUserData* d2 = (test::MockUserData*)c2->createData(client1.data());
+        test::MockUserData* d3 = (test::MockUserData*)c2->createData(client2.data());
+
+        QVERIFY(!c1->have(d2));
+        QVERIFY(c2->have(d2));
+
+        c1->join(d2, c2);
+
+        QVERIFY(c1->have(d2));
+        QVERIFY(!c2->have(d2));
 
     }
 }

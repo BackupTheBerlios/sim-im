@@ -172,8 +172,9 @@ const unsigned short SEARCH_DONE = USHRT_MAX;
 class AIMFileTransfer;
 class DirectClient;
 
-struct ICQUserData : public SIM::IMContact
+class ICQUserData : public SIM::IMContact
 {
+public:
 	SIM::Data        Alias;
 	SIM::Data        Cellular;
 	SIM::Data		Status;

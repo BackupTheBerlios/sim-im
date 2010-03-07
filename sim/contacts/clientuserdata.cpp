@@ -124,6 +124,7 @@ namespace SIM
         load_data(def, data.data, cfg);
         p->push_back(data);
     }
+    
 
     void *ClientUserData::createData(Client *client)
     {

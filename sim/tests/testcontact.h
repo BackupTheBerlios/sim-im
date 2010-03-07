@@ -16,6 +16,7 @@ namespace testContact
         void testAccessors();
         void testCompositeProperties();
         void testClientData();
+        void testClientDataPartialJoin();
     };
 }
 

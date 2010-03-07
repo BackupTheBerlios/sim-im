@@ -501,7 +501,7 @@ namespace SIM
         return ClientDataIterator(m_clientData, client);
     }
 
-    QByteArray Contact::saveUseData() const
+    QByteArray Contact::saveUserData() const
     {
         return m_clientData.save();
     }

@@ -76,7 +76,7 @@ namespace SIM
 
         // m_clientData accessors
         ClientDataIterator clientDataIterator(Client* client = NULL);
-        QByteArray saveUseData() const;
+        QByteArray saveUserData() const;
         void loadUserData(Client *client, Buffer *cfg);
         void *createData(Client *client);
         void *getData(Client *client);

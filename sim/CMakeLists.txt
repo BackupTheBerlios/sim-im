@@ -231,6 +231,8 @@ SET(sim_tests_srcs
     tests/testprotocolmanager.cpp
     tests/testpropertyhub.cpp
     tests/testuserdata.cpp
+    tests/mockclient.cpp
+    tests/mockprotocol.cpp
 )
 
 
@@ -245,6 +247,8 @@ SET(sim_tests_hdrs
     tests/testprotocolmanager.h
     tests/testpropertyhub.h
     tests/testuserdata.h
+    tests/mockclient.h
+    tests/mockprotocol.h
 )
 
 QT4_WRAP_CPP(testmocs ${sim_tests_hdrs})
