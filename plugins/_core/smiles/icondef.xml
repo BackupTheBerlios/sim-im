@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<icondef>
+  <meta>
+    <name>SIM smiles</name>
+    <version>0.9.6</version>
+    <description>SIM smiles.</description>
+    <author jid="shutoff@jabber.ru">Vladimir Shutoff</author>
+    <creation>2004-06-11</creation>
+    <home>http://sim-im.org/</home>
+  </meta>
+  <icon>
+	<text>:-)</text>
+	<text>:)</text>
+	<text>=)</text>
+	<object mime="image/png">Smile.png</object>
+  </icon>
+  <icon>
+	<text>:-0</text>
+	<text>:-O</text>
+	<text>:=0</text>
+	<text>:=O</text>
+	<object mime="image/png">Surprised.png</object>
+  </icon>
+  <icon>
+	<text>:-|</text>
+	<text>:-!</text>
+	<object mime="image/png">Indifferent.png</object>
+  </icon>
+  <icon>
+	<text>:-/</text>
+	<text>:-\</text>
+	<object mime="image/png">Skeptical.png</object>
+  </icon>
+  <icon>
+	<text>:-(</text>
+	<text>:(</text>
+	<object mime="image/png">Sad.png</object>
+  </icon>
+  <icon>
+	<text>:-{}</text>
+	<text>:{}</text>
+	<object mime="image/png">Kiss.png</object>
+  </icon>
+  <icon>
+	<text>:*)</text>
+	<object mime="image/png">Annoyed.png</object>
+  </icon>
+  <icon>
+	<text>:'-(</text>
+	<text>:'(</text>
+	<object mime="image/png">Crying.png</object>
+  </icon>
+  <icon>
+	<text>;-)</text>
+	<text>;)</text>
+	<object mime="image/png">Wink.png</object>
+  </icon>
+  <icon>
+	<text>:-@</text>
+	<text>&gt;:0</text>
+	<text>&gt;:O</text>
+	<text>&gt;:o</text>
+	<object mime="image/png">Angry.png</object>
+  </icon>
+  <icon>
+	<text>:-")</text>
+	<text>:-[</text>
+	<text>:-&lt;</text>
+	<text>:&lt;</text>
+	<object mime="image/png">Embarrassed.png</object>
+  </icon>
+  <icon>
+	<text>:-X</text>
+	<text>:-x</text>
+	<object mime="image/png">Uptight.png</object>
+  </icon>
+  <icon>
+	<text>:-P</text>
+	<object mime="image/png">Teaser.png</object>
+  </icon>
+  <icon>
+	<text>8-)</text>
+	<object mime="image/png">Cool.png</object>
+  </icon>
+  <icon>
+	<text>0:-)</text>
+	<text>O:-)</text>
+	<text>0-)</text>
+	<text>O-)</text>
+	<object mime="image/png">Angel.png</object>
+  </icon>
+  <icon>
+	<text>:-D</text>
+	<text>:D</text>
+	<object mime="image/png">Grin.png</object>
+  </icon>
+</icondef>

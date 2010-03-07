@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<icondef>
+  <meta>
+    <name>SIM smiles</name>
+    <version>0.9.6</version>
+    <description>SIM smiles.</description>
+    <author jid="shutoff@jabber.ru">Vladimir Shutoff</author>
+    <creation>2004-06-11</creation>
+    <home>http://sim-im.org/</home>
+  </meta>
+  <icon>
+	<text>:-)</text>
+	<text>:)</text>
+	<text>=)</text>
+	<object mime="image/png">0.png</object>
+  </icon>
+  <icon>
+	<text>:-(</text>
+	<text>:(</text>
+	<object mime="image/png">1.png</object>
+  </icon>
+  <icon>
+	<text>;-)</text>
+	<text>;)</text>
+	<object mime="image/png">2.png</object>
+  </icon>
+  <icon>
+	<text>:-P</text>
+	<object mime="image/png">3.png</object>
+  </icon>
+  <icon>
+	<text>*JOKINGLY*</text>
+	<object mime="image/png">4.png</object>
+  </icon>
+  <icon>
+	<text>:'-(</text>
+	<text>:'(</text>
+	<object mime="image/png">5.png</object>
+  </icon>
+  <icon>
+	<text>*KISSED*</text>
+	<object mime="image/png">6.png</object>
+  </icon>
+  <icon>
+	<text>:-{}</text>
+	<text>:-*</text>
+	<text>:{}</text>
+	<object mime="image/png">7.png</object>
+  </icon>
+  <icon>
+	<text>:-")</text>
+	<text>:-[</text>
+	<text>:-&lt;</text>
+	<text>:&lt;</text>
+	<object mime="image/png">8.png</object>
+  </icon>
+  <icon>
+	<text>0:-)</text>
+	<text>O:-)</text>
+	<text>0-)</text>
+	<text>O-)</text>
+	<object mime="image/png">9.png</object>
+  </icon>
+  <icon>
+	<text>:-X</text>
+	<text>:-x</text>
+	<object mime="image/png">10.png</object>
+  </icon>
+  <icon>
+	<text>:-|</text>
+	<text>:-!</text>
+	<text>:-$</text>
+	<object mime="image/png">11.png</object>
+  </icon>
+  <icon>
+	<text>:-@</text>
+	<text>&gt;:0</text>
+	<text>&gt;:O</text>
+	<text>&gt;:o</text>
+	<object mime="image/png">12.png</object>
+  </icon>
+  <icon>
+	<text>:-D</text>
+	<text>:D</text>
+	<object mime="image/png">13.png</object>
+  </icon>
+  <icon>
+	<text>:-/</text>
+	<text>:-\</text>
+	<object mime="image/png">14.png</object>
+  </icon>
+  <icon>
+	<text>:-0</text>
+	<text>:-O</text>
+	<text>:=0</text>
+	<text>:=O</text>
+	<text>=-0</text>
+	<text>=-O</text>
+	<object mime="image/png">15.png</object>
+  </icon>
+  <icon>
+	<text>8-)</text>
+	<object mime="image/png">16.png</object>
+  </icon>
+  <icon>
+	<text>[:-}</text>
+	<object mime="image/png">17.png</object>
+  </icon>
+  <icon>
+	<text>*TIRED*</text>
+	<object mime="image/png">18.png</object>
+  </icon>
+  <icon>
+	<text>:*)</text>
+	<object mime="image/png">19.png</object>
+  </icon>
+  <icon>
+	<text>*STOP*</text>
+	<object mime="image/png">20.png</object>
+  </icon>
+  <icon>
+	<text>*KISSING*</text>
+	<object mime="image/png">21.png</object>
+  </icon>
+  <icon>
+	<text>]:-&gt;</text>
+	<object mime="image/png">22.png</object>
+  </icon>
+  <icon>
+	<text>@}-&gt;--</text>
+	<object mime="image/png">23.png</object>
+  </icon>
+  <icon>
+	<text>@=</text>
+	<object mime="image/png">24.png</object>
+  </icon>
+  <icon>
+	<text>*THUMBS UP*</text>
+	<object mime="image/png">25.png</object>
+  </icon>
+  <icon>
+	<text>*DRINK*</text>
+	<object mime="image/png">26.png</object>
+  </icon>
+  <icon>
+	<text>*IN LOVE*</text>
+	<object mime="image/png">27.png</object>
+  </icon>
+</icondef>

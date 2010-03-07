@@ -1,0 +1,248 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<icondef>
+  <meta>
+    <name>SIM weather icons</name>
+    <version>0.9.6</version>
+    <description>SIM weather icons.</description>
+    <author jid="shutoff@jabber.ru">Vladimir Shutoff</author>
+    <creation>2004-06-11</creation>
+    <home>http://sim-im.org/</home>
+  </meta>
+  <icon name="weather0">
+	<object mime="image/png">0.png</object>
+  </icon>
+  <icon name="weather1">
+	<object mime="image/png">1.png</object>
+  </icon>
+  <icon name="weather2">
+	<object mime="image/png">2.png</object>
+  </icon>
+  <icon name="weather3">
+	<object mime="image/png">3.png</object>
+  </icon>
+  <icon name="weather4">
+	<object mime="image/png">4.png</object>
+  </icon>
+  <icon name="weather5">
+	<object mime="image/png">5.png</object>
+  </icon>
+  <icon name="weather6">
+	<object mime="image/png">6.png</object>
+  </icon>
+  <icon name="weather7">
+	<object mime="image/png">7.png</object>
+  </icon>
+  <icon name="weather8">
+	<object mime="image/png">8.png</object>
+  </icon>
+  <icon name="weather9">
+	<object mime="image/png">9.png</object>
+  </icon>
+  <icon name="weather10">
+	<object mime="image/png">10.png</object>
+  </icon>
+  <icon name="weather11">
+	<object mime="image/png">11.png</object>
+  </icon>
+  <icon name="weather12">
+	<object mime="image/png">12.png</object>
+  </icon>
+  <icon name="weather13">
+	<object mime="image/png">13.png</object>
+  </icon>
+  <icon name="weather14">
+	<object mime="image/png">14.png</object>
+  </icon>
+  <icon name="weather15">
+	<object mime="image/png">15.png</object>
+  </icon>
+  <icon name="weather16">
+	<object mime="image/png">16.png</object>
+  </icon>
+  <icon name="weather17">
+	<object mime="image/png">17.png</object>
+  </icon>
+  <icon name="weather18">
+	<object mime="image/png">18.png</object>
+  </icon>
+  <icon name="weather19">
+	<object mime="image/png">19.png</object>
+  </icon>
+  <icon name="weather20">
+	<object mime="image/png">20.png</object>
+  </icon>
+  <icon name="weather21">
+	<object mime="image/png">21.png</object>
+  </icon>
+  <icon name="weather22">
+	<object mime="image/png">22.png</object>
+  </icon>
+  <icon name="weather23">
+	<object mime="image/png">23.png</object>
+  </icon>
+  <icon name="weather24">
+	<object mime="image/png">24.png</object>
+  </icon>
+  <icon name="weather25">
+	<object mime="image/png">25.png</object>
+  </icon>
+  <icon name="weather26">
+	<object mime="image/png">26.png</object>
+  </icon>
+  <icon name="weather27">
+	<object mime="image/png">27.png</object>
+  </icon>
+  <icon name="weather28">
+	<object mime="image/png">28.png</object>
+  </icon>
+  <icon name="weather29">
+	<object mime="image/png">29.png</object>
+  </icon>
+  <icon name="weather30">
+	<object mime="image/png">30.png</object>
+  </icon>
+  <icon name="weather31">
+	<object mime="image/png">31.png</object>
+  </icon>
+  <icon name="weather32">
+	<object mime="image/png">32.png</object>
+  </icon>
+  <icon name="weather33">
+	<object mime="image/png">33.png</object>
+  </icon>
+  <icon name="weather34">
+	<object mime="image/png">34.png</object>
+  </icon>
+  <icon name="weather35">
+	<object mime="image/png">35.png</object>
+  </icon>
+  <icon name="weather36">
+	<object mime="image/png">36.png</object>
+  </icon>
+  <icon name="weather37">
+	<object mime="image/png">37.png</object>
+  </icon>
+  <icon name="weather38">
+	<object mime="image/png">38.png</object>
+  </icon>
+  <icon name="weather39">
+	<object mime="image/png">39.png</object>
+  </icon>
+  <icon name="weather40">
+	<object mime="image/png">40.png</object>
+  </icon>
+  <icon name="weather41">
+	<object mime="image/png">41.png</object>
+  </icon>
+  <icon name="weather42">
+	<object mime="image/png">42.png</object>
+  </icon>
+  <icon name="weather43">
+	<object mime="image/png">43.png</object>
+  </icon>
+  <icon name="weather44">
+	<object mime="image/png">44.png</object>
+  </icon>
+  <icon name="weather45">
+	<object mime="image/png">45.png</object>
+  </icon>
+  <icon name="weather46">
+	<object mime="image/png">46.png</object>
+  </icon>
+  <icon name="weather47">
+	<object mime="image/png">47.png</object>
+  </icon>
+  <icon name="weather">
+	<object mime="image/png">na.png</object>
+  </icon>
+  <icon name="moon0">
+	<object mime="image/png">m0.png</object>
+  </icon>
+  <icon name="moon1">
+	<object mime="image/png">m1.png</object>
+  </icon>
+  <icon name="moon2">
+	<object mime="image/png">m2.png</object>
+  </icon>
+  <icon name="moon3">
+	<object mime="image/png">m3.png</object>
+  </icon>
+  <icon name="moon4">
+	<object mime="image/png">m4.png</object>
+  </icon>
+  <icon name="moon5">
+	<object mime="image/png">m5.png</object>
+  </icon>
+  <icon name="moon6">
+	<object mime="image/png">m6.png</object>
+  </icon>
+  <icon name="moon7">
+	<object mime="image/png">m7.png</object>
+  </icon>
+  <icon name="moon8">
+	<object mime="image/png">m8.png</object>
+  </icon>
+  <icon name="moon9">
+	<object mime="image/png">m9.png</object>
+  </icon>
+  <icon name="moon10">
+	<object mime="image/png">m10.png</object>
+  </icon>
+  <icon name="moon11">
+	<object mime="image/png">m11.png</object>
+  </icon>
+  <icon name="moon12">
+	<object mime="image/png">m12.png</object>
+  </icon>
+  <icon name="moon13">
+	<object mime="image/png">m13.png</object>
+  </icon>
+  <icon name="moon14">
+	<object mime="image/png">m14.png</object>
+  </icon>
+  <icon name="moon15">
+	<object mime="image/png">m15.png</object>
+  </icon>
+  <icon name="moon16">
+	<object mime="image/png">m16.png</object>
+  </icon>
+  <icon name="moon17">
+	<object mime="image/png">m17.png</object>
+  </icon>
+  <icon name="moon18">
+	<object mime="image/png">m18.png</object>
+  </icon>
+  <icon name="moon19">
+	<object mime="image/png">m19.png</object>
+  </icon>
+  <icon name="moon20">
+	<object mime="image/png">m20.png</object>
+  </icon>
+  <icon name="moon21">
+	<object mime="image/png">m21.png</object>
+  </icon>
+  <icon name="moon22">
+	<object mime="image/png">m22.png</object>
+  </icon>
+  <icon name="moon23">
+	<object mime="image/png">m23.png</object>
+  </icon>
+  <icon name="moon24">
+	<object mime="image/png">m24.png</object>
+  </icon>
+  <icon name="moon25">
+	<object mime="image/png">m25.png</object>
+  </icon>
+  <icon name="moon26">
+	<object mime="image/png">m26.png</object>
+  </icon>
+  <icon name="moon27">
+	<object mime="image/png">m27.png</object>
+  </icon>
+  <icon name="moon28">
+	<object mime="image/png">m28.png</object>
+  </icon>
+  <icon name="moon29">
+	<object mime="image/png">m29.png</object>
+  </icon>
+</icondef>

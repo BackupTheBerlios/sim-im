@@ -1,0 +1,309 @@
+<!DOCTYPE QtCreatorProject>
+<qtcreator>
+ <data>
+  <variable>RunConfiguration0-BaseEnvironmentBase</variable>
+  <value type="int">2</value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-CommandLineArguments</variable>
+  <valuelist type="QVariantList"/>
+ </data>
+ <data>
+  <variable>RunConfiguration0-ProFile</variable>
+  <value type="QString">sim.pro</value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-RunConfiguration.name</variable>
+  <value type="QString">sim</value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-UseDyldImageSuffix</variable>
+  <value type="bool">false</value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-UseTerminal</variable>
+  <value type="bool">false</value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-UserEnvironmentChanges</variable>
+  <valuelist type="QVariantList"/>
+ </data>
+ <data>
+  <variable>RunConfiguration0-UserSetName</variable>
+  <value type="bool">false</value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-UserSetWorkingDirectory</variable>
+  <value type="bool">false</value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-UserWorkingDirectory</variable>
+  <value type="QString"></value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-type</variable>
+  <value type="QString">Qt4ProjectManager.Qt4RunConfiguration</value>
+ </data>
+ <data>
+  <variable>activeRunConfiguration</variable>
+  <value type="int">0</value>
+ </data>
+ <data>
+  <variable>activebuildconfiguration</variable>
+  <value type="QString">Debug</value>
+ </data>
+ <data>
+  <variable>buildConfiguration-Debug</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Debug</value>
+   <value key="QtVersionId" type="int">0</value>
+   <value key="ToolChain" type="int">0</value>
+   <value key="addQDumper" type=""></value>
+   <value key="buildConfiguration" type="int">2</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildConfiguration-Release</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
+   <value key="QtVersionId" type="int">0</value>
+   <value key="addQDumper" type=""></value>
+   <value key="buildConfiguration" type="int">0</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfiguration-Debug-buildstep0</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Debug</value>
+   <valuelist key="abstractProcess.Environment" type="QVariantList">
+    <value type="QString">ALSA_PLUGINS_DIR=/usr/lib/alsa-lib</value>
+    <value type="QString">ANT_HOME=/usr/share/java/apache-ant</value>
+    <value type="QString">COLORFGBG=15;0</value>
+    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-MiKUqA4U2z,guid=8cc41f5dbb3f39464e40694a4b81eff1</value>
+    <value type="QString">DERBY_HOME=/opt/java/db</value>
+    <value type="QString">DESKTOP_SESSION=kde</value>
+    <value type="QString">DISPLAY=:0</value>
+    <value type="QString">DM_CONTROL=/var/run/xdmctl</value>
+    <value type="QString">ECLIM_ECLIPSE_HOME=/usr/share/eclipse</value>
+    <value type="QString">EDITOR=vim</value>
+    <value type="QString">GPG_AGENT_INFO=/tmp/gpg-aRkiuE/S.gpg-agent:4010:1</value>
+    <value type="QString">GS_LIB=/home/todin/.fonts</value>
+    <value type="QString">GTK2_RC_FILES=/etc/gtk-2.0/gtkrc:/home/todin/.gtkrc-2.0::/home/todin/.kde4/share/config/gtkrc-2.0</value>
+    <value type="QString">GTK_RC_FILES=/etc/gtk/gtkrc:/home/todin/.gtkrc::/home/todin/.kde4/share/config/gtkrc</value>
+    <value type="QString">G_BROKEN_FILENAMES=1</value>
+    <value type="QString">HG=/usr/bin/hg</value>
+    <value type="QString">HISTCONTROL=erasedups</value>
+    <value type="QString">HISTSIZE=1000</value>
+    <value type="QString">HOME=/home/todin</value>
+    <value type="QString">INPUTRC=/etc/inputrc</value>
+    <value type="QString">J2SDKDIR=/opt/java</value>
+    <value type="QString">JAVA_HOME=/opt/java</value>
+    <value type="QString">KDE_FULL_SESSION=true</value>
+    <value type="QString">KDE_MULTIHEAD=false</value>
+    <value type="QString">KDE_SESSION_UID=1000</value>
+    <value type="QString">KDE_SESSION_VERSION=4</value>
+    <value type="QString">KONSOLE_DBUS_SERVICE=:1.29</value>
+    <value type="QString">KONSOLE_DBUS_SESSION=/Sessions/1</value>
+    <value type="QString">LANG=en_US.UTF-8</value>
+    <value type="QString">LANGUAGE=</value>
+    <value type="QString">LD_LIBRARY_PATH=/usr/lib/qtcreator:</value>
+    <value type="QString">LESS=-R</value>
+    <value type="QString">LOGNAME=todin</value>
+    <value type="QString">MOZ_PLUGIN_PATH=/usr/lib/mozilla/plugins</value>
+    <value type="QString">PATH=/usr/bin:/opt/wine/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/share/java/apache-ant/bin:/opt/java/bin:/opt/java/jre/bin:/opt/kde/bin:/usr/bin/perlbin/site:/usr/bin/perlbin/vendor:/usr/bin/perlbin/core:/opt/qt/bin:/home/todin/bin:/home/todin/x-tools/arm-unknown-eabi/bin:/home/todin/projects/arm/crosstool-ng/bin</value>
+    <value type="QString">PKG_CONFIG_PATH=/usr/lib/pkgconfig:/opt/qt/lib/pkgconfig</value>
+    <value type="QString">PROFILEHOME=</value>
+    <value type="QString">PROMPT_COMMAND=echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/$HOME/~}\007"</value>
+    <value type="QString">PS3=> </value>
+    <value type="QString">PS4=+ </value>
+    <value type="QString">PWD=/home/todin/projects/sim-im/branches/branch-playground</value>
+    <value type="QString">QTDIR=/usr/share/qt</value>
+    <value type="QString">QT_PLUGIN_PATH=/home/todin/.kde4/lib/kde4/plugins/:/usr/lib/kde4/plugins/</value>
+    <value type="QString">QT_XFT=true</value>
+    <value type="QString">SESSION_MANAGER=local/hell:@/tmp/.ICE-unix/4065,unix/hell:/tmp/.ICE-unix/4065</value>
+    <value type="QString">SHELL=/bin/bash</value>
+    <value type="QString">SHLVL=2</value>
+    <value type="QString">SSH_AGENT_PID=4013</value>
+    <value type="QString">SSH_AUTH_SOCK=/tmp/ssh-YBuERb4012/agent.4012</value>
+    <value type="QString">SVN_EDITOR=vim</value>
+    <value type="QString">TERM=xterm</value>
+    <value type="QString">USER=todin</value>
+    <value type="QString">WINDOWID=37748775</value>
+    <value type="QString">WINDOWPATH=7</value>
+    <value type="QString">WINELOADER=/opt/wine/bin/wine</value>
+    <value type="QString">XCURSOR_THEME=Oxygen_Black</value>
+    <value type="QString">XDG_CACHE_HOME=/home/todin/.cache</value>
+    <value type="QString">XDG_CONFIG_DIRS=/etc/xdg:/etc/xdg:/etc/xdg:/etc/xdg:/etc/xdg</value>
+    <value type="QString">XDG_CONFIG_HOME=/home/todin/.config</value>
+    <value type="QString">XDG_DATA_DIRS=/usr/share:/usr/local/share:/usr/share:/usr/local/share:/usr/share:/usr/local/share:/usr/share:/usr/local/share:/usr/share:/usr/local/share:/opt/kde/share:/opt/kde/share:/opt/kde/share:/opt/kde/share:/opt/kde/share</value>
+    <value type="QString">XDG_DATA_HOME=/home/todin/.local/share</value>
+    <value type="QString">XDG_SESSION_COOKIE=46070e371950b58c8ac873a74ae405f7-1266806768.812023-963992597</value>
+    <value type="QString">XDM_MANAGED=method=classic</value>
+   </valuelist>
+   <valuelist key="abstractProcess.arguments" type="QVariantList">
+    <value type="QString">/home/todin/projects/sim-im/branches/branch-playground/sim.pro</value>
+    <value type="QString">-spec</value>
+    <value type="QString">linux-g++-64</value>
+    <value type="QString">-r</value>
+    <value type="QString">CONFIG+=debug</value>
+   </valuelist>
+   <value key="abstractProcess.command" type="QString">/usr/bin/qmake</value>
+   <value key="abstractProcess.enabled" type="bool">false</value>
+   <value key="abstractProcess.workingDirectory" type="QString">/home/todin/projects/sim-im/branches/branch-playground</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfiguration-Debug-buildstep1</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Debug</value>
+   <valuelist key="abstractProcess.Environment" type="QVariantList">
+    <value type="QString">ALSA_PLUGINS_DIR=/usr/lib/alsa-lib</value>
+    <value type="QString">ANT_HOME=/usr/share/java/apache-ant</value>
+    <value type="QString">COLORFGBG=15;0</value>
+    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-MiKUqA4U2z,guid=8cc41f5dbb3f39464e40694a4b81eff1</value>
+    <value type="QString">DERBY_HOME=/opt/java/db</value>
+    <value type="QString">DESKTOP_SESSION=kde</value>
+    <value type="QString">DISPLAY=:0</value>
+    <value type="QString">DM_CONTROL=/var/run/xdmctl</value>
+    <value type="QString">ECLIM_ECLIPSE_HOME=/usr/share/eclipse</value>
+    <value type="QString">EDITOR=vim</value>
+    <value type="QString">GPG_AGENT_INFO=/tmp/gpg-aRkiuE/S.gpg-agent:4010:1</value>
+    <value type="QString">GS_LIB=/home/todin/.fonts</value>
+    <value type="QString">GTK2_RC_FILES=/etc/gtk-2.0/gtkrc:/home/todin/.gtkrc-2.0::/home/todin/.kde4/share/config/gtkrc-2.0</value>
+    <value type="QString">GTK_RC_FILES=/etc/gtk/gtkrc:/home/todin/.gtkrc::/home/todin/.kde4/share/config/gtkrc</value>
+    <value type="QString">G_BROKEN_FILENAMES=1</value>
+    <value type="QString">HG=/usr/bin/hg</value>
+    <value type="QString">HISTCONTROL=erasedups</value>
+    <value type="QString">HISTSIZE=1000</value>
+    <value type="QString">HOME=/home/todin</value>
+    <value type="QString">INPUTRC=/etc/inputrc</value>
+    <value type="QString">J2SDKDIR=/opt/java</value>
+    <value type="QString">JAVA_HOME=/opt/java</value>
+    <value type="QString">KDE_FULL_SESSION=true</value>
+    <value type="QString">KDE_MULTIHEAD=false</value>
+    <value type="QString">KDE_SESSION_UID=1000</value>
+    <value type="QString">KDE_SESSION_VERSION=4</value>
+    <value type="QString">KONSOLE_DBUS_SERVICE=:1.29</value>
+    <value type="QString">KONSOLE_DBUS_SESSION=/Sessions/1</value>
+    <value type="QString">LANG=en_US.UTF-8</value>
+    <value type="QString">LANGUAGE=</value>
+    <value type="QString">LD_LIBRARY_PATH=/usr/lib/qtcreator:</value>
+    <value type="QString">LESS=-R</value>
+    <value type="QString">LOGNAME=todin</value>
+    <value type="QString">MOZ_PLUGIN_PATH=/usr/lib/mozilla/plugins</value>
+    <value type="QString">PATH=/usr/bin:/opt/wine/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/share/java/apache-ant/bin:/opt/java/bin:/opt/java/jre/bin:/opt/kde/bin:/usr/bin/perlbin/site:/usr/bin/perlbin/vendor:/usr/bin/perlbin/core:/opt/qt/bin:/home/todin/bin:/home/todin/x-tools/arm-unknown-eabi/bin:/home/todin/projects/arm/crosstool-ng/bin</value>
+    <value type="QString">PKG_CONFIG_PATH=/usr/lib/pkgconfig:/opt/qt/lib/pkgconfig</value>
+    <value type="QString">PROFILEHOME=</value>
+    <value type="QString">PROMPT_COMMAND=echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/$HOME/~}\007"</value>
+    <value type="QString">PS3=> </value>
+    <value type="QString">PS4=+ </value>
+    <value type="QString">PWD=/home/todin/projects/sim-im/branches/branch-playground</value>
+    <value type="QString">QTDIR=/usr/share/qt</value>
+    <value type="QString">QT_PLUGIN_PATH=/home/todin/.kde4/lib/kde4/plugins/:/usr/lib/kde4/plugins/</value>
+    <value type="QString">QT_XFT=true</value>
+    <value type="QString">SESSION_MANAGER=local/hell:@/tmp/.ICE-unix/4065,unix/hell:/tmp/.ICE-unix/4065</value>
+    <value type="QString">SHELL=/bin/bash</value>
+    <value type="QString">SHLVL=2</value>
+    <value type="QString">SSH_AGENT_PID=4013</value>
+    <value type="QString">SSH_AUTH_SOCK=/tmp/ssh-YBuERb4012/agent.4012</value>
+    <value type="QString">SVN_EDITOR=vim</value>
+    <value type="QString">TERM=xterm</value>
+    <value type="QString">USER=todin</value>
+    <value type="QString">WINDOWID=37748775</value>
+    <value type="QString">WINDOWPATH=7</value>
+    <value type="QString">WINELOADER=/opt/wine/bin/wine</value>
+    <value type="QString">XCURSOR_THEME=Oxygen_Black</value>
+    <value type="QString">XDG_CACHE_HOME=/home/todin/.cache</value>
+    <value type="QString">XDG_CONFIG_DIRS=/etc/xdg:/etc/xdg:/etc/xdg:/etc/xdg:/etc/xdg</value>
+    <value type="QString">XDG_CONFIG_HOME=/home/todin/.config</value>
+    <value type="QString">XDG_DATA_DIRS=/usr/share:/usr/local/share:/usr/share:/usr/local/share:/usr/share:/usr/local/share:/usr/share:/usr/local/share:/usr/share:/usr/local/share:/opt/kde/share:/opt/kde/share:/opt/kde/share:/opt/kde/share:/opt/kde/share</value>
+    <value type="QString">XDG_DATA_HOME=/home/todin/.local/share</value>
+    <value type="QString">XDG_SESSION_COOKIE=46070e371950b58c8ac873a74ae405f7-1266806768.812023-963992597</value>
+    <value type="QString">XDM_MANAGED=method=classic</value>
+   </valuelist>
+   <value key="abstractProcess.IgnoreReturnValue" type="bool">false</value>
+   <valuelist key="abstractProcess.arguments" type="QVariantList">
+    <value type="QString">-w</value>
+   </valuelist>
+   <value key="abstractProcess.command" type="QString">/usr/bin/make</value>
+   <value key="abstractProcess.enabled" type="bool">true</value>
+   <value key="abstractProcess.workingDirectory" type="QString">/home/todin/projects/sim-im/branches/branch-playground</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfiguration-Debug-cleanstep0</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Debug</value>
+   <value key="cleanConfig" type="bool">true</value>
+   <valuelist key="makeargs" type="QVariantList">
+    <value type="QString">clean</value>
+   </valuelist>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfiguration-Release-buildstep0</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfiguration-Release-buildstep1</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfiguration-Release-cleanstep0</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Release</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfigurations</variable>
+  <valuelist type="QVariantList">
+   <value type="QString">Debug</value>
+   <value type="QString">Release</value>
+  </valuelist>
+ </data>
+ <data>
+  <variable>buildstep0</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString"></value>
+   <value key="mkspec" type="QString"></value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildstep1</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString"></value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildsteps</variable>
+  <valuelist type="QVariantList">
+   <value type="QString">trolltech.qt4projectmanager.qmake</value>
+   <value type="QString">trolltech.qt4projectmanager.make</value>
+  </valuelist>
+ </data>
+ <data>
+  <variable>cleanstep0</variable>
+  <valuemap type="QVariantMap">
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString"></value>
+   <value key="clean" type="bool">true</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>cleansteps</variable>
+  <valuelist type="QVariantList">
+   <value type="QString">trolltech.qt4projectmanager.make</value>
+  </valuelist>
+ </data>
+ <data>
+  <variable>defaultFileEncoding</variable>
+  <value type="QByteArray">UTF-8</value>
+ </data>
+ <data>
+  <variable>project</variable>
+  <valuemap type="QVariantMap"/>
+ </data>
+</qtcreator>

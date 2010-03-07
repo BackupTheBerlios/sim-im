@@ -1,0 +1,111 @@
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>PassphraseDlgBase</class>
+  <widget class="QDialog" name="Passphrase" >
+    <property name="geometry" stdset="0" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>388</width>
+        <height>119</height>
+      </rect>
+    </property>
+    <property name="windowTitle" stdset="0" >
+      <string>Input passphrase</string>
+    </property>
+    <layout class="QGridLayout" >
+      <property name="margin" stdset="0" >
+        <number>11</number>
+      </property>
+      <property name="spacing" stdset="0" >
+        <number>6</number>
+      </property>
+      <item rowspan="1" row="0" column="0" colspan="3" >
+        <widget class="QLabel" name="lblTitle" >
+          <property name="sizePolicy" stdset="0" >
+            <sizepolicy>
+              <hsizetype>7</hsizetype>
+              <vsizetype>7</vsizetype>
+            </sizepolicy>
+          </property>
+          <property name="text" stdset="0" >
+            <string/>
+          </property>
+          <property name="alignment" stdset="0" >
+            <set>Qt::AlignVCenter|Qt::AlignLeft</set>
+          </property>
+          <property name="wordWrap" >
+            <bool>true</bool>
+          </property>
+        </widget>
+      </item>
+      <item rowspan="1" row="2" column="0" colspan="3" >
+        <widget class="QCheckBox" name="chkSave" >
+          <property name="text" stdset="0" >
+            <string>&amp;Save passphrase</string>
+          </property>
+        </widget>
+      </item>
+      <item rowspan="1" row="1" column="0" colspan="3" >
+        <widget class="QLineEdit" name="edtPass" >
+          <property name="echoMode" stdset="0" >
+            <enum>QLineEdit::Password</enum>
+          </property>
+        </widget>
+      </item>
+      <item row="4" column="1" >
+        <widget class="QPushButton" name="btnOk" >
+          <property name="text" stdset="0" >
+            <string>&amp;OK</string>
+          </property>
+        </widget>
+      </item>
+      <item row="4" column="0" >
+        <spacer name="Spacer1" >
+          <property name="sizeHint" >
+            <size>
+              <width>20</width>
+              <height>20</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>QSizePolicy::Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+          </property>
+        </spacer>
+      </item>
+      <item row="4" column="2" >
+        <widget class="QPushButton" name="btnCancel" >
+          <property name="text" stdset="0" >
+            <string>&amp;Cancel</string>
+          </property>
+        </widget>
+      </item>
+    </layout>
+  </widget>
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+  <tabstops>
+    <tabstop>edtPass</tabstop>
+    <tabstop>chkSave</tabstop>
+    <tabstop>btnOk</tabstop>
+    <tabstop>btnCancel</tabstop>
+  </tabstops>
+  <connections>
+    <connection>
+      <sender>btnOk</sender>
+      <signal>clicked()</signal>
+      <receiver>Passphrase</receiver>
+      <slot>accept()</slot>
+    </connection>
+    <connection>
+      <sender>btnCancel</sender>
+      <signal>clicked()</signal>
+      <receiver>Passphrase</receiver>
+      <slot>reject()</slot>
+    </connection>
+  </connections>
+</ui>

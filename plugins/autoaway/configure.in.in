@@ -1,0 +1,24 @@
+if test "x$kde_use_qt_win" = "xno"; then
+	compile_plugin="no"
+	XSS_LIBS="no"
+	save_CPPFLAGS="$CPPFLAGS"
+	save_LDFLAGS="$LDFLAGS"
+	LDFLAGS="$LDFLAGS $all_libraries"
+	CPPFLAGS="$CPPFLAGS $X_INCLUDES"
+	AC_CHECK_LIB(Xext, XScreenSaverRegister,[XSS_LIBS=""],[], [-lX11 -lXext -lm])
+	AC_CHECK_LIB(Xss, XScreenSaverRegister,[XSS_LIBS="-lXss"],[],[-lX11 -lXext -lm])
+	if test \! "$XSS_LIBS" = "no"; then
+		KDE_CHECK_HEADER(X11/extensions/scrnsaver.h,[compile_plugin="yes"],[])
+	else
+		XSS_LIBS=""
+		AC_CHECK_HEADER(Carbon/Carbon.h,[compile_plugin="yes"])
+	fi
+	AC_SUBST(XSS_LIBS)
+	if test "x$compile_plugin" = "xno"; then
+		AC_MSG_WARN([ScreenSaver extension not found. AutoAway plugin is disabled])
+	fi
+	AM_CONDITIONAL(ENABLE_AUTOAWAY, test "x$compile_plugin" = "xyes")
+else
+	AM_CONDITIONAL(ENABLE_AUTOAWAY, true)
+fi
+

@@ -1,0 +1,5 @@
+if test "$have_ssl" != yes; then
+  AC_MSG_WARN([OpenSSL library disabled. ICQ plugin is disabled])
+fi
+AM_CONDITIONAL(ENABLE_ICQ, test "$have_ssl" = "yes")
+

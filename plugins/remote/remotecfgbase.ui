@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>RemoteCfg</class>
+ <widget class="QWidget" name="RemoteCfg">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>367</width>
+    <height>216</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form1</string>
+  </property>
+  <layout class="QVBoxLayout">
+   <property name="spacing">
+    <number>6</number>
+   </property>
+   <property name="margin">
+    <number>11</number>
+   </property>
+   <item>
+    <widget class="QGroupBox" name="grpRemote">
+     <property name="title">
+      <string/>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0" colspan="3">
+       <widget class="QRadioButton" name="btnUNIX">
+        <property name="text">
+         <string>Use &amp;UNIX socket</string>
+        </property>
+        <property name="buttonGroupId" stdset="0">
+         <number>1</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" colspan="3">
+       <widget class="QLineEdit" name="edtPath"/>
+      </item>
+      <item row="2" column="0" colspan="3">
+       <widget class="QCheckBox" name="chkTCP">
+        <property name="text">
+         <string>Use &amp;TCP socket</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="3">
+       <widget class="QRadioButton" name="btnTCP">
+        <property name="text">
+         <string>Use &amp;TCP socket</string>
+        </property>
+        <property name="buttonGroupId" stdset="0">
+         <number>2</number>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="lblPort">
+        <property name="text">
+         <string>Port:</string>
+        </property>
+        <property name="wordWrap">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QSpinBox" name="edtPort">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>65535</number>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <spacer name="Spacer2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>220</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="Line" name="Line1"/>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="chkIE">
+     <property name="text">
+      <string>Enable IE context menu extension</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <spacer name="Spacer3">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

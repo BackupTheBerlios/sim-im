@@ -1,0 +1,154 @@
+#MIN_CONFIG
+AC_PREREQ(2.50)
+AC_LANG_CPLUSPLUS
+AC_LANG_C
+AM_INIT_AUTOMAKE(sim,0.9.6)
+AC_PROG_LIBTOOL
+AC_STDC_HEADERS
+AC_C_BIGENDIAN
+KDE_NEED_FLEX
+LFLAGS="-o${LEX_OUTPUT_ROOT}.c"
+AC_SUBST(LFLAGS)
+if test "$CYGWIN" = "yes"; then
+ LDFLAGS="$LDFLAGS --enable-auto-import"
+fi
+if ! echo $CXXFLAGS | fgrep '-fno-strict-aliasing' >/dev/null 2>&1 ; then 
+	old_cxxflags=$CXXFLAGS 
+    CXXFLAGS="$CXXFLAGS -fno-strict-aliasing" 
+    AC_TRY_COMPILE([], [return 0;], , CXXFLAGS=$old_cxxflags) 
+fi 
+RELEASE_BUILD="no"
+AC_ARG_ENABLE(
+ release,
+ [  --enable-release        enable release build],
+ RELEASE_BUILD="$enableval")
+if test "$RELEASE_BUILD" != "yes"; then
+ AC_DEFINE(CVS_BUILD, 1, [CVS build])
+fi
+
+AC_TYPE_OFF_T
+AC_TYPE_PID_T
+AC_TYPE_SIZE_T
+AC_TYPE_UID_T
+AC_STRUCT_TM
+
+AC_PATH_X
+if test $have_x = yes; then
+   AC_DEFINE(HAVE_X,1,[Have X Window System])
+fi
+
+AC_HEADER_SYS_WAIT
+AC_FUNC_FORK
+AC_C_INLINE
+AC_C_CONST
+KDE_CHECK_SSL
+AC_HEADER_STDBOOL
+AC_FUNC_ERROR_AT_LINE
+AC_FUNC_MMAP
+AC_FUNC_MKTIME
+AC_FUNC_MEMCMP
+AC_FUNC_MALLOC
+AC_FUNC_REALLOC
+AC_FUNC_STAT
+
+AC_CACHE_CHECK(for tm_gmtoff in struct tm, ac_cv_struct_tm_gmtoff,
+  AC_TRY_COMPILE([
+    #include <time.h>
+  ], [
+    struct tm tm;
+    tm.tm_gmtoff = 1;
+  ], ac_cv_struct_tm_gmtoff=yes, ac_cv_struct_tm_gmtoff=no))
+if test $ac_cv_struct_tm_gmtoff = yes; then
+  AC_DEFINE(HAVE_TM_GMTOFF, 1, [Define if you have a tm_gmtoff member in struct tm])
+fi
+
+AC_CHECK_HEADERS([arpa/inet.h netinet/in.h sys/ioctl.h sys/socket.h])
+AC_CHECK_HEADERS([fcntl.h limits.h netdb.h stddef.h termios.h])
+
+AC_CHECK_FUNCS([dup2 gethostbyname gethostname inet_ntoa])
+AC_CHECK_FUNCS([memset mkdir munmap rmdir socket])
+AC_CHECK_FUNCS([strcspn strdup strerror strstr strtol strtoul])
+
+AC_CHECK_FUNC(strcasecmp,[AC_DEFINE(HAVE_STRCASECMP,1,[Have strcasecmp])])
+AC_CHECK_FUNC(chmod,[AC_DEFINE(HAVE_CHMOD,1,[Have chmod])])
+AC_CHECK_FUNC(uname,[AC_DEFINE(HAVE_UNAME,1,[Have uname])])
+
+AC_EGREP_HEADER(in_addr_t, netinet/in.h,, AC_DEFINE(in_addr_t,int,[defaults in_addr_t to int]))
+AC_EGREP_HEADER(socklen_t, sys/socket.h,, AC_DEFINE(socklen_t,int,[defaults socklen_t to int]))
+
+AC_CHECK_LIB(xnet,inet_addr)
+AC_CHECK_LIB(socket, socket)
+
+AC_MSG_CHECKING([for The Ultimate Answer])
+AC_MSG_RESULT([42])
+
+EXTRA_LIBS=""
+KDE_CHECK_HEADER(qsyntaxhighlighter.h,[AC_DEFINE(HAVE_QSYNTAXHIGHLIGHTER_H,1,[Have qsyntaxhighlighter.h])])
+AC_DEFINE_UNQUOTED(PREFIX, "$prefix", [Install prefix])
+AC_SUBST(EXTRA_LIBS)
+if test "${exec_prefix}" = "NONE" ; then
+  exec_prefix=$prefix
+fi
+libdir=`eval echo $libdir`
+
+sim_plugindir="${libdir}/sim"
+sim_stylesdir="\${sim_plugindir}/styles"
+AC_SUBST(sim_plugindir)
+AC_SUBST(sim_stylesdir)
+AC_DEFINE_UNQUOTED(PLUGIN_PATH,"${sim_plugindir}",[Plugins path])
+
+LIB_XML2=""
+AC_PATH_PROG(XML2_CONFIG, xml2-config, no)
+if test "x$XML2_CONFIG" = "xno" ; then
+   AC_MSG_ERROR([Executable xml2-config not found!
+Seems you have no libxml2 devel files installed.
+You can download it from http://xmlsoft.org/download.html
+])
+fi
+
+LIB_XML2=`$XML2_CONFIG --libs 2>/dev/null`
+CPPFLAGS="$CPPFLAGS `$XML2_CONFIG --cflags`"
+
+LIB_XSLT=""
+AC_PATH_PROG(XSLT_CONFIG, xslt-config, no)
+if test "x$XSLT_CONFIG" = "xno" ; then
+   AC_MSG_ERROR([Executable xslt-config not found!
+Seems you have no libxslt devel files installed.
+You can download it from http://xmlsoft.org/download.html
+])
+fi
+
+LIB_XSLT=`$XSLT_CONFIG --libs 2>/dev/null`
+CPPFLAGS="$CPPFLAGS `$XSLT_CONFIG --cflags`"
+
+AC_SUBST(LIB_XML2)
+AC_SUBST(LIB_XSLT)
+
+ZIP_FLAGS="-j"
+AC_PATH_PROG(ZIP, zip, no)
+if test "x$ZIP" = "xno" ; then
+   AC_MSG_ERROR([Executable zip not found!])
+fi
+AC_SUBST(ZIP)
+AC_SUBST(ZIP_FLAGS)
+
+if test "$have_ssl" != "yes" -a "$want_ssl" != "no"; then
+  AC_MSG_ERROR([SIM requires OpenSSL library.
+Please install OpenSSL (libraries and headers).
+OpenSSL can be found at http://www.openssl.org
+or as RPM from your local distribution site.
+])
+fi
+
+AM_CONDITIONAL(QT_WIN, test "$kde_use_qt_win" = "yes")
+
+if test "$kde_use_qt_win" = "yes"; then
+   AC_SUBST(SIM_RC_OBJ, "sim_rc.o")
+   AC_SUBST(GMSGFMT, "$GMSGFMT --qt")
+   AC_DEFINE(SIMAPI_EXPORTS, 1, [build libsim.dll])
+fi
+
+AM_CONDITIONAL(ENABLE_UPDATE, false)
+AM_CONDITIONAL(ENABLE_STYLES_WOOD, false)
+AM_CONDITIONAL(ENABLE_STYLES_METAL, false)
+

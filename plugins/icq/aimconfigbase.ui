@@ -1,0 +1,251 @@
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>AIMConfigBase</class>
+  <widget class="QDialog" name="AIMCfg" >
+    <property name="geometry" stdset="0" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>318</width>
+        <height>258</height>
+      </rect>
+    </property>
+    <property name="windowTitle" stdset="0" >
+      <string>Form1</string>
+    </property>
+    <layout class="QVBoxLayout" >
+      <property name="margin" stdset="0" >
+        <number>11</number>
+      </property>
+      <property name="spacing" stdset="0" >
+        <number>6</number>
+      </property>
+      <item>
+        <widget class="QTabWidget" name="tabConfig" >
+          <widget class="QWidget" name="tabAIM" >
+            <attribute name="title" >
+              <string>&amp;AIM</string>
+            </attribute>
+            <layout class="QGridLayout" >
+              <property name="margin" stdset="0" >
+                <number>11</number>
+              </property>
+              <property name="spacing" stdset="0" >
+                <number>6</number>
+              </property>
+              <item row="0" column="0" >
+                <widget class="QLabel" name="TextLabel1" >
+                  <property name="text" stdset="0" >
+                    <string>ScreenName:</string>
+                  </property>
+                  <property name="alignment" stdset="0" >
+                    <set>Qt::AlignVCenter|Qt::AlignRight</set>
+                  </property>
+                  <property name="wordWrap" >
+                    <bool>false</bool>
+                  </property>
+                </widget>
+              </item>
+              <item row="0" column="1" >
+                <widget class="QLineEdit" name="edtScreen" />
+              </item>
+              <item row="1" column="0" >
+                <widget class="QLabel" name="TextLabel2" >
+                  <property name="text" stdset="0" >
+                    <string>Password:</string>
+                  </property>
+                  <property name="alignment" stdset="0" >
+                    <set>Qt::AlignVCenter|Qt::AlignRight</set>
+                  </property>
+                  <property name="wordWrap" >
+                    <bool>false</bool>
+                  </property>
+                </widget>
+              </item>
+              <item row="1" column="1" >
+                <widget class="QLineEdit" name="edtPasswd" >
+                  <property name="echoMode" stdset="0" >
+                    <enum>QLineEdit::Password</enum>
+                  </property>
+                </widget>
+              </item>
+              <item rowspan="1" row="2" column="0" colspan="2" >
+                <widget class="LinkLabel" name="lnkReg" />
+              </item>
+              <item row="3" column="0" >
+                <spacer name="Spacer5" >
+                  <property name="sizeHint" >
+                    <size>
+                      <width>20</width>
+                      <height>20</height>
+                    </size>
+                  </property>
+                  <property name="sizeType" >
+                    <enum>QSizePolicy::Expanding</enum>
+                  </property>
+                  <property name="orientation" >
+                    <enum>Qt::Vertical</enum>
+                  </property>
+                </spacer>
+              </item>
+            </layout>
+          </widget>
+          <widget class="QWidget" name="tab" >
+            <attribute name="title" >
+              <string>&amp;Network</string>
+            </attribute>
+            <layout class="QGridLayout" >
+              <property name="margin" stdset="0" >
+                <number>11</number>
+              </property>
+              <property name="spacing" stdset="0" >
+                <number>6</number>
+              </property>
+              <item rowspan="1" row="0" column="1" colspan="2" >
+                <widget class="QLineEdit" name="edtServer" />
+              </item>
+              <item row="1" column="0" >
+                <widget class="QLabel" name="TextLabel4" >
+                  <property name="text" stdset="0" >
+                    <string>Port:</string>
+                  </property>
+                  <property name="alignment" stdset="0" >
+                    <set>Qt::AlignVCenter|Qt::AlignRight</set>
+                  </property>
+                  <property name="wordWrap" >
+                    <bool>false</bool>
+                  </property>
+                </widget>
+              </item>
+              <item row="1" column="1" >
+                <widget class="QSpinBox" name="edtPort" >
+                  <property name="maximum" stdset="0" >
+                    <number>65535</number>
+                  </property>
+                  <property name="minimum" stdset="0" >
+                    <number>1</number>
+                  </property>
+                </widget>
+              </item>
+              <item row="1" column="2" >
+                <spacer name="Spacer6" >
+                  <property name="sizeHint" >
+                    <size>
+                      <width>20</width>
+                      <height>20</height>
+                    </size>
+                  </property>
+                  <property name="sizeType" >
+                    <enum>QSizePolicy::Expanding</enum>
+                  </property>
+                  <property name="orientation" >
+                    <enum>Qt::Horizontal</enum>
+                  </property>
+                </spacer>
+              </item>
+              <item row="0" column="0" >
+                <widget class="QLabel" name="TextLabel3" >
+                  <property name="text" stdset="0" >
+                    <string>Server:</string>
+                  </property>
+                  <property name="alignment" stdset="0" >
+                    <set>Qt::AlignVCenter|Qt::AlignRight</set>
+                  </property>
+                  <property name="wordWrap" >
+                    <bool>false</bool>
+                  </property>
+                </widget>
+              </item>
+              <item rowspan="1" row="2" column="0" colspan="3" >
+                <widget class="QCheckBox" name="chkHTTP" >
+                  <property name="text" stdset="0" >
+                    <string>Use &amp;HTTP polling</string>
+                  </property>
+                </widget>
+              </item>
+              <item rowspan="1" row="3" column="0" colspan="3" >
+                <widget class="QCheckBox" name="chkAuto" >
+                  <property name="text" stdset="0" >
+                    <string>&amp;Automatically use HTTP polling if proxy required</string>
+                  </property>
+                </widget>
+              </item>
+              <item rowspan="1" row="4" column="0" colspan="3" >
+                <widget class="QLabel" name="TextLabel1_4" >
+                  <property name="text" stdset="0" >
+                    <string>Note: For HTTP-polling using proxy settings for HTTP</string>
+                  </property>
+                  <property name="alignment" stdset="0" >
+                    <set>Qt::AlignVCenter|Qt::AlignLeft</set>
+                  </property>
+                  <property name="wordWrap" >
+                    <bool>true</bool>
+                  </property>
+                </widget>
+              </item>
+              <item row="6" column="0" >
+                <spacer name="Spacer7" >
+                  <property name="sizeHint" >
+                    <size>
+                      <width>20</width>
+                      <height>20</height>
+                    </size>
+                  </property>
+                  <property name="sizeType" >
+                    <enum>QSizePolicy::Expanding</enum>
+                  </property>
+                  <property name="orientation" >
+                    <enum>Qt::Vertical</enum>
+                  </property>
+                </spacer>
+              </item>
+              <item rowspan="1" row="5" column="0" colspan="3" >
+                <widget class="QCheckBox" name="chkKeepAlive" >
+                  <property name="text" stdset="0" >
+                    <string>&amp;Keep-alive connection</string>
+                  </property>
+                </widget>
+              </item>
+            </layout>
+          </widget>
+        </widget>
+      </item>
+    </layout>
+  </widget>
+  <customwidgets>
+    <customwidget>
+      <class>LinkLabel</class>
+      <extends>QWidget</extends>
+      <header location="local" >simgui/linklabel.h</header>
+      <sizehint>
+        <width>-1</width>
+        <height>-1</height>
+      </sizehint>
+      <container>0</container>
+      <sizepolicy>
+        <hordata>1</hordata>
+        <verdata>1</verdata>
+      </sizepolicy>
+      <pixmap>image0</pixmap>
+      <properties>
+        <property type="String" >text</property>
+      </properties>
+    </customwidget>
+  </customwidgets>
+  <tabstops>
+    <tabstop>tabConfig</tabstop>
+    <tabstop>edtScreen</tabstop>
+    <tabstop>edtPasswd</tabstop>
+    <tabstop>edtServer</tabstop>
+    <tabstop>edtPort</tabstop>
+    <tabstop>chkHTTP</tabstop>
+    <tabstop>chkAuto</tabstop>
+  </tabstops>
+  <images>
+    <image name="image0" >
+      <data format="XPM.GZ" length="646" >789c6dd2c10ac2300c00d07bbf2234b7229d1ddec44f503c0ae2a154410f53d0ed20e2bf6bdb656dd6861dd23d9a66591b0587fd1654235ebded6f0edcd53e419d87ae7b1f4f9b8f906d0bfe012317426a70b07bdc2f3ec77f8ed6b89559061a0343d06a124cc105596482585094bc0ae599b04646c9018926491b2205e140c485cace25755c175d0a967b622ff900b8cc9c7d29af594ea722d589167f813aa852ba07d94b9dce296e883fe7bb163f23896753</data>
+    </image>
+  </images>
+</ui>

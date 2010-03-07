@@ -1,0 +1,152 @@
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>EditMailBase</class>
+  <widget class="QDialog" name="EditMail" >
+    <property name="geometry" stdset="0" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>315</width>
+        <height>174</height>
+      </rect>
+    </property>
+    <property name="sizePolicy" stdset="0" >
+      <sizepolicy>
+        <hsizetype>5</hsizetype>
+        <vsizetype>5</vsizetype>
+      </sizepolicy>
+    </property>
+    <property name="windowTitle" stdset="0" >
+      <string>EditMail</string>
+    </property>
+    <property name="sizeGripEnabled" stdset="0" >
+      <bool>true</bool>
+    </property>
+    <layout class="QVBoxLayout" >
+      <property name="margin" stdset="0" >
+        <number>11</number>
+      </property>
+      <property name="spacing" stdset="0" >
+        <number>6</number>
+      </property>
+      <item>
+        <widget class="QLabel" name="TextLabel1" >
+          <property name="text" stdset="0" >
+            <string>Enter Email address:</string>
+          </property>
+          <property name="alignment" stdset="0" >
+            <set>Qt::AlignVCenter|Qt::AlignLeft</set>
+          </property>
+          <property name="wordWrap" >
+            <bool>false</bool>
+          </property>
+        </widget>
+      </item>
+      <item>
+        <widget class="QLineEdit" name="edtMail" />
+      </item>
+      <item>
+        <widget class="QCheckBox" name="chkPublish" >
+          <property name="text" stdset="0" >
+            <string>&amp;Publish</string>
+          </property>
+        </widget>
+      </item>
+      <item>
+        <spacer name="Spacer17" >
+          <property name="sizeHint" >
+            <size>
+              <width>20</width>
+              <height>20</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>QSizePolicy::Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+          </property>
+        </spacer>
+      </item>
+      <item>
+        <widget class="Line" name="Line4" >
+          <property name="frameShape" stdset="0" >
+            <enum>QFrame::HLine</enum>
+          </property>
+          <property name="frameShadow" stdset="0" >
+            <enum>QFrame::Sunken</enum>
+          </property>
+          <property name="frameShape" stdset="0" >
+            <enum>QFrame::HLine</enum>
+          </property>
+        </widget>
+      </item>
+      <item>
+        <layout class="QHBoxLayout" >
+          <property name="margin" stdset="0" >
+            <number>0</number>
+          </property>
+          <property name="spacing" stdset="0" >
+            <number>6</number>
+          </property>
+          <item>
+            <spacer name="Horizontal Spacing2" >
+              <property name="sizeHint" >
+                <size>
+                  <width>20</width>
+                  <height>20</height>
+                </size>
+              </property>
+              <property name="sizeType" >
+                <enum>QSizePolicy::Expanding</enum>
+              </property>
+              <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+              </property>
+            </spacer>
+          </item>
+          <item>
+            <widget class="QPushButton" name="buttonOk" >
+              <property name="text" stdset="0" >
+                <string>&amp;OK</string>
+              </property>
+              <property name="autoDefault" stdset="0" >
+                <bool>true</bool>
+              </property>
+              <property name="default" stdset="0" >
+                <bool>true</bool>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="QPushButton" name="buttonCancel" >
+              <property name="text" stdset="0" >
+                <string>&amp;Cancel</string>
+              </property>
+              <property name="autoDefault" stdset="0" >
+                <bool>true</bool>
+              </property>
+            </widget>
+          </item>
+        </layout>
+      </item>
+    </layout>
+  </widget>
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+  <connections>
+    <connection>
+      <sender>buttonOk</sender>
+      <signal>clicked()</signal>
+      <receiver>EditMail</receiver>
+      <slot>accept()</slot>
+    </connection>
+    <connection>
+      <sender>buttonCancel</sender>
+      <signal>clicked()</signal>
+      <receiver>EditMail</receiver>
+      <slot>reject()</slot>
+    </connection>
+  </connections>
+</ui>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AutoAwayConfigBase</class>
+ <widget class="QWidget" name="AutoAwayConfigBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>484</width>
+    <height>243</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form1</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QCheckBox" name="chkAway">
+     <property name="text">
+      <string>Set &quot;Away&quot; status after</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QSpinBox" name="spnAway">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QLabel" name="TextLabel1">
+     <property name="text">
+      <string>minutes not using computer</string>
+     </property>
+     <property name="wordWrap">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QCheckBox" name="chkNA">
+     <property name="text">
+      <string>Set &quot;N/A&quot; status after</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QSpinBox" name="spnNA">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QLabel" name="TextLabel2">
+     <property name="text">
+      <string>minutes of &quot;Away&quot;</string>
+     </property>
+     <property name="wordWrap">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QCheckBox" name="chkOff">
+     <property name="text">
+      <string>Set &quot;Offline&quot; status after</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QSpinBox" name="spnOff">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="QLabel" name="TextLabel3">
+     <property name="text">
+      <string>minutes of &quot;N/A&quot;</string>
+     </property>
+     <property name="wordWrap">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <spacer name="Spacer14">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>10</width>
+       <height>10</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="4" column="0" colspan="3">
+    <widget class="QCheckBox" name="chkAlert">
+     <property name="text">
+      <string>Disable online alert in &quot;Away&quot;, &quot;N/A&quot;, &quot;DND&quot; and &quot;Occupied&quot; List</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <spacer name="Spacer14_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>95</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>chkAway</tabstop>
+  <tabstop>spnAway</tabstop>
+  <tabstop>chkNA</tabstop>
+  <tabstop>spnNA</tabstop>
+  <tabstop>chkOff</tabstop>
+  <tabstop>spnOff</tabstop>
+  <tabstop>chkAlert</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

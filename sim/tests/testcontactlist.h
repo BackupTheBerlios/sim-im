@@ -1,0 +1,58 @@
+
+#ifndef SIM_TESTCONTACTLIST_H
+#define SIM_TESTCONTACTLIST_H
+
+#include <QtTest/QtTest>
+#include <QObject>
+#include "contacts.h"
+#include "contacts/client.h"
+#include "event.h"
+
+namespace testContactList
+{
+    using namespace SIM;
+    class TestClient : public Client
+    {
+    public:
+        TestClient(Protocol* protocol, Buffer* buf);
+        virtual QString name();
+        virtual QString dataName(void*);
+        virtual QWidget* setupWnd();
+        virtual bool isMyData(clientData*&, Contact*&);
+        virtual bool createData(clientData*&, Contact*);
+        virtual void contactInfo(void *clientData, unsigned long &status, unsigned &style, QString &statusIcon, QSet<QString> *icons = NULL);
+        virtual void setupContact(Contact*, void *data);
+        virtual bool send(Message*, void *data);
+        virtual bool canSend(unsigned type, void *data);
+        virtual QWidget* searchWindow(QWidget *parent);
+        QStringList statuses() { return QStringList(); };
+    };
+
+    class Test: public QObject, public SIM::EventReceiver
+    {
+        Q_OBJECT
+    public:
+        Test();
+        virtual bool processEvent(SIM::Event*);
+    private slots:
+        void initTestCase();
+        void cleanupTestCase();
+
+        void testClientManipulation();
+        void testGroupManipulation();
+        void testGroupIterator();
+        void testPacketTypeManipulation();
+        void testContactManipulation();
+        
+    private:
+        ContactList* m_contactList;
+        int m_groupAdded;
+        int m_contactAdded;
+    };
+
+}
+
+#endif
+
+// vim: set expandtab:
+

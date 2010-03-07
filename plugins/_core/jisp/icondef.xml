@@ -1,0 +1,363 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<icondef>
+  <meta>
+    <name>SIM Icons</name>
+    <version>0.9.6</version>
+    <description>SIM icons.</description>
+    <author jid="shutoff@jabber.ru">Vladimir Shutoff</author>
+    <creation>2004-06-11</creation>
+    <home>http://sim-im.org/</home>
+  </meta>
+  <icon name="SIM">
+	<object mime="image/png">sim.png</object>
+  </icon>
+  <icon name="about_kde" kicon="about_kde">
+  </icon>
+  <icon name="ICQ" kicon="licq" flags="65340">
+	<object mime="image/png">icq.png</object>
+  </icon>
+  <icon name="MSN" flags="512">
+	<object mime="image/png">msn.png</object>
+  </icon>
+  <icon name="AIM">
+	<object mime="image/png">aim.png</object>
+  </icon>
+  <icon name="Yahoo!">
+	<object mime="image/png">yahoo.png</object>
+  </icon>
+  <icon name="Yahoo!_offline">
+	<object mime="image/png">yahoo_offline.png</object>
+  </icon>
+  <icon name="Yahoo!_away">
+	<object mime="image/png">yahoo_away.png</object>
+  </icon>
+  <icon name="Yahoo!_na">
+	<object mime="image/png">yahoo_na.png</object>
+  </icon>
+  <icon name="Yahoo!_dnd">
+	<object mime="image/png">yahoo_dnd.png</object>
+  </icon>
+  <icon name="GG">
+    <object mime="image/png">gadu.png</object>
+  </icon>
+  <icon name="GG_away">
+    <object mime="image/png">gadu_away.png</object>
+  </icon>
+  <icon name="GG_na">
+    <object mime="image/png">gadu_na.png</object>
+  </icon>
+  <icon name="GG_dnd">
+    <object mime="image/png">gadu_dnd.png</object>
+  </icon>
+  <icon name="GG_invisible">
+    <object mime="image/png">gadu_invisible.png</object>
+  </icon>
+  <icon name="GG_offline">
+    <object mime="image/png">gadu_offline.png</object>
+  </icon>
+  <icon name="away">
+	<object mime="image/png">away.png</object>
+  </icon>
+  <icon name="na">
+	<object mime="image/png">na.png</object>
+  </icon>
+  <icon name="dnd">
+	<object mime="image/png">dnd.png</object>
+  </icon>
+  <icon name="occupied">
+	<object mime="image/png">occupied.png</object>
+  </icon>
+  <icon name="ffc">
+	<object mime="image/png">ffc.png</object>
+  </icon>
+  <icon name="exit" kicon="exit">
+	<object mime="image/png">exit.png</object>
+  </icon>
+  <icon name="button_ok" kicon="button_ok">
+	<object mime="image/png">button_ok.png</object>
+  </icon>
+  <icon name="button_cancel" kicon="button_cancel">
+	<object mime="image/png">button_cancel.png</object>
+  </icon>
+  <icon name="1downarrow" kicon="1downarrow">
+	<object mime="image/png">1downarrow.png</object>
+  </icon>
+  <icon name="1uparrow" kicon="1uparrow">
+	<object mime="image/png">1uparrow.png</object>
+  </icon>
+  <icon name="1leftarrow" kicon="1leftarrow">
+	<object mime="image/png">1leftarrow.png</object>
+  </icon>
+  <icon name="1rightarrow" kicon="1rightarrow">
+	<object mime="image/png">1rightarrow.png</object>
+  </icon>
+  <icon name="configure" kicon="configure">
+	<object mime="image/png">configure.png</object>
+  </icon>
+  <icon name="fileopen" kicon="fileopen">
+	<object mime="image/png">fileopen.png</object>
+  </icon>
+  <icon name="filesave" kicon="filesave">
+	<object mime="image/png">filesave.png</object>
+  </icon>
+  <icon name="remove" kicon="remove">
+	<object mime="image/png">remove.png</object>
+  </icon>
+  <icon name="error">
+	<object mime="image/png">error.png</object>
+  </icon>
+  <icon name="collapsed">
+	<object mime="image/png">collapsed.png</object>
+  </icon>
+  <icon name="expanded">
+	<object mime="image/png">expanded.png</object>
+  </icon>
+  <icon name="mail_generic" kicon="mail_generic">
+	<object mime="image/png">mail_generic.png</object>
+  </icon>
+  <icon name="info" kicon="info">
+	<object mime="image/png">info.png</object>
+  </icon>
+  <icon name="text" kicon="text">
+	<object mime="image/png">text.png</object>
+  </icon>
+  <icon name="phone">
+	<object mime="image/png">phone.png</object>
+  </icon>
+  <icon name="fax">
+	<object mime="image/png">fax.png</object>
+  </icon>
+  <icon name="cell">
+	<object mime="image/png">cell.png</object>
+  </icon>
+  <icon name="pager">
+	<object mime="image/png">pager.png</object>
+  </icon>
+  <icon name="nophone">
+	<object mime="image/png">nophone.png</object>
+  </icon>
+  <icon name="webpress" kicon="webpress">
+	<object mime="image/png">webpress.png</object>
+  </icon>
+  <icon name="find" kicon="find">
+	<object mime="image/png">find.png</object>
+  </icon>
+  <icon name="nonim">
+	<object mime="image/png">nonim.png</object>
+  </icon>
+  <icon name="online_on">
+	<object mime="image/png">online_on.png</object>
+  </icon>
+  <icon name="online_off">
+	<object mime="image/png">online_off.png</object>
+  </icon>
+  <icon name="grp_on">
+	<object mime="image/png">grp_on.png</object>
+  </icon>
+  <icon name="grp_off">
+	<object mime="image/png">grp_off.png</object>
+  </icon>
+  <icon name="grp_create">
+	<object mime="image/png">grp_create.png</object>
+  </icon>
+  <icon name="grp_rename">
+	<object mime="image/png">grp_rename.png</object>
+  </icon>
+  <icon name="home">
+	<object mime="image/png">home.png</object>
+  </icon>
+  <icon name="work">
+	<object mime="image/png">work.png</object>
+  </icon>
+  <icon name="security">
+	<object mime="image/png">security.png</object>
+  </icon>
+  <icon name="run" kicon="run">
+	<object mime="image/png">run.png</object>
+  </icon>
+  <icon name="network">
+	<object mime="image/png">network.png</object>
+  </icon>
+  <icon name="message">
+	<object mime="image/png">message.png</object>
+  </icon>
+  <icon name="file">
+	<object mime="image/png">file.png</object>
+  </icon>
+  <icon name="sms">
+	<object mime="image/png">sms.png</object>
+  </icon>
+  <icon name="url">
+	<object mime="image/png">url.png</object>
+  </icon>
+  <icon name="contacts">
+	<object mime="image/png">contacts.png</object>
+  </icon>
+  <icon name="auth">
+	<object mime="image/png">auth.png</object>
+  </icon>
+  <icon name="empty">
+	<object mime="image/png">empty.png</object>
+  </icon>
+  <icon name="translit">
+	<object mime="image/png">translit.png</object>
+  </icon>
+  <icon name="bgcolor">
+	<object mime="image/png">bgcolor.png</object>
+  </icon>
+  <icon name="fgcolor">
+	<object mime="image/png">fgcolor.png</object>
+  </icon>
+  <icon name="pict">
+	<object mime="image/png">pict.png</object>
+  </icon>
+  <icon name="text_bold" kicon="text_bold">
+	<object mime="image/png">text_bold.png</object>
+  </icon>
+  <icon name="text_italic" kicon="text_italic">
+	<object mime="image/png">text_italic.png</object>
+  </icon>
+  <icon name="text_under" kicon="text_under">
+	<object mime="image/png">text_under.png</object>
+  </icon>
+  <icon name="text_strike" kicon="text_strike">
+	<object mime="image/png">text_strike.png</object>
+  </icon>
+  <icon name="cancel" kicon="cancel">
+	<object mime="image/png">cancel.png</object>
+  </icon>
+  <icon name="filter" kicon="filter">
+	<object mime="image/png">filter.png</object>
+  </icon>
+  <icon name="history" kicon="history">
+	<object mime="image/png">history.png</object>
+  </icon>
+  <icon name="editcut" kicon="editcut">
+	<object mime="image/png">editcut.png</object>
+  </icon>
+  <icon name="editcopy" kicon="editcopy">
+	<object mime="image/png">editcopy.png</object>
+  </icon>
+  <icon name="editpaste" kicon="editpaste">
+	<object mime="image/png">editpaste.png</object>
+  </icon>
+  <icon name="undo" kicon="undo">
+	<object mime="image/png">undo.png</object>
+  </icon>
+  <icon name="redo" kicon="redo">
+	<object mime="image/png">redo.png</object>
+  </icon>
+  <icon name="typing">
+	<object mime="image/png">typing.png</object>
+  </icon>
+  <icon name="fileclose" kicon="fileclose">
+	<object mime="image/png">fileclose.png</object>
+  </icon>
+  <icon name="encrypted" kicon="encrypted">
+	<object mime="image/png">encrypted.png</object>
+  </icon>
+  <icon name="listmsg">
+	<object mime="image/png">listmsg.png</object>
+  </icon>
+  <icon name="urgentmsg">
+	<object mime="image/png">urgentmsg.png</object>
+  </icon>
+  <icon name="help" kicon="help">
+	<object mime="image/png">help.png</object>
+  </icon>
+  <icon name="btn_more">
+	<object mime="image/png">btn_more.png</object>
+  </icon>;
+  <icon name="chat">
+	<object mime="image/png">chat.png</object>
+  </icon>;
+  <icon name="encoding" kicon="charset">
+	<object mime="image/png">encoding.png</object>
+  </icon>
+  <icon name="add" kicon="bookmark_add">
+	<object mime="image/png">add.png</object>
+  </icon>
+  <icon name="new" kicon="filenew">
+	<object mime="image/png">new.png</object>
+  </icon>
+  <icon name="ignorelist">
+	<object mime="image/png">ignorelist.png</object>
+  </icon>
+  <icon name="floating">
+	<object mime="image/png">floating.png</object>
+  </icon>
+  <icon name="upd" flags="160">
+  </icon>
+  <icon name="SMS">
+	<object mime="image/png">cell.png</object>
+  </icon>
+  <icon name="birthday">
+	<object mime="image/png">birthday.png</object>
+  </icon>
+  <icon name="more">
+	<object mime="image/png">more.png</object>
+  </icon>
+  <icon name="interest">
+	<object mime="image/png">interest.png</object>
+  </icon>
+  <icon name="past">
+	<object mime="image/png">past.png</object>
+  </icon>
+  <icon name="useronline">
+	<object mime="image/png">useronline.png</object>
+  </icon>
+  <icon name="useroffline">
+	<object mime="image/png">useroffline.png</object>
+  </icon>
+  <icon name="userunknown">
+	<object mime="image/png">userunknown.png</object>
+  </icon>
+  <icon name="web">
+	<object mime="image/png">web.png</object>
+  </icon>
+  <icon name="mailpager">
+	<object mime="image/png">mailpager.png</object>
+  </icon>
+  <icon name="icqphone">
+	<object mime="image/png">icqphone.png</object>
+  </icon>
+  <icon name="icqphonebusy">
+	<object mime="image/png">icqphonebusy.png</object>
+  </icon>
+  <icon name="sharedfiles">
+	<object mime="image/png">sharedfiles.png</object>
+  </icon>
+  <icon name="Jabber">
+	<object mime="image/png">jabber.png</object>
+  </icon>
+  <icon name="reg">
+	<object mime="image/png">register.png</object>
+  </icon>
+  <icon name="connect" kicon="connect_established">
+	<object mime="image/png">connect.png</object>
+  </icon>
+  <icon name="lunch">
+	<object mime="image/png">lunch.png</object>
+  </icon>
+  <icon name="onback">
+	<object mime="image/png">onback.png</object>
+  </icon>
+  <icon name="onphone">
+	<object mime="image/png">onphone.png</object>
+  </icon>
+  <icon name="alert">
+	<object mime="image/png">alert.png</object>
+  </icon>
+  <icon name="sound">
+	<object mime="image/png">sound.png</object>
+  </icon>
+  <icon name="nosound">
+	<object mime="image/png">nosound.png</object>
+  </icon>
+  <icon name="LiveJournal">
+	<object mime="image/png">livejournal.png</object>
+  </icon>
+  <icon name="simcard">
+	<object mime="image/png">simcard.png</object>
+  </icon>
+</icondef>

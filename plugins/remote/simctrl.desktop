@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=simctrl
+Icon=licq
+Type=Service
+MimeType=application/x-icq;
+GenericName=SIM remote control
+Terminal=false
+Exec=simctrl
+X-KDE-StartupNotify=true
+X-DCOP-ServiceType=Unique

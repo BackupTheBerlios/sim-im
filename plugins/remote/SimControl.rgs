@@ -1,0 +1,26 @@
+HKCR
+{
+	Simremote.SimControl.1 = s 'SimControl Class'
+	{
+		CLSID = s '{0B4C5D94-61D9-41C6-AD05-4750A0E86C2E}'
+	}
+	Simremote.SimControl = s 'SimControl Class'
+	{
+		CLSID = s '{0B4C5D94-61D9-41C6-AD05-4750A0E86C2E}'
+		CurVer = s 'Simremote.SimControl.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {0B4C5D94-61D9-41C6-AD05-4750A0E86C2E} = s 'SimControl Class'
+		{
+			ProgID = s 'Simremote.SimControl.1'
+			VersionIndependentProgID = s 'Simremote.SimControl'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{C4826912-0E46-445E-8B03-9683AAF5143F}'
+		}
+	}
+}

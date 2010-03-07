@@ -1,0 +1,128 @@
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>WarnDlgBase</class>
+  <widget class="QDialog" name="WarningDlg" >
+    <property name="geometry" stdset="0" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>374</width>
+        <height>193</height>
+      </rect>
+    </property>
+    <property name="windowTitle" stdset="0" >
+      <string>Send warning</string>
+    </property>
+    <property name="sizeGripEnabled" stdset="0" >
+      <bool>true</bool>
+    </property>
+    <layout class="QVBoxLayout" >
+      <property name="margin" stdset="0" >
+        <number>11</number>
+      </property>
+      <property name="spacing" stdset="0" >
+        <number>6</number>
+      </property>
+      <item>
+        <widget class="QLabel" name="lblInfo" >
+          <property name="text" stdset="0" >
+            <string>Click OK to send warning to %1. This will raise %1's warning and limit his or her activity. Do this only if %1 has done something to merit a warning.</string>
+          </property>
+          <property name="alignment" stdset="0" >
+            <set>Qt::AlignVCenter|Qt::AlignLeft</set>
+          </property>
+          <property name="wordWrap" >
+            <bool>true</bool>
+          </property>
+        </widget>
+      </item>
+      <item>
+        <widget class="QCheckBox" name="chkAnon" >
+          <property name="text" stdset="0" >
+            <string>Warn &amp;anonymously</string>
+          </property>
+        </widget>
+      </item>
+      <item>
+        <widget class="QLabel" name="TextLabel4" >
+          <property name="text" stdset="0" >
+            <string>Check this if you don't want your screen name revealed.&#xd;
+Anonymous warnings are less severe.</string>
+          </property>
+          <property name="alignment" stdset="0" >
+            <set>Qt::AlignTop|Qt::AlignLeft</set>
+          </property>
+          <property name="wordWrap" >
+            <bool>true</bool>
+          </property>
+        </widget>
+      </item>
+      <item>
+        <layout class="QHBoxLayout" >
+          <property name="margin" stdset="0" >
+            <number>0</number>
+          </property>
+          <property name="spacing" stdset="0" >
+            <number>6</number>
+          </property>
+          <item>
+            <spacer name="Horizontal Spacing2" >
+              <property name="sizeHint" >
+                <size>
+                  <width>20</width>
+                  <height>20</height>
+                </size>
+              </property>
+              <property name="sizeType" >
+                <enum>QSizePolicy::Expanding</enum>
+              </property>
+              <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+              </property>
+            </spacer>
+          </item>
+          <item>
+            <widget class="QPushButton" name="buttonOk" >
+              <property name="text" stdset="0" >
+                <string>&amp;OK</string>
+              </property>
+              <property name="autoDefault" stdset="0" >
+                <bool>true</bool>
+              </property>
+              <property name="default" stdset="0" >
+                <bool>true</bool>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="QPushButton" name="buttonCancel" >
+              <property name="text" stdset="0" >
+                <string>&amp;Cancel</string>
+              </property>
+              <property name="autoDefault" stdset="0" >
+                <bool>true</bool>
+              </property>
+            </widget>
+          </item>
+        </layout>
+      </item>
+    </layout>
+  </widget>
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+  <connections>
+    <connection>
+      <sender>buttonOk</sender>
+      <signal>clicked()</signal>
+      <receiver>WarningDlg</receiver>
+      <slot>accept()</slot>
+    </connection>
+    <connection>
+      <sender>buttonCancel</sender>
+      <signal>clicked()</signal>
+      <receiver>WarningDlg</receiver>
+      <slot>reject()</slot>
+    </connection>
+  </connections>
+</ui>

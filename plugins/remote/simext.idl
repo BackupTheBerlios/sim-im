@@ -1,0 +1,38 @@
+// simext.idl : IDL source for simext.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (simext.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	[
+		object,
+		uuid(7A6FBB28-B284-4731-97AF-9AE32EA0BB89),
+	
+		helpstring("ISIM_ext Interface"),
+		pointer_default(unique)
+	]
+	interface ISIM_ext : IUnknown
+	{
+	};
+
+[
+	uuid(F67751E0-1470-447C-8B3E-000D155711A2),
+	version(1.0),
+	helpstring("simext 1.0 Type Library")
+]
+library SIMEXTLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	[
+		uuid(8DD848D4-81E7-490E-9A3D-CE9058956208),
+		helpstring("SIM_ext Class")
+	]
+	coclass SIM_ext
+	{
+		[default] interface ISIM_ext;
+	};
+};

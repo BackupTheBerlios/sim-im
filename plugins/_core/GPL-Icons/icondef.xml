@@ -1,0 +1,437 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<icondef>
+  <meta>
+    <name>SIM smiles</name>
+    <version>0.9.6</version>
+    <description>GPL Sim-IM icons</description>
+    <author jid="N@shaplov.ru">Nikolay Shplov</author>
+    <creation>2004-06-11</creation>
+    <home>http://www.sim-im.org</home>
+  </meta>
+  
+  <icon name="SIM">
+    <object mime="image/png">sim.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Author: Eldar Fazullin, for Alexey Panfilov (lehis) <sim-im@lehis.ru> -->
+  </icon>
+
+  <icon name="Jabber">
+    <object mime="image/png">jabber.png</object>
+    <!-- Licence: TODO: Find out where this icon came from -->
+  </icon>
+  
+  <icon name="Jabber_offline">
+    <object mime="image/png">jabber_offline.png</object>
+    <!-- Licence: TODO: Find out where this icon came from -->
+  </icon>
+  
+  
+  <icon name="ICQ" flags="65340">
+    <object mime="image/png">icq_online.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Origin: http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/oscar/icons/cr16-action-icq_online.png -->
+  </icon>
+    
+  <icon name="MSN" flags="512">
+    <object mime="image/png">msn_online.png</object>
+     <!-- Licence: GNU/GPL -->
+     <!-- Origin: http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/msn/icons/cr16-action-msn_online.png -->
+  </icon>
+    
+  <icon name="AIM">
+    <object mime="image/png">aim_online.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Origin: http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/oscar/icons/cr16-action-aim_online.png -->
+  </icon>
+    
+  <icon name="Yahoo!">
+    <object mime="image/png">yahoo_online.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Origin: http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/yahoo/icons/cr16-app-yahoo_protocol.png --> 
+  </icon>
+  <icon name="Yahoo!_offline">
+    <object mime="image/png">yahoo_offline.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Author: Nikolay Shaplov N@shaplov.ru -->
+    <!-- Source: http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/yahoo/icons/cr16-app-yahoo_protocol.png --> 
+  </icon>
+  <icon name="Yahoo!_away">
+    <object mime="image/png">yahoo_away.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Author: Nikolay Shaplov N@shaplov.ru -->
+    <!-- Sources: http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/yahoo/icons/cr16-app-yahoo_protocol.png --> 
+    <!--          http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/yahoo/icons/cr16-action-yahoo_idle.png --> 
+  </icon>
+  <icon name="Yahoo!_na">
+    <object mime="image/png">yahoo_na.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Author: Nikolay Shaplov N@shaplov.ru -->
+    <!-- Sources: http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/yahoo/icons/cr16-app-yahoo_protocol.png --> 
+    <!--          http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/yahoo/icons/cr16-action-yahoo_away.png -->
+  </icon>
+  <icon name="Yahoo!_dnd">
+    <object mime="image/png">yahoo_dnd.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Author: Nikolay Shaplov N@shaplov.ru -->
+    <!-- Sources: http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/yahoo/icons/cr16-app-yahoo_protocol.png --> 
+    <!--          http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/yahoo/icons/cr16-action-yahoo_busy.png -->
+  </icon>      
+  <icon name="Yahoo!_invisible">
+    <object mime="image/png">yahoo_invisible.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Author: Nikolay Shaplov N@shaplov.ru -->
+    <!-- Sources: http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/yahoo/icons/cr16-app-yahoo_protocol.png --> 
+    <!--          http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/yahoo/icons/cr16-action-yahoo_invisible.png -->
+  </icon>
+  
+  <icon name="GG">
+    <object mime="image/png">gadu_online.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Origin: http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/gadu/icons/cr16-app-gadu_protocol.png -->
+  </icon>
+  <icon name="GG_away">
+    <object mime="image/png">gadu_away.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Origin: http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/gadu/icons/cr16-action-gg_away.png -->
+  </icon>
+  <!-- Let it be with default NA label
+  <icon name="GG_na">
+    <object mime="image/png">gadu_na.png</object>
+  </icon> -->
+  <icon name="GG_dnd">
+    <object mime="image/png">gadu_dnd.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Author: Nikolay Shaplov N@shaplov.ru -->
+    <!-- Sources: http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/gadu/icons/cr16-app-gadu_protocol.png -->
+    <!--          http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/yahoo/icons/cr16-action-gg_busy.png -->
+  </icon>
+  <icon name="GG_invisible">
+    <object mime="image/png">gadu_invisible.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Author: Nikolay Shaplov N@shaplov.ru -->
+    <!-- Sources: http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/gadu/icons/cr16-app-gadu_protocol.png -->
+    <!--          http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/yahoo/icons/cr16-action-yahoo_invisible.png -->
+  </icon>
+  <icon name="GG_offline">
+    <object mime="image/png">gadu_offline.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Origin: http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/gadu/icons/cr16-action-gg_away.png -->
+  </icon>
+
+  <icon name="away">
+    <object mime="image/png">def_status_away.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Origin: http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/oscar/icons/hi16-action-icq_away.png -->
+  </icon>
+  
+  <icon name="na">
+    <object mime="image/png">def_status_na.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Origin: http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/oscar/icons/hi16-action-icq_na.png -->
+  </icon>
+  <icon name="dnd">
+    <object mime="image/png">def_status_dnd.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Origin: http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/oscar/icons/hi16-action-icq_dnd.png -->
+  </icon>
+  <icon name="occupied">
+    <object mime="image/png">def_status_occupied.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Origin: http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/oscar/icons/hi16-action-icq_occupied.png -->
+  </icon>
+  <icon name="ffc">
+    <object mime="image/png">def_status_ffc.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Origin: http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/oscar/icons/hi16-action-icq_ffc.png -->
+  </icon>
+  
+  <icon name="exit">
+    <object mime="image/png">exit.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Origin: http://websvn.kde.org/trunk/KDE/kdeartwork/IconThemes/kdeclassic/16x16/actions/exit.png?rev=516936 -->
+  </icon>
+  
+   <icon name="button_ok">
+    <object mime="image/png">button_ok.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Origin: http://websvn.kde.org/trunk/KDE/kdelibs/pics/crystalsvg/cr16-action-ok.png?rev=518495 -->
+  </icon> 
+  <icon name="button_cancel">
+    <object mime="image/png">button_cancel.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Modification of: http://websvn.kde.org/trunk/KDE/kdelibs/pics/crystalsvg/cr32-action-button_cancel.png?rev=518495 -->
+   </icon>
+
+  
+  <icon name="1downarrow">
+    <object mime="image/png">1downarrow.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Modification of: http://websvn.kde.org/trunk/KDE/kdelibs/pics/crystalsvg/cr22-action-1downarrow.png?rev=518495 -->
+  </icon>
+  <icon name="1uparrow">
+    <object mime="image/png">1uparrow.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Modification of: http://websvn.kde.org/trunk/KDE/kdelibs/pics/crystalsvg/cr22-action-1uparrow.png?rev=518495 -->
+  </icon>
+  <icon name="1leftarrow">
+    <object mime="image/png">1leftarrow.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Modification of: http://websvn.kde.org/trunk/KDE/kdelibs/pics/crystalsvg/cr22-action-1leftarrow.png?rev=518495 -->
+  </icon>
+  <icon name="1rightarrow">
+    <object mime="image/png">1rightarrow.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Modification of: http://websvn.kde.org/trunk/KDE/kdelibs/pics/crystalsvg/cr22-action-1leftarrow.png?rev=518495 -->
+  </icon>
+  
+  <icon name="configure">
+    <object mime="image/png">configure.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Origin: http://websvn.kde.org/trunk/KDE/kdelibs/pics/crystalsvg/cr16-action-configure.png?rev=518495 -->
+  </icon>
+  
+  <icon name="fileopen">
+    <object mime="image/png">fileopen.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Origin: http://websvn.kde.org/trunk/KDE/kdelibs/pics/crystalsvg/cr16-action-fileopen.png?rev=518495 -->
+  </icon>
+  <icon name="filesave">
+    <object mime="image/png">filesave.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Origin: http://websvn.kde.org/trunk/KDE/kdelibs/pics/crystalsvg/cr16-action-fileopen.png?rev=518495 -->
+  </icon>
+  
+  <icon name="remove">
+    <object mime="image/png">remove.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Origin: http://websvn.kde.org/trunk/KDE/kdelibs/pics/crystalsvg/cr16-action-remove.png?rev=518495 -->
+  </icon>
+  <icon name="error">
+    <object mime="image/png">error.png</object>
+    <!-- TODO: Make it red not yellow...-->
+    <!-- Licence: GNU/GPL -->
+    <!-- Origin: http://websvn.kde.org/trunk/KDE/kdelibs/pics/crystalsvg/crsc-action-error.svgz?rev=518495 -->
+  </icon>
+
+  <icon name="collapsed">
+    <object mime="image/png">group_collapsed.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Modification of: http://websvn.kde.org/trunk/KDE/kdelibs/pics/crystalsvg/cr22-action-1downarrow.png?rev=518495 -->
+  </icon>
+  <icon name="expanded">
+    <object mime="image/png">group_expanded.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Modification of: http://websvn.kde.org/trunk/KDE/kdelibs/pics/crystalsvg/cr22-action-1downarrow.png?rev=518495 -->
+  </icon>
+
+  <icon name="mail_generic">
+    <object mime="image/png">mail_generic.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Origin: http://websvn.kde.org/trunk/KDE/kdelibs/pics/crystalsvg/cr16-action-mail_generic.png?rev=518495-->
+  </icon>  
+  <icon name="info">
+    <object mime="image/png">info.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Origin:http://websvn.kde.org/trunk/KDE/kdelibs/pics/crystalsvg/cr16-action-mail_generic.png?rev=518495 -->
+  </icon>
+  <icon name="text">
+    <object mime="image/png">fonts.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Modification of: http://websvn.kde.org/trunk/KDE/kdelibs/pics/crystalsvg/cr32-action-fonts.png?rev=518495& -->
+  </icon>
+  
+  <icon name="phone">
+    <object mime="image/png">phone.png</object>
+    <!-- Licence: GNU/LGPL -->
+    <!-- From: http://www.kde-look.org/content/show.php?content=8341 -->
+    <!-- /16x16/apps/linphone.png-->
+  </icon>
+  <icon name="fax">
+    <object mime="image/png">fax.png</object>
+    <!-- Licence: GNU/LGPL -->
+    <!-- Origin:  http://websvn.kde.org/trunk/KDE/kdegraphics/kfax/hi16-app-kfax.png?rev=517323  -->
+  </icon>
+  <icon name="cell">
+    <object mime="image/png">cell.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Origin: http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/sms/icons/cr16-app-sms_protocol.png?rev=518176 -->
+  </icon>
+   <icon name="pager">
+     <object mime="image/png">pager.png</object>
+     <!-- Licence: GNU/LGPL -->
+     <!-- From: http://www.kde-look.org/content/show.php?content=8341 -->
+     <!-- Modification of: 128x128/devices/pda_black.png-->
+     <!-- TODO: Resize it again -->
+  </icon>
+  <icon name="nophone">
+    <object mime="image/png">no_phone.png</object>
+    <!-- Licence: GNU/LGPL -->
+    <!-- Modification of : http://www.kde-look.org/content/show.php?content=8341 /16x16/apps/linphone.png -->
+    <!-- and http://websvn.kde.org/trunk/KDE/kdelibs/pics/crystalsvg/cr32-action-button_cancel.png?rev=518495 -->
+  </icon>
+  <icon name="webpress">
+    <object mime="image/png">webpress.png</object>
+      <!-- Licence: GNU/LGPL -->
+      <!-- From: http://www.kde-look.org/content/show.php?content=8341 -->
+      <!-- 16x16/actions/reload.png --> 
+  </icon>
+  <icon name="find">
+    <object mime="image/png">find_user.png</object>
+      <!-- Licence: GNU/LGPL -->
+      <!-- Author: Nikolay Shaplov N@shaplov.ru -->
+      <!-- Sources: http://www.kde-look.org/content/show.php?content=8341 16x16/actions/findf.png-->
+      <!--          http://www.kde-look.org/content/show.php?content=8341 16x16/apps/kuser.png -->
+  </icon>
+
+  <icon name="nonim">
+    <object mime="image/png">non-im-contact.png</object>
+    <!-- Licence: GNU/LGPL -->
+    <!--    From: http://www.kde-look.org/content/show.php?content=8341 16x16/apps/identity.png -->
+  </icon>
+
+  <icon name="online_on">
+    <object mime="image/png">online_on.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Author: Eldar Fazullin, for Alexey Panfilov (lehis) <sim-im@lehis.ru> -->
+  </icon>
+  <icon name="online_off">
+    <object mime="image/png">online_off.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Author: Eldar Fazullin, for Alexey Panfilov (lehis) <sim-im@lehis.ru> -->
+  </icon>
+
+  <icon name="grp_on">
+    <object mime="image/png">grp_on.png</object>  
+    <!-- Licence: GNU/LGPL -->
+    <!--    From: http://www.kde-look.org/content/show.php?content=8341 16x16/actions/agt_family.png -->
+  </icon>
+  <icon name="grp_off">
+    <object mime="image/png">grp_off.png</object>  
+    <!-- Licence: GNU/LGPL -->
+    <!-- Author: Nikolay Shaplov N@shaplov.ru -->
+      <!-- Sources: http://www.kde-look.org/content/show.php?content=8341 16x16/actions/agt_family.png -->
+      <!--          http://www.kde-look.org/content/show.php?content=8341 16x16/actions/agt_action_fail.png -->
+  </icon>
+  <icon name="grp_create">
+    <object mime="image/png">grp_create.png</object>  
+    <!-- Licence: GNU/LGPL -->
+    <!-- Author: Nikolay Shaplov N@shaplov.ru -->
+    <!-- Sources: http://www.kde-look.org/content/show.php?content=8341 16x16/actions/agt_family.png -->
+    <!--          http://www.kde-look.org/content/show.php?content=8341 16x16/actions/add_user.png -->
+  </icon>
+  
+  <icon name="grp_rename">
+    <object mime="image/png">grp_rename.png</object>  
+    <!-- Licence: GNU/LGPL -->
+    <!-- Author: Nikolay Shaplov N@shaplov.ru -->
+    <!-- Sources: http://www.kde-look.org/content/show.php?content=8341 16x16/actions/agt_family.png -->
+    <!--          http://www.kde-look.org/content/show.php?content=8341 16x16/actions/completion.png -->
+  </icon>
+  
+  <icon name="home">
+    <object mime="image/png">home.png</object>
+    <!-- Licence: GNU/LGPL -->
+    <!--  Source: http://www.kde-look.org/content/show.php?content=8341 16x16/actions/agt_home.png -->
+  </icon>
+  <icon name="work">
+    <object mime="image/png">work.png</object>
+    <!-- Licence: GNU/LGPL -->
+    <!--  Source: http://www.kde-look.org/content/show.php?content=8341 16x16/actions/agt_business.png -->
+  </icon>
+  <icon name="security">
+    <object mime="image/png">security.png</object>
+    <!-- Licence: GNU/LGPL -->
+    <!--  Source: http://www.kde-look.org/content/show.php?content=8341 16x16/actions/lock.png -->
+  </icon>
+  <icon name="run">
+    <object mime="image/png">run.png</object>
+    <!-- Licence: GNU/LGPL -->
+    <!--  Source: http://www.kde-look.org/content/show.php?content=8341 16x16/actions/gear.png -->
+    <!--    TODO: IMHO Jabber Browser and Configure menu shuld use two different "run" icons -->
+    <!--          I think it would be wise to rename it to plugins.png for Configure window -->
+  </icon>
+  
+  <icon name="network">
+    <object mime="image/png">network.png</object>
+    <!--          Licence: GNU/LGPL -->
+    <!--  Modification of: http://www.kde-look.org/content/show.php?content=8341 22x22/filesystems/connect_to_network.png -->
+    <!--             TODO: It would be good to find better icon later... This one is not good enough -->
+  </icon>
+  
+  <icon name="message">
+    <object mime="image/png">message.png</object>
+    <!-- Licence: GNU/LGPL -->
+    <!--  Source: http://www.kde-look.org/content/show.php?content=8341 16x16/actions/comment.png -->
+  </icon>  
+  <icon name="file">
+    <object mime="image/png">file.png</object>
+    <!-- Licence: GNU/LGPL -->
+    <!--  Source: http://www.kde-look.org/content/show.php?content=8341 16x16/actions/filesave.png -->
+    <!--    TODO: I think that floppy is not the best icon for "send file", but i do not know the better one :-( -->
+  </icon>
+  <icon name="sms">
+    <object mime="image/png">sms.png</object>  
+    <!-- Licence: GNU/LGPL -->
+    <!-- Author: Nikolay Shaplov N@shaplov.ru -->
+    <!-- Sources: http://www.kde-look.org/content/show.php?content=8341 16x16/actions/comment.png -->
+    <!--          http://www.kde-look.org/content/show.php?content=8341 16x16/actions/msn_phone.png -->
+    <!--          http://www.kde-look.org/content/show.php?content=8341 16x16/actions/compfile.png -->
+  </icon>
+  <icon name="url">
+    <object mime="image/png">url.png</object> 
+    <!-- Licence: GNU/LGPL -->
+    <!--  Source: http://www.kde-look.org/content/show.php?content=8341 16x16/actions/agt_internet.png  -->    
+  </icon>
+  <icon name="contacts">
+    <object mime="image/png">contacts.png</object> 
+    <!-- Licence: GNU/LGPL -->
+    <!-- Sources: http://www.kde-look.org/content/show.php?content=8341 32x32/apps/identity.png -->
+    <!--          http://www.kde-look.org/content/show.php?content=8341 16x16/actions/compfile.png -->
+  </icon>
+  
+  <icon name="auth">
+    <object mime="image/png">auth.png</object> 
+    <!-- Licence: GNU/LGPL -->
+    <!--  Source: http://www.kde-look.org/content/show.php?content=8341 16x16/actions/filenew.png -->
+    <!--          Filter icon form OpenOffice.org, do not know exact filename, I've taken it from screenshot-->
+  </icon>
+  
+  <icon name="empty">
+    <object mime="image/png">empty.png</object>
+    <!-- Licence: GNU/LGPL -->
+    <!-- Do not think that empty transpanent png file will have any problems with licenses ;-) -->
+  </icon>
+
+  <icon name="floating">
+    <object mime="image/png">floating.png</object>
+    <!-- Licence: GNU/LGPL -->
+    <!-- Author: Nikolay Shaplov N@shaplov.ru -->
+    <!--  Sources: http://www.kde-look.org/content/show.php?content=8341 16x16/actions/frame_edit.png -->
+    <!--           http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/oscar/icons/cr16-action-icq_online.png -->
+  </icon>
+  <icon name="upd" >
+    <object mime="image/png">unknown_icon_1.png</object>
+    <!-- "upd" icon is mentioned in original Sim-IM jisp set, but I do not know where it is used -->
+    <!-- there is no such icon entry in source code (at least I didn't find it) -->
+    <!-- So this icon entry will be associated with black square with number 1 on it, for a while -->
+    <!-- and if nobody managed to find where it is used, it should be removed from here -->
+  </icon>
+  <icon name="SMS">
+    <object mime="image/png">SMS-protocol.png</object>
+    <!-- Licence: GNU/LGPL -->
+    <!--  Source: http://www.kde-look.org/content/show.php?content=8341 16x16/actions/msn_phone.png -->
+  </icon>
+  <icon name="birthday">
+    <object mime="image/png">birthday.png</object>
+    <!-- Licence: GNU/LGPL -->
+    <!--  Author: Nikolay Shaplov N@shaplov.ru -->
+    <!-- Sources: http://websvn.kde.org/tags/KDE/3.5.9/kdebase/kcontrol/pics/cr16-app-cookie.png -->
+    <!--          http://websvn.kde.org/tags/KDE/3.5.9/kdebase/kcontrol/pics/cr64-app-cookie.png -->
+    
+  </icon>
+        
+      
+      
+      
+  
+</icondef>

@@ -1,0 +1,1 @@
+?package(sim): needs="kde" kde_filename="sim" section="Networking/Instant messaging" title="Sim (for KDE)" icon="sim.png" command="sim" kde_command="sim -caption \"%c\" %i %m  " genericname="" longtitle="ICQ-client" kde_opt="\\nMiniIcon=sim.png\\nDocPath=sim/index.html\\nTerminal=0"

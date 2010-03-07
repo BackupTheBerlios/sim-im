@@ -1,0 +1,4 @@
+if test "$have_ssl" != yes; then
+  AC_MSG_WARN([OpenSSL library disabled. Yahoo! plugin is disabled])
+fi
+AM_CONDITIONAL(ENABLE_YAHOO, test "$have_ssl" = "yes")

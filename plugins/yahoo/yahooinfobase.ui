@@ -1,0 +1,263 @@
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>YahooInfoBase</class>
+  <widget class="QWidget" name="MSNInfo" >
+    <property name="geometry" stdset="0" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>368</width>
+        <height>299</height>
+      </rect>
+    </property>
+    <property name="windowTitle" stdset="0" >
+      <string>Form1</string>
+    </property>
+    <layout class="QVBoxLayout" >
+      <property name="margin" stdset="0" >
+        <number>11</number>
+      </property>
+      <property name="spacing" stdset="0" >
+        <number>6</number>
+      </property>
+      <item>
+        <widget class="QTabWidget" name="TabWidget4" >
+          <widget class="QWidget" name="tab" >
+            <attribute name="title" >
+              <string>&amp;Names</string>
+            </attribute>
+            <layout class="QGridLayout" >
+              <property name="margin" stdset="0" >
+                <number>11</number>
+              </property>
+              <property name="spacing" stdset="0" >
+                <number>6</number>
+              </property>
+              <item rowspan="1" row="1" column="0" colspan="3" >
+                <widget class="Line" name="Line3" >
+                  <property name="frameShape" stdset="0" >
+                    <enum>QFrame::HLine</enum>
+                  </property>
+                  <property name="frameShadow" stdset="0" >
+                    <enum>QFrame::Sunken</enum>
+                  </property>
+                  <property name="frameShape" stdset="0" >
+                    <enum>QFrame::HLine</enum>
+                  </property>
+                </widget>
+              </item>
+              <item rowspan="1" row="2" column="1" colspan="2" >
+                <widget class="QLineEdit" name="edtNick" />
+              </item>
+              <item row="2" column="0" >
+                <widget class="QLabel" name="TextLabel4" >
+                  <property name="text" stdset="0" >
+                    <string>Nick:</string>
+                  </property>
+                  <property name="alignment" stdset="0" >
+                    <set>Qt::AlignVCenter|Qt::AlignRight</set>
+                  </property>
+                  <property name="wordWrap" >
+                    <bool>false</bool>
+                  </property>
+                </widget>
+              </item>
+              <item rowspan="1" row="0" column="1" colspan="2" >
+                <widget class="QLineEdit" name="edtLogin" >
+                  <property name="font" stdset="0" >
+                    <font>
+                      <bold>true</bold>
+                    </font>
+                  </property>
+                </widget>
+              </item>
+              <item row="0" column="0" >
+                <widget class="QLabel" name="TextLabel2" >
+                  <property name="font" stdset="0" >
+                    <font>
+                      <bold>true</bold>
+                    </font>
+                  </property>
+                  <property name="text" stdset="0" >
+                    <string>Login:</string>
+                  </property>
+                  <property name="alignment" stdset="0" >
+                    <set>Qt::AlignVCenter|Qt::AlignRight</set>
+                  </property>
+                  <property name="wordWrap" >
+                    <bool>false</bool>
+                  </property>
+                </widget>
+              </item>
+              <item row="3" column="0" >
+                <widget class="QLabel" name="TextLabel1" >
+                  <property name="text" stdset="0" >
+                    <string>First Name:</string>
+                  </property>
+                  <property name="alignment" stdset="0" >
+                    <set>Qt::AlignVCenter|Qt::AlignRight</set>
+                  </property>
+                  <property name="wordWrap" >
+                    <bool>false</bool>
+                  </property>
+                </widget>
+              </item>
+              <item row="4" column="0" >
+                <widget class="QLabel" name="TextLabel2_2" >
+                  <property name="text" stdset="0" >
+                    <string>Last Name:</string>
+                  </property>
+                  <property name="alignment" stdset="0" >
+                    <set>Qt::AlignVCenter|Qt::AlignRight</set>
+                  </property>
+                  <property name="wordWrap" >
+                    <bool>false</bool>
+                  </property>
+                </widget>
+              </item>
+              <item rowspan="1" row="3" column="1" colspan="2" >
+                <widget class="QLineEdit" name="edtFirst" />
+              </item>
+              <item rowspan="1" row="4" column="1" colspan="2" >
+                <widget class="QLineEdit" name="edtLast" />
+              </item>
+              <item row="7" column="0" >
+                <spacer name="Spacer6" >
+                  <property name="sizeHint" >
+                    <size>
+                      <width>20</width>
+                      <height>20</height>
+                    </size>
+                  </property>
+                  <property name="sizeType" >
+                    <enum>QSizePolicy::Expanding</enum>
+                  </property>
+                  <property name="orientation" >
+                    <enum>Qt::Vertical</enum>
+                  </property>
+                </spacer>
+              </item>
+            </layout>
+          </widget>
+          <widget class="QWidget" name="tab" >
+            <attribute name="title" >
+              <string>&amp;Status</string>
+            </attribute>
+            <layout class="QGridLayout" >
+              <property name="margin" stdset="0" >
+                <number>11</number>
+              </property>
+              <property name="spacing" stdset="0" >
+                <number>6</number>
+              </property>
+              <item row="0" column="0" >
+                <widget class="QLabel" name="TextLabel5" >
+                  <property name="text" stdset="0" >
+                    <string>Status:</string>
+                  </property>
+                  <property name="alignment" stdset="0" >
+                    <set>Qt::AlignVCenter|Qt::AlignRight</set>
+                  </property>
+                  <property name="wordWrap" >
+                    <bool>false</bool>
+                  </property>
+                </widget>
+              </item>
+              <item row="0" column="1" >
+                <widget class="QComboBox" name="cmbStatus" >
+                  <property name="sizePolicy" stdset="0" >
+                    <sizepolicy>
+                      <hsizetype>7</hsizetype>
+                      <vsizetype>0</vsizetype>
+                    </sizepolicy>
+                  </property>
+                </widget>
+              </item>
+              <item row="1" column="0" >
+                <widget class="QLabel" name="lblOnline" >
+                  <property name="text" stdset="0" >
+                    <string>Online:</string>
+                  </property>
+                  <property name="alignment" stdset="0" >
+                    <set>Qt::AlignVCenter|Qt::AlignRight</set>
+                  </property>
+                  <property name="wordWrap" >
+                    <bool>false</bool>
+                  </property>
+                </widget>
+              </item>
+              <item row="1" column="1" >
+                <widget class="QLineEdit" name="edtOnline" />
+              </item>
+              <item row="2" column="0" >
+                <widget class="QLabel" name="lblNA" >
+                  <property name="text" stdset="0" >
+                    <string/>
+                  </property>
+                  <property name="alignment" stdset="0" >
+                    <set>Qt::AlignVCenter|Qt::AlignRight</set>
+                  </property>
+                  <property name="wordWrap" >
+                    <bool>false</bool>
+                  </property>
+                </widget>
+              </item>
+              <item row="2" column="1" >
+                <widget class="QLineEdit" name="edtNA" />
+              </item>
+              <item row="4" column="1" >
+                <spacer name="Spacer7" >
+                  <property name="sizeHint" >
+                    <size>
+                      <width>20</width>
+                      <height>20</height>
+                    </size>
+                  </property>
+                  <property name="sizeType" >
+                    <enum>QSizePolicy::Expanding</enum>
+                  </property>
+                  <property name="orientation" >
+                    <enum>Qt::Vertical</enum>
+                  </property>
+                </spacer>
+              </item>
+            </layout>
+          </widget>
+        </widget>
+      </item>
+    </layout>
+  </widget>
+  <customwidgets>
+    <customwidget>
+      <class>QWidget</class>
+      <extends>QWidget</extends>
+      <header location="global" >QWidget</header>
+      <sizehint>
+        <width>-1</width>
+        <height>-1</height>
+      </sizehint>
+      <container>0</container>
+      <sizepolicy>
+        <hordata>5</hordata>
+        <verdata>5</verdata>
+      </sizepolicy>
+      <pixmap>image0</pixmap>
+      <properties>
+        <property type="String" >text</property>
+      </properties>
+    </customwidget>
+  </customwidgets>
+  <tabstops>
+    <tabstop>edtLogin</tabstop>
+    <tabstop>edtNick</tabstop>
+    <tabstop>edtFirst</tabstop>
+    <tabstop>edtLast</tabstop>
+  </tabstops>
+  <images>
+    <image name="image0" >
+      <data format="XPM.GZ" length="646" >789c6dd2c10ac2300c00d07bbf2234b7229d1be245fc04c5a3201e4615f430059d0711ff5ddb2e6bb236ec90eed134cb5a19d8ef36602af5ecdbfeeac05dda0798d3abebde87e3faa374d3807fa0d633a52d38d8de6f679fe33fc776e196f53cd010188256a3600a292882096246517815ca99884606e18044a3a40d91824820924265a7923a2e8bcd05f33db1173e002913175f2a6be6d3294871a2d95fa00e8a94ee017b69d339d90df1e77c57ea072ede6758</data>
+    </image>
+  </images>
+</ui>

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Encoding=UTF-8
+Name=Sim-IM
+Exec=sim
+Icon=sim.png
+GenericName=SIM Instant Messenger
+Terminal=false
+Categories=Qt;KDE;Network;InstantMessaging;

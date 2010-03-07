@@ -1,0 +1,45 @@
+HKCR
+{
+	Simext.SIM_ext.1 = s 'SIM_ext Class'
+	{
+		CLSID = s '{8DD848D4-81E7-490E-9A3D-CE9058956208}'
+	}
+	Simext.SIM_ext = s 'SIM_ext Class'
+	{
+		CLSID = s '{8DD848D4-81E7-490E-9A3D-CE9058956208}'
+		CurVer = s 'Simext.SIM_ext.1'
+	}
+	NoRemove *
+	{
+		NoRemove shellex
+		{
+			NoRemove ContextMenuHandlers
+			{
+				ForceRemove SIMMenu = s '{8DD848D4-81E7-490E-9A3D-CE9058956208}'
+			}
+		}
+	}
+	NoRemove Folder
+	{
+		NoRemove shellex
+		{
+			NoRemove ContextMenuHandlers
+			{
+				ForceRemove SIMMenu = s '{8DD848D4-81E7-490E-9A3D-CE9058956208}'
+			}
+		}
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {8DD848D4-81E7-490E-9A3D-CE9058956208} = s 'SIM_ext Class'
+		{
+			ProgID = s 'Simext.SIM_ext.1'
+			VersionIndependentProgID = s 'Simext.SIM_ext'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{F67751E0-1470-447C-8B3E-000D155711A2}'
+		}
+	}
+}

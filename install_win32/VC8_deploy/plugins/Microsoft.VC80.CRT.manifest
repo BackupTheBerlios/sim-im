@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- Copyright © 1981-2001 Microsoft Corporation-->
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" 
+                                 manifestVersion="1.0">
+  <noInheritable/>
+  <assemblyIdentity
+    type="win32"
+    name="Microsoft.VC80.CRT"
+    version="8.0.50608.0"
+    processorArchitecture="x86"
+    publicKeyToken="1fc8b3b9a1e18e3b" />
+  <file name="about.dll"/>
+  <file name="action.dll"/>
+  <file name="autoaway.dll"/>
+  <file name="background.dll"/>
+  <file name="dock.dll"/>
+  <file name="filter.dll"/>
+  <file name="floaty.dll"/>
+  <file name="forward.dll"/>
+  <file name="gpg.dll"/>
+  <file name="icons.dll"/>
+  <file name="icq.dll"/>
+  <file name="jabber.dll"/>
+  <file name="livejournal.dll"/>
+  <file name="loger.dll"/>
+  <file name="msn.dll"/>
+  <file name="navigate.dll"/>
+  <file name="netmonitor.dll"/>
+  <file name="ontop.dll"/>
+  <file name="osd.dll"/>
+  <file name="proxy.dll"/>
+  <file name="remote.dll"/>
+  <file name="replace.dll"/>
+  <file name="shortcuts.dll"/>
+  <file name="sms.dll"/>
+  <file name="sound.dll"/>
+  <file name="spell.dll"/>
+  <file name="splash.dll"/>
+  <file name="styles.dll"/>
+  <file name="transparent.dll"/>
+  <file name="update.dll"/>
+  <file name="weather.dll"/>
+  <file name="windock.dll"/>
+  <file name="yahoo.dll"/>
+  <file name="zodiak.dll"/>
+  <file name="_core.dll"/>
+  <file name="__homedir.dll"/>
+  <file name="__migrate.dll"/>
+</assembly>

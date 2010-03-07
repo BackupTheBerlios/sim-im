@@ -1,0 +1,38 @@
+// simremote.idl : IDL source for simremote.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (simremote.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	[
+		object,
+		uuid(1FE1EEB0-0BC8-4D7F-B0E4-B57AC5DC5E52),
+		dual,
+		helpstring("ISimControl Interface"),
+		pointer_default(unique)
+	]
+	interface ISimControl : IDispatch
+	{
+		[propget, id(1), helpstring("property Running")] HRESULT Running([out, retval] BOOL *pVal);
+		[id(2), helpstring("method Process")] HRESULT Process([in] BSTR in_str, [out, retval] BSTR *out_str);
+	};
+[
+	uuid(C4826912-0E46-445E-8B03-9683AAF5143F),
+	version(1.0),
+	helpstring("simremote 1.0 Type Library")
+]
+library SIMREMOTELib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+	[
+		uuid(0B4C5D94-61D9-41C6-AD05-4750A0E86C2E),
+		helpstring("SimControl Class")
+	]
+	coclass SimControl
+	{
+		[default] interface ISimControl;
+	};
+};

@@ -1,0 +1,23 @@
+/* XPM */
+static const char *simcard[]={
+"16 16 4 1",
+"# c #040000",
+". c None",
+"b c #dcd620",
+"a c #ffffff",
+"................",
+"....#########...",
+"...#aaaaaaaa#...",
+"..#aaaaaaaaa#...",
+"..#aaaaaaaaa#...",
+"..#aabbbbbaa#...",
+"..#aab...baa#...",
+"..#aabbbbbaa#...",
+"..#aab...baa#...",
+"..#aabbbbbaa#...",
+"..#aaaaaaaaa#...",
+"..#aaaaaaaaa#...",
+"..#aaaaaaaaa#...",
+"..#aaaaaaaaa#...",
+"..###########...",
+"................"};

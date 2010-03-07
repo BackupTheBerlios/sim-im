@@ -1,0 +1,17 @@
+compile_plugin="no"
+if test "$use_kde" != "yes" ; then
+  AC_CHECK_HEADER(aspell.h, compile_plugin="yes")
+fi
+
+if test "x$compile_plugin" = "xyes"; then
+  compile_plugin="no"
+  AC_CHECK_LIB(aspell, get_aspell_dict_info_list, [compile_plugin="yes"; LIB_ASPELL="-laspell"])
+  AC_SUBST(LIB_ASPELL)
+fi
+
+if test "$kde_use_qt_win" = "yes"; then
+	SPELL_OBJ=spellfind.lo
+	AC_SUBST([SPELL_OBJ])
+fi
+AM_CONDITIONAL(ENABLE_SPELL, test "x$compile_plugin" != "xno")
+

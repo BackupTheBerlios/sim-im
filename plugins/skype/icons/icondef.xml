@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<icondef>
+  <meta>
+    <name>SIM-Skype Icons</name>
+    <version>0.9.6</version>
+    <description>SIM icons.</description>
+    <author jid="noragen@gmx.net">Tobias Franz</author>
+    <creation>2006-10-31</creation>
+    <home>http://sim-im.org/</home>
+  </meta>
+  <icon name="CallCr16">
+	<object mime="image/png">cr16-action-call.png</object>
+  </icon>
+  <icon name="FFCcr16" flags="512">
+	<object mime="image/png">cr16-action-contact_ffc_overlay.png</object>
+  </icon>
+  <icon name="Proto">
+	<object mime="image/png">cr16-app-skype_protocol.png</object>
+  </icon>
+  <icon name="Call22">
+	<object mime="image/png">cr22-action-call.png</object>
+  </icon>
+  <icon name="CallCr32">
+	<object mime="image/png">cr32-action-call.png</object>
+  </icon>
+  <icon name="CallHi16!_away">
+	<object mime="image/png">hi16-action-call.png</object>
+  </icon>
+  <icon name="FFChi16">
+	<object mime="image/png">hi16-action-contact_ffc_overlay.png</object>
+  </icon>
+  <icon name="Unkown">
+	<object mime="image/png">hi16-action-contact_unknown_overlay.png</object>
+  </icon>
+  <icon name="Connect">
+    <object mime="image/png">hi16-action-skype_connect.png</object>
+  </icon>
+</icondef>
+
+
+
+
+
+
+
+
+
+

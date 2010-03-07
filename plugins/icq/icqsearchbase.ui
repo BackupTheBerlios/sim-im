@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ICQSearchBase</class>
+ <widget class="QWidget" name="ICQSearchBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>227</width>
+    <height>606</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form1</string>
+  </property>
+  <layout class="QVBoxLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="RadioGroup" name="grpUin">
+     <property name="title">
+      <string>&amp;UIN</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <layout class="QVBoxLayout">
+      <property name="margin">
+       <number>11</number>
+      </property>
+      <item>
+       <widget class="QLineEdit" name="edtUIN"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="RadioGroup" name="grpScreen">
+     <property name="title">
+      <string>&amp;Screenname</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <layout class="QVBoxLayout">
+      <property name="margin">
+       <number>11</number>
+      </property>
+      <item>
+       <widget class="QLineEdit" name="edtScreen"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="RadioGroup" name="grpMail">
+     <property name="title">
+      <string>&amp;E-Mail</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <layout class="QVBoxLayout">
+      <property name="margin">
+       <number>11</number>
+      </property>
+      <item>
+       <widget class="QLineEdit" name="edtMail"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="RadioGroup" name="grpName">
+     <property name="title">
+      <string>&amp;Name</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <layout class="QVBoxLayout">
+      <property name="margin">
+       <number>11</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="lblFirst">
+        <property name="text">
+         <string>First:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <property name="wordWrap">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="edtFirst"/>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblLast">
+        <property name="text">
+         <string>Last:</string>
+        </property>
+        <property name="wordWrap">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="edtLast"/>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblNick">
+        <property name="text">
+         <string>Nick:</string>
+        </property>
+        <property name="wordWrap">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="edtNick"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="RadioGroup" name="grpAOL">
+     <property name="title">
+      <string>AOL s&amp;creenname</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <layout class="QVBoxLayout">
+      <property name="margin">
+       <number>11</number>
+      </property>
+      <item>
+       <widget class="QLineEdit" name="edtAOL"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="RadioGroup" name="grpAOL_UIN">
+     <property name="title">
+      <string>ICQ &amp;UIN</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <layout class="QVBoxLayout">
+      <property name="margin">
+       <number>11</number>
+      </property>
+      <item>
+       <widget class="QLineEdit" name="edtAOL_UIN"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="btnAdvanced">
+     <property name="text">
+      <string>Advanced</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <spacer name="Spacer9">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>RadioGroup</class>
+   <extends>QGroupBox</extends>
+   <header>simgui/intedit.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>edtUIN</tabstop>
+  <tabstop>edtScreen</tabstop>
+  <tabstop>edtMail</tabstop>
+  <tabstop>edtFirst</tabstop>
+  <tabstop>edtLast</tabstop>
+  <tabstop>edtNick</tabstop>
+  <tabstop>edtAOL</tabstop>
+  <tabstop>edtAOL_UIN</tabstop>
+  <tabstop>btnAdvanced</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,133 @@
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>ARConfigBase</class>
+  <widget class="QWidget" name="ARConfig" >
+    <property name="geometry" stdset="0" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>421</width>
+        <height>314</height>
+      </rect>
+    </property>
+    <property name="windowTitle" stdset="0" >
+      <string>Form1</string>
+    </property>
+    <layout class="QVBoxLayout" >
+      <property name="margin" stdset="0" >
+        <number>11</number>
+      </property>
+      <property name="spacing" stdset="0" >
+        <number>6</number>
+      </property>
+      <item>
+        <widget class="QTabWidget" name="tabAR" >
+          <widget class="QWidget" name="tab" >
+            <attribute name="title" >
+              <string/>
+            </attribute>
+            <layout class="QGridLayout" >
+              <property name="margin" stdset="0" >
+                <number>11</number>
+              </property>
+              <property name="spacing" stdset="0" >
+                <number>6</number>
+              </property>
+              <item rowspan="1" row="0" column="0" colspan="3" >
+                <widget class="QCheckBox" name="chkOverride" >
+                  <property name="text" stdset="0" >
+                    <string>&amp;Override global settings</string>
+                  </property>
+                </widget>
+              </item>
+              <item row="2" column="0" >
+                <widget class="QPushButton" name="btnHelp" >
+                  <property name="text" stdset="0" >
+                    <string>&amp;Help</string>
+                  </property>
+                </widget>
+              </item>
+              <item row="2" column="1" >
+                <widget class="QCheckBox" name="chkNoShow" >
+                  <property name="sizePolicy" stdset="0" >
+                    <sizepolicy>
+                      <hsizetype>7</hsizetype>
+                      <vsizetype>0</vsizetype>
+                    </sizepolicy>
+                  </property>
+                  <property name="text" stdset="0" >
+                    <string>Don't show autoreply dialog</string>
+                  </property>
+                </widget>
+              </item>
+              <item row="2" column="2" >
+                <spacer name="Spacer1" >
+                  <property name="sizeHint" >
+                    <size>
+                      <width>20</width>
+                      <height>20</height>
+                    </size>
+                  </property>
+                  <property name="sizeType" >
+                    <enum>QSizePolicy::Expanding</enum>
+                  </property>
+                  <property name="orientation" >
+                    <enum>Qt::Horizontal</enum>
+                  </property>
+                </spacer>
+              </item>
+              <item rowspan="1" row="1" column="0" colspan="3" >
+                <widget class="MultiLineEdit" name="edtAutoReply" />
+              </item>
+            </layout>
+          </widget>
+        </widget>
+      </item>
+    </layout>
+  </widget>
+  <customwidgets>
+    <customwidget>
+      <class>QWidget</class>
+      <extends>QWidget</extends>
+      <header location="global" >QWidget</header>
+      <sizehint>
+        <width>-1</width>
+        <height>-1</height>
+      </sizehint>
+      <container>0</container>
+      <sizepolicy>
+        <hordata>5</hordata>
+        <verdata>5</verdata>
+      </sizepolicy>
+      <pixmap>image0</pixmap>
+      <properties>
+        <property type="String" >text</property>
+      </properties>
+    </customwidget>
+    <customwidget>
+      <class>MultiLineEdit</class>
+      <extends>QWidget</extends>
+      <header location="local" >simgui/editfile.h</header>
+      <sizehint>
+        <width>-1</width>
+        <height>-1</height>
+      </sizehint>
+      <container>0</container>
+      <sizepolicy>
+        <hordata>7</hordata>
+        <verdata>7</verdata>
+      </sizepolicy>
+      <pixmap>image1</pixmap>
+    </customwidget>
+  </customwidgets>
+  <images>
+    <image name="image0" >
+      <data format="XPM.GZ" length="646" >789c6dd2c10ac2300c00d07bbf2234b7229d1be245fc04c5a3201e4615f430059d0711ff5ddb2e6bb236ec90eed134cb5a19d8ef36602af5ecdbfeeac05dda0798d3abebde87e3faa374d3807fa0d633a52d38d8de6f679fe33fc776e196f53cd010188256a3600a292882096246517815ca99884606e18044a3a40d91824820924265a7923a2e8bcd05f33db1173e002913175f2a6be6d3294871a2d95fa00e8a94ee017b69d339d90df1e77c57ea072ede6758</data>
+    </image>
+    <image name="image1" >
+      <data format="XPM.GZ" length="646" >789c6dd2c10ac2300c00d07bbf2234b7229d1ddec44f503c0ae2a154410f53d0ed20e2bf6bdb656dd6861dd23d9a66591b0587fd1654235ebded6f0edcd53e419d87ae7b1f4f9b8f906d0bfe012317426a70b07bdc2f3ec77f8ed6b89559061a0343d06a124cc105596482585094bc0ae599b04646c9018926491b2205e140c485cace25755c175d0a967b622ff900b8cc9c7d29af594ea722d589167f813aa852ba07d94b9dce296e883fe7bb163f23896753</data>
+    </image>
+  </images>
+</ui>

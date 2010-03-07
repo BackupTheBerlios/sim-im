@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<icondef>
+  <meta>
+    <name>SIM smiles</name>
+    <version>0.9.6</version>
+    <description>SIM smiles.</description>
+    <author jid="shutoff@jabber.ru">Vladimir Shutoff</author>
+    <creation>2004-06-11</creation>
+    <home>http://sim-im.berlios.de/</home>
+  </meta>
+  <icon>
+	<text>*EYES OPEN*</text>
+	<object mime="image/png">0.png</object>
+  </icon>
+  <icon>
+	<text>*UGLY*</text>
+	<object mime="image/png">1.png</object>
+  </icon>
+</icondef>

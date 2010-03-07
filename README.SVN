@@ -1,0 +1,16 @@
+Here a short overview how to compile the svn-version:
+First you'll need actual automake and autoconf. Also you'll need different
+packages like openssl, libxml, libxslt and more.
+If you haven't installed some of them, hopefully ./configure will complain
+about missing libs (If not, let us know )
+
+Steps:
+1. make -f admin/Makefile.common
+2. ./configure
+3. make
+4. make install
+5. Start SIM :-)
+
+If you want to help us, it is better you did "./configure --enable-debug"
+so we get more informations and can fix bugs better.
+

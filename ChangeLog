@@ -1,0 +1,99 @@
+USER-VISIBLE CHANGES IN SIM INSTANT MESSENGER
+
+[+] New
+[-] Fixed error
+[*] Changes
+
+
+=== SIM 0.9.5 (not released yet) ===
+
+
+Build system
+~~~~~~~~~~~~
+[*] Update admin/ dir to KDE 3.5.3.
+[+] Make 'make dist' working.
+[+] Add ability to build in separate directory.
+[+] Unix: do not delete .la files after installing.
+[+] MacOSX: fix build with X11.
+[+] Win32/MSVC: switch to MSVC8.
+[+] Win32/MSVC: use precompiled headers.
+[+] Unix: issue error, not warning, if openssl wasn't found.
+[-] Autotools: fix SMP builds.
+[-] Autotools: add AC_LANG_C.
+[+] Add hidden visibility support for GCC4.1 and cmake.
+[-] Autotools: fix libXss detection.
+
+Core
+~~~~
+[+] Command line option to run SIM with specified profile.
+[+] Option to show contact list title in message window title.
+[+] Contact list: search in contact list by a substring in contact name.
+[+] History: option to use external viewer.
+[+] Contact list: search in closed contact list groups too.
+[-] Contact list: fix deleting contacts by pressing Del.
+[*] Remove Qt2 code.
+[*] Use QLibrary for plugins instead of libltdl.
+[+] Contact list: search in contact list by user protocol IDs.
+[+] Add profile (re)naming feature.
+[-] Fix context menu shortcuts in dialog window.
+[+] Save state on system logout with Qt Session Management.
+[-] Win32: fix (un)setting autostart.
+[-] Fix restoring font sizes.
+[-] Disable history filter when it is empty.
+[+] Replace libxml2-based SAX parser with Qt-provided one.
+[+] Show user avatars in the dialog window.
+[-] Remove "To container" menu when separate containers are disabled.
+[*] Auto scroll message view only if it is scrolled to the bottom.
+[-] XFree: fix problems with Composite extension enabled.
+
+ICQ plugin
+~~~~~~~~~~
+[*] Improve client versions detection.
+[-] Do not delete contacts if group changed while offline.
+[*] Accept messages in Occupied/DND modes by default.
+[+] Add new icons from ICQ 5 and ICQ 5.1.
+[+] Add MD5 auth support for ICQ accounts.
+[-] Fix user info saving.
+[-] Fix birthday flag handling.
+[-] Sync language and occupation lists with ICQ server.
+[*] Disable "Automatically use HTTP polling if proxy required" by
+    default.
+[+] Send and detect SIM patchlevel in version info.
+[-] Fix receiving certain messages containing TLV(5) twice.
+[-] Fix playing sounds for messages from QIP.
+
+Jabber plugin
+~~~~~~~~~~~~~
+[-] Fix crash on auth request when "Receive message only from contacts from list".
+[-] Fix handling of single quotes in roster item names.
+[+] Add icons for sms and gadu-gadu transports.
+[*] Detect jabber transports by missing "@" symbol in jid instead of
+    "/registered" ending.
+[+] Allow auth messages for transports.
+[*] Show protocol icons for jabber transports in roster.
+[*] Ignore JID letter case.
+[+] Add support for XEP-0092 client version info requests/replies.
+[*] Show resource as a part of JID in contact tip, not as separate line.
+[*] Remove SIM version from default resource value.
+
+Yahoo! plugin
+~~~~~~~~~~~~~
+
+
+MSN plugin
+~~~~~~~~~~
+[+] Add password recovery URL.
+
+Misc plugins
+~~~~~~~~~~~~
+[-] LiveJournal: security level of message was set incorrectly.
+[+] LiveJournal: add optional signature to all messages.
+[+] LiveJournal: option to disable message text formatting.
+[-] Proxy: fix some crashes.
+[*] Logger: remove dangerous 'Events' logging facility
+[-] Icons: fix handling of JISP files with non-ascii paths.
+[-] Icons: fix handling of JISP files containing subdirectiories.
+[*] Shortcuts: fix global shortcuts on X11 Qt-only build.
+[*] LiveJournal: disable formatted messages by default.
+[*] LiveJournal: add password recovery URL.
+[-] LiveJournal: fix posting messages longer than 4 Kb.

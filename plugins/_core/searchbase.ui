@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Search</class>
+ <widget class="QWidget" name="Search">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>614</width>
+    <height>451</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Search</string>
+  </property>
+  <layout class="QGridLayout">
+   <property name="margin">
+    <number>11</number>
+   </property>
+   <property name="spacing">
+    <number>6</number>
+   </property>
+   <item row="3" column="5">
+    <widget class="QPushButton" name="btnAdd">
+     <property name="text">
+      <string>&amp;Add to list</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="2">
+    <widget class="QComboBox" name="cmbClients"/>
+   </item>
+   <item row="3" column="0" colspan="2">
+    <widget class="QPushButton" name="btnSearch">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="default">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="4">
+    <widget class="QPushButton" name="btnOptions">
+     <property name="text">
+      <string>More &amp;options</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="6">
+    <widget class="Line" name="Line1"/>
+   </item>
+   <item row="3" column="3">
+    <spacer name="Spacer3">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="2">
+    <widget class="QPushButton" name="btnNew">
+     <property name="text">
+      <string>&amp;New search</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QStackedWidget" name="wndCondition">
+     <widget class="QWidget" name="page"/>
+     <widget class="QWidget" name="page_2"/>
+    </widget>
+   </item>
+   <item row="0" column="2" rowspan="2" colspan="4">
+    <widget class="QStackedWidget" name="wndResult">
+     <widget class="QWidget" name="page_3"/>
+     <widget class="QWidget" name="page_4"/>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>btnSearch</tabstop>
+  <tabstop>btnNew</tabstop>
+  <tabstop>btnOptions</tabstop>
+  <tabstop>btnAdd</tabstop>
+  <tabstop>cmbClients</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,5 @@
+if test "$kde_use_qt_win" = "yes"; then
+	GPG_OBJ=gpgfind.lo
+	AC_SUBST([GPG_OBJ])
+fi
+

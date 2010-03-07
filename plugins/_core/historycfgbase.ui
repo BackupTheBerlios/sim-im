@@ -1,0 +1,372 @@
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>HistoryConfigBase</class>
+  <widget class="QWidget" name="HistoryCfg" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>587</width>
+        <height>340</height>
+      </rect>
+    </property>
+    <property name="windowTitle" >
+      <string>Form1</string>
+    </property>
+    <layout class="QGridLayout" >
+      <property name="margin" >
+        <number>11</number>
+      </property>
+      <property name="spacing" >
+        <number>6</number>
+      </property>
+      <item row="1" column="2" >
+        <widget class="QCheckBox" name="chkSize" >
+          <property name="text" >
+            <string/>
+          </property>
+        </widget>
+      </item>
+      <item row="1" column="4" >
+        <widget class="QSpinBox" name="edtSize" >
+          <property name="maximum" >
+            <number>1000</number>
+          </property>
+        </widget>
+      </item>
+      <item row="1" column="5" >
+        <widget class="QLabel" name="lblSize1" >
+          <property name="text" >
+            <string>Mb</string>
+          </property>
+          <property name="wordWrap" >
+            <bool>false</bool>
+          </property>
+        </widget>
+      </item>
+      <item row="2" column="2" >
+        <widget class="QCheckBox" name="chkDays" >
+          <property name="text" >
+            <string/>
+          </property>
+        </widget>
+      </item>
+      <item row="2" column="4" >
+        <widget class="QSpinBox" name="edtDays" >
+          <property name="maximum" >
+            <number>1000</number>
+          </property>
+        </widget>
+      </item>
+      <item row="2" column="5" >
+        <widget class="QLabel" name="lblDays1" >
+          <property name="text" >
+            <string>days</string>
+          </property>
+          <property name="wordWrap" >
+            <bool>false</bool>
+          </property>
+        </widget>
+      </item>
+      <item rowspan="1" row="5" column="0" colspan="7" >
+        <layout class="QHBoxLayout" >
+          <property name="margin" >
+            <number>0</number>
+          </property>
+          <property name="spacing" >
+            <number>6</number>
+          </property>
+          <item>
+            <widget class="QComboBox" name="cmbStyle" >
+              <property name="sizePolicy" >
+                <sizepolicy>
+                  <hsizetype>7</hsizetype>
+                  <vsizetype>0</vsizetype>
+                </sizepolicy>
+              </property>
+              <property name="editable" >
+                <bool>true</bool>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="QPushButton" name="btnCopy" >
+              <property name="text" >
+                <string>&amp;Copy</string>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="QPushButton" name="btnRename" >
+              <property name="text" >
+                <string>&amp;Rename</string>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="QPushButton" name="btnDelete" >
+              <property name="text" >
+                <string>&amp;Delete</string>
+              </property>
+            </widget>
+          </item>
+        </layout>
+      </item>
+      <item rowspan="1" row="6" column="0" colspan="7" >
+        <widget class="QTabWidget" name="tabStyle" >
+          <widget class="QWidget" name="preview" >
+            <attribute name="title" >
+              <string>&amp;Preview</string>
+            </attribute>
+            <layout class="QVBoxLayout" >
+              <property name="margin" >
+                <number>11</number>
+              </property>
+              <property name="spacing" >
+                <number>6</number>
+              </property>
+              <item>
+                <widget class="MsgViewBase" name="edtPreview" />
+              </item>
+            </layout>
+          </widget>
+          <widget class="QWidget" name="source" >
+            <attribute name="title" >
+              <string>&amp;Source</string>
+            </attribute>
+            <layout class="QVBoxLayout" >
+              <property name="margin" >
+                <number>0</number>
+              </property>
+              <property name="spacing" >
+                <number>0</number>
+              </property>
+              <item>
+                <widget class="TextEdit" name="edtStyle" />
+              </item>
+            </layout>
+          </widget>
+        </widget>
+      </item>
+      <item row="2" column="3" >
+        <widget class="QLabel" name="lblDays" >
+          <property name="text" >
+            <string>Keep history </string>
+          </property>
+          <property name="alignment" >
+            <set>Qt::AlignVCenter|Qt::AlignRight</set>
+          </property>
+          <property name="wordWrap" >
+            <bool>false</bool>
+          </property>
+        </widget>
+      </item>
+      <item rowspan="1" row="1" column="0" colspan="2" >
+        <widget class="QCheckBox" name="chkOwn" >
+          <property name="text" >
+            <string>Use &amp;own colors and fonts settings</string>
+          </property>
+        </widget>
+      </item>
+      <item row="1" column="3" >
+        <widget class="QLabel" name="lblSize" >
+          <property name="text" >
+            <string>Max history file size</string>
+          </property>
+          <property name="alignment" >
+            <set>Qt::AlignVCenter|Qt::AlignRight</set>
+          </property>
+          <property name="wordWrap" >
+            <bool>false</bool>
+          </property>
+        </widget>
+      </item>
+      <item rowspan="1" row="0" column="0" colspan="7" >
+        <layout class="QHBoxLayout" >
+          <property name="margin" >
+            <number>0</number>
+          </property>
+          <property name="spacing" >
+            <number>6</number>
+          </property>
+          <item>
+            <widget class="QCheckBox" name="chkExtViewer" >
+              <property name="text" >
+                <string>Use external viewer</string>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="QLineEdit" name="edtExtViewer" >
+              <property name="sizePolicy" >
+                <sizepolicy>
+                  <hsizetype>3</hsizetype>
+                  <vsizetype>0</vsizetype>
+                </sizepolicy>
+              </property>
+            </widget>
+          </item>
+        </layout>
+      </item>
+      <item rowspan="1" row="4" column="0" colspan="7" >
+        <layout class="QHBoxLayout" >
+          <property name="margin" >
+            <number>0</number>
+          </property>
+          <property name="spacing" >
+            <number>6</number>
+          </property>
+          <item>
+            <widget class="QLabel" name="lblPage1" >
+              <property name="text" >
+                <string/>
+              </property>
+              <property name="wordWrap" >
+                <bool>false</bool>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="QComboBox" name="cmbPage" >
+              <item>
+                <property name="text" >
+                  <string>100</string>
+                </property>
+              </item>
+              <item>
+                <property name="text" >
+                  <string>50</string>
+                </property>
+              </item>
+              <item>
+                <property name="text" >
+                  <string>20</string>
+                </property>
+              </item>
+            </widget>
+          </item>
+          <item>
+            <widget class="QLabel" name="lblPage2" >
+              <property name="sizePolicy" >
+                <sizepolicy>
+                  <hsizetype>7</hsizetype>
+                  <vsizetype>1</vsizetype>
+                </sizepolicy>
+              </property>
+              <property name="text" >
+                <string/>
+              </property>
+              <property name="wordWrap" >
+                <bool>false</bool>
+              </property>
+            </widget>
+          </item>
+        </layout>
+      </item>
+      <item row="1" column="6" >
+        <spacer name="Spacer2" >
+          <property name="sizeHint" >
+            <size>
+              <width>20</width>
+              <height>20</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>QSizePolicy::Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+          </property>
+        </spacer>
+      </item>
+      <item rowspan="1" row="2" column="0" colspan="2" >
+        <widget class="QCheckBox" name="chkSmile" >
+          <property name="text" >
+            <string>Use emotional &amp;icons</string>
+          </property>
+        </widget>
+      </item>
+      <item row="3" column="0" >
+        <widget class="QCheckBox" name="chkAvatar" >
+          <property name="text" >
+            <string>Show user avatar</string>
+          </property>
+        </widget>
+      </item>
+    </layout>
+  </widget>
+  <customwidgets>
+    <customwidget>
+      <class>QWidget</class>
+      <extends>QWidget</extends>
+      <header location="global" >QWidget</header>
+      <sizehint>
+        <width>-1</width>
+        <height>-1</height>
+      </sizehint>
+      <container>0</container>
+      <sizepolicy>
+        <hordata>5</hordata>
+        <verdata>5</verdata>
+      </sizepolicy>
+      <pixmap>image0</pixmap>
+      <properties>
+        <property type="String" >text</property>
+      </properties>
+    </customwidget>
+    <customwidget>
+      <class>TextEdit</class>
+      <extends>QWidget</extends>
+      <header location="local" >simgui/textshow.h</header>
+      <sizehint>
+        <width>-1</width>
+        <height>-1</height>
+      </sizehint>
+      <container>0</container>
+      <sizepolicy>
+        <hordata>7</hordata>
+        <verdata>7</verdata>
+      </sizepolicy>
+      <pixmap>image1</pixmap>
+    </customwidget>
+    <customwidget>
+      <class>MsgViewBase</class>
+      <extends>QWidget</extends>
+      <header location="local" >msgview.h</header>
+      <sizehint>
+        <width>-1</width>
+        <height>-1</height>
+      </sizehint>
+      <container>0</container>
+      <sizepolicy>
+        <hordata>7</hordata>
+        <verdata>7</verdata>
+      </sizepolicy>
+      <pixmap>image1</pixmap>
+    </customwidget>
+  </customwidgets>
+  <tabstops>
+    <tabstop>chkOwn</tabstop>
+    <tabstop>chkSmile</tabstop>
+    <tabstop>chkSize</tabstop>
+    <tabstop>chkDays</tabstop>
+    <tabstop>edtSize</tabstop>
+    <tabstop>edtDays</tabstop>
+    <tabstop>cmbPage</tabstop>
+    <tabstop>cmbStyle</tabstop>
+    <tabstop>btnCopy</tabstop>
+    <tabstop>btnRename</tabstop>
+    <tabstop>btnDelete</tabstop>
+    <tabstop>tabStyle</tabstop>
+  </tabstops>
+  <images>
+    <image name="image0" >
+      <data format="XPM.GZ" length="646" >789c6dd2c10ac2300c00d07bbf2234b7229d1be245fc04c5a3201e4615f430059d0711ff5ddb2e6bb236ec90eed134cb5a19d8ef36602af5ecdbfeeac05dda0798d3abebde87e3faa374d3807fa0d633a52d38d8de6f679fe33fc776e196f53cd010188256a3600a292882096246517815ca99884606e18044a3a40d91824820924265a7923a2e8bcd05f33db1173e002913175f2a6be6d3294871a2d95fa00e8a94ee017b69d339d90df1e77c57ea072ede6758</data>
+    </image>
+    <image name="image1" >
+      <data format="XPM.GZ" length="646" >789c6dd2c10ac2300c00d07bbf2234b7229d1ddec44f503c0ae2a154410f53d0ed20e2bf6bdb656dd6861dd23d9a66591b0587fd1654235ebded6f0edcd53e419d87ae7b1f4f9b8f906d0bfe012317426a70b07bdc2f3ec77f8ed6b89559061a0343d06a124cc105596482585094bc0ae599b04646c9018926491b2205e140c485cace25755c175d0a967b622ff900b8cc9c7d29af594ea722d589167f813aa852ba07d94b9dce296e883fe7bb163f23896753</data>
+    </image>
+  </images>
+</ui>

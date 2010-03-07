@@ -1,0 +1,189 @@
+Version 0.9.4
+Change Jabber browser
+MSN: Add hotmail notification
+GPG: Add support passphrase
+ICQ: Add packets flow control
+ICQ: Fix send URL and contacts
+ICQ: Fix send large messages
+Redesign search window
+Remove support miranda icons and smiles
+Add JISP icons and smiles
+Yahoo: Support new authorisation
+Win32: Fix support icons with alpha channel
+Add history exporting to text files
+Add UV-Intesity, Moonphases to Weather Plugin
+Fix to big value for temperature in Weather Plugin
+Fix Loading History
+Fix compile KDE3.4
+
+Version 0.9.3
+Add LiveJournal plugin
+Add Greek translation
+Jabber: fix send rich-text messages
+ICQ: Fix set birthday flag
+Fix apply custom fonts
+Fix communication-problem with AIM-Screennames > 13 chars
+Fix not receive AuthGrant from some ICQ-users
+Proxy: add support listen sockets for SOCKS4 and SOCKS5
+Add Yahoo! plugin
+MSN: Fix remove contact
+Add replace text plugin
+Add option "Show/hide empty groups"
+Add weather plugin
+WIN32: Use WinInet for HTTP connection (NTLM-auth on proxy and proxy autoconfig)
+Move plugins from prefix/share into prefix/lib
+Fix acinclude for automake-1.8
+MSN: add HTTP polling
+Jabber: add HTTP polling
+OSD: add show message content
+Jabber: add select resource for send
+
+Version 0.9.2
+Add styles plugin
+Add customizable history styles
+ICQ: Fix receive messages from icq2003b
+Jabber: Add disco request for search agents
+Add history size config
+Add remote control plugin
+Add spell checking
+Jabber: Add jabber browser/disco
+Fix bind socket for direct connection
+Fix save history on win32
+Add option "Ignore this phrase" in context menu
+Jabber: Fix send multiline message
+Jabber: Add configure to jabber browser
+Jabber: Add headline support
+ICQ: Change check invisible method
+ICQ: Remove check invisible
+Add action plugin - for call external programs
+Add zodiak plugin
+
+Version 0.9.1
+ICQ: Fix login
+Add GPG plugin
+Fix HTTPS proxy auth
+Add Hungarian translation
+
+Version 0.9
+Rewrite code, make plugin-based structure
+Add MSN & Jabber protocols
+Add metacontact support
+ICQ: Add typing notification
+ICQ: Add support users picture
+ICQ: Add check invisible
+Add Miranda emoticons support
+ICQ: Add support AIM buddies
+ICQ: Fix send to occupied and dnd mode
+MSN: Upgrade protocol to V8
+Add quick search in contact list
+MacOS X compile
+Add AIM protocol
+Jabber: Add rich-text support
+Jabber: Add typing notification
+ICQ: File transfer and reverse direct connections support
+MSN: File transfer support
+ICQ: Fix protocol for bigendian
+Jabber: File transfer support
+Jabber: Picture in vCard support
+Jabber: Send & receive contacts list
+AIM: Send & receive contacts list
+Add Portuguese translation
+
+Version 0.8.2
+Add Bulgarian translation
+Add Hebrew translation
+Add random chat
+Add settings for groups
+Add GKrellM2 plugin
+Add French translation
+
+Version 0.8.1
+Add option for using simple/double click
+Add background picture for mainwindow
+Add option "disable all sounds"
+Add change UIN
+Add GNOME 2 docklet support
+Add Polish translation
+Add Dutch translation
+Add change history sort order
+Add synchronization with KAddressBook
+Add Spanish translation
+Redesign setup window
+Add customize toolbars
+Add Czech translation
+Add copy messages from history to conversation
+Fix works with accel
+Fix receiving unicode messages from ICQ2Go!
+Add external programms in template
+Add network monitor
+Fix rtf parser and generator for fix font size problem
+Switch support HTTP and HTTPS proxy from call CONNECT method to using AIM-HTTP gate
+Add saving split position in chat mode message window
+
+Version 0.8
+Add optional own history and user info in separate window
+Add filter for history
+Add alphabticaly sorting user list
+Add secure channel dialog
+Add recognize various clients
+Fix dock window and keyboard shortcuts for QT-only version
+Add loging change status
+Add smiles popup
+Add autoforward to cellular
+Fix work protocol on bigendian   
+Change message window button to tolbar
+Change configure for FreeBSD
+Change font saving
+Use KExtendedSocket on KDE
+Add HTTPS proxy support
+Make abstract interface for socket
+Fix receive messages from ICQLite
+Fix drag-and-drop files 
+Fix user encoding for encode/decode RTF 
+Add process escape for close user window
+Fix set status for icq2go
+Fix save options "Alert if Away" and "Require authorization"
+
+Version 0.7
+Sending of the messages to several users added
+Add message forwarding
+Add autosplit SMS messages
+Add support keyboard shortcuts
+Add On-Screen display notification about messages and user status
+Work with a history is improved, the speed is increased, search and adjustments is added
+Add message mode for user window
+Is corrected batch file transfer, transfer of several files and recursive directoryes now works
+Direct connection with ICQ-clones is corrected
+Add support secure direct connection with SIM and Licq
+Add support user encoding
+Fix bug with receive bug server-side contact list
+Add spam filter
+
+Version 0.6
+Proxy support added (SOCKS4, SOCKS5, HTTP)
+Germany translation added
+Add miranda icon themes support (see README for details)
+Add save flag "Close on send"
+Fix bug with KCmdLineArgs, SIM may crash on start
+Fix bug on update timezone - SIM may crash after logon
+Fix compile on gcc 3.1
+
+Version 0.5 (25.06.2002)
+
+The chat support added.
+List of attributes for search of the user is extended
+And some others fixes:
+- The processing of network mistakes is corrected, resulted in that that on the 
+  broken off connection could work very long, thus loading strongly enough 
+  processor (the very unpleasant mistake was - on windows could result in 
+  crash of system)
+- The effect "strange sound" is corrected, that is it was really started to 
+  play twice
+- Are corrected acinclude - now normally is going on KDE 2 and does not require 
+  of a key - disable-kde if KDE is not present 
+
+Version 0.4 (11.06.2002)
+
+Configure with iconv bug fixed (const keyword missed)
+Owner info dialog bug fixed 
+

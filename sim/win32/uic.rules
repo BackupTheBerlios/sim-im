@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VisualStudioToolFile
+	Name="User Interface Compiler"
+	Version="8,00"
+	>
+	<Rules>
+		<CustomBuildRule
+			Name="Uic"
+			DisplayName="User Interface Compiler"
+			CommandLine="%qtdir%\bin\uic.exe -o $(InputDir)\ui_$(InputName).h $(InputPath)"
+			Outputs="$(InputDir)ui_$(InputName).h"
+			FileExtensions="*.ui"
+			ExecutionDescription="Uic&apos;ing $(InputName).ui ..."
+			>
+			<Properties>
+			</Properties>
+		</CustomBuildRule>
+	</Rules>
+</VisualStudioToolFile>

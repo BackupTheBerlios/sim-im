@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ICQConfigBase</class>
+ <widget class="QWidget" name="ICQConfigBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>461</width>
+    <height>349</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form1</string>
+  </property>
+  <layout class="QVBoxLayout">
+   <property name="margin">
+    <number>11</number>
+   </property>
+   <item>
+    <widget class="QTabWidget" name="tabConfig">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tabICQ">
+      <attribute name="title">
+       <string>&amp;ICQ</string>
+      </attribute>
+      <layout class="QGridLayout">
+       <property name="margin">
+        <number>11</number>
+       </property>
+       <item row="2" column="0">
+        <widget class="QLabel" name="TextLabel2">
+         <property name="text">
+          <string>Password:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="wordWrap">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="edtPasswd">
+         <property name="echoMode">
+          <enum>QLineEdit::Password</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <spacer name="Spacer2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="0" colspan="2">
+        <widget class="QCheckBox" name="chkNew">
+         <property name="text">
+          <string>&amp;Register new UIN</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="lblUin">
+         <property name="text">
+          <string>UIN:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="wordWrap">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="edtUin"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>&amp;Network</string>
+      </attribute>
+      <layout class="QGridLayout">
+       <property name="margin">
+        <number>11</number>
+       </property>
+       <item row="1" column="1">
+        <widget class="QSpinBox" name="edtPort">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>65535</number>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="3">
+        <widget class="QCheckBox" name="chkAuto">
+         <property name="text">
+          <string>&amp;Automatically use HTTP polling if proxy required</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="3">
+        <widget class="QCheckBox" name="chkHTTP">
+         <property name="text">
+          <string>Use &amp;HTTP polling</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0" colspan="3">
+        <widget class="Line" name="Line1">
+         <property name="frameShape">
+          <enum>QFrame::HLine</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Sunken</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="TextLabel3">
+         <property name="text">
+          <string>Server:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="wordWrap">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" colspan="2">
+        <widget class="QLineEdit" name="edtServer"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="TextLabel4">
+         <property name="text">
+          <string>Port:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="wordWrap">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <spacer name="Spacer3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="9" column="0">
+        <spacer name="Spacer4">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="10" column="0" colspan="3">
+        <layout class="QHBoxLayout">
+         <item>
+          <widget class="QLabel" name="TextLabel2_2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Port range for direct connections:</string>
+           </property>
+           <property name="wordWrap">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="edtMaxPort">
+           <property name="minimum">
+            <number>1024</number>
+           </property>
+           <property name="maximum">
+            <number>65534</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="edtMinPort">
+           <property name="minimum">
+            <number>1024</number>
+           </property>
+           <property name="maximum">
+            <number>65534</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="Spacer5">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Expanding</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item row="4" column="0" colspan="3">
+        <widget class="QLabel" name="TextLabel1_4">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Note: For HTTP-polling using proxy settings for HTTP</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
+         <property name="wordWrap">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="3">
+        <widget class="QCheckBox" name="chkKeepAlive">
+         <property name="text">
+          <string>&amp;Keep-alive connection</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0" colspan="3">
+        <widget class="QCheckBox" name="chkMediaSense">
+         <property name="text">
+          <string>Activate Network &amp;Media Sense</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>&amp;Options</string>
+      </attribute>
+      <layout class="QGridLayout">
+       <property name="margin">
+        <number>11</number>
+       </property>
+       <item row="4" column="0" colspan="2">
+        <widget class="QCheckBox" name="chkInvisible">
+         <property name="text">
+          <string>Automatically check &amp;invisible</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="TextLabel1">
+         <property name="text">
+          <string>Send format:</string>
+         </property>
+         <property name="wordWrap">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QComboBox" name="cmbFormat">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <layout class="QHBoxLayout">
+         <item>
+          <widget class="QLabel" name="TextLabel1_3">
+           <property name="text">
+            <string>Send message:</string>
+           </property>
+           <property name="wordWrap">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="cmbAck">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <item>
+            <property name="text">
+             <string>No wait ack</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Wait ack from server</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Wait ack from client</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="3" column="0" colspan="2">
+        <widget class="QCheckBox" name="chkOccupied">
+         <property name="text">
+          <string>Accept in &amp;occupied mode</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QCheckBox" name="chkDND">
+         <property name="text">
+          <string>Accept in &amp;DND mode</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="0">
+        <spacer name="Spacer4_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="6" column="0" colspan="2">
+        <widget class="QLabel" name="TextLabel1_5">
+         <property name="text">
+          <string>For decrease traffic you can:</string>
+         </property>
+         <property name="wordWrap">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0" colspan="2">
+        <widget class="QCheckBox" name="chkPlugins">
+         <property name="text">
+          <string>Disable answer on phonebook and &amp;picture requests</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0" colspan="2">
+        <widget class="QCheckBox" name="chkAutoReply">
+         <property name="text">
+          <string>Disable automatically &amp;request autoreply on change status</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0" colspan="2">
+        <widget class="QCheckBox" name="chkUpdate">
+         <property name="text">
+          <string>Disable automatically &amp;update user info</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="0" colspan="2">
+        <widget class="QCheckBox" name="chkTyping">
+         <property name="text">
+          <string>Disable &amp;typing notification</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="2">
+        <layout class="QHBoxLayout">
+         <item>
+          <widget class="QLabel" name="lblInvisible">
+           <property name="text">
+            <string>Check invisible every</string>
+           </property>
+           <property name="wordWrap">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="edtInvisible">
+           <property name="minimum">
+            <number>5</number>
+           </property>
+           <property name="maximum">
+            <number>999</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lblInvisible2">
+           <property name="text">
+            <string>minutes</string>
+           </property>
+           <property name="wordWrap">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="Spacer6">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Expanding</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>chkNew</tabstop>
+  <tabstop>edtUin</tabstop>
+  <tabstop>edtPasswd</tabstop>
+  <tabstop>edtServer</tabstop>
+  <tabstop>edtPort</tabstop>
+  <tabstop>chkHTTP</tabstop>
+  <tabstop>chkAuto</tabstop>
+  <tabstop>chkKeepAlive</tabstop>
+  <tabstop>edtMaxPort</tabstop>
+  <tabstop>cmbFormat</tabstop>
+  <tabstop>cmbAck</tabstop>
+  <tabstop>chkDND</tabstop>
+  <tabstop>chkOccupied</tabstop>
+  <tabstop>chkInvisible</tabstop>
+  <tabstop>edtInvisible</tabstop>
+  <tabstop>chkPlugins</tabstop>
+  <tabstop>chkAutoReply</tabstop>
+  <tabstop>chkUpdate</tabstop>
+  <tabstop>chkTyping</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

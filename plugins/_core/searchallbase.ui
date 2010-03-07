@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0" >
+ <class>SearchAll</class>
+ <widget class="QWidget" name="SearchAll" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>373</width>
+    <height>369</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form4</string>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <property name="margin" >
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QGroupBox" name="grpMail">
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <property name="title" stdset="0" >
+      <string>&amp;E-Mail</string>
+     </property>
+     <layout class="QVBoxLayout" >
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <property name="margin" >
+       <number>11</number>
+      </property>
+      <item>
+       <widget class="QLineEdit" name="edtMail" />
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="grpName">
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <property name="title" stdset="0" >
+      <string>&amp;Name</string>
+     </property>
+     <layout class="QVBoxLayout" >
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <property name="margin" >
+       <number>11</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="TextLabel5" >
+        <property name="text" >
+         <string>First:</string>
+        </property>
+        <property name="wordWrap" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="edtFirst" />
+      </item>
+      <item>
+       <widget class="QLabel" name="TextLabel6" >
+        <property name="text" >
+         <string>Last:</string>
+        </property>
+        <property name="wordWrap" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="edtLast" />
+      </item>
+      <item>
+       <widget class="QLabel" name="TextLabel7" >
+        <property name="text" >
+         <string>Nick:</string>
+        </property>
+        <property name="wordWrap" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="edtNick" />
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <spacer name="Spacer8" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+  <zorder>grpMail</zorder>
+  <zorder>grpName</zorder>
+  <zorder>groupBox</zorder>
+  <zorder>groupBox_2</zorder>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
