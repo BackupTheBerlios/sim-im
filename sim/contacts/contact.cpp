@@ -461,19 +461,9 @@ namespace SIM
         m_clientData.sort();
     }
 
-    void Contact::join(ClientUserData &data)
-    {
-        m_clientData.join(data);
-    }
-
     void Contact::join(Contact* c)
     {
         m_clientData.join(c->m_clientData);
-    }
-
-    void Contact::join(SIM::clientData *cData, ClientUserData &data)
-    {
-        m_clientData.join(cData, data);
     }
 
     void Contact::join(SIM::clientData *cData, Contact* c)

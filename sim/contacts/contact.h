@@ -83,9 +83,7 @@ namespace SIM
         void *getData(Client *client);
         bool have(void*);
         void sort();
-        void join(ClientUserData &data);
         void join(Contact* c);
-        void join(SIM::clientData *cData, ClientUserData &data);
         void join(SIM::clientData *cData, Contact* c);
         unsigned size();
         Client *activeClient(void *&data, Client *client);
