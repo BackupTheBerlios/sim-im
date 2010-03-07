@@ -5,6 +5,7 @@
 #include <QSharedPointer>
 #include "simapi.h"
 #include "clientuserdata.h"
+#include "imcontact.h"
 
 namespace SIM
 {
@@ -17,7 +18,7 @@ namespace SIM
         ClientDataIterator();
         ClientDataIterator(ClientUserData &data, Client *client=NULL);
         ~ClientDataIterator();
-        clientData *operator ++();
+        IMContact *operator ++();
         Client *client();
         void reset();
     protected:

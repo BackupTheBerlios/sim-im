@@ -943,7 +943,7 @@ QString ICQClient::packContacts(ContactsMessage *msg, ICQUserData *, CONTACTS_MA
             Contact *contact = getContacts()->contact(url.toULong());
             if (contact){
                 ClientDataIterator it = contact->clientDataIterator();
-                clientData *cdata;
+                IMContact *cdata;
                 while ((cdata = ++it) != NULL){
                     Contact *cc = contact;
                     if (!isMyData(cdata, cc))

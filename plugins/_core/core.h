@@ -110,7 +110,7 @@ struct MessageDef
 
 struct clientContact
 {
-    SIM::clientData	*data;
+    SIM::IMContact	*data;
     SIM::Client	*client;
     bool		bNew;
 };

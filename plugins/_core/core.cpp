@@ -801,11 +801,11 @@ typedef map<msgIndex, msgCount> MAP_COUNT;
 
 void CorePlugin::getWays(vector<clientContact> &ways, Contact *contact)
 {
-	clientData *data;
+    IMContact *data;
     ClientDataIterator it = contact->clientDataIterator();
 	while ((data = ++it) != NULL)
     {
-		clientData *data1;
+        IMContact *data1;
         ClientDataIterator it1 = contact->clientDataIterator();
 		bool bOK = true;
 		while ((data1 = ++it1) != NULL)
@@ -830,7 +830,7 @@ void CorePlugin::getWays(vector<clientContact> &ways, Contact *contact)
 		for (unsigned i = 0; i < getContacts()->nClients(); i++)
         {
             Contact *clContact;
-			clientData *data2 = data;
+            IMContact *data2 = data;
             if (getClient(i) == it.client() || !getClient(i)->isMyData(data2, clContact) || clContact != contact)
                 continue;
 
@@ -1705,7 +1705,7 @@ bool CorePlugin::processCheckCmdContactClients(SIM::CommandDef* cmd)
                 if (client == itw->client)
                     continue;
                 Contact *contact;
-                clientData *data = itw->data;
+                IMContact *data = itw->data;
                 if (client->isMyData(data, contact)){
                     bFrom = true;
                     break;
@@ -2402,7 +2402,7 @@ bool CorePlugin::processExecCmdSeparate(SIM::CommandDef* cmd)
     if (n >= ways.size())
         return false;
     clientContact &cc = ways[n];
-    clientData *data;
+    IMContact *data;
     ClientDataIterator it = contact->clientDataIterator(cc.client);
     while ((data = ++it) != NULL){
         if (data == cc.data)
@@ -2788,7 +2788,7 @@ bool CorePlugin::processEventCommandExec(SIM::Event* e)
                     QString res = getToken(resources, ';');
                     if (nRes-- == 0){
                         clientContact &cc = ways[n];
-                        clientData *data;
+                        IMContact *data;
                         ClientDataIterator it = contact->clientDataIterator(cc.client);
                         while ((data = ++it) != NULL){
                             if (data == cc.data)
@@ -2824,7 +2824,7 @@ bool CorePlugin::processEventCommandExec(SIM::Event* e)
             if (n < ways.size()){
                 clientContact &cc = ways[n];
 
-                clientData *data;
+                IMContact *data;
                 ClientDataIterator it = contact->clientDataIterator(cc.client);
                 while ((data = ++it) != NULL){
                     if (data == cc.data)

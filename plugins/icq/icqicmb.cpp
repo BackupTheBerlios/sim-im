@@ -349,7 +349,7 @@ void SnacIcqICBM::ackMessage(SendMsg &s)
 
 bool SnacIcqICBM::sendThruServer(Message *msg, void *_data)
 {
-    ICQUserData *data = client()->toICQUserData((SIM::clientData*)_data); // FIXME unsafe type conversion
+    ICQUserData *data = client()->toICQUserData((SIM::IMContact*)_data); // FIXME unsafe type conversion
     Contact *contact = getContacts()->contact(msg->contact());
     if ((contact == NULL) || (data == NULL))
         return false;

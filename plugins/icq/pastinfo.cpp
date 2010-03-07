@@ -270,7 +270,7 @@ void PastInfo::apply(Client *client, void *_data)
 {
     if (client != m_client)
         return;
-    ICQUserData *data = m_client->toICQUserData((SIM::clientData*)_data);  // FIXME unsafe type conversion
+    ICQUserData *data = m_client->toICQUserData((SIM::IMContact*)_data);  // FIXME unsafe type conversion
     QString bg[3];
     bg[0] = getInfo(cmbBg1, edtBg1, pasts);
     bg[1] = getInfo(cmbBg2, edtBg2, pasts);

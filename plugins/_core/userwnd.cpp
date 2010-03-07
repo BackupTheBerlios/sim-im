@@ -150,7 +150,7 @@ QString UserWnd::getLongName()
             if (pClient == client)
                 continue;
             Contact *contact;
-            clientData *data1 = (clientData*)data;
+            IMContact *data1 = (IMContact*)data;
             if (pClient->isMyData(data1, contact)){
                 bFrom = true;
                 break;

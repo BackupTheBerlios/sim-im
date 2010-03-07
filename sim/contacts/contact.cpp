@@ -100,9 +100,9 @@ namespace SIM
 
     static bool cmp_sd(sortClientData p1, sortClientData p2)
     {
-        if (((clientData*)(p1.data))->LastSend.asULong() > ((clientData*)(p2.data))->LastSend.asULong())
+        if (((IMContact*)(p1.data))->LastSend.asULong() > ((IMContact*)(p2.data))->LastSend.asULong())
             return true;
-        if (((clientData*)(p1.data))->LastSend.asULong() < ((clientData*)(p2.data))->LastSend.asULong())
+        if (((IMContact*)(p1.data))->LastSend.asULong() < ((IMContact*)(p2.data))->LastSend.asULong())
             return false;
         return p1.nClient < p2.nClient;
     }
@@ -466,7 +466,7 @@ namespace SIM
         m_clientData.join(c->m_clientData);
     }
 
-    void Contact::join(SIM::clientData *cData, Contact* c)
+    void Contact::join(SIM::IMContact *cData, Contact* c)
     {
         m_clientData.join(cData, c->m_clientData);
     }

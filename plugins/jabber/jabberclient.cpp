@@ -213,8 +213,8 @@ const DataDef *JabberProtocol::userDataDef()
 
 bool JabberClient::compareData(void *d1, void *d2)
 {
-    JabberUserData *data1 = toJabberUserData((SIM::clientData*)d1); // FIXME unsafe type conversion
-    JabberUserData *data2 = toJabberUserData((SIM::clientData*)d2); // FIXME unsafe type conversion
+    JabberUserData *data1 = toJabberUserData((SIM::IMContact*)d1); // FIXME unsafe type conversion
+    JabberUserData *data2 = toJabberUserData((SIM::IMContact*)d2); // FIXME unsafe type conversion
     return (data1->ID.str().toLower() == data2->ID.str().toLower());
 }
 
@@ -254,7 +254,7 @@ QWidget	*JabberClient::setupWnd()
     return new JabberConfig(NULL, this, false);
 }
 
-bool JabberClient::isMyData(clientData *&_data, Contact *&contact)
+bool JabberClient::isMyData(IMContact *&_data, Contact *&contact)
 {
     if (_data->Sign.toULong() != JABBER_SIGN)
         return false;
@@ -269,12 +269,12 @@ bool JabberClient::isMyData(clientData *&_data, Contact *&contact)
     return true;
 }
 
-bool JabberClient::createData(clientData *&_data, Contact *contact)
+bool JabberClient::createData(IMContact *&_data, Contact *contact)
 {
     JabberUserData *data = toJabberUserData(_data);
-    JabberUserData *new_data = toJabberUserData((SIM::clientData*)contact->createData(this)); // FIXME unsafe type conversion
+    JabberUserData *new_data = toJabberUserData((SIM::IMContact*)contact->createData(this)); // FIXME unsafe type conversion
     new_data->ID.str() = data->ID.str();
-    _data = (clientData*)new_data;
+    _data = (IMContact*)new_data;
     return true;
 }
 
@@ -1082,7 +1082,7 @@ JabberUserData *JabberClient::findContact(const QString &_jid, const QString &na
     if (bJoin){
         while ((contact = ++it) != NULL){
             if (contact->getName().toLower() == sname.toLower()){
-                JabberUserData *data = toJabberUserData((SIM::clientData*) contact->createData(this)); // FIXME unsafe type conversion
+                JabberUserData *data = toJabberUserData((SIM::IMContact*) contact->createData(this)); // FIXME unsafe type conversion
                 data->ID.str() = jid;
                 if (!resource.isEmpty())
                     data->Resource.str() = resource;
@@ -1097,7 +1097,7 @@ JabberUserData *JabberClient::findContact(const QString &_jid, const QString &na
         }
     }
     contact = getContacts()->contact(0, true);
-    JabberUserData *data = toJabberUserData((SIM::clientData*) contact->createData(this)); // FIXME unsafe type conversion
+    JabberUserData *data = toJabberUserData((SIM::IMContact*) contact->createData(this)); // FIXME unsafe type conversion
     data->ID.str() = jid;
     if (!resource.isEmpty())
         data->Resource.str() = resource;
@@ -1286,7 +1286,7 @@ QString JabberClient::get_icon(JabberUserData *data, unsigned status, bool invis
 
 void JabberClient::contactInfo(void *_data, unsigned long &curStatus, unsigned &style, QString &statusIcon, QSet<QString> *icons)
 {
-    JabberUserData *data = toJabberUserData((SIM::clientData*)_data); // FIXME unsafe type conversion
+    JabberUserData *data = toJabberUserData((SIM::IMContact*)_data); // FIXME unsafe type conversion
     QString dicon = get_icon(data, data->Status.toULong(), data->invisible.toBool());
     if (data->Status.toULong() > curStatus)
 	{
@@ -1344,7 +1344,7 @@ QString JabberClient::contactName(void *clientData)
 {
     QString res = Client::contactName(clientData);
     res += ": ";
-    JabberUserData *data = toJabberUserData((SIM::clientData*)clientData); // FIXME unsafe type conversion
+    JabberUserData *data = toJabberUserData((SIM::IMContact*)clientData); // FIXME unsafe type conversion
     QString name = data->ID.str();
     if (!data->Nick.str().isEmpty()){
         res += data->Nick.str();
@@ -1360,7 +1360,7 @@ QString JabberClient::contactName(void *clientData)
 
 QString JabberClient::contactTip(void *_data)
 {
-    JabberUserData *data = toJabberUserData((SIM::clientData*)_data); // FIXME unsafe type conversion
+    JabberUserData *data = toJabberUserData((SIM::IMContact*)_data); // FIXME unsafe type conversion
     QString res;
     if (data->nResources.toULong() == 0){
         res = "<img src=\"sim:icons/";
@@ -1736,7 +1736,7 @@ static CommandDef cfgJabberWnd[] =
 
 CommandDef *JabberClient::infoWindows(Contact*, void *_data)
 {
-    JabberUserData *data = toJabberUserData((SIM::clientData*)_data); // FIXME unsafe type conversion
+    JabberUserData *data = toJabberUserData((SIM::IMContact*)_data); // FIXME unsafe type conversion
     QString name = i18n(protocol()->description()->text);
     name += ' ';
     name += data->ID.str();
@@ -1756,7 +1756,7 @@ CommandDef *JabberClient::configWindows()
 
 QWidget *JabberClient::infoWindow(QWidget *parent, Contact*, void *_data, unsigned id)
 {
-    JabberUserData *data = toJabberUserData((SIM::clientData*)_data); // FIXME unsafe type conversion
+    JabberUserData *data = toJabberUserData((SIM::IMContact*)_data); // FIXME unsafe type conversion
     switch (id){
     case MAIN_INFO:
         return new JabberInfo(parent, data, this);
@@ -1803,12 +1803,12 @@ void JabberClient::updateInfo(Contact *contact, void *data)
     }
     if (data == NULL)
         data = &this->data.owner;
-    info_request(toJabberUserData((SIM::clientData*)data), false); // FIXME unsafe type conversion
+    info_request(toJabberUserData((SIM::IMContact*)data), false); // FIXME unsafe type conversion
 }
 
 QString JabberClient::resources(void *_data)
 {
-    JabberUserData *data = toJabberUserData((SIM::clientData*)_data); // FIXME unsafe type conversion
+    JabberUserData *data = toJabberUserData((SIM::IMContact*)_data); // FIXME unsafe type conversion
     QString resource;
     if (data->nResources.toULong() > 1){
         for (unsigned i = 1; i <= data->nResources.toULong(); i++){
@@ -1825,11 +1825,11 @@ QString JabberClient::resources(void *_data)
 
 bool JabberClient::canSend(unsigned type, void *_data)
 {
-    if ((_data == NULL) || (((clientData*)_data)->Sign.toULong() != JABBER_SIGN))
+    if ((_data == NULL) || (((IMContact*)_data)->Sign.toULong() != JABBER_SIGN))
         return false;
     if (getState() != Connected)
         return false;
-    JabberUserData *data = toJabberUserData((SIM::clientData*)_data); // FIXME unsafe type conversion
+    JabberUserData *data = toJabberUserData((SIM::IMContact*)_data); // FIXME unsafe type conversion
     switch (type)
 	{
     case MessageGeneric:
@@ -2152,7 +2152,7 @@ bool JabberClient::send(Message *msg, void *_data)
 {
     if ((getState() != Connected) || (_data == NULL))
         return false;
-    JabberUserData *data = toJabberUserData((SIM::clientData*)_data); // FIXME unsafe type conversion
+    JabberUserData *data = toJabberUserData((SIM::IMContact*)_data); // FIXME unsafe type conversion
     switch (msg->type()){
     case MessageAuthRefused:{
             QString grp;
@@ -2320,7 +2320,7 @@ bool JabberClient::send(Message *msg, void *_data)
                 if (proto == "sim"){
                     Contact *contact = getContacts()->contact(url.toLong());
                     if (contact){
-                        clientData *data;
+                        IMContact *data;
                         ClientDataIterator it = contact->clientDataIterator();
                         while ((data = ++it) != NULL){
                             Contact *c = contact;
@@ -2513,7 +2513,7 @@ bool JabberClient::send(Message *msg, void *_data)
 QString JabberClient::dataName(void *_data)
 {
     QString res = name();
-    JabberUserData *data = toJabberUserData((SIM::clientData*)_data); // FIXME unsafe type conversion
+    JabberUserData *data = toJabberUserData((SIM::IMContact*)_data); // FIXME unsafe type conversion
     res += '+';
     res += data->ID.str();
     res = res.replace('/', '_');
@@ -2712,7 +2712,7 @@ QString JabberClient::logoFile(JabberUserData *data)
 
 void JabberClient::setupContact(Contact *contact, void *_data)
 {
-    JabberUserData *data = toJabberUserData((SIM::clientData*)_data); // FIXME unsafe type conversion
+    JabberUserData *data = toJabberUserData((SIM::IMContact*)_data); // FIXME unsafe type conversion
     QString mail = data->EMail.str();
     contact->setEMails(mail, name());
     QString phones;
@@ -2778,7 +2778,7 @@ QImage JabberClient::userPicture(unsigned id)
     return QImage();
 }
 
-JabberUserData* JabberClient::toJabberUserData(SIM::clientData * data)
+JabberUserData* JabberClient::toJabberUserData(SIM::IMContact * data)
 {
    // This function is used to more safely preform type conversion from SIM::clientData* into JabberUserData*
    // It will at least warn if the content of the structure is not JabberUserData

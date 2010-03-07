@@ -2,12 +2,13 @@
 #include "testcontact.h"
 #include "contacts/contact.h"
 #include "contacts/client.h"
+#include "contacts/imcontact.h"
 
 namespace testContact
 {
     using namespace SIM;
 
-    struct testClientData : public clientData
+    struct testClientData : public IMContact
     {
 
     };

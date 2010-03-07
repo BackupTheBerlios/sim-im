@@ -28,6 +28,7 @@
 #include "socket/socket.h"
 #include "socket/serversocketnotify.h"
 #include "socket/tcpclient.h"
+#include "contacts/imcontact.h"
 #include "jabberstatus.h"
 
 #include "jabberbuffer.h"
@@ -44,8 +45,9 @@ const unsigned SUBSCRIBE_FROM	= 1;
 const unsigned SUBSCRIBE_TO		= 2;
 const unsigned SUBSCRIBE_BOTH	= (SUBSCRIBE_FROM | SUBSCRIBE_TO);
 
-struct JabberUserData : public SIM::clientData
+class JabberUserData : public SIM::IMContact
 {
+public:
     SIM::Data		ID;
     SIM::Data		Node;
     SIM::Data		Resource;
@@ -407,7 +409,7 @@ public:
 
     virtual void changeStatus(const SIM::IMStatusPtr& status);
     
-    JabberUserData* toJabberUserData(SIM::clientData *); // More safely type conversion from generic SIM::clientData into JabberUserData
+    JabberUserData* toJabberUserData(SIM::IMContact *); // More safely type conversion from generic SIM::clientData into JabberUserData
 protected slots:
     void	ping();
     void	auth_failed();
@@ -423,8 +425,8 @@ protected:
     virtual void connect_ready();
     virtual void packet_ready();
     virtual void setInvisible(bool bState);
-    virtual bool isMyData(SIM::clientData*&, SIM::Contact*&);
-    virtual bool createData(SIM::clientData*&, SIM::Contact*);
+    virtual bool isMyData(SIM::IMContact*&, SIM::Contact*&);
+    virtual bool createData(SIM::IMContact*&, SIM::Contact*);
     virtual bool compareData(void*, void*);
     virtual bool canSend(unsigned, void*);
     virtual void contactInfo(void *data, unsigned long &curStatus, unsigned &style, QString &statusIcon, QSet<QString> *icons = NULL);

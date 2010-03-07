@@ -349,7 +349,7 @@ Client *MsgEdit::client(void *&data, bool bCreate, bool bTyping, unsigned contac
         for (i = 0; i < cs.size(); i++){
             for (unsigned n = 0; n < getContacts()->nClients(); n++){
                 Client *client = getContacts()->getClient(n);
-                clientData *d = cs[i].data;
+                IMContact *d = cs[i].data;
                 Contact *c;
                 if (!client->isMyData(d, c))
                     continue;
@@ -798,7 +798,7 @@ void MsgEdit::getWays(vector<ClientStatus> &cs, Contact *contact)
     for (unsigned i = 0; i < getContacts()->nClients(); i++){
         Client *client = getContacts()->getClient(i);
         ClientDataIterator it = contact->clientDataIterator(client);
-        clientData *data;
+        IMContact *data;
         while ((data = ++it) != NULL){
             unsigned long status = STATUS_UNKNOWN;
             unsigned style = 0;
@@ -925,7 +925,7 @@ bool MsgEdit::send()
     }
     if (bSent){
         if (data){
-            ((clientData*)data)->LastSend.asULong() = QDateTime::currentDateTime().toTime_t();
+            ((IMContact*)data)->LastSend.asULong() = QDateTime::currentDateTime().toTime_t();
         }
     }else{
         if (m_msg){
@@ -1377,7 +1377,7 @@ void MsgEdit::typingStop()
     if (contact == NULL)
         return;
     ClientDataIterator it = contact->clientDataIterator();
-    clientData *data;
+    IMContact *data;
     while ((data = ++it) != NULL){
         if (it.client()->dataName(data) == m_typingClient){
             Message *msg = new Message(MessageTypingStop);

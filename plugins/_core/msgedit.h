@@ -35,7 +35,7 @@ struct ClientStatus
 {
     unsigned long	status;
     unsigned		client;
-    SIM::clientData	*data;
+    SIM::IMContact	*data;
 };
 
 class MsgTextEdit : public TextEdit

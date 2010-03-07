@@ -59,9 +59,9 @@ namespace SIM
     {
     }
 
-    clientData *ClientDataIterator::operator ++()
+    IMContact *ClientDataIterator::operator ++()
     {
-        return (clientData*)(++(*p));
+        return (IMContact*)(++(*p));
     }
 
     void ClientDataIterator::reset()

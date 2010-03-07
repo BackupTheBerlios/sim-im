@@ -3,6 +3,7 @@
 #include "contacts.h"
 #include "clientuserdataprivate.h"
 #include "client.h"
+#include "imcontact.h"
 
 namespace SIM
 {
@@ -64,7 +65,7 @@ namespace SIM
         for (it = p->begin(); it != p->end(); ++it){
             if ((it->client == client) && (it->data == data))
                 break;
-            if (((clientData*)(it->data))->Sign.toULong() != ((clientData*)data)->Sign.toULong())
+            if (((IMContact*)(it->data))->Sign.toULong() != ((IMContact*)data)->Sign.toULong())
                 continue;
             if (client->compareData(data, it->data))
                 return NULL;
@@ -76,7 +77,7 @@ namespace SIM
         for (++it; it != p->end(); ++it){
             if (it->client->getState() != Client::Connected)
                 continue;
-            if (((clientData*)(it->data))->Sign.toULong() != ((clientData*)data)->Sign.toULong())
+            if (((IMContact*)(it->data))->Sign.toULong() != ((IMContact*)data)->Sign.toULong())
                 continue;
             if (client->compareData(data, it->data)){
                 data = it->data;
@@ -182,7 +183,7 @@ namespace SIM
         sort();
     }
 
-    void ClientUserData::join(clientData *cData, ClientUserData &data)
+    void ClientUserData::join(IMContact *cData, ClientUserData &data)
     {
         for (ClientUserDataPrivate::iterator it = data.p->begin(); it != data.p->end(); ++it){
             if (it->data == &(cData->Sign)){

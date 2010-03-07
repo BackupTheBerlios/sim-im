@@ -575,7 +575,7 @@ void SetInfoRequest::element_start(const QString& el, const QXmlAttributes& attr
 
 void JabberClient::setClientInfo(void *_data)
 {
-    JabberUserData *data = toJabberUserData((SIM::clientData*)_data);  // FIXME unsafe type conversion
+    JabberUserData *data = toJabberUserData((SIM::IMContact*)_data);  // FIXME unsafe type conversion
     if (data != &this->data.owner){
         this->data.owner.FirstName.str() = data->FirstName.str();
         this->data.owner.Nick.str() = data->Nick.str();

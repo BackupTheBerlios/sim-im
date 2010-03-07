@@ -144,7 +144,7 @@ void WorkInfo::apply(Client *client, void *_data)
 {
     if (client != m_client)
         return;
-    ICQUserData *data = m_client->toICQUserData((SIM::clientData*)_data);  // FIXME unsafe type conversion
+    ICQUserData *data = m_client->toICQUserData((SIM::IMContact*)_data);  // FIXME unsafe type conversion
     data->WorkAddress.str()     = edtAddress->toPlainText();
     data->WorkCity.str()        = edtCity->text();
     data->WorkState.str()       = edtState->text();

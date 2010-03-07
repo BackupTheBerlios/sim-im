@@ -68,8 +68,8 @@ namespace SIM
         // Deprecated interface
         SIM_DEPRECATED Client(Protocol*, Buffer *cfg);
         virtual bool compareData(void*, void*);
-        virtual bool isMyData(clientData*&, Contact*&) = 0;
-        virtual bool createData(clientData*&, Contact*) = 0;
+        virtual bool isMyData(IMContact*&, Contact*&) = 0;
+        virtual bool createData(IMContact*&, Contact*) = 0;
         virtual void contactInfo(void *clientData, unsigned long &status, unsigned &style, QString &statusIcon, QSet<QString> *icons = NULL) = 0;
         virtual void setupContact(Contact*, void *data) = 0;
         virtual bool send(Message*, void *data) = 0;

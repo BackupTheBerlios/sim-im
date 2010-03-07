@@ -73,8 +73,8 @@ namespace testClientSocket
             return QString("TestDataName");
         }
         QWidget *setupWnd() {return 0;}
-        bool isMyData(SIM::clientData*&, SIM::Contact*&) {return false;}
-        bool createData(SIM::clientData*&, SIM::Contact*) { return false;}
+        bool isMyData(SIM::IMContact*&, SIM::Contact*&) {return false;}
+        bool createData(SIM::IMContact*&, SIM::Contact*) { return false;}
 		void contactInfo(void * /*clientData*/, unsigned long& /*status*/, unsigned& /*style*/, QString& /*statusIcon*/, QSet<QString>* /*icons*/ = NULL) {}
 		void setupContact(SIM::Contact*, void* /*data*/){}
 		bool send(SIM::Message*, void* /*data*/){return false;}

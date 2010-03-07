@@ -172,7 +172,7 @@ const unsigned short SEARCH_DONE = USHRT_MAX;
 class AIMFileTransfer;
 class DirectClient;
 
-struct ICQUserData : public SIM::clientData
+struct ICQUserData : public SIM::IMContact
 {
 	SIM::Data        Alias;
 	SIM::Data        Cellular;
@@ -606,7 +606,7 @@ public:
     bool m_bAIM;
     static QString addCRLF(const QString &str);
     void uploadBuddy(const ICQUserData *data);
-    ICQUserData * toICQUserData(SIM::clientData*);  // More safely type conversion from generic SIM::clientData into ICQUserData
+    ICQUserData * toICQUserData(SIM::IMContact*);  // More safely type conversion from generic SIM::clientData into ICQUserData
 
     virtual void changeStatus(const SIM::IMStatusPtr& status);
 
@@ -652,8 +652,8 @@ protected:
     virtual void contactInfo(void *_data, unsigned long &status, unsigned &style, QString &statusIcon, QSet<QString> *icons = NULL);
     virtual bool send(SIM::Message*, void*);
     virtual bool canSend(unsigned type, void*);
-    virtual bool isMyData(SIM::clientData*&, SIM::Contact*&);
-    virtual bool createData(SIM::clientData*&, SIM::Contact*);
+    virtual bool isMyData(SIM::IMContact*&, SIM::Contact*&);
+    virtual bool createData(SIM::IMContact*&, SIM::Contact*);
     virtual QString contactTip(void *_data);
     virtual SIM::CommandDef *infoWindows(SIM::Contact *contact, void *_data);
     virtual QWidget *infoWindow(QWidget *parent, SIM::Contact *contact, void *_data, unsigned id);

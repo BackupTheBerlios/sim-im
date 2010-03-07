@@ -22,12 +22,12 @@ namespace testContactList
         return NULL;
     }
 
-    bool TestClient::isMyData(clientData*& data, Contact*& contact)
+    bool TestClient::isMyData(IMContact*& data, Contact*& contact)
     {
         return false;
     }
 
-    bool TestClient::createData(clientData*& data, Contact* contact)
+    bool TestClient::createData(IMContact*& data, Contact* contact)
     {
         return false;
     }

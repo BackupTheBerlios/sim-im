@@ -7,7 +7,6 @@
 #include "propertyhub.h"
 #include "clientuserdata.h"
 #include "misc.h"
-#include "clientdatastruct.h"
 
 namespace SIM
 {
@@ -84,7 +83,7 @@ namespace SIM
         bool have(void*);
         void sort();
         void join(Contact* c);
-        void join(SIM::clientData *cData, Contact* c);
+        void join(SIM::IMContact *cData, Contact* c);
         unsigned size();
         Client *activeClient(void *&data, Client *client);
         QString property(const char *name);

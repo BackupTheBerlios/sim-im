@@ -1329,7 +1329,7 @@ void ICQClient::setClientInfo(void *_data)
     if (getState() != Connected)
         return;
 
-    ICQUserData *d = toICQUserData((SIM::clientData*)_data);  // FIXME unsafe type conversion
+    ICQUserData *d = toICQUserData((SIM::IMContact*)_data);  // FIXME unsafe type conversion
 
     if (m_bAIM){
         d->ProfileFetch.asBool() = true;

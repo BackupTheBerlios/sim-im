@@ -362,8 +362,8 @@ const DataDef *AIMProtocol::userDataDef()
 
 bool ICQClient::compareData(void *d1, void *d2)
 {
-    ICQUserData *data1 = toICQUserData((SIM::clientData*) d1); // FIXME unsafe type conversion
-    ICQUserData *data2 = toICQUserData((SIM::clientData*) d2); // FIXME unsafe type conversion
+    ICQUserData *data1 = toICQUserData((SIM::IMContact*) d1); // FIXME unsafe type conversion
+    ICQUserData *data2 = toICQUserData((SIM::IMContact*) d2); // FIXME unsafe type conversion
     if (data1->Uin.toULong())
         return data1->Uin.toULong() == data2->Uin.toULong();
     if (data2->Uin.toULong())
@@ -450,7 +450,7 @@ void ICQClient::generateCookie(MessageId& id)
 	id.id_l = rand() + (rand() << 16);
 }
 
-bool ICQClient::isMyData(clientData *&_data, Contact *&contact)
+bool ICQClient::isMyData(IMContact *&_data, Contact *&contact)
 {
     if (_data->Sign.toULong() != ICQ_SIGN)
         return false;
@@ -472,13 +472,13 @@ bool ICQClient::isMyData(clientData *&_data, Contact *&contact)
     return true;
 }
 
-bool ICQClient::createData(clientData *&_data, Contact *contact)
+bool ICQClient::createData(IMContact *&_data, Contact *contact)
 {
     ICQUserData *data = toICQUserData(_data);
-    ICQUserData *new_data = toICQUserData((SIM::clientData*)contact->createData(this)); // FIXME unsafe type conversion
+    ICQUserData *new_data = toICQUserData((SIM::IMContact*)contact->createData(this)); // FIXME unsafe type conversion
     new_data->Uin = data->Uin;
     new_data->Screen.str() = data->Screen.str();
-    _data = (clientData*)new_data;
+    _data = (IMContact*)new_data;
     return true;
 }
 
@@ -1112,7 +1112,7 @@ ICQUserData *ICQClient::findContact(const QString &screen, const QString *alias,
                 {
                     if (uin && data->Uin.toULong() != uin || (uin == 0 && s != data->Screen.str()))
                         continue;
-                    data = toICQUserData((SIM::clientData*)contact->createData(this)); // FIXME unsafe type conversion
+                    data = toICQUserData((SIM::IMContact*)contact->createData(this)); // FIXME unsafe type conversion
                     data->Uin.asULong() = uin;
                     if (uin == 0)
                         data->Screen.str() = s;
@@ -1149,7 +1149,7 @@ ICQUserData *ICQClient::findContact(const QString &screen, const QString *alias,
             it.reset();
             while ((contact = ++it) != NULL)
                 if (contact->getName().toLower() == name){
-                    ICQUserData *data = toICQUserData((SIM::clientData*) contact->createData(this)); // FIXME unsafe type conversion
+                    ICQUserData *data = toICQUserData((SIM::IMContact*) contact->createData(this)); // FIXME unsafe type conversion
                     data->Uin.asULong() = uin;
                     if (uin == 0)
                         data->Screen.str() = screen;
@@ -1163,7 +1163,7 @@ ICQUserData *ICQClient::findContact(const QString &screen, const QString *alias,
         }
     }
     contact = getContacts()->contact(0, true);
-    data = toICQUserData((SIM::clientData*) contact->createData(this)); // FIXME unsafe type conversion
+    data = toICQUserData((SIM::IMContact*) contact->createData(this)); // FIXME unsafe type conversion
     data->Uin.asULong() = uin;
     if (uin == 0)
         data->Screen.str() = s;
@@ -1191,7 +1191,7 @@ ICQUserData *ICQClient::findGroup(unsigned id, const QString *alias, Group *&grp
     ICQUserData *data;
     while ((grp = ++it) != NULL)
     {
-        data = toICQUserData((SIM::clientData*)grp->clientData.getData(this)); // FIXME unsafe type conversion
+        data = toICQUserData((SIM::IMContact*)grp->clientData.getData(this)); // FIXME unsafe type conversion
         if (!data || data->IcqID.toULong() != id)
             continue;
 
@@ -1207,7 +1207,7 @@ ICQUserData *ICQClient::findGroup(unsigned id, const QString *alias, Group *&grp
     {
         if (grp->getName() == name)
         {
-            data = toICQUserData((SIM::clientData*)grp->clientData.createData(this)); // FIXME unsafe type conversion
+            data = toICQUserData((SIM::IMContact*)grp->clientData.createData(this)); // FIXME unsafe type conversion
             data->IcqID.asULong() = id;
             data->Alias.str() = *alias;
             return data;
@@ -1215,7 +1215,7 @@ ICQUserData *ICQClient::findGroup(unsigned id, const QString *alias, Group *&grp
     }
     grp = getContacts()->group(0, true);
     grp->setName(name);
-    data = toICQUserData((SIM::clientData*)grp->clientData.createData(this)); // FIXME unsafe type conversion
+    data = toICQUserData((SIM::IMContact*)grp->clientData.createData(this)); // FIXME unsafe type conversion
     data->IcqID.asULong() = id;
     data->Alias.str() = *alias;
     EventGroup e(grp, EventGroup::eChanged);
@@ -1273,7 +1273,7 @@ static void addIcon(QSet<QString> *s, const QString &icon, const QString &status
 
 void ICQClient::contactInfo(void *_data, unsigned long &curStatus, unsigned &style, QString &statusIcon, QSet<QString> *icons)
 {
-    ICQUserData *data = toICQUserData((SIM::clientData*)_data); // FIXME unsafe type conversion
+    ICQUserData *data = toICQUserData((SIM::IMContact*)_data); // FIXME unsafe type conversion
     unsigned status = STATUS_ONLINE;
     unsigned client_status = data->Status.toULong();
     if (client_status == ICQ_STATUS_OFFLINE)
@@ -1435,7 +1435,7 @@ void ICQClient::ping()
 
 void ICQClient::setupContact(Contact *contact, void *_data)
 {
-    ICQUserData *data = toICQUserData((SIM::clientData*)_data); // FIXME unsafe type conversion
+    ICQUserData *data = toICQUserData((SIM::IMContact*)_data); // FIXME unsafe type conversion
     QString phones;
     if (!data->HomePhone.str().isEmpty())
     {
@@ -1534,7 +1534,7 @@ QString ICQClient::trimPhone(const QString &from)
 
 QString ICQClient::contactTip(void *_data)
 {
-    ICQUserData *data = toICQUserData((SIM::clientData*)_data); // FIXME unsafe type conversion
+    ICQUserData *data = toICQUserData((SIM::IMContact*)_data); // FIXME unsafe type conversion
     QString res;
     QString statusText;
     unsigned long status = STATUS_OFFLINE;
@@ -2414,7 +2414,7 @@ static CommandDef aimConfigWnd[] =
 
 CommandDef *ICQClient::infoWindows(Contact*, void *_data)
 {
-    ICQUserData *data = toICQUserData((SIM::clientData*) _data); // FIXME unsafe type conversion
+    ICQUserData *data = toICQUserData((SIM::IMContact*) _data); // FIXME unsafe type conversion
     CommandDef *def = data->Uin.toULong() ? icqWnd : aimWnd;
     QString name = i18n(protocol()->description()->text);
     name += ' ';
@@ -2443,7 +2443,7 @@ CommandDef *ICQClient::configWindows()
 
 QWidget *ICQClient::infoWindow(QWidget *parent, Contact *contact, void *_data, unsigned id)
 {
-    ICQUserData *data = toICQUserData((SIM::clientData*)_data); // FIXME unsafe type conversion
+    ICQUserData *data = toICQUserData((SIM::IMContact*)_data); // FIXME unsafe type conversion
     switch (id){
     case MAIN_INFO:
         if (data->Uin.toULong())
@@ -2507,7 +2507,7 @@ QWidget *ICQClient::searchWindow(QWidget *parent)
 
 void ICQClient::updateInfo(Contact *contact, void *_data)
 {
-    ICQUserData *data = toICQUserData((SIM::clientData*)_data); // FIXME unsafe type conversion
+    ICQUserData *data = toICQUserData((SIM::IMContact*)_data); // FIXME unsafe type conversion
     if (getState() != Connected)
     {
         Client::updateInfo(contact, _data);
@@ -2772,7 +2772,7 @@ bool ICQClient::processEvent(Event *e)
         addGroupRequest(group);
         break;
     case EventGroup::eDeleted: {
-        ICQUserData *data = toICQUserData((SIM::clientData*)group->clientData.getData(this));
+        ICQUserData *data = toICQUserData((SIM::IMContact*)group->clientData.getData(this));
         if (data){
             ListRequest lr;
             lr.type   = LIST_GROUP_DELETED;
@@ -2931,7 +2931,7 @@ bool ICQClient::processEvent(Event *e)
                 Contact *contact = getContacts()->contact((unsigned long)(cmd->param));
                 if (contact == NULL)
                     return false;
-                SIM::clientData *data;
+                SIM::IMContact *data;
                 ICQUserData * icq_user_data;
                 ClientDataIterator it = contact->clientDataIterator();
                 while ((data = ++it) != NULL) 
@@ -2950,7 +2950,7 @@ bool ICQClient::processEvent(Event *e)
                 Contact *contact = getContacts()->contact((unsigned long)(cmd->param));
                 if (contact == NULL)
                     return false;
-                SIM::clientData *data;
+                SIM::IMContact *data;
                 ICQUserData * icq_user_data;
                 ClientDataIterator it = contact->clientDataIterator();
                 while ((data = ++it) != NULL)
@@ -3083,7 +3083,7 @@ bool ICQClient::send(Message *msg, void *_data)
 {
     if (getState() != Connected)
         return false;
-    ICQUserData *data = toICQUserData((SIM::clientData*)_data); // FIXME unsafe type conversion
+    ICQUserData *data = toICQUserData((SIM::IMContact*)_data); // FIXME unsafe type conversion
     SendMsg s;
     switch (msg->type()){
     case MessageSMS:
@@ -3193,11 +3193,11 @@ bool ICQClient::send(Message *msg, void *_data)
 
 bool ICQClient::canSend(unsigned type, void *_data)
 {
-    if (_data && (((clientData*)_data)->Sign.toULong() != ICQ_SIGN))
+    if (_data && (((IMContact*)_data)->Sign.toULong() != ICQ_SIGN))
         return false;
     if (getState() != Connected)
         return false;
-    ICQUserData *data = toICQUserData((SIM::clientData*)_data); // FIXME unsafe type conversion
+    ICQUserData *data = toICQUserData((SIM::IMContact*)_data); // FIXME unsafe type conversion
     switch (type){
     case MessageSMS:
         return !m_bAIM;
@@ -3241,7 +3241,7 @@ bool ICQClient::canSend(unsigned type, void *_data)
 
 QString ICQClient::dataName(void *data)
 {
-    return dataName(screen(toICQUserData((SIM::clientData*)data))); // FIXME unsafe type conversion
+    return dataName(screen(toICQUserData((SIM::IMContact*)data))); // FIXME unsafe type conversion
 }
 
 QString ICQClient::dataName(const QString &screen)
@@ -3309,7 +3309,7 @@ bool ICQClient::messageReceived(Message *msg, const QString &screen)
 QString ICQClient::contactName(void *clientData)
 {
     QString res;
-    ICQUserData *data = toICQUserData((SIM::clientData*)clientData); // FIXME unsafe type conversion
+    ICQUserData *data = toICQUserData((SIM::IMContact*)clientData); // FIXME unsafe type conversion
     res = data->Uin.toULong() ? "ICQ: " : "AIM: ";
     if (!data->Nick.str().isEmpty()){
         res += data->Nick.str();
@@ -3532,7 +3532,7 @@ Contact *ICQClient::getContact(ICQUserData *data)
 }
 
 
-ICQUserData* ICQClient::toICQUserData(SIM::clientData * data)
+ICQUserData* ICQClient::toICQUserData(SIM::IMContact * data)
 {
    // This function is used to more safely preform type conversion from SIM::clientData* into ICQUserData*
    // It will at least warn if the content of the structure is not ICQUserData

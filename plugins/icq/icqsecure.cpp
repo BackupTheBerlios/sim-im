@@ -93,7 +93,7 @@ void ICQSecure::apply(Client *client, void *_data)
 {
     if (client != m_client)
         return;
-    ICQUserData *data = m_client->toICQUserData((SIM::clientData*)_data); // FIXME unsafe type conversion
+    ICQUserData *data = m_client->toICQUserData((SIM::IMContact*)_data); // FIXME unsafe type conversion
     data->WaitAuth.asBool() = chkAuth->isChecked();
     data->WebAware.asBool() = chkWeb->isChecked();
 }

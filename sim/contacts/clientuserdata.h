@@ -12,7 +12,7 @@ namespace SIM
 {
     class Client;
     class ClientUserDataPrivate;
-    struct clientData;
+    class IMContact;
     class EXPORT ClientUserData
     {
     public:
@@ -26,7 +26,7 @@ namespace SIM
         bool have(void*);
         void sort();
         void join(ClientUserData &data);
-        void join(clientData *cData, ClientUserData &data);
+        void join(IMContact *cData, ClientUserData &data);
         unsigned size();
         Client *activeClient(void *&data, Client *client);
         QString property(const char *name);

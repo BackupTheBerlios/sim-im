@@ -85,7 +85,7 @@ void JabberHomeInfo::apply(Client *client, void *_data)
 {
     if (client != m_client)
         return;
-    JabberUserData *data = m_client->toJabberUserData((SIM::clientData*)_data); // FIXME unsafe type conversion
+    JabberUserData *data = m_client->toJabberUserData((SIM::IMContact*)_data); // FIXME unsafe type conversion
     data->Street.str() = edtStreet->toPlainText();
     data->ExtAddr.str() = edtExt->toPlainText();
     data->City.str()    = edtCity->text();

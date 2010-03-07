@@ -17,8 +17,8 @@ namespace testClientManager
         virtual QString name();
         virtual QString dataName(void*);
         virtual QWidget* setupWnd();
-        virtual bool isMyData(clientData*&, Contact*&);
-        virtual bool createData(clientData*&, Contact*);
+        virtual bool isMyData(IMContact*&, Contact*&);
+        virtual bool createData(IMContact*&, Contact*);
         virtual void contactInfo(void *clientData, unsigned long &status, unsigned &style, QString &statusIcon, QSet<QString> *icons = NULL);
         virtual void setupContact(Contact*, void *data);
         virtual bool send(Message*, void *data);

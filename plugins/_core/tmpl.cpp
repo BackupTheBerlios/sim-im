@@ -197,7 +197,7 @@ QString Tmpl::process(TmplExpand &t, const QString &str)
 //        if (getTag(tag, &(contact->getGroup()), contact->dataDef(), res))
 //            continue;
 
-        clientData *data;
+        IMContact *data;
         ClientDataIterator itc = contact->clientDataIterator();
         while ((data = ++itc) != NULL){
             if (getTag(tag, &(data->Sign), itc.client()->protocol()->userDataDef(), res))
