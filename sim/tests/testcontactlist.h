@@ -35,14 +35,16 @@ namespace testContactList
         Test();
         virtual bool processEvent(SIM::Event*);
     private slots:
-        void initTestCase();
-        void cleanupTestCase();
+        void init();
+        void cleanup();
 
         void testClientManipulation();
         void testGroupManipulation();
         void testGroupIterator();
         void testPacketTypeManipulation();
         void testContactManipulation();
+        void testGetCodec();
+        void testEncoding();
         
     private:
         ContactList* m_contactList;

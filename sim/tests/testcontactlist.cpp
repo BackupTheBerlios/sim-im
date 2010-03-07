@@ -89,14 +89,14 @@ namespace testContactList
     }
 
 
-    void Test::initTestCase()
+    void Test::init()
     {
         m_groupAdded = 0;
         SIM::createContactList();
         m_contactList = SIM::getContacts();
     }
 
-    void Test::cleanupTestCase()
+    void Test::cleanup()
     {
         SIM::destroyContactList();
     }
@@ -221,6 +221,35 @@ namespace testContactList
 
         QCOMPARE(getContacts()->contactByPhone("1-2-3")->id(), c->id());
         QCOMPARE(getContacts()->contactByPhone("666")->id(), c2->id());
+    }
+
+    void Test::testGetCodec()
+    {
+        Contact* c = getContacts()->contact(10, true);
+        c->setEncoding("CP 1251");
+        QTextCodec* codec = getContacts()->getCodec(c);
+        QString s = codec->toUnicode("\xc0\xc1\xc2");
+        QCOMPARE(s.length(), 3);
+        QCOMPARE(s.at(0).unicode(), (unsigned short)0x0410);
+        QCOMPARE(s.at(1).unicode(), (unsigned short)0x0411);
+        QCOMPARE(s.at(2).unicode(), (unsigned short)0x0412);
+    }
+
+    void Test::testEncoding()
+    {
+        Contact* c = getContacts()->contact(10, true);
+        c->setEncoding("CP 1251");
+
+        QByteArray arr;
+        arr.append((char)0xc0);
+        arr.append((char)0xc1);
+        arr.append((char)0xc2);
+        QString s = getContacts()->toUnicode(c, arr);
+
+        QCOMPARE(s.length(), 3);
+        QCOMPARE(s.at(0).unicode(), (unsigned short)0x0410);
+        QCOMPARE(s.at(1).unicode(), (unsigned short)0x0411);
+        QCOMPARE(s.at(2).unicode(), (unsigned short)0x0412);
     }
 }
 

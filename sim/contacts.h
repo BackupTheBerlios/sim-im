@@ -181,9 +181,11 @@ public:
     Contact *contactByMail(const QString &_mail, const QString &_name);
 
     static bool cmpPhone(const QString &p1, const QString &p2);
+
     QString toUnicode(Contact *contact, const QByteArray &str);
     QByteArray fromUnicode(Contact *contact, const QString &str);
     QTextCodec *getCodec(Contact *contact);
+
     static QTextCodec *getCodecByName(const QString &encoding);
     static QTextCodec *getCodecByCodePage(const int iCP);
     static const ENCODING *getEncodings();
