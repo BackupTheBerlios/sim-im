@@ -47,17 +47,16 @@ namespace SIM
 
     ClientDataIterator::ClientDataIterator() : p(0)
     {
-
+        p = ClientDataIteratorPrivatePtr();
     }
 
     ClientDataIterator::ClientDataIterator(ClientUserData &data, Client *client)
     {
-        p = new ClientDataIteratorPrivate(data.p, client);
+        p = ClientDataIteratorPrivatePtr(new ClientDataIteratorPrivate(data.p, client));
     }
 
     ClientDataIterator::~ClientDataIterator()
     {
-        delete p;
     }
 
     clientData *ClientDataIterator::operator ++()

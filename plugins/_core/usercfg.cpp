@@ -62,6 +62,7 @@ unsigned ConfigItem::curIndex;
 
 ConfigItem::ConfigItem(QTreeWidget *view, bool bShowUpdate)
         : QTreeWidgetItem(view)
+        , m_widget(NULL)
 		, m_bShowUpdate(bShowUpdate)
 {
     init();
@@ -98,7 +99,8 @@ void ConfigItem::show()
         m_widget = getWidget(dlg); //Fixme: Crash, second time: m_widget is 0xcccccc
         if (m_widget == NULL)
             return;
-        m_id = dlg->wnd->addWidget(m_widget/*, id() ? id() : defId++*/);
+        if(dlg->wnd->indexOf(m_widget) < 0)
+            m_id = dlg->wnd->addWidget(m_widget/*, id() ? id() : defId++*/);
         dlg->wnd->setMinimumSize(dlg->wnd->sizeHint());
         QObject::connect(dlg, SIGNAL(applyChanges()), m_widget, SLOT(apply()));
     }
@@ -108,7 +110,7 @@ void ConfigItem::show()
 
 QWidget *ConfigItem::getWidget(UserConfig *dlg)
 {
-    return dlg; //Fixme
+    return 0; //Fixme
 }
 
 class PrefItem : public ConfigItem
@@ -407,7 +409,7 @@ void UserConfig::fill()
 	
 	delete tmp;
 
-    m_parentItem = new ConfigItem(lstBox, 0);
+    m_parentItem = new ConfigItem(lstBox, false);
     m_parentItem->setText(0, i18n("Settings"));
     m_parentItem->setIcon(0, Pict("configure"));
     m_parentItem->setExpanded(true);

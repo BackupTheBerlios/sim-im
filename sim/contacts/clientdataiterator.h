@@ -2,11 +2,15 @@
 #ifndef SIM_CLIENTDATAITERATOR_H
 #define SIM_CLIENTDATAITERATOR_H
 
+#include <QSharedPointer>
 #include "simapi.h"
 #include "clientuserdata.h"
 
 namespace SIM
 {
+    class ClientDataIteratorPrivate;
+    typedef QSharedPointer<ClientDataIteratorPrivate> ClientDataIteratorPrivatePtr;
+
     class EXPORT ClientDataIterator
     {
     public:
@@ -17,7 +21,7 @@ namespace SIM
         Client *client();
         void reset();
     protected:
-        class ClientDataIteratorPrivate *p;
+        ClientDataIteratorPrivatePtr p;
 
         //COPY_RESTRICTED(ClientDataIterator)
     };
