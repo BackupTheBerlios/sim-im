@@ -260,7 +260,7 @@ ICQClient::ICQClient(Protocol *protocol, Buffer *cfg, bool bAIM)
     Contact *contact;
     while ((contact = ++it) != NULL)
     {
-        ClientDataIterator itd(contact->clientData, this);
+        ClientDataIterator itd = contact->clientDataIterator(this);
         ICQUserData *data;
         while ((data = toICQUserData(++itd)) != NULL)
             data->Alias.str() = contact->getName();
@@ -475,7 +475,7 @@ bool ICQClient::isMyData(clientData *&_data, Contact *&contact)
 bool ICQClient::createData(clientData *&_data, Contact *contact)
 {
     ICQUserData *data = toICQUserData(_data);
-    ICQUserData *new_data = toICQUserData((SIM::clientData*)contact->clientData.createData(this)); // FIXME unsafe type conversion
+    ICQUserData *new_data = toICQUserData((SIM::clientData*)contact->createData(this)); // FIXME unsafe type conversion
     new_data->Uin = data->Uin;
     new_data->Screen.str() = data->Screen.str();
     _data = (clientData*)new_data;
@@ -685,7 +685,7 @@ void ICQClient::disconnected()
     while ((contact = ++it) != NULL)
     {
         ICQUserData *data;
-        ClientDataIterator it(contact->clientData, this);
+        ClientDataIterator it = contact->clientDataIterator(this);
         while ((data = toICQUserData(++it)) != NULL)
         {
             if ((data->Status.toULong() != ICQ_STATUS_OFFLINE) || data->bInvisible.toBool())
@@ -1065,7 +1065,7 @@ ICQUserData *ICQClient::findContact(const QString &screen, const QString *alias,
 
     while ((contact = ++it) != NULL)
     {
-        ClientDataIterator it(contact->clientData, this);
+        ClientDataIterator it = contact->clientDataIterator(this);
         while ((data = toICQUserData(++it)) != NULL)
         {
             if (uin && data->Uin.toULong() != uin || (uin == 0 && s != data->Screen.str()))
@@ -1107,12 +1107,12 @@ ICQUserData *ICQClient::findContact(const QString &screen, const QString *alias,
             it.reset();
             while ((contact = ++it) != NULL)
             {
-                ClientDataIterator it(contact->clientData, c);
+                ClientDataIterator it = contact->clientDataIterator(c);
                 while ((data = toICQUserData(++it)) != NULL)
                 {
                     if (uin && data->Uin.toULong() != uin || (uin == 0 && s != data->Screen.str()))
                         continue;
-                    data = toICQUserData((SIM::clientData*)contact->clientData.createData(this)); // FIXME unsafe type conversion
+                    data = toICQUserData((SIM::clientData*)contact->createData(this)); // FIXME unsafe type conversion
                     data->Uin.asULong() = uin;
                     if (uin == 0)
                         data->Screen.str() = s;
@@ -1149,7 +1149,7 @@ ICQUserData *ICQClient::findContact(const QString &screen, const QString *alias,
             it.reset();
             while ((contact = ++it) != NULL)
                 if (contact->getName().toLower() == name){
-                    ICQUserData *data = toICQUserData((SIM::clientData*) contact->clientData.createData(this)); // FIXME unsafe type conversion
+                    ICQUserData *data = toICQUserData((SIM::clientData*) contact->createData(this)); // FIXME unsafe type conversion
                     data->Uin.asULong() = uin;
                     if (uin == 0)
                         data->Screen.str() = screen;
@@ -1163,7 +1163,7 @@ ICQUserData *ICQClient::findContact(const QString &screen, const QString *alias,
         }
     }
     contact = getContacts()->contact(0, true);
-    data = toICQUserData((SIM::clientData*) contact->clientData.createData(this)); // FIXME unsafe type conversion
+    data = toICQUserData((SIM::clientData*) contact->createData(this)); // FIXME unsafe type conversion
     data->Uin.asULong() = uin;
     if (uin == 0)
         data->Screen.str() = s;
@@ -2558,13 +2558,13 @@ bool ICQClient::processEvent(Event *e)
         while ((contact = ++it) != NULL)
         {
             ICQUserData *data;
-            ClientDataIterator itc(contact->clientData, this);
+            ClientDataIterator itc = contact->clientDataIterator(this);
             while ((data = toICQUserData(++itc)) != NULL)
             {
                 if (data->Screen.str() != addr)
                     continue;
-                contact->clientData.freeData(data);
-                ClientDataIterator itc(contact->clientData);
+                contact->freeData(data);
+                ClientDataIterator itc = contact->clientDataIterator();
                 if (++itc == NULL)
                     delete contact;
                 return true;
@@ -2576,7 +2576,7 @@ bool ICQClient::processEvent(Event *e)
         EventGetContactIP *ei = static_cast<EventGetContactIP*>(e);
         Contact *contact = ei->contact();
         ICQUserData *data;
-        ClientDataIterator it(contact->clientData, this);
+        ClientDataIterator it = contact->clientDataIterator(this);
         while ((data = toICQUserData(++it)) != NULL)
         {
             if (data->RealIP.ip()) 
@@ -2694,7 +2694,7 @@ bool ICQClient::processEvent(Event *e)
         switch(ec->action()) {
     case EventContact::eDeleted: {
         ICQUserData *data;
-        ClientDataIterator it(contact->clientData, this);
+        ClientDataIterator it = contact->clientDataIterator(this);
         while ((data = toICQUserData(++it)) != NULL){
             if (data->IcqID.toULong() == 0)
                 continue;
@@ -2747,7 +2747,7 @@ bool ICQClient::processEvent(Event *e)
                 return false;
             }
             ICQUserData *data;
-            ClientDataIterator it(contact->clientData, this);
+            ClientDataIterator it = contact->clientDataIterator(this);
             while ((data = toICQUserData(++it)) != NULL){
                 if (data->Uin.toULong() || data->ProfileFetch.toBool())
                     continue;
@@ -2805,7 +2805,7 @@ bool ICQClient::processEvent(Event *e)
             Contact *contact = getContacts()->contact((unsigned long)(cmd->param));
             if (!contact) 
                 return false;
-            ClientDataIterator it(contact->clientData, this);
+            ClientDataIterator it = contact->clientDataIterator(this);
             ICQUserData *data;
             while ((data = toICQUserData(++it)) != NULL){
                 unsigned long status = STATUS_OFFLINE;
@@ -2839,7 +2839,7 @@ bool ICQClient::processEvent(Event *e)
                     if (client->protocol() == protocol())
                         break;
                 }
-                ClientDataIterator it(contact->clientData, this);
+                ClientDataIterator it = contact->clientDataIterator(this);
                 if ((++it) != NULL){
                     cmd->flags &= ~BTN_HIDE;
                     return true;
@@ -2868,7 +2868,7 @@ bool ICQClient::processEvent(Event *e)
                 }
                 ICQUserData *data;
                 bool bOK = false;
-                ClientDataIterator it(contact->clientData, this);
+                ClientDataIterator it = contact->clientDataIterator(this);
                 while ((data = toICQUserData(++it)) != NULL)
                 {
                     bOK = true;
@@ -2894,7 +2894,7 @@ bool ICQClient::processEvent(Event *e)
                 }
                 ICQUserData *data;
                 bool bOK = false;
-                ClientDataIterator it(contact->clientData, this);
+                ClientDataIterator it = contact->clientDataIterator(this);
                 while ((data = toICQUserData(++it)) != NULL)
                 {
                     bOK = true;
@@ -2912,7 +2912,7 @@ bool ICQClient::processEvent(Event *e)
         if(cmd->id == CmdFetchAway) 
         {
             Contact *contact = getContacts()->contact((unsigned long)(cmd->param));
-            ClientDataIterator it(contact->clientData, this);
+            ClientDataIterator it = contact->clientDataIterator(this);
             ICQUserData *data;
             while ((data = toICQUserData(++it)) != NULL)
             {
@@ -2933,7 +2933,7 @@ bool ICQClient::processEvent(Event *e)
                     return false;
                 SIM::clientData *data;
                 ICQUserData * icq_user_data;
-                ClientDataIterator it(contact->clientData);
+                ClientDataIterator it = contact->clientDataIterator();
                 while ((data = ++it) != NULL) 
                 {
                     if (data->Sign.asULong() == ICQ_SIGN)
@@ -2952,7 +2952,7 @@ bool ICQClient::processEvent(Event *e)
                     return false;
                 SIM::clientData *data;
                 ICQUserData * icq_user_data;
-                ClientDataIterator it(contact->clientData);
+                ClientDataIterator it = contact->clientDataIterator();
                 while ((data = ++it) != NULL)
                 {
                     if (data->Sign.asULong() == ICQ_SIGN)
@@ -3024,7 +3024,7 @@ bool ICQClient::processEvent(Event *e)
         if (contact == NULL)
             return false;
         ICQUserData *data = NULL;
-        ClientDataIterator it(contact->clientData, this);
+        ClientDataIterator it = contact->clientDataIterator(this);
         if (client.isEmpty())
             while ((data = toICQUserData(++it)) != NULL)
                 break;
@@ -3444,7 +3444,7 @@ QImage ICQClient::userPicture(unsigned id)
     Contact *contact = getContacts()->contact(id);
     if(!contact)
         return QImage();
-    ClientDataIterator it(contact->clientData, this);
+    ClientDataIterator it = contact->clientDataIterator(this);
 
     ICQUserData *d;
     while ((d = toICQUserData(++it)) != NULL){

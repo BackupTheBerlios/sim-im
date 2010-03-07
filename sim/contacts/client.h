@@ -11,11 +11,6 @@
 namespace SIM
 {
     class Protocol;
-    struct clientData       // Base struct for all clientData
-    {
-        Data    Sign;       // Protocol ID, must be ICQ_SIGN, JABBER_SIGN etc
-        Data    LastSend;
-    };
     struct ClientData
     {
         Data    ManualStatus;

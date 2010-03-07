@@ -20,17 +20,18 @@ namespace SIM
         ~ClientUserData();
         QByteArray save() const;
         void load(Client *client, Buffer *cfg);
+
+        void *createData(Client *client);
         void *getData(Client *client);
         bool have(void*);
-        void *createData(Client *client);
-        void freeData(void*);
-        void freeClientData(Client *client);
         void sort();
         void join(ClientUserData &data);
         void join(clientData *cData, ClientUserData &data);
         unsigned size();
         Client *activeClient(void *&data, Client *client);
         QString property(const char *name);
+        void freeData(void*);
+        void freeClientData(Client *client);
 
     protected:
         class ClientUserDataPrivate *p;

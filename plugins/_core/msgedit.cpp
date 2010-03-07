@@ -372,7 +372,7 @@ Client *MsgEdit::client(void *&data, bool bCreate, bool bTyping, unsigned contac
     if (contact == NULL)
         return NULL;
     void *d;
-    ClientDataIterator it(contact->clientData);
+    ClientDataIterator it = contact->clientDataIterator();
     while ((d = ++it) != NULL){
         if (it.client()->dataName(d) == m_client){
             data = d;
@@ -797,7 +797,7 @@ void MsgEdit::getWays(vector<ClientStatus> &cs, Contact *contact)
 {
     for (unsigned i = 0; i < getContacts()->nClients(); i++){
         Client *client = getContacts()->getClient(i);
-        ClientDataIterator it(contact->clientData, client);
+        ClientDataIterator it = contact->clientDataIterator(client);
         clientData *data;
         while ((data = ++it) != NULL){
             unsigned long status = STATUS_UNKNOWN;
@@ -913,7 +913,7 @@ bool MsgEdit::send()
                 }
             }
         }else{
-            ClientDataIterator it(contact->clientData);
+            ClientDataIterator it = contact->clientDataIterator();
             while ((data = ++it) != NULL){
                 if (it.client()->dataName(data) == client_str){
                     if (it.client()->send(m_msg, data))
@@ -1376,7 +1376,7 @@ void MsgEdit::typingStop()
     Contact *contact = getContacts()->contact(m_userWnd->m_id);
     if (contact == NULL)
         return;
-    ClientDataIterator it(contact->clientData);
+    ClientDataIterator it = contact->clientDataIterator();
     clientData *data;
     while ((data = ++it) != NULL){
         if (it.client()->dataName(data) == m_typingClient){

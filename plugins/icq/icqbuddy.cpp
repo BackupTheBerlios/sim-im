@@ -570,7 +570,7 @@ void ICQClient::sendContactList()
     Contact *contact;
     ContactList::ContactIterator it;
     while ((contact = ++it) != NULL){
-        ClientDataIterator it_data(contact->clientData, this);
+        ClientDataIterator it_data = contact->clientDataIterator(this);
         ICQUserData *data;
         while ((data = toICQUserData(++it_data)) != NULL){
             if (data->IgnoreId.toULong() == 0)
@@ -582,7 +582,7 @@ void ICQClient::sendContactList()
     snac(ICQ_SNACxFOOD_BUDDY, ICQ_SNACxBDY_ADDxTOxLIST);
     it.reset();
     while ((contact = ++it) != NULL){
-        ClientDataIterator it_data(contact->clientData, this);
+        ClientDataIterator it_data = contact->clientDataIterator(this);
         ICQUserData *data;
         while ((data = toICQUserData(++it_data)) != NULL){
             if (data->IgnoreId.toULong() == 0)
@@ -599,7 +599,7 @@ void SnacIcqBuddy::addBuddy(Contact *contact)
     if (contact->id() == 0)
         return;
     ICQUserData *data;
-    ClientDataIterator it_data(contact->clientData, m_client);
+    ClientDataIterator it_data = contact->clientDataIterator(m_client);
     while ((data = m_client->toICQUserData(++it_data)) != NULL){
         int it = m_client->buddies.indexOf(m_client->screen(data));
         if (it != -1)
@@ -620,7 +620,7 @@ void SnacIcqBuddy::removeBuddy(Contact *contact)
     if (contact->id() == 0)
         return;
     ICQUserData *data;
-    ClientDataIterator it_data(contact->clientData, m_client);
+    ClientDataIterator it_data = contact->clientDataIterator(m_client);
     while ((data = m_client->toICQUserData(++it_data)) != NULL){
         int it = m_client->buddies.indexOf(m_client->screen(data));
         if (it == -1)

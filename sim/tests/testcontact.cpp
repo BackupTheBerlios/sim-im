@@ -1,21 +1,30 @@
 
 #include "testcontact.h"
 #include "contacts/contact.h"
+#include "contacts/client.h"
 
 namespace testContact
 {
     using namespace SIM;
-    void Test::initTestCase()
+
+    struct testClientData : public clientData
     {
+
+    };
+
+    void Test::init()
+    {
+        SIM::createContactList();
     }
 
-    void Test::cleanupTestCase()
+    void Test::cleanup()
     {
+        SIM::destroyContactList();
     }
 
     void Test::testAccessors()
     {
-        ContactPtr c = ContactPtr(new Contact(1));
+        Contact* c = getContacts()->contact(1, true);
         QCOMPARE(c->id(), (unsigned long)1);
         c->setGroup(42);
         QCOMPARE(c->getGroup(), 42);
@@ -39,11 +48,17 @@ namespace testContact
 
     void Test::testCompositeProperties()
     {
-        ContactPtr c = ContactPtr(new Contact(1));
+        Contact* c = getContacts()->contact(1, true);
         c->setFirstName("foo", "bar");
         QCOMPARE(c->getFirstName(), QString("foo/bar"));
         c->setLastName("alpha", "beta");
         QCOMPARE(c->getLastName(), QString("alpha/beta"));
+    }
+
+    void Test::testClientData()
+    {
+        //Contact* c = getContacts()->contact(1, true);
+
     }
 }
 

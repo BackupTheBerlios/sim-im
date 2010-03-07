@@ -563,7 +563,7 @@ void ICQClient::fetchProfiles()
     ContactList::ContactIterator itc;
     while ((contact = ++itc) != NULL){
         ICQUserData *data;
-        ClientDataIterator itd(contact->clientData, this);
+        ClientDataIterator itd = contact->clientDataIterator(this);
         while ((data = toICQUserData(++itd)) != NULL){
             if (data->Uin.toULong() || data->ProfileFetch.toBool())
                 continue;

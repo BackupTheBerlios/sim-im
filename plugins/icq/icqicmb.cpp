@@ -719,7 +719,7 @@ void SnacIcqICBM::accept(Message *msg, ICQUserData *data)
         Contact *contact = getContacts()->contact(msg->contact());
         ICQUserData *data = NULL; //Fixme: Local declaration of 'data' hides declaration of the same name in outer scope, see previous declaration at line '2163'
         if (contact){
-            ClientDataIterator it(contact->clientData, client());
+            ClientDataIterator it = contact->clientDataIterator(client());
             while ((data = (client()->toICQUserData(++it))) != NULL){
 				if (!msg->client().isEmpty() && (client()->dataName(data) == msg->client()))
                     break;
@@ -754,7 +754,7 @@ void SnacIcqICBM::accept(Message *msg, const QString &dir, OverwriteMode overwri
 	if (!msg->client().isEmpty()){
         Contact *contact = getContacts()->contact(msg->contact());
         if (contact){
-            ClientDataIterator it(contact->clientData, client());
+            ClientDataIterator it = contact->clientDataIterator(client());
             while ((data = (client()->toICQUserData(++it))) != NULL){
                 if (client()->dataName(data) == msg->client())
                     break;
@@ -816,7 +816,7 @@ void SnacIcqICBM::decline(Message *msg, const QString &reason)
         Contact *contact = getContacts()->contact(msg->contact());
         ICQUserData *data = NULL;
         if (contact){
-            ClientDataIterator it(contact->clientData, client());
+            ClientDataIterator it = contact->clientDataIterator(client());
             while ((data = (client()->toICQUserData(++it))) != NULL){
 				if (!msg->client().isEmpty() && (client()->dataName(data) == msg->client()))
                     break;
@@ -854,7 +854,7 @@ void SnacIcqICBM::decline(Message *msg, const QString &reason)
 		if (!msg->client().isEmpty()){
             contact = getContacts()->contact(msg->contact());
             if (contact){
-                ClientDataIterator it(contact->clientData, client());
+                ClientDataIterator it = contact->clientDataIterator(client());
                 while ((data = (client()->toICQUserData(++it))) != NULL){
                     if (client()->dataName(data) == msg->client())
                         break;
@@ -941,7 +941,7 @@ bool SnacIcqICBM::cancelMessage(SIM::Message* msg)
 		if(contact)
 		{
 			ICQUserData *data;
-			ClientDataIterator it(contact->clientData, m_client);
+            ClientDataIterator it = contact->clientDataIterator(m_client);
 			while ((data = m_client->toICQUserData(++it)) != NULL)
 			{
 				DirectClient *dc = dynamic_cast<DirectClient*>(data->Direct.object());

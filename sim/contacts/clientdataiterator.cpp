@@ -1,4 +1,5 @@
 
+#include <vector>
 #include "clientdataiterator.h"
 #include "clientuserdataprivate.h"
 #include "contacts.h"
@@ -42,6 +43,11 @@ namespace SIM
     {
         m_lastClient = NULL;
         m_it = m_p->begin();
+    }
+
+    ClientDataIterator::ClientDataIterator() : p(0)
+    {
+
     }
 
     ClientDataIterator::ClientDataIterator(ClientUserData &data, Client *client)

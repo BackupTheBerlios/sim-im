@@ -942,7 +942,7 @@ QString ICQClient::packContacts(ContactsMessage *msg, ICQUserData *, CONTACTS_MA
         if (proto == "sim"){
             Contact *contact = getContacts()->contact(url.toULong());
             if (contact){
-                ClientDataIterator it(contact->clientData);
+                ClientDataIterator it = contact->clientDataIterator();
                 clientData *cdata;
                 while ((cdata = ++it) != NULL){
                     Contact *cc = contact;

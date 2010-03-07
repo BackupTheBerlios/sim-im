@@ -10,6 +10,7 @@ namespace SIM
     class EXPORT ClientDataIterator
     {
     public:
+        ClientDataIterator();
         ClientDataIterator(ClientUserData &data, Client *client=NULL);
         ~ClientDataIterator();
         clientData *operator ++();
@@ -18,7 +19,7 @@ namespace SIM
     protected:
         class ClientDataIteratorPrivate *p;
 
-        COPY_RESTRICTED(ClientDataIterator)
+        //COPY_RESTRICTED(ClientDataIterator)
     };
 
 }

@@ -157,10 +157,10 @@ namespace SIM
         ContactList::ContactIterator itc;
         while ((contact = ++itc) != NULL)
         {
-            if (contact->clientData.size() == 0)
+            if (contact->size() == 0)
                 continue;
-            contact->clientData.freeClientData(this);
-            if (contact->clientData.size())
+            contact->freeClientData(this);
+            if (contact->size())
             {
                 getContacts()->removeContact(contact->id());
             }

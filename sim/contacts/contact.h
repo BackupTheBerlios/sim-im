@@ -7,6 +7,7 @@
 #include "propertyhub.h"
 #include "clientuserdata.h"
 #include "misc.h"
+#include "clientdatastruct.h"
 
 namespace SIM
 {
@@ -63,7 +64,6 @@ namespace SIM
         void setEncoding(const QString& enc);
 
         PropertyHubPtr getUserData(const QString& id, bool bCreate = false);
-        ClientUserData clientData;
         bool setFirstName(const QString &name, const QString &client);
         bool setLastName(const QString &name, const QString &client);
         bool setEMails(const QString &mails, const QString &client);
@@ -74,6 +74,25 @@ namespace SIM
         void setup();
 
         UserDataPtr getUserData() { return m_userData; }
+
+        // m_clientData accessors
+        ClientDataIterator clientDataIterator(Client* client = NULL);
+        QByteArray saveUseData() const;
+        void loadUserData(Client *client, Buffer *cfg);
+        void *createData(Client *client);
+        void *getData(Client *client);
+        bool have(void*);
+        void sort();
+        void join(ClientUserData &data);
+        void join(Contact* c);
+        void join(SIM::clientData *cData, ClientUserData &data);
+        void join(SIM::clientData *cData, Contact* c);
+        unsigned size();
+        Client *activeClient(void *&data, Client *client);
+        QString property(const char *name);
+        void freeData(void*);
+        void freeClientData(Client *client);
+        // m_clientData accessors end
     protected:
         unsigned long m_id;
         friend class ContactList;
@@ -81,6 +100,7 @@ namespace SIM
 
     private:
         UserDataPtr m_userData;
+        ClientUserData m_clientData;
     };
     typedef QSharedPointer<Contact> ContactPtr;
 

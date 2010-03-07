@@ -604,7 +604,7 @@ bool ContactList::moveClient(Client *client, bool bUp)
     Contact *contact;
     ContactList::ContactIterator it;
     while ((contact = ++it) != NULL){
-        contact->clientData.sort();
+        contact->sort();
         EventContact e(contact, EventContact::eChanged);
         e.process();
     }
@@ -957,8 +957,9 @@ bool ContactList::load_contacts(const QDomElement& contacts)
 void ContactListPrivate::flush(Contact *c, Group *g)
 {
     ClientUserData *data = NULL;
-    if (c)
-        data = &c->clientData;
+//    if (c)
+//        data = &c->clientData;
+    c->sort();
     if (g)
         data = &g->clientData;
     if (data)
@@ -999,8 +1000,8 @@ void ContactListPrivate::flush(Contact *c, Group *g, const QByteArray &section, 
         if (client->name() != section)
             continue;
         ClientUserData *data = NULL;
-        if (c)
-            data = &c->clientData;
+        if (c && !g)
+            c->loadUserData(client, cfg);
         if (g)
             data = &g->clientData;
         if (data)
@@ -1383,7 +1384,7 @@ EXPORT QString g_i18n(const char *text, SIM::Contact *contact)
     QString female = i18n("female", text);
     if (male == female)
         return male;
-    QString gender = contact->clientData.property("Gender");
+    QString gender = contact->property("Gender");
     if (gender.toLong() == 1)
         return female;
     return male;

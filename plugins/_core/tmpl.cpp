@@ -198,7 +198,7 @@ QString Tmpl::process(TmplExpand &t, const QString &str)
 //            continue;
 
         clientData *data;
-        ClientDataIterator itc(contact->clientData);
+        ClientDataIterator itc = contact->clientDataIterator();
         while ((data = ++itc) != NULL){
             if (getTag(tag, &(data->Sign), itc.client()->protocol()->userDataDef(), res))
                 break;

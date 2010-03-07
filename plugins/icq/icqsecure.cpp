@@ -44,7 +44,7 @@ void ICQSecure::deleteVisibleItem(ListViewItem *item)
     Contact *contact = getContacts()->contact(item->text(4).toUInt());
     if (contact) {
         ICQUserData *data;
-        ClientDataIterator it(contact->clientData);
+        ClientDataIterator it = contact->clientDataIterator();
         while ((data = m_client->toICQUserData(++it)) != NULL){
             data->VisibleId.asULong() = 0;
             EventContact eContact(contact, EventContact::eChanged);
@@ -58,7 +58,7 @@ void ICQSecure::deleteInvisibleItem(ListViewItem *item)
     Contact *contact = getContacts()->contact(item->text(4).toUInt());
     if (contact) {
         ICQUserData *data;
-        ClientDataIterator it(contact->clientData);
+        ClientDataIterator it = contact->clientDataIterator();
         while ((data = m_client->toICQUserData(++it)) != NULL){
             data->InvisibleId.asULong() = 0;
             EventContact eContact(contact, EventContact::eChanged);
@@ -161,7 +161,7 @@ void ICQSecure::fillListView(ListView *lst, SIM::Data ICQUserData::* field)
     ContactList::ContactIterator it;
     while ((contact = ++it) != NULL){
         ICQUserData *data;
-        ClientDataIterator it(contact->clientData, m_client);
+        ClientDataIterator it = contact->clientDataIterator(m_client);
         while ((data = m_client->toICQUserData(++it)) != NULL){
             if ((data->*field).toULong()){
                 QString firstName = contact->getFirstName();

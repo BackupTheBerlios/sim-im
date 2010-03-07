@@ -85,7 +85,7 @@ namespace SIM
             res += "/-";
         }
         setPhones(res);
-        ClientDataIterator it(clientData);
+        ClientDataIterator it =  clientDataIterator();
         void *data;
         while ((data = ++it) != NULL)
             it.client()->setupContact(this, data);
@@ -115,7 +115,7 @@ namespace SIM
             icons->clear();
         unsigned long status = STATUS_UNKNOWN;
         void *data;
-        ClientDataIterator it(clientData, NULL);
+        ClientDataIterator it = clientDataIterator();
         std::vector<sortClientData> d;
         while ((data = ++it) != NULL){
             sortClientData sd;
@@ -133,7 +133,7 @@ namespace SIM
         std::sort(d.begin(), d.end(), cmp_sd);
         for (unsigned i = 0; i < d.size(); i++){
             void *data = d[i].data;
-            Client *client = clientData.activeClient(data, d[i].client);
+            Client *client = m_clientData.activeClient(data, d[i].client);
             if (client == NULL)
                 continue;
             client->contactInfo(data, status, style, statusIcon, icons);
@@ -221,9 +221,9 @@ namespace SIM
             tip += quoteString(mail);
         }
         void *data;
-        ClientDataIterator it(clientData);
+        ClientDataIterator it(m_clientData);
         while ((data = ++it) != NULL){
-            Client *client = clientData.activeClient(data, it.client());
+            Client *client = m_clientData.activeClient(data, it.client());
             if (client == NULL)
                 continue;
             QString str = client->contactTip(data);
@@ -439,6 +439,86 @@ namespace SIM
     void Contact::setEncoding(const QString& enc)
     {
         getUserData()->root()->setValue("Encoding", enc);
+    }
+
+    void* Contact::createData(Client *client)
+    {
+        return m_clientData.createData(client);
+    }
+
+    void* Contact::getData(Client *client)
+    {
+        return m_clientData.getData(client);
+    }
+
+    bool Contact::have(void* d)
+    {
+        return m_clientData.have(d);
+    }
+
+    void Contact::sort()
+    {
+        m_clientData.sort();
+    }
+
+    void Contact::join(ClientUserData &data)
+    {
+        m_clientData.join(data);
+    }
+
+    void Contact::join(Contact* c)
+    {
+        m_clientData.join(c->m_clientData);
+    }
+
+    void Contact::join(SIM::clientData *cData, ClientUserData &data)
+    {
+        m_clientData.join(cData, data);
+    }
+
+    void Contact::join(SIM::clientData *cData, Contact* c)
+    {
+        m_clientData.join(cData, c->m_clientData);
+    }
+
+    unsigned Contact::size()
+    {
+        return m_clientData.size();
+    }
+
+    Client* Contact::activeClient(void *&data, Client *client)
+    {
+        return m_clientData.activeClient(data, client);
+    }
+
+    QString Contact::property(const char *name)
+    {
+        return m_clientData.property(name);
+    }
+
+    void Contact::freeData(void* d)
+    {
+        m_clientData.freeData(d);
+    }
+
+    void Contact::freeClientData(Client *client)
+    {
+        m_clientData.freeClientData(client);
+    }
+
+    ClientDataIterator Contact::clientDataIterator(Client* client)
+    {
+        return ClientDataIterator(m_clientData, client);
+    }
+
+    QByteArray Contact::saveUseData() const
+    {
+        return m_clientData.save();
+    }
+
+    void Contact::loadUserData(Client *client, Buffer *cfg)
+    {
+        m_clientData.load(client, cfg);
     }
 }
 

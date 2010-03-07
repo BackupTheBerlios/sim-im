@@ -180,7 +180,7 @@ void ClientItem::init(CommandDef *cmd)
 QWidget *ClientItem::getWidget(UserConfig *dlg)
 {
     void *data = m_data;
-    Client *client = dlg->m_contact->clientData.activeClient(data, m_client);
+    Client *client = dlg->m_contact->activeClient(data, m_client);
     if (client == NULL)
         return NULL;
     return client->infoWindow(dlg, dlg->m_contact, data, m_cmd->id);
@@ -345,11 +345,11 @@ void UserConfig::fill()
     if (m_contact)
 	{
         m_parentItem = new MainInfoItem(lstBox, CmdInfo);
-        ClientDataIterator it(m_contact->clientData);
+        ClientDataIterator it = m_contact->clientDataIterator();
         void *data; //WUUUARH, Fixme
         while ((data = ++it) != NULL)
 		{
-            Client *client = m_contact->clientData.activeClient(data, it.client());
+            Client *client = m_contact->activeClient(data, it.client());
             if (client == NULL)
                 continue;
             CommandDef *cmds = client->infoWindows(m_contact, data);
@@ -372,11 +372,12 @@ void UserConfig::fill()
 
     m_parentItem = NULL;
     ClientUserData* data;
+    ClientDataIterator it;
     if (m_contact) 
-        data = &m_contact->clientData;
+        it = m_contact->clientDataIterator();
 	else 
-        data = &m_group->clientData;
-    ClientDataIterator it(*data);
+        it = ClientDataIterator(m_group->clientData);
+    //ClientDataIterator it(*data);
     list<unsigned> st;
 	ARItem *tmp=NULL;
     while (++it)
@@ -579,11 +580,11 @@ void UserConfig::updateInfo()
 {
     if (m_nUpdates || (m_contact == NULL))
         return;
-    ClientDataIterator it(m_contact->clientData);
+    ClientDataIterator it = m_contact->clientDataIterator();
     void *data;
     while ((data = ++it) != NULL)
 	{
-        Client *client = m_contact->clientData.activeClient(data, it.client());
+        Client *client = m_contact->activeClient(data, it.client());
         if (client == NULL)
             continue;
         m_nUpdates++;

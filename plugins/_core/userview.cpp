@@ -1286,7 +1286,7 @@ void UserView::joinContacts(void*)
     Contact *contact2 = getContacts()->contact(joinContactsData.contact2);
     if ((contact1 == NULL) || (contact2 == NULL))
         return;
-    contact1->clientData.join(contact2->clientData);
+    contact1->join(contact2);
     if (!contact2->getPhones().isEmpty()){
         QString phones = contact1->getPhones();
         if (!phones.isEmpty())
@@ -1370,10 +1370,10 @@ void UserView::search(ListViewItem *item, list<ListViewItem*> &items)
     } else {
       void *data;
       Contact *contact = getContacts()->contact(static_cast<ContactItem*>(item)->id());
-        ClientDataIterator it(contact->clientData);
+        ClientDataIterator it = contact->clientDataIterator();
         while ((data = ++it) != NULL)
 		{
-			Client *client = contact->clientData.activeClient(data, it.client());
+            Client *client = contact->activeClient(data, it.client());
 			if (client == NULL)
 				continue;
 			QString contactName = client->contactName(data);

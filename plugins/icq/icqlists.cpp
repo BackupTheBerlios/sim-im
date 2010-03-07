@@ -523,7 +523,7 @@ void ICQClient::snac_lists(unsigned short type, unsigned short seq)
                 ContactList::ContactIterator it_c;
                 while ((contact = ++it_c) != NULL){
                     ICQUserData *data;
-                    ClientDataIterator it(contact->clientData, this);
+                    ClientDataIterator it = contact->clientDataIterator(this);
                     while ((data = toICQUserData(++it)) != NULL){
                         data->bChecked.asBool() = false;
                         data->GrpId.asULong() = 0;
@@ -579,8 +579,8 @@ void ICQClient::snac_lists(unsigned short type, unsigned short seq)
             while ((contact = ++it_c) != NULL){
                 ICQUserData *data;
                 SIM::clientData * client_data;
-                ClientDataIterator it_d(contact->clientData);
-                bool bOther = (contact->clientData.size() == 0);
+                ClientDataIterator it_d = contact->clientDataIterator();
+                bool bOther = (contact->size() == 0);
                 bool bMy = false;
                 unsigned long newGroup = 0;
                 while ((client_data = ++it_d) != NULL){
@@ -1064,7 +1064,7 @@ unsigned short ICQClient::getListId()
         Contact *contact;
         ContactList::ContactIterator it_cnt;
         while ((contact = ++it_cnt) != NULL){
-            ClientDataIterator it(contact->clientData, this);
+            ClientDataIterator it = contact->clientDataIterator(this);
             ICQUserData *data;
             while((data = toICQUserData(++it)) != NULL){
                 if((data->IcqID.toULong() == id) || (data->IgnoreId.toULong() == id) ||
@@ -1165,7 +1165,7 @@ void ICQClient::getGroupIDs(unsigned short group_id, ICQBuffer* buf)
 	ICQUserData *data;
 	while((contact = ++it) != NULL)
 	{
-		ClientDataIterator it(contact->clientData, this);
+        ClientDataIterator it = contact->clientDataIterator(this);
 		data = toICQUserData(++it);
 		if(!data)
 			continue;
@@ -1201,7 +1201,7 @@ unsigned short ICQClient::ssiRemoveFromGroup(QString& groupname, unsigned short 
 	ICQUserData *data;
 	while((contact = ++it) != NULL)
 	{
-		ClientDataIterator it(contact->clientData, this);
+        ClientDataIterator it = contact->clientDataIterator(this);
 		data = toICQUserData(++it);
 		if(!data)
 			continue;
@@ -1597,7 +1597,7 @@ void ICQClient::addGroupRequest(Group *group)
 void ICQClient::addContactRequest(Contact *contact)
 {
     ICQUserData *data;
-    ClientDataIterator it(contact->clientData, this);
+    ClientDataIterator it = contact->clientDataIterator(this);
     while ((data = toICQUserData(++it)) != NULL){
         list<ListRequest>::iterator it;
         for (it = listRequests.begin(); it != listRequests.end(); it++){

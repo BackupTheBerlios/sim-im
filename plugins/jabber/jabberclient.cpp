@@ -272,7 +272,7 @@ bool JabberClient::isMyData(clientData *&_data, Contact *&contact)
 bool JabberClient::createData(clientData *&_data, Contact *contact)
 {
     JabberUserData *data = toJabberUserData(_data);
-    JabberUserData *new_data = toJabberUserData((SIM::clientData*)contact->clientData.createData(this)); // FIXME unsafe type conversion
+    JabberUserData *new_data = toJabberUserData((SIM::clientData*)contact->createData(this)); // FIXME unsafe type conversion
     new_data->ID.str() = data->ID.str();
     _data = (clientData*)new_data;
     return true;
@@ -343,11 +343,11 @@ bool JabberClient::processEvent(Event *e)
         Contact *contact;
         while ((contact = ++it) != NULL){
             JabberUserData *data;
-            ClientDataIterator itc(contact->clientData, this);
+            ClientDataIterator itc = contact->clientDataIterator(this);
             while ((data = toJabberUserData(++itc)) != NULL){
                 if (data->ID.str() == addr){
-                    contact->clientData.freeData(data);
-                    ClientDataIterator itc(contact->clientData);
+                    contact->freeData(data);
+                    ClientDataIterator itc = contact->clientDataIterator();
                     if (++itc == NULL)
                         delete contact;
                     return true;
@@ -395,7 +395,7 @@ bool JabberClient::processEvent(Event *e)
         Contact *contact = ec->contact();
         switch(ec->action()) {
             case EventContact::eDeleted: {
-                ClientDataIterator it(contact->clientData, this);
+                ClientDataIterator it = contact->clientDataIterator(this);
                 JabberUserData *data;
                 while ((data = toJabberUserData(++it)) != NULL){
                     listRequest(data, QString::null, QString::null, true);
@@ -411,7 +411,7 @@ bool JabberClient::processEvent(Event *e)
                     grp = getContacts()->group(contact->getGroup());
                 if (grp)
                     grpName = grp->getName();
-                ClientDataIterator it(contact->clientData, this);
+                ClientDataIterator it = contact->clientDataIterator(this);
                 JabberUserData *data;
                 while ((data = toJabberUserData(++it)) != NULL){
                     if (grpName == data->Group.str()){
@@ -444,7 +444,7 @@ bool JabberClient::processEvent(Event *e)
         while ((contact = ++itc) != NULL){
             if (contact->getGroup() != (int)grp->id())
                 continue;
-            ClientDataIterator it(contact->clientData, this);
+            ClientDataIterator it = contact->clientDataIterator(this);
             JabberUserData *data;
             while ((data = toJabberUserData(++it)) != NULL){
                 if (grpName == data->Group.str())
@@ -685,7 +685,7 @@ void JabberClient::setStatus(unsigned status, const QString &ar)
         data.owner.StatusTime.asULong() = now.toTime_t();
         while ((contact = ++it) != NULL){
             JabberUserData *data;
-            ClientDataIterator it(contact->clientData, this);
+            ClientDataIterator it = contact->clientDataIterator(this);
             while ((data = toJabberUserData(++it)) != NULL){
                 if (data->Status.toULong() == STATUS_OFFLINE)
                     continue;
@@ -1056,7 +1056,7 @@ JabberUserData *JabberClient::findContact(const QString &_jid, const QString &na
     ContactList::ContactIterator it;
     while ((contact = ++it) != NULL){
         JabberUserData *data;
-        ClientDataIterator it(contact->clientData, this);
+        ClientDataIterator it = contact->clientDataIterator(this);
         while ((data = toJabberUserData(++it)) != NULL){
           if (jid.toUpper() != data->ID.str().toUpper())
                 continue;
@@ -1082,7 +1082,7 @@ JabberUserData *JabberClient::findContact(const QString &_jid, const QString &na
     if (bJoin){
         while ((contact = ++it) != NULL){
             if (contact->getName().toLower() == sname.toLower()){
-                JabberUserData *data = toJabberUserData((SIM::clientData*) contact->clientData.createData(this)); // FIXME unsafe type conversion
+                JabberUserData *data = toJabberUserData((SIM::clientData*) contact->createData(this)); // FIXME unsafe type conversion
                 data->ID.str() = jid;
                 if (!resource.isEmpty())
                     data->Resource.str() = resource;
@@ -1097,7 +1097,7 @@ JabberUserData *JabberClient::findContact(const QString &_jid, const QString &na
         }
     }
     contact = getContacts()->contact(0, true);
-    JabberUserData *data = toJabberUserData((SIM::clientData*) contact->clientData.createData(this)); // FIXME unsafe type conversion
+    JabberUserData *data = toJabberUserData((SIM::clientData*) contact->createData(this)); // FIXME unsafe type conversion
     data->ID.str() = jid;
     if (!resource.isEmpty())
         data->Resource.str() = resource;
@@ -2321,7 +2321,7 @@ bool JabberClient::send(Message *msg, void *_data)
                     Contact *contact = getContacts()->contact(url.toLong());
                     if (contact){
                         clientData *data;
-                        ClientDataIterator it(contact->clientData);
+                        ClientDataIterator it = contact->clientDataIterator();
                         while ((data = ++it) != NULL){
                             Contact *c = contact;
                             if (!isMyData(data, c))
@@ -2767,7 +2767,7 @@ QImage JabberClient::userPicture(unsigned id)
     Contact *contact = getContacts()->contact(id);
     if(!contact)
         return QImage();
-    ClientDataIterator it(contact->clientData, this);
+    ClientDataIterator it = contact->clientDataIterator(this);
 
     JabberUserData *d;
     while ((d = toJabberUserData(++it)) != NULL){

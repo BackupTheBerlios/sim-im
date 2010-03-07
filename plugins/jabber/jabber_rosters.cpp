@@ -63,7 +63,7 @@ RostersRequest::RostersRequest(JabberClient *client)
     ContactList::ContactIterator itc;
     Contact *contact;
     while ((contact = ++itc) != NULL){
-        ClientDataIterator it(contact->clientData, client);
+        ClientDataIterator it = contact->clientDataIterator(client);
         JabberUserData *data;
         while ((data = m_client->toJabberUserData(++it)) != NULL)
             data->bChecked.asBool() = false;
@@ -77,7 +77,7 @@ RostersRequest::~RostersRequest()
     Contact *contact;
     list<Contact*> contactRemoved;
     while ((contact = ++itc) != NULL){
-        ClientDataIterator it(contact->clientData, m_client);
+        ClientDataIterator it = contact->clientDataIterator(m_client);
         JabberUserData *data;
         list<void*> dataRemoved;
         while ((data = m_client->toJabberUserData(++it)) != NULL){
@@ -92,8 +92,8 @@ RostersRequest::~RostersRequest()
         if (dataRemoved.empty())
             continue;
         for (list<void*>::iterator itr = dataRemoved.begin(); itr != dataRemoved.end(); ++itr)
-            contact->clientData.freeData(*itr);
-        if (contact->clientData.size() == 0)
+            contact->freeData(*itr);
+        if (contact->size() == 0)
             contactRemoved.push_back(contact);
     }
     for (list<Contact*>::iterator itr = contactRemoved.begin(); itr != contactRemoved.end(); ++itr)
@@ -212,7 +212,7 @@ void RostersRequest::element_end(const QString& el)
             if (contact->getGroup() != (int)grp){
                 if (grp == 0){
                     void *d = NULL;
-                    ClientDataIterator it_d(contact->clientData);
+                    ClientDataIterator it_d = contact->clientDataIterator();
                     while ((d = ++it_d) != NULL){
                         if (d != data)
                             break;

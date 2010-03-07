@@ -802,11 +802,11 @@ typedef map<msgIndex, msgCount> MAP_COUNT;
 void CorePlugin::getWays(vector<clientContact> &ways, Contact *contact)
 {
 	clientData *data;
-	ClientDataIterator it(contact->clientData);
+    ClientDataIterator it = contact->clientDataIterator();
 	while ((data = ++it) != NULL)
     {
 		clientData *data1;
-		ClientDataIterator it1(contact->clientData);
+        ClientDataIterator it1 = contact->clientDataIterator();
 		bool bOK = true;
 		while ((data1 = ++it1) != NULL)
         {
@@ -1688,7 +1688,7 @@ bool CorePlugin::processCheckCmdContactClients(SIM::CommandDef* cmd)
             QString statusIcon;
             if (itw->bNew){
                 void *data = itw->data;
-                Client *client = contact->clientData.activeClient(data, itw->client);
+                Client *client = contact->activeClient(data, itw->client);
                 if (client == NULL){
                     client = itw->client;
                     data   = itw->data;
@@ -2298,7 +2298,7 @@ bool CorePlugin::processExecMenuMessage(SIM::CommandDef* cmd)
     if (mdef->flags & MESSAGE_SILENT){
         Contact *contact = getContacts()->contact((unsigned long)(cmd->param));
         if (contact){
-            ClientDataIterator it(contact->clientData);
+            ClientDataIterator it = contact->clientDataIterator();
             void *data;
             while ((data = ++it) != NULL){
                 Client *client = it.client();
@@ -2364,7 +2364,7 @@ bool CorePlugin::processExecCmdGrantAuth(SIM::CommandDef* cmd)
     Contact *contact = getContacts()->contact(msg->contact());
     if (contact){
         void *data;
-        ClientDataIterator it(contact->clientData);
+        ClientDataIterator it = contact->clientDataIterator();
         while ((data = ++it) != NULL){
             Client *client = it.client();
             if (!from->client().isEmpty()){
@@ -2403,7 +2403,7 @@ bool CorePlugin::processExecCmdSeparate(SIM::CommandDef* cmd)
         return false;
     clientContact &cc = ways[n];
     clientData *data;
-    ClientDataIterator it(contact->clientData, cc.client);
+    ClientDataIterator it = contact->clientDataIterator(cc.client);
     while ((data = ++it) != NULL){
         if (data == cc.data)
             break;
@@ -2414,7 +2414,7 @@ bool CorePlugin::processExecCmdSeparate(SIM::CommandDef* cmd)
     }
     Contact *newContact = getContacts()->contact(0, true);
     newContact->setGroup(contact->getGroup());
-    newContact->clientData.join(data, contact->clientData);
+    newContact->join(data, contact);
     contact->setup();
     newContact->setup();
     EventContact e1(contact, EventContact::eChanged);
@@ -2789,7 +2789,7 @@ bool CorePlugin::processEventCommandExec(SIM::Event* e)
                     if (nRes-- == 0){
                         clientContact &cc = ways[n];
                         clientData *data;
-                        ClientDataIterator it(contact->clientData, cc.client);
+                        ClientDataIterator it = contact->clientDataIterator(cc.client);
                         while ((data = ++it) != NULL){
                             if (data == cc.data)
                                 break;
@@ -2825,7 +2825,7 @@ bool CorePlugin::processEventCommandExec(SIM::Event* e)
                 clientContact &cc = ways[n];
 
                 clientData *data;
-                ClientDataIterator it(contact->clientData, cc.client);
+                ClientDataIterator it = contact->clientDataIterator(cc.client);
                 while ((data = ++it) != NULL){
                     if (data == cc.data)
                         break;
