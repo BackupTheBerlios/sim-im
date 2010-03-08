@@ -8,6 +8,7 @@
 #include "event.h"
 #include "cfg.h"
 #include "contacts/imstatus.h"
+#include "contacts/imcontact.h"
 
 namespace SIM
 {
@@ -24,6 +25,7 @@ namespace SIM
         virtual QStringList statuses() = 0;
         virtual IMStatusPtr status(const QString& id) = 0;
         virtual const DataDef *userDataDef() = 0;
+        virtual IMContact* createIMContact() = 0;
 
     protected:
         Plugin *m_plugin;

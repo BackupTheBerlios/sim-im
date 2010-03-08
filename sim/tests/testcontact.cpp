@@ -60,12 +60,15 @@ namespace testContact
         ClientPtr client = p.createClient("mock", 0);
         test::MockUserData* d = (test::MockUserData*)c->createData(client.data());
         test::MockUserData* d2 = (test::MockUserData*)c->getData(client.data());
+        d->Alpha.asULong() = 12;
+        QCOMPARE(d->Alpha.toULong(), 12ul);
         QCOMPARE(d, d2);
         QVERIFY(c->have(d));
         QCOMPARE(c->size(), (unsigned int)1);
 
         Contact* c2 = getContacts()->contact(2, true);
         test::MockUserData* d3 = (test::MockUserData*)c2->createData(client.data());
+        QVERIFY(!c->have(d3));
         c->join(c2);
 
         QVERIFY(c->have(d3));
@@ -92,6 +95,21 @@ namespace testContact
         QVERIFY(c1->have(d2));
         QVERIFY(!c2->have(d2));
 
+    }
+
+    void Test::testClientDataPersistance()
+    {
+        Contact* c1 = getContacts()->contact(1, true);
+        test::MockProtocol p;
+        ClientPtr client1 = p.createClient("mock1", 0);
+        test::MockUserData* d = (test::MockUserData*)c1->createData(client1.data());
+        d->Alpha.asULong() = 12ul;
+        QByteArray arr = c1->saveUserData();
+
+        Contact* c2 = getContacts()->contact(2, true);
+        Buffer buf(arr);
+        c2->loadUserData(client1.data(), &buf);
+        QCOMPARE(((test::MockUserData*)c2->getData(client1.data()))->Alpha.toULong(), 12ul);
     }
 }
 

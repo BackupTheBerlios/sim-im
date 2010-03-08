@@ -93,6 +93,11 @@ SIM::IMStatusPtr JabberProtocol::status(const QString& id)
     return SIM::IMStatusPtr();
 }
 
+IMContact* JabberProtocol::createIMContact()
+{
+    return new JabberUserData();
+}
+
 ClientPtr JabberProtocol::createClient(Buffer *cfg)
 {
 	ClientPtr jabber = ClientPtr(new JabberClient(this, cfg));

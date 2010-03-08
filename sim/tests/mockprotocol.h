@@ -12,6 +12,10 @@ namespace test
     {
     public:
         MockUserData();
+
+        //virtual QByteArray serialize();
+        //virtual void deserialize(Buffer* cfg);
+
         SIM::Data Alpha;
     };
 
@@ -26,6 +30,7 @@ namespace test
         virtual QStringList statuses();
         virtual IMStatusPtr status(const QString& id);
         virtual const DataDef *userDataDef();
+        virtual IMContact* createIMContact();
     };
 }
 

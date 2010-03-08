@@ -11,7 +11,7 @@ namespace SIM
     struct _ClientUserData
     {
         Client  *client;
-        Data    *data;
+        IMContact* data;
     };
 
     class ClientUserDataPrivate : public std::vector<_ClientUserData>
@@ -28,11 +28,11 @@ namespace SIM
     ClientUserDataPrivate::~ClientUserDataPrivate()
     {
         // why do I have to delete something here which is created somehwere else??
-//        for (ClientUserDataPrivate::iterator it = begin(); it != end(); ++it){
-//            _ClientUserData &d = *it;
-//            free_data(d.client->protocol()->userDataDef(), d.data);
-//            delete[] d.data;
-//        }
+        for (ClientUserDataPrivate::iterator it = begin(); it != end(); ++it){
+            _ClientUserData &d = *it;
+            free_data(d.client->protocol()->userDataDef(), d.data);
+            delete d.data;
+        }
     }
 
     ClientUserData::ClientUserData()
@@ -167,10 +167,11 @@ namespace SIM
         _ClientUserData data;
         data.client = client;
         const DataDef *def = client->protocol()->userDataDef();
-        size_t size = 0;
-        for (const DataDef *d = def; d->name; ++d)
-            size += d->n_values;
-        data.data = new Data[size];
+//        size_t size = 0;
+//        for (const DataDef *d = def; d->name; ++d)
+//            size += d->n_values;
+//        data.data = new Data[size];
+        data.data = client->protocol()->createIMContact();
         load_data(def, data.data, cfg);
         p->push_back(data);
     }
@@ -180,12 +181,7 @@ namespace SIM
     {
         _ClientUserData data;
         data.client = client;
-        const DataDef *def = client->protocol()->userDataDef();
-        size_t size = 0;
-        for (const DataDef *d = def; d->name; ++d)
-            size += d->n_values;
-        data.data = new Data[size];
-        load_data(def, data.data, NULL);
+        data.data = client->protocol()->createIMContact();
         p->push_back(data);
         return data.data;
     }
@@ -203,9 +199,9 @@ namespace SIM
     {
         SIM::Data *data = (SIM::Data*)_data;
         for (ClientUserDataPrivate::iterator it = p->begin(); it != p->end(); ++it){
-            if (it->data == data){
+            if ((void*)it->data == data){
                 free_data(it->client->protocol()->userDataDef(), data);
-                delete[] data;
+                delete data;
                 p->erase(it);
                 return;
             }
@@ -220,7 +216,7 @@ namespace SIM
                 continue;
             }
             free_data(it->client->protocol()->userDataDef(), it->data);
-            delete[] it->data;
+            delete it->data;
             p->erase(it);
             it = p->begin();
         }
@@ -237,7 +233,7 @@ namespace SIM
     void ClientUserData::join(IMContact *cData, ClientUserData &data)
     {
         for (ClientUserDataPrivate::iterator it = data.p->begin(); it != data.p->end(); ++it){
-            if (it->data == &(cData->Sign)){
+            if ((void*)it->data == &(cData->Sign)){
                 p->push_back(*it);
                 data.p->erase(it);
                 break;

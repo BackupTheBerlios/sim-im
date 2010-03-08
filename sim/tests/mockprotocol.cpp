@@ -5,14 +5,43 @@ namespace test
 {
     DataDef mockUserData[] =
         {
-         { "Alpha", DATA_UTF, 1, 0 },
+         { "Sign", DATA_ULONG, 1, 0 },
+         { "LastSend", DATA_ULONG, 1, 0 },
+         { "Alpha", DATA_ULONG, 1, 0 },
          { NULL, DATA_UNKNOWN, 0, 0 }
         };
+
+    static CommandDef mock_descr =
+        CommandDef (
+            0,
+            I18N_NOOP("MOCK"),
+            "Mock_online",
+            QString::null,
+            "",
+            0,
+            0,
+            0,
+            0,
+            0,
+            PROTOCOL_INFO | PROTOCOL_AR | PROTOCOL_ANY_PORT,
+            NULL,
+            QString::null
+        );
 
     MockUserData::MockUserData()
     {
         Sign.asLong() = 1;
     }
+
+//    void MockUserData::serialize(Buffer* cfg)
+//    {
+//        load_data(def, data.data, cfg);
+//    }
+//
+//    void MockUserData::deserialize(Buffer* cfg)
+//    {
+//
+//    }
 
     MockProtocol::MockProtocol() : Protocol(0)
     {
@@ -30,7 +59,7 @@ namespace test
 
     const CommandDef *MockProtocol::description()
     {
-        return 0;
+        return &mock_descr;
     }
 
     const CommandDef *MockProtocol::statusList()
@@ -51,5 +80,10 @@ namespace test
     const DataDef *MockProtocol::userDataDef()
     {
         return mockUserData;
+    }
+
+    IMContact* MockProtocol::createIMContact()
+    {
+        return new MockUserData();
     }
 }

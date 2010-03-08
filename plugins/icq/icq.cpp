@@ -63,6 +63,11 @@ ClientPtr ICQProtocol::createClient(Buffer *cfg)
     return icq;
 }
 
+IMContact* ICQProtocol::createIMContact()
+{
+    return new ICQUserData();
+}
+
 QStringList ICQProtocol::statuses()
 {
     QStringList list;
@@ -261,6 +266,11 @@ SIM::IMStatusPtr AIMProtocol::status(const QString& /*id*/)
 {
 	// TODO
 	return SIM::IMStatusPtr();
+}
+
+IMContact* AIMProtocol::createIMContact()
+{
+    return new ICQUserData();
 }
 
 ClientPtr AIMProtocol::createClient(Buffer *cfg)
