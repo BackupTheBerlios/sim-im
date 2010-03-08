@@ -39,7 +39,6 @@ SET(sim_LIB_SRCS
 		qzip/unzip.c
 		contacts/userdata.cpp
 		contacts/clientuserdata.cpp
-		contacts/clientuserdataprivate.cpp
 		contacts/packettype.cpp
 		contacts/contact.cpp
 		contacts/group.cpp
@@ -113,7 +112,6 @@ SET(sim_LIB_HDRS
 		fetchclientprivate.h
 		contacts/userdata.h
 		contacts/clientuserdata.h
-		contacts/clientuserdataprivate.h
 		contacts/packettype.h
 		contacts/contact.h
 		contacts/group.h

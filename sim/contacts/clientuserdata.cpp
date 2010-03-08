@@ -1,4 +1,5 @@
 
+#include <algorithm>
 #include "clientuserdata.h"
 #include "contacts.h"
 #include "clientuserdataprivate.h"
@@ -7,6 +8,33 @@
 
 namespace SIM
 {
+    struct _ClientUserData
+    {
+        Client  *client;
+        Data    *data;
+    };
+
+    class ClientUserDataPrivate : public std::vector<_ClientUserData>
+    {
+    public:
+        ClientUserDataPrivate();
+        ~ClientUserDataPrivate();
+    };
+
+    ClientUserDataPrivate::ClientUserDataPrivate()
+    {
+    }
+
+    ClientUserDataPrivate::~ClientUserDataPrivate()
+    {
+        // why do I have to delete something here which is created somehwere else??
+//        for (ClientUserDataPrivate::iterator it = begin(); it != end(); ++it){
+//            _ClientUserData &d = *it;
+//            free_data(d.client->protocol()->userDataDef(), d.data);
+//            delete[] d.data;
+//        }
+    }
+
     ClientUserData::ClientUserData()
     {
         p = new ClientUserDataPrivate;
@@ -86,6 +114,28 @@ namespace SIM
         }
         return client;
     }
+
+
+    static bool cmp_client_data(_ClientUserData p1, _ClientUserData p2)
+    {
+        for (unsigned i = 0; i < getContacts()->nClients(); i++){
+            Client *c = getContacts()->getClient(i);
+            if (c == p1.client){
+                if (c != p2.client)
+                    return true;
+                return p1.data < p2.data;
+            }
+            if (c == p2.client)
+                return false;
+        }
+        return p1.data < p2.data;
+    }
+
+    void ClientUserData::sort()
+    {
+        std::sort(p->begin(), p->end(), cmp_client_data);
+    }
+
 
     QByteArray ClientUserData::save() const
     {

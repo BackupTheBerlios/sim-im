@@ -610,26 +610,6 @@ bool ContactList::moveClient(Client *client, bool bUp)
     return true;
 }
 
-static bool cmp_client_data(_ClientUserData p1, _ClientUserData p2)
-{
-    for (unsigned i = 0; i < getContacts()->nClients(); i++){
-        Client *c = getContacts()->getClient(i);
-        if (c == p1.client){
-            if (c != p2.client)
-                return true;
-            return p1.data < p2.data;
-        }
-        if (c == p2.client)
-            return false;
-    }
-    return p1.data < p2.data;
-}
-
-void ClientUserData::sort()
-{
-    std::sort(p->begin(), p->end(), cmp_client_data);
-}
-
 void ContactList::addClient(Client *client)
 {
     p->clients.push_back(client);
