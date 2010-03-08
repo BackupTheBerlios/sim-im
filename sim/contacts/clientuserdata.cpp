@@ -1,8 +1,8 @@
 
 #include <algorithm>
+#include <vector>
 #include "clientuserdata.h"
 #include "contacts.h"
-#include "clientuserdataprivate.h"
 #include "client.h"
 #include "imcontact.h"
 
