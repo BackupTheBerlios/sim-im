@@ -27,9 +27,9 @@
 #include "userviewdelegate.h"
 #include "history.h"
 #include "contacts/contact.h"
+#include "contacts/imcontact.h"
 #include "contacts/client.h"
 #include "contacts/group.h"
-#include "contacts/clientdataiterator.h"
 
 #include <QPainter>
 #include <QPixmap>

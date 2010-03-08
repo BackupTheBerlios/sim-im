@@ -40,7 +40,6 @@ SET(sim_LIB_SRCS
 		contacts/userdata.cpp
 		contacts/clientuserdata.cpp
 		contacts/clientuserdataprivate.cpp
-		contacts/clientdataiterator.cpp
 		contacts/packettype.cpp
 		contacts/contact.cpp
 		contacts/group.cpp
@@ -115,7 +114,6 @@ SET(sim_LIB_HDRS
 		contacts/userdata.h
 		contacts/clientuserdata.h
 		contacts/clientuserdataprivate.h
-		contacts/clientdataiterator.h
 		contacts/packettype.h
 		contacts/contact.h
 		contacts/group.h

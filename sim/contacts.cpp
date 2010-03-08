@@ -35,7 +35,6 @@ email                : vovan@shutoff.ru
 
 #include "contacts.h"
 #include "contacts/clientuserdataprivate.h"
-#include "contacts/clientdataiterator.h"
 #include "contacts/contact.h"
 #include "contacts/group.h"
 #include "contacts/client.h"

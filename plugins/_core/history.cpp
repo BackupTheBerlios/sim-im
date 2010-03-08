@@ -28,7 +28,6 @@ email                : vovan@shutoff.ru
 #include "simapi.h"
 #include "buffer.h"
 #include "log.h"
-#include "contacts/clientdataiterator.h"
 #include "contacts/contact.h"
 #include "contacts/client.h"
 

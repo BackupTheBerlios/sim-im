@@ -27,7 +27,6 @@
 #include "unquot.h"
 #include "misc.h"
 #include "core_events.h"
-#include "contacts/clientdataiterator.h"
 #include "contacts/contact.h"
 #include "contacts/group.h"
 

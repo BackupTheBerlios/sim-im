@@ -7,6 +7,13 @@
 
 namespace SIM
 {
+
+    struct _ClientUserData
+    {
+        Client  *client;
+        Data    *data;
+    };
+
     class ClientUserDataPrivate : public std::vector<_ClientUserData>
     {
     public:

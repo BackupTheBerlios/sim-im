@@ -4,6 +4,7 @@
 
 #include <QByteArray>
 #include <QString>
+#include <QSharedPointer>
 
 #include "simapi.h"
 #include "buffer.h"
@@ -38,6 +39,24 @@ namespace SIM
         friend class ClientDataIterator;
 
         COPY_RESTRICTED(ClientUserData)
+    };
+
+    class ClientDataIteratorPrivate;
+    typedef QSharedPointer<ClientDataIteratorPrivate> ClientDataIteratorPrivatePtr;
+
+    class EXPORT ClientDataIterator
+    {
+    public:
+        ClientDataIterator();
+        ClientDataIterator(ClientUserData &data, Client *client=NULL);
+        ~ClientDataIterator();
+        IMContact *operator ++();
+        Client *client();
+        void reset();
+    protected:
+        ClientDataIteratorPrivatePtr p;
+
+        //COPY_RESTRICTED(ClientDataIterator)
     };
 }
 

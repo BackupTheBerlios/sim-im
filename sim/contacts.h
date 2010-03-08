@@ -75,12 +75,6 @@ const unsigned PROTOCOL_NO_AUTH         = 0x10000000;
 class ContactList;
 class Client;
 
-struct _ClientUserData
-{
-    Client  *client;
-    Data    *data;
-};
-
 
 const unsigned AuthError = 1;
 

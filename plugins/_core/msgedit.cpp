@@ -18,8 +18,8 @@
 #include "msgedit.h"
 
 #include "simapi.h"
-#include "contacts/clientdataiterator.h"
 #include "contacts/contact.h"
+#include "contacts/imcontact.h"
 #include "contacts/client.h"
 
 #include "userwnd.h"
@@ -38,6 +38,7 @@
 #include "container.h"
 #include "icons.h"
 #include "history.h"
+
 
 #include <algorithm>
 #include <QVBoxLayout>

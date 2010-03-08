@@ -33,7 +33,6 @@
 
 #include "log.h"
 #include "icqbuddy.h"
-#include "contacts/clientdataiterator.h"
 #include "contacts/contact.h"
 
 using namespace SIM;

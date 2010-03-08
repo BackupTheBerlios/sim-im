@@ -4,11 +4,11 @@
 #include <algorithm>
 #include "contact.h"
 #include "contacts.h"
-#include "clientdataiterator.h"
 #include "group.h"
 #include "client.h"
 #include "log.h"
 #include "unquot.h"
+#include "contacts/imcontact.h"
 
 namespace SIM
 {

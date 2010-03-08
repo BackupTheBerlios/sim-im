@@ -22,8 +22,8 @@
 #include "core.h"
 #include "arcfg.h"
 #include "log.h"
-#include "contacts/clientdataiterator.h"
 #include "contacts/contact.h"
+#include "contacts/imcontact.h"
 #include "contacts/group.h"
 #include "contacts/client.h"
 

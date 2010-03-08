@@ -54,11 +54,11 @@ email                : vovan@shutoff.ru
 #include "simgui/textshow.h"
 #include "simgui/toolbtn.h"
 #include "simgui/ballonmsg.h"
-#include "contacts/clientdataiterator.h"
 #include "contacts/contact.h"
 #include "contacts/group.h"
 #include "contacts/client.h"
 #include "contacts/protocolmanager.h"
+#include "contacts/imcontact.h"
 // _core
 #include "core.h"
 #include "cfgdlg.h"
