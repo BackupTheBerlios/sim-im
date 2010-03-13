@@ -172,6 +172,11 @@ static DataDef _icqUserData[] =
         { NULL, DATA_UNKNOWN, 0, 0 }
     };
 
+ICQUserData::ICQUserData() : IMContact(), m_uin(0)
+{
+
+}
+
 void ICQUserData::dispatchDeserialization(const QString& key, const QString& value)
 {
     QString val = value;
@@ -542,6 +547,135 @@ static DataDef icqClientData[] =
         { NULL, DATA_UNKNOWN, 0, 0 }
     };
 
+QByteArray ICQClientData::serialize()
+{
+    QString result;
+    result += QString("Server=%1\n").arg(Server.str());
+    result += QString("ServerPort=%1\n").arg(Port.toULong());
+    result += QString("HideIP=%1\n").arg(HideIP.toBool() ? "true" : "false");
+    result += QString("IgnoreAuth=%1\n").arg(IgnoreAuth.toBool() ? "true" : "false");
+    result += QString("UseMD5=%1\n").arg(UseMD5.toBool() ? "true" : "false");
+    result += QString("DirectMode=%1\n").arg(DirectMode.toULong());
+    result += QString("IdleTime=%1\n").arg(IdleTime.toULong());
+    result += QString("ListRequests=%1\n").arg(ListRequests.str());
+    result += QString("Picture=\"%1\"\n").arg(Picture.str());
+    result += QString("RandomChatGroup=\"%1\"\n").arg(RandomChatGroup.toULong());
+    result += QString("DisablePlugins=%1\n").arg(DisablePlugins.toBool() ? "true" : "false");
+    result += QString("DisableAutoUpdate=%1\n").arg(DisableAutoUpdate.toBool() ? "true" : "false");
+    result += QString("DisableAutoReplyUpdate=%1\n").arg(DisableAutoReplyUpdate.toBool() ? "true" : "false");
+    result += QString("DisableTypingNotification=%1\n").arg(DisableTypingNotification.toBool() ? "true" : "false");
+    result += QString("AcceptInDND=%1\n").arg(AcceptInDND.toBool() ? "true" : "false");
+    result += QString("AcceptInOccupied=%1\n").arg(AcceptInOccupied.toBool() ? "true" : "false");
+    result += QString("MinPort=%1\n").arg(MinPort.toULong());
+    result += QString("MaxPort=%1\n").arg(MaxPort.toULong());
+    result += QString("WarnAnonimously=%1\n").arg(WarnAnonimously.toBool() ? "true" : "false");
+    result += QString("ACKMode=%1\n").arg(AckMode.toULong());
+    result += QString("UseHTTP=%1\n").arg(UseHTTP.toBool() ? "true" : "false");
+    result += QString("AutoHTTP=%1\n").arg(AutoHTTP.toBool() ? "true" : "false");
+    result += QString("KeepAlive=%1\n").arg(KeepAlive.toBool() ? "true" : "false");
+    result += QString("MediaSense=%1\n").arg(MediaSense.toBool() ? "true" : "false");
+
+    return result.toLocal8Bit();
+}
+
+void ICQClientData::deserialize(Buffer* cfg)
+{
+    while(1) {
+        const QString line = QString::fromUtf8(cfg->getLine());
+        if (line.isEmpty())
+            break;
+        QStringList keyval = line.split('=');
+        if(keyval.size() < 2)
+            continue;
+        dispatchDeserialization(keyval.at(0), keyval.at(1));
+    }
+}
+
+void ICQClientData::dispatchDeserialization(const QString& key, const QString& value)
+{
+    log(L_DEBUG, "key: %s, value: %s", qPrintable(key), qPrintable(value));
+    QString val = value;
+    if(val.startsWith('\"') && val.endsWith('\"'))
+        val = val.mid(1, val.length() - 2);
+    if(key == "Server") {
+        Server.setStr(val);
+    }
+    else if(key == "ServerPort") {
+        Port.asULong() = val.toULong();
+    }
+    else if(key == "HideIP") {
+        HideIP.asBool() = val == "true";
+    }
+    else if(key == "IgnoreAuth") {
+        IgnoreAuth.asBool() = val == "true";
+    }
+    else if(key == "UseMD5") {
+        UseMD5.asBool() = val == "true";
+    }
+    else if(key == "DirectMode") {
+        DirectMode.asULong() = val.toULong();
+    }
+    else if(key == "IdleTime") {
+        IdleTime.asULong() = val.toULong();
+    }
+    else if(key == "ListRequests") {
+       ListRequests.setStr(val);
+    }
+    else if(key == "Picture") {
+       Picture.setStr(val);
+    }
+    else if(key == "RandomChatGroup") {
+        RandomChatGroup.asULong() = val.toULong();
+    }
+    else if(key == "SendFormat") {
+        SendFormat.asULong() = val.toULong();
+    }
+    else if(key == "DisablePlugins") {
+        DisablePlugins.asBool() = val == "true";
+    }
+    else if(key == "DisableAutoUpdate") {
+        DisableAutoUpdate.asBool() = val == "true";
+    }
+    else if(key == "DisableAutoReplyUpdate") {
+        DisableAutoReplyUpdate.asBool() = val == "true";
+    }
+    else if(key == "DisableTypingNotification") {
+        DisableTypingNotification.asBool() = val == "true";
+    }
+    else if(key == "AcceptInDND") {
+        AcceptInDND.asBool() = val == "true";
+    }
+    else if(key == "AcceptInOccupied") {
+        AcceptInOccupied.asBool() = val == "true";
+    }
+    else if(key == "MinPort") {
+        MinPort.asULong() = val.toULong();
+    }
+    else if(key == "MaxPort") {
+        MaxPort.asULong() = val.toULong();
+    }
+    else if(key == "WarnAnonimously") {
+        WarnAnonimously.asBool() = val == "true";
+    }
+    else if(key == "ACKMode") {
+        AckMode.asULong() = val.toULong();
+    }
+    else if(key == "UseHTTP") {
+        UseHTTP.asBool() = val == "true";
+    }
+    else if(key == "AutoHTTP") {
+        AutoHTTP.asBool() = val == "true";
+    }
+    else if(key == "KeepAlive") {
+        KeepAlive.asBool() = val == "true";
+    }
+    else if(key == "MediaSense") {
+        MediaSense.asBool() = val == "true";
+    }
+    else
+        owner.dispatchDeserialization(key, value);
+}
+
 ICQClient::ICQClient(Protocol *protocol, Buffer *cfg, bool bAIM)
     : TCPClient(protocol, cfg, HighPriority - 1),
     m_bVerifying			(false),
@@ -559,7 +693,8 @@ ICQClient::ICQClient(Protocol *protocol, Buffer *cfg, bool bAIM)
 {
     m_bAIM = bAIM;
 
-    load_data(icqClientData, &data, cfg);
+    data.deserialize(cfg);
+	//load_data(icqClientData, &data, cfg);
     if (data.owner.Uin.toULong() != 0)
         m_bAIM = false;
     if (!data.owner.Screen.str().isEmpty())
@@ -618,7 +753,7 @@ ICQClient::~ICQClient()
     delete m_snacBuddy;
     delete m_snacICBM;
     delete m_ifChecker; //independed if MediaSense is activated, it can be risk-less deleted, because it is initilized with NULL
-    free_data(icqClientData, &data);
+	//free_data(icqClientData, &data);
     delete socket();
     for(list<Message*>::iterator it = m_processMsg.begin(); it != m_processMsg.end(); ++it)
 	{

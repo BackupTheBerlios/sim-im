@@ -168,12 +168,7 @@ namespace SIM
         _ClientUserData data;
         data.client = client;
         const DataDef *def = client->protocol()->userDataDef();
-//        size_t size = 0;
-//        for (const DataDef *d = def; d->name; ++d)
-//            size += d->n_values;
-//        data.data = new Data[size];
         data.data = client->protocol()->createIMContact();
-        //load_data(def, data.data, cfg);
         data.data->deserialize(cfg);
         p->push_back(data);
     }

@@ -99,6 +99,9 @@ public:
     SIM::Data		ResourceClientName;
     SIM::Data		ResourceClientVersion;
     SIM::Data		ResourceClientOS;
+
+private:
+	void dispatchDeserialization(const QString& key, const QString& value);
 };
 
 struct JabberClientData

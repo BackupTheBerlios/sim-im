@@ -176,9 +176,13 @@ class DirectClient;
 class ICQUserData : public SIM::IMContact
 {
 public:
+    ICQUserData();
 
     virtual QByteArray serialize();
     virtual void deserialize(Buffer* cfg);
+
+    unsigned long getUin() { return m_uin; }
+    void setUin(unsigned long uin) { m_uin = uin; }
 
 	SIM::Data        Alias;
 	SIM::Data        Cellular;
@@ -194,7 +198,7 @@ public:
 	SIM::Data		Caps;
 	SIM::Data		Caps2;
 	SIM::Data        AutoReply;
-	SIM::Data		Uin;
+    //SIM::Data		Uin;
 	SIM::Data        Screen;
 	SIM::Data		IcqID;
 	SIM::Data		bChecked;
@@ -219,7 +223,7 @@ public:
 	SIM::Data        Nick;
 	SIM::Data        FirstName;
 	SIM::Data        LastName;
-	SIM::Data		MiddleName;
+    SIM::Data		MiddleName;
 	SIM::Data		Maiden;
 	SIM::Data        EMail;
 	SIM::Data		HiddenEMail;
@@ -278,12 +282,17 @@ public:
 	SIM::Data		unknown4;
 	SIM::Data		unknown5;
 
-private:
     void dispatchDeserialization(const QString& key, const QString& value);
+private:
+    unsigned long m_uin;
 };
 
-struct ICQClientData
+class ICQClientData : public SIM::IMContact
 {
+public:
+    virtual QByteArray serialize();
+    virtual void deserialize(Buffer* cfg);
+
     SIM::Data        Server;
     SIM::Data		Port;
     SIM::Data		ContactsTime;
@@ -316,6 +325,9 @@ struct ICQClientData
     SIM::Data		KeepAlive;
 	SIM::Data		MediaSense;
     ICQUserData	owner;
+
+private:
+    void dispatchDeserialization(const QString& key, const QString& value);
 };
 
 class ICQClient;

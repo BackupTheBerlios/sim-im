@@ -126,9 +126,33 @@ QByteArray JabberUserData::serialize()
     return QByteArray();
 }
 
+void JabberUserData::dispatchDeserialization(const QString& key, const QString& value)
+{
+	QString val = value;
+	if(val.startsWith('\"') && val.endsWith('\"'))
+		val = val.mid(1, val.length() - 2);
+	if(key == "LastSend") {
+		LastSend.asULong() = val.toULong();
+	}
+	else if(key == "ID") {
+		ID.setStr(val);
+	}
+	else if(key == "Node") {
+		Node.setStr(val);
+	}
+}
+
 void JabberUserData::deserialize(Buffer* cfg)
 {
-
+	while(1) {
+		const QString line = QString::fromUtf8(cfg->getLine());
+		if (line.isEmpty())
+			break;
+		QStringList keyval = line.split('=');
+		if(keyval.size() < 2)
+			continue;
+		dispatchDeserialization(keyval.at(0), keyval.at(1));
+	}
 }
 
 static DataDef jabberClientData[] =
@@ -161,7 +185,7 @@ static DataDef jabberClientData[] =
 
 JabberClient::JabberClient(JabberProtocol *protocol, Buffer *cfg) : TCPClient(protocol, cfg)
 {
-    load_data(jabberClientData, &data, cfg);
+	//load_data(jabberClientData, &data, cfg);
     QString jid = data.owner.ID.str();
 	//log(L_DEBUG, "JID: %s", jid.toUtf8().data());
 
@@ -211,7 +235,7 @@ JabberClient::~JabberClient()
 {
     TCPClient::changeStatus(this->protocol()->status("offline"));
     //TCPClient::setStatus(STATUS_OFFLINE, false);
-    free_data(jabberClientData, &data);
+	//free_data(jabberClientData, &data);
     freeData();
 }
 

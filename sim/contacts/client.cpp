@@ -165,7 +165,7 @@ namespace SIM
                 getContacts()->removeContact(contact->id());
             }
         }
-        free_data(_clientData, &data);
+		//free_data(_clientData, &data);
     }
 
     QByteArray Client::getConfig()
