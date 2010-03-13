@@ -1,6 +1,7 @@
 
 #include <algorithm>
 #include <vector>
+#include <stdio.h>
 #include "clientuserdata.h"
 #include "contacts.h"
 #include "client.h"
@@ -81,7 +82,7 @@ namespace SIM
     bool ClientUserData::have(void *data)
     {
         for (ClientUserDataPrivate::iterator it = p->begin(); it != p->end(); ++it){
-            if (it->data == data)
+            if ((void*)it->data == data)
                 return true;
         }
         return false;
@@ -144,7 +145,7 @@ namespace SIM
             _ClientUserData &d = *it;
             if (d.client->protocol()->description()->flags & PROTOCOL_TEMP_DATA)
                 continue;
-            QByteArray cfg = save_data(d.client->protocol()->userDataDef(), d.data);
+            QByteArray cfg = d.data->serialize(); //save_data(d.client->protocol()->userDataDef(), d.data);
             if (cfg.length()){
                 if (res.length())
                     res += '\n';
@@ -172,7 +173,8 @@ namespace SIM
 //            size += d->n_values;
 //        data.data = new Data[size];
         data.data = client->protocol()->createIMContact();
-        load_data(def, data.data, cfg);
+        //load_data(def, data.data, cfg);
+        data.data->deserialize(cfg);
         p->push_back(data);
     }
     
@@ -215,7 +217,7 @@ namespace SIM
                 ++it;
                 continue;
             }
-            free_data(it->client->protocol()->userDataDef(), it->data);
+            //free_data(it->client->protocol()->userDataDef(), it->data);
             delete it->data;
             p->erase(it);
             it = p->begin();
@@ -233,7 +235,7 @@ namespace SIM
     void ClientUserData::join(IMContact *cData, ClientUserData &data)
     {
         for (ClientUserDataPrivate::iterator it = data.p->begin(); it != data.p->end(); ++it){
-            if ((void*)it->data == &(cData->Sign)){
+            if (&it->data->Sign == &(cData->Sign)){
                 p->push_back(*it);
                 data.p->erase(it);
                 break;

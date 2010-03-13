@@ -121,6 +121,16 @@ DataDef jabberUserData[] =
         { NULL, DATA_UNKNOWN, 0, 0 }
     };
 
+QByteArray JabberUserData::serialize()
+{
+    return QByteArray();
+}
+
+void JabberUserData::deserialize(Buffer* cfg)
+{
+
+}
+
 static DataDef jabberClientData[] =
     {
         { "Server", DATA_STRING, 1, "jabber.org" },

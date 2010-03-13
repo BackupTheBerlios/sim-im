@@ -48,6 +48,10 @@ const unsigned SUBSCRIBE_BOTH	= (SUBSCRIBE_FROM | SUBSCRIBE_TO);
 class JabberUserData : public SIM::IMContact
 {
 public:
+
+    virtual QByteArray serialize();
+    virtual void deserialize(Buffer* cfg);
+
     SIM::Data		ID;
     SIM::Data		Node;
     SIM::Data		Resource;

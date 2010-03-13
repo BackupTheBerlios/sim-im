@@ -176,6 +176,10 @@ class DirectClient;
 class ICQUserData : public SIM::IMContact
 {
 public:
+
+    virtual QByteArray serialize();
+    virtual void deserialize(Buffer* cfg);
+
 	SIM::Data        Alias;
 	SIM::Data        Cellular;
 	SIM::Data		Status;
@@ -273,6 +277,9 @@ public:
 	SIM::Data		unknown2;
 	SIM::Data		unknown4;
 	SIM::Data		unknown5;
+
+private:
+    void dispatchDeserialization(const QString& key, const QString& value);
 };
 
 struct ICQClientData

@@ -103,14 +103,14 @@
    <valuelist key="abstractProcess.Environment" type="QVariantList">
     <value type="QString">ALSA_PLUGINS_DIR=/usr/lib/alsa-lib</value>
     <value type="QString">ANT_HOME=/usr/share/java/apache-ant</value>
-    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-gQfDqkzbhC,guid=92e8cd188f1149d8dd8b9b2a4b930f36</value>
+    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-x2nb69TtDy,guid=04324f65e4231cf1614dd6184b946e29</value>
     <value type="QString">DERBY_HOME=/opt/java/db</value>
     <value type="QString">DESKTOP_SESSION=kde</value>
-    <value type="QString">DISPLAY=:0</value>
+    <value type="QString">DISPLAY=:0.0</value>
     <value type="QString">DM_CONTROL=/var/run/xdmctl</value>
     <value type="QString">ECLIM_ECLIPSE_HOME=/usr/share/eclipse</value>
     <value type="QString">EDITOR=vim</value>
-    <value type="QString">GPG_AGENT_INFO=/tmp/gpg-0Ukoey/S.gpg-agent:3876:1</value>
+    <value type="QString">GPG_AGENT_INFO=/tmp/gpg-pGbC76/S.gpg-agent:3852:1</value>
     <value type="QString">GS_LIB=/home/todin/.fonts</value>
     <value type="QString">GTK2_RC_FILES=/etc/gtk-2.0/gtkrc:/home/todin/.gtkrc-2.0::/home/todin/.kde4/share/config/gtkrc-2.0</value>
     <value type="QString">GTK_RC_FILES=/etc/gtk/gtkrc:/home/todin/.gtkrc::/home/todin/.kde4/share/config/gtkrc</value>
@@ -127,7 +127,7 @@
     <value type="QString">KDE_SESSION_UID=1000</value>
     <value type="QString">KDE_SESSION_VERSION=4</value>
     <value type="QString">LANG=en_US.UTF-8</value>
-    <value type="QString">LANGUAGE=</value>
+    <value type="QString">LD_LIBRARY_PATH=/usr/lib/qtcreator:</value>
     <value type="QString">LESS=-R</value>
     <value type="QString">LOGNAME=todin</value>
     <value type="QString">MOZ_PLUGIN_PATH=/usr/lib/mozilla/plugins</value>
@@ -139,11 +139,11 @@
     <value type="QString">QTDIR=/opt/qt</value>
     <value type="QString">QT_PLUGIN_PATH=/home/todin/.kde4/lib/kde4/plugins/:/usr/lib/kde4/plugins/</value>
     <value type="QString">QT_XFT=true</value>
-    <value type="QString">SESSION_MANAGER=local/hell:@/tmp/.ICE-unix/3930,unix/hell:/tmp/.ICE-unix/3930</value>
+    <value type="QString">SESSION_MANAGER=local/hell:@/tmp/.ICE-unix/3906,unix/hell:/tmp/.ICE-unix/3906</value>
     <value type="QString">SHELL=/bin/bash</value>
     <value type="QString">SHLVL=1</value>
-    <value type="QString">SSH_AGENT_PID=3879</value>
-    <value type="QString">SSH_AUTH_SOCK=/tmp/ssh-XZEnUe3878/agent.3878</value>
+    <value type="QString">SSH_AGENT_PID=3855</value>
+    <value type="QString">SSH_AUTH_SOCK=/tmp/ssh-GDrBjS3854/agent.3854</value>
     <value type="QString">SVN_EDITOR=vim</value>
     <value type="QString">USER=todin</value>
     <value type="QString">WINDOWPATH=7</value>
@@ -154,9 +154,8 @@
     <value type="QString">XDG_CONFIG_HOME=/home/todin/.config</value>
     <value type="QString">XDG_DATA_DIRS=/usr/share:/usr/local/share:/usr/share:/usr/local/share:/usr/share:/usr/local/share:/usr/share:/usr/local/share:/opt/kde/share:/opt/kde/share:/opt/kde/share:/opt/kde/share</value>
     <value type="QString">XDG_DATA_HOME=/home/todin/.local/share</value>
-    <value type="QString">XDG_SESSION_COOKIE=46070e371950b58c8ac873a74ae405f7-1267928884.814109-2059646849</value>
+    <value type="QString">XDG_SESSION_COOKIE=46070e371950b58c8ac873a74ae405f7-1268018727.545372-466214211</value>
     <value type="QString">XDM_MANAGED=method=classic</value>
-    <value type="QString">_=/usr/lib/kde4/libexec/start_kdeinit_wrapper</value>
    </valuelist>
    <value key="abstractProcess.IgnoreReturnValue" type="bool">false</value>
    <valuelist key="abstractProcess.arguments" type="QVariantList">

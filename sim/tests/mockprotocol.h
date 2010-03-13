@@ -13,10 +13,13 @@ namespace test
     public:
         MockUserData();
 
-        //virtual QByteArray serialize();
-        //virtual void deserialize(Buffer* cfg);
+        virtual QByteArray serialize();
+        virtual void deserialize(Buffer* cfg);
 
         SIM::Data Alpha;
+
+    private:
+        void dispatchDeserialization(const QString& key, const QString& value);
     };
 
     class MockProtocol : public Protocol

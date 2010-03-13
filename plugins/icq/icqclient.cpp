@@ -36,6 +36,7 @@
 #include "icons.h"
 #include "contacts/contact.h"
 #include "contacts/group.h"
+#include "socket/ip.h"
 
 #include "icq.h"
 #include "icqconfig.h"
@@ -170,6 +171,339 @@ static DataDef _icqUserData[] =
 		{ "unknown5", DATA_BINARY, 1, 0},
         { NULL, DATA_UNKNOWN, 0, 0 }
     };
+
+void ICQUserData::dispatchDeserialization(const QString& key, const QString& value)
+{
+    QString val = value;
+    if(val.startsWith('\"') && val.endsWith('\"'))
+        val = val.mid(1, val.length() - 2);
+    if(key == "LastSend") {
+        LastSend.asULong() = val.toULong();
+    }
+    else if(key == "Alias") {
+        Alias.setStr(val);
+    }
+    else if(key == "Cellular") {
+        Cellular.setStr(val);
+    }
+    else if(key == "StatusTime") {
+		StatusTime.asULong() = val.toULong();
+    }
+    else if(key == "WarningLevel") {
+		WarningLevel.asULong() = val.toULong();
+    }
+    else if(key == "IP") {
+		IP.asULong() = val.toULong();
+    }
+    else if(key == "RealIP") {
+		RealIP.asULong() = val.toULong();
+    }
+    else if(key == "Port") {
+		Port.asULong() = val.toULong();
+    }
+    else if(key == "Caps") {
+		Caps.asULong() = val.toULong();
+    }
+    else if(key == "Caps2") {
+		Caps2.asULong() = val.toULong();
+    }
+    else if(key == "Uin") {
+		Uin.asULong() = val.toULong();
+    }
+    else if(key == "Screen") {
+		StatusTime.setStr(val);
+    }
+    else if(key == "ID") {
+		IcqID.asULong() = val.toULong();
+    }
+    else if(key == "GroupID") {
+		GrpId.asULong() = val.toULong();
+    }
+    else if(key == "Ignore") {
+		IgnoreId.asULong() = val.toULong();
+    }
+    else if(key == "Visible") {
+		ContactVisibleId.asULong() = val.toULong();
+    }
+    else if(key == "Invsible") {
+		ContactInvisibleId.asULong() = val.toULong();
+    }
+    else if(key == "WaitAuth") {
+		WaitAuth.asBool() = (val == "true");
+    }
+    else if(key == "WantAuth") {
+		WantAuth.asBool() = (val == "true");
+    }
+    else if(key == "WebAware") {
+		WebAware.asBool() = (val == "true");
+    }
+    else if(key == "InfoUpdateTime") {
+		InfoUpdateTime.asULong() = val.toULong();
+    }
+    else if(key == "PluginInfoTime") {
+		PluginInfoTime.asULong() = val.toULong();
+    }
+    else if(key == "PluginStatusTime") {
+		PluginStatusTime.asULong() = val.toULong();
+    }
+    else if(key == "InfoFetchTime") {
+		InfoFetchTime.asULong() = val.toULong();
+    }
+    else if(key == "PluginInfoFetchTime") {
+		PluginInfoFetchTime.asULong() = val.toULong();
+    }
+    else if(key == "PluginStatusFetchTime") {
+		PluginStatusFetchTime.asULong() = val.toULong();
+    }
+    else if(key == "Mode") {
+		Mode.asULong() = val.toULong();
+    }
+    else if(key == "Version") {
+		Version.asULong() = val.toULong();
+    }
+    else if(key == "Build") {
+		Build.asULong() = val.toULong();
+    }
+    else if(key == "Nick") {
+		Nick.setStr(val);
+    }
+    else if(key == "FirstName") {
+		FirstName.setStr(val);
+    }
+    else if(key == "LastName") {
+		LastName.setStr(val);
+    }
+    else if(key == "MiddleName") {
+		MiddleName.setStr(val);
+    }
+    else if(key == "Maiden") {
+		Maiden.setStr(val);
+    }
+    else if(key == "EMail") {
+		EMail.setStr(val);
+    }
+    else if(key == "HiddenEMail") {
+		HiddenEMail.asBool() = (val == "true");
+    }
+    else if(key == "City") {
+		City.setStr(val);
+    }
+    else if(key == "State") {
+		State.setStr(val);
+    }
+    else if(key == "HomePhone") {
+		HomePhone.setStr(val);
+    }
+    else if(key == "HomeFax") {
+		HomeFax.setStr(val);
+    }
+    else if(key == "Address") {
+		Address.setStr(val);
+    }
+    else if(key == "PrivateCellular") {
+		PrivateCellular.setStr(val);
+    }
+    else if(key == "Zip") {
+		Zip.setStr(val);
+    }
+    else if(key == "Country") {
+		Country.asULong() = val.toULong();
+    }
+    else if(key == "TimeZone") {
+		TimeZone.asULong() = val.toULong();
+    }
+    else if(key == "Age") {
+		Age.asULong() = val.toULong();
+    }
+    else if(key == "Gender") {
+		Gender.asULong() = val.toULong();
+    }
+    else if(key == "HomePage") {
+		Homepage.setStr(val);
+    }
+    else if(key == "Gender") {
+		Gender.asULong() = val.toULong();
+    }
+    else if(key == "BirthYear") {
+		BirthYear.asULong() = val.toULong();
+    }
+    else if(key == "BirthMonth") {
+		BirthMonth.asULong() = val.toULong();
+    }
+    else if(key == "BirthDay") {
+		BirthDay.asULong() = val.toULong();
+    }
+    else if(key == "Language") {
+		Language.asULong() = val.toULong();
+    }
+    else if(key == "WorkCity") {
+		WorkCity.setStr(val);
+    }
+    else if(key == "WorkState") {
+		WorkState.setStr(val);
+    }
+    else if(key == "WorkAddress") {
+		WorkAddress.setStr(val);
+    }
+    else if(key == "WorkZip") {
+		WorkZip.setStr(val);
+    }
+    else if(key == "WorkCountry") {
+		WorkCountry.asULong() = val.toULong();
+    }
+    else if(key == "WorkName") {
+		WorkName.setStr(val);
+    }
+    else if(key == "WorkDepartment") {
+		WorkDepartment.setStr(val);
+    }
+    else if(key == "WorkPosition") {
+		WorkPosition.setStr(val);
+    }
+    else if(key == "Occupation") {
+		Occupation.asULong() = val.toULong();
+    }
+	else if(key == "WorkHomepage") {
+		WorkHomepage.setStr(val);
+	}
+	else if(key == "About") {
+		About.setStr(val);
+	}
+	else if(key == "Interests") {
+		Interests.setStr(val);
+	}
+	else if(key == "Backgrounds") {
+		Backgrounds.setStr(val);
+	}
+	else if(key == "Affilations") {
+		Affilations.setStr(val);
+	}
+	else if(key == "FollowMe") {
+		FollowMe.asULong() = val.toULong();
+	}
+	else if(key == "SharedFiles") {
+		SharedFiles.asBool() = (val == "true");
+	}
+	else if(key == "ICQPhone") {
+		ICQPhone.asULong() = val.toULong();
+	}
+	else if(key == "Picture") {
+		Picture.setStr(val);
+	}
+	else if(key == "PictureWidth") {
+		PictureWidth.asULong() = val.toULong();
+	}
+	else if(key == "PictureHeight") {
+		PictureHeight.asULong() = val.toULong();
+	}
+	else if(key == "PhoneBook") {
+		PhoneBook.setStr(val);
+	}
+	else if(key == "ProfileFetch") {
+		ProfileFetch.asBool() = (val == "true");
+	}
+	else if(key == "buddyID") {
+		buddyID.asULong() = val.toULong();
+	}
+	else if(key == "buddyHash") {
+		buddyHash.asBinary() = QByteArray::fromHex(val.toLocal8Bit());
+	}
+}
+
+QByteArray ICQUserData::serialize()
+{
+	QString result;
+	result += QString("LastSend=%1\n").arg(LastSend.toULong());
+	result += QString("Alias=%1\n").arg(LastSend.str());
+	result += QString("Cellular=\"%1\"\n").arg(Alias.str());
+	result += QString("StatusTime=%1\n").arg(StatusTime.toULong());
+	result += QString("WarningLevel=%1\n").arg(WarningLevel.toULong());
+	result += QString("IP=%1\n").arg(IP.toULong());
+	result += QString("RealIP=%1\n").arg(RealIP.toULong());
+	result += QString("Port=%1\n").arg(Port.toULong());
+	result += QString("Caps=%1\n").arg(Caps.toULong());
+	result += QString("Caps2=%1\n").arg(Caps2.toULong());
+	result += QString("Uin=%1\n").arg(Uin.toULong());
+	result += QString("Screen=%1\n").arg(Screen.str());
+	result += QString("ID=%1\n").arg(IcqID.toULong());
+	result += QString("GroupID=%1\n").arg(GrpId.toULong());
+	result += QString("Ignore=%1\n").arg(IgnoreId.toULong());
+	result += QString("Visible=%1\n").arg(VisibleId.toULong());
+	result += QString("Invisible=%1\n").arg(InvisibleId.toULong());
+	result += QString("WaitAuth=%1\n").arg(WaitAuth.toBool() ? "true" : "false");
+	result += QString("WantAuth=%1\n").arg(WantAuth.toBool() ? "true" : "false");
+	result += QString("WebAware=%1\n").arg(WebAware.toBool() ? "true" : "false");
+	result += QString("InfoUpdateTime=%1\n").arg(InfoUpdateTime.toULong());
+	result += QString("PluginInfoTime=%1\n").arg(PluginInfoTime.toULong());
+	result += QString("PluginStatusTime=%1\n").arg(PluginStatusTime.toULong());
+	result += QString("InfoFetchTime=%1\n").arg(InfoFetchTime.toULong());
+	result += QString("PluginInfoFetchTime=%1\n").arg(PluginInfoFetchTime.toULong());
+	result += QString("PluginStatusFetchTime=%1\n").arg(PluginStatusFetchTime.toULong());
+	result += QString("Mode=%1\n").arg(Mode.toULong());
+	result += QString("Version=%1\n").arg(Version.toULong());
+	result += QString("Build=%1\n").arg(Build.toULong());
+	result += QString("Nick=%1\n").arg(Nick.str());
+	result += QString("FirstName=%1\n").arg(FirstName.str());
+	result += QString("LastName=%1\n").arg(LastName.str());
+	result += QString("MiddleName=%1\n").arg(MiddleName.str());
+	result += QString("Maiden=%1\n").arg(Maiden.str());
+	result += QString("EMail=%1\n").arg(EMail.str());
+	result += QString("HiddenEMail=%1\n").arg(HiddenEMail.toBool() ? "true" : "false");
+	result += QString("City=%1\n").arg(City.str());
+	result += QString("State=%1\n").arg(State.str());
+	result += QString("HomePhone=%1\n").arg(HomePhone.str());
+	result += QString("HomeFax=%1\n").arg(HomeFax.str());
+	result += QString("Address=\"%1\"\n").arg(Address.str());
+	result += QString("PrivateCellular=%1\n").arg(PrivateCellular.str());
+	result += QString("Zip=%1\n").arg(Zip.str());
+	result += QString("Country=%1\n").arg(Country.toULong());
+	result += QString("TimeZone=%1\n").arg(TimeZone.toULong());
+	result += QString("Age=%1\n").arg(Age.toULong());
+	result += QString("Gender=%1\n").arg(Gender.toULong());
+	result += QString("Homepage=%1\n").arg(Homepage.str());
+	result += QString("BirthYear=%1\n").arg(BirthYear.toULong());
+	result += QString("BirthMonth=%1\n").arg(BirthMonth.toULong());
+	result += QString("BirthDay=%1\n").arg(BirthDay.toULong());
+	result += QString("Language=%1\n").arg(Language.toULong());
+	result += QString("WorkCity=%1\n").arg(WorkCity.str());
+	result += QString("WorkState=%1\n").arg(WorkState.str());
+	result += QString("WorkAddress=%1\n").arg(WorkAddress.str());
+	result += QString("WorkZip=%1\n").arg(WorkZip.str());
+	result += QString("WorkCountry=%1\n").arg(WorkCountry.toULong());
+	result += QString("WorkName=%1\n").arg(WorkName.str());
+	result += QString("WorkDepartment=%1\n").arg(WorkDepartment.str());
+	result += QString("WorkPosition=%1\n").arg(WorkPosition.str());
+	result += QString("Occupation=%1\n").arg(Occupation.toULong());
+	result += QString("WorkHomepage=%1\n").arg(WorkHomepage.str());
+	result += QString("About=%1\n").arg(About.str());
+	result += QString("Interests=%1\n").arg(Interests.str());
+	result += QString("Backgrounds=%1\n").arg(Backgrounds.str());
+	result += QString("Affilations=%1\n").arg(Affilations.str());
+	result += QString("FollowMe=%1\n").arg(FollowMe.toULong());
+	result += QString("SharedFiles=%1\n").arg(SharedFiles.toBool() ? "true" : "false");
+	result += QString("Picture=\"%1\"\n").arg(Picture.str());
+	result += QString("PictureWidth=%1\n").arg(PictureWidth.toULong());
+	result += QString("PictureHeight=%1\n").arg(PictureHeight.toULong());
+	result += QString("PhoneBook=\"%1\"\n").arg(PhoneBook.str());
+	result += QString("ProfileFetch=%1\n").arg(ProfileFetch.toBool() ? "true" : "false");
+	result += QString("buddyID=%1\n").arg(buddyID.toULong());
+	result += QString("buddyHash=%1\n").arg(QString(buddyID.toBinary().toHex()));
+
+	return result.toLocal8Bit();
+}
+
+void ICQUserData::deserialize(Buffer* cfg)
+{
+    while(1) {
+        const QString line = QString::fromUtf8(cfg->getLine());
+        if (line.isEmpty())
+            break;
+        QStringList keyval = line.split('=');
+        if(keyval.size() < 2)
+            continue;
+        dispatchDeserialization(keyval.at(0), keyval.at(1));
+    }
+}
 
 const DataDef *ICQProtocol::icqUserData = _icqUserData;
 

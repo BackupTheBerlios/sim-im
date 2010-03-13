@@ -76,8 +76,8 @@ namespace testContact
 
     void Test::testClientDataPartialJoin()
     {
-        Contact* c1 = getContacts()->contact(1, true);
-        Contact* c2 = getContacts()->contact(2, true);
+        Contact* c1 = getContacts()->contact(22, true);
+        Contact* c2 = getContacts()->contact(33, true);
         test::MockProtocol p;
         ClientPtr client1 = p.createClient("mock1", 0);
         ClientPtr client2 = p.createClient("mock2", 0);
@@ -89,6 +89,7 @@ namespace testContact
 
         QVERIFY(!c1->have(d2));
         QVERIFY(c2->have(d2));
+        QVERIFY(c2->have(d3));
 
         c1->join(d2, c2);
 
