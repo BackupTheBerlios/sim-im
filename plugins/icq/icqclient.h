@@ -181,14 +181,32 @@ public:
     virtual QByteArray serialize();
     virtual void deserialize(Buffer* cfg);
 
-    unsigned long getUin() { return m_uin; }
+    unsigned long getUin() const { return m_uin; }
     void setUin(unsigned long uin) { m_uin = uin; }
 
-	SIM::Data        Alias;
-	SIM::Data        Cellular;
-	SIM::Data		Status;
-	SIM::Data		Class;
-	SIM::Data		StatusTime;
+    QString getScreen() const { return m_screen; }
+    void setScreen(const QString& screen) { m_screen = screen; }
+
+    QString getAlias() const { return m_alias; }
+    void setAlias(const QString& alias) { m_alias = alias; }
+
+    QString getCellular() const { return m_cellular; }
+    void setCellular(const QString& cellular) { m_cellular = cellular; }
+
+    unsigned long getStatus() const { return m_status; }
+    void setStatus(unsigned long status) { m_status = status; }
+
+    unsigned long getClass() const { return m_class; }
+    void setClass(unsigned long cl) { m_class = cl; }
+
+    unsigned long getStatusTime() const { return m_statusTime; }
+    void setStatusTime(unsigned long statusTime) { m_statusTime = statusTime; }
+
+    //SIM::Data        Alias;
+    //SIM::Data        Cellular;
+    //SIM::Data		Status;
+    //SIM::Data		Class;
+    //SIM::Data		StatusTime;
 	SIM::Data		OnlineTime;
 	SIM::Data		WarningLevel;
 	SIM::Data        IP;
@@ -199,7 +217,7 @@ public:
 	SIM::Data		Caps2;
 	SIM::Data        AutoReply;
     //SIM::Data		Uin;
-	SIM::Data        Screen;
+    //SIM::Data        Screen;
 	SIM::Data		IcqID;
 	SIM::Data		bChecked;
 	SIM::Data		GrpId;
@@ -285,6 +303,12 @@ public:
     void dispatchDeserialization(const QString& key, const QString& value);
 private:
     unsigned long m_uin;
+    QString m_screen;
+    QString m_alias;
+    QString m_cellular;
+    unsigned long m_status;
+    unsigned long m_class;
+    unsigned long m_statusTime;
 };
 
 class ICQClientData : public SIM::IMContact

@@ -1067,7 +1067,7 @@ void ICQClient::packMessage(ICQBuffer &b, Message *msg, ICQUserData *data, unsig
         b.pack(msgStatus());
         b.pack(flags);
     }else{
-        b.pack(this->data.owner.Uin.toULong());
+        b.pack(this->data.owner.getUin());
         b.pack((char)type);
         b.pack((char)0x01);
     }
@@ -1101,7 +1101,7 @@ void ICQClient::parsePluginPacket(ICQBuffer &b, unsigned plugin_type, ICQUserDat
         b.unpack(nEntries);
         if (data)
             log(L_DEBUG, "Plugin info reply %lu %lu (%lu %lu) %lu %lu (%u)",
-                data->Uin.toULong(), time, data->PluginInfoTime.toULong(),
+                data->getUin(), time, data->PluginInfoTime.toULong(),
                 data->PluginStatusTime.toULong(), size, nEntries, plugin_type);
         switch (plugin_type){
         case PLUGIN_RANDOMxCHAT:{
@@ -1121,8 +1121,8 @@ void ICQClient::parsePluginPacket(ICQBuffer &b, unsigned plugin_type, ICQUserDat
                 b.unpackStr(homepage);
                 ICQUserData data;
                 load_data(static_cast<ICQProtocol*>(protocol())->icqUserData, &data, NULL);
-                data.Uin.asULong() = uin;
-                data.Alias.str() = QString::fromUtf8(name);
+                data.setUin(uin);
+                data.setAlias(QString::fromUtf8(name));
                 data.About.str() = QString::fromUtf8(topic);
                 data.Age.asULong() = age;
                 data.Gender.asULong() = gender;
@@ -1315,7 +1315,7 @@ void ICQClient::parsePluginPacket(ICQBuffer &b, unsigned plugin_type, ICQUserDat
                 }
                 data->PhoneBook.str() = phones;
                 Contact *contact = NULL;
-                findContact(data->Uin.toULong(), NULL, false, contact);
+                findContact(data->getUin(), NULL, false, contact);
                 if (contact){
                     setupContact(contact, data);
                     EventContact e(contact, EventContact::eChanged);

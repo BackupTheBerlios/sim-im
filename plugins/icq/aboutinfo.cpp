@@ -67,7 +67,7 @@ void AboutInfo::fill()
 {
     ICQUserData *data = m_data;
     if(data == NULL) data = &m_client->data.owner;
-    if(data->Uin.toULong())
+    if(data->getUin())
 	{
 //        edtAbout->setTextFormat(Qt::PlainText);
         edtAbout->setText(data->About.str());

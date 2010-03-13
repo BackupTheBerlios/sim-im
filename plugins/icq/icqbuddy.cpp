@@ -88,7 +88,7 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 			ICQUserData *data = m_client->findContact(screen, NULL, false, contact);
 			if(!data)
 				break;
-			if(data->Status.toULong() != ICQ_STATUS_OFFLINE)
+            if(data->getStatus() != ICQ_STATUS_OFFLINE)
 			{
 				m_client->setOffline(data);
 				StatusMessage *m = new StatusMessage;
@@ -117,7 +117,7 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 			{
 				bool bChanged     = false;
 				bool bAwayChanged = false;
-				unsigned long prevStatus = data->Status.toULong();
+                unsigned long prevStatus = data->getStatus();
 
 				unsigned short level, len;
 				(*buf) >> level >> len;
@@ -128,17 +128,17 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 				if(tlvClass)
 				{
 					unsigned short userClass = *tlvClass;
-					if(userClass != data->Class.toULong())
+                    if(userClass != data->getClass())
 					{
-						if ((userClass & CLASS_AWAY) != (data->Class.toULong() & CLASS_AWAY))
+                        if ((userClass & CLASS_AWAY) != (data->getClass() & CLASS_AWAY))
 						{
-							data->StatusTime.asULong() = (unsigned long)time(NULL);
+                            data->setStatusTime((unsigned long)time(NULL));
 							bAwayChanged = true;
 						}
-						data->Class.asULong() = userClass;
+                        data->setClass(userClass);
 						bChanged = true;
 					}
-					if(data->Uin.toULong() == 0)
+                    if(data->getUin() == 0)
 					{
 						if (userClass & CLASS_AWAY)
 						{
@@ -156,18 +156,18 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 				if(tlvStatus)
 				{
 					uint32_t status = *tlvStatus;
-					if (status != data->Status.toULong())
+                    if (status != data->getStatus())
 					{
-						data->Status.asULong() = status;
+                        data->setStatus(status);
 						if ((status & 0xFF) == 0)
 							data->AutoReply.str() = QString::null;
-						data->StatusTime.asULong() = (unsigned long)time(NULL);
+                        data->setStatusTime((unsigned long)time(NULL));
 					}
 				}
-				else if(data->Status.toULong() == ICQ_STATUS_OFFLINE)
+                else if(data->getStatus() == ICQ_STATUS_OFFLINE)
 				{
-					data->Status.asULong() = ICQ_STATUS_ONLINE;
-					data->StatusTime.asULong() = (unsigned long)time(NULL);
+                    data->setStatus(ICQ_STATUS_ONLINE);
+                    data->setStatusTime((unsigned long)time(NULL));
 				}
 
 				// Online time TLV
@@ -186,9 +186,9 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 				{
 					unsigned short na_time = *tlvNATime;
 					unsigned long StatusTime = (unsigned long)time(NULL) - na_time * 60;
-					if(StatusTime != data->StatusTime.toULong())
+                    if(StatusTime != data->getStatusTime())
 					{
-						data->StatusTime.asULong() = StatusTime;
+                        data->setStatusTime(StatusTime);
 						bChanged = true;
 					}
 				}
@@ -221,7 +221,7 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 							// we don't go through all caps, only the first ones starting with 0x09
 							if (*m_client->capabilities[i] != '\x09')
 							{
-								log(L_DEBUG, "%lu unknown cap %s", data->Uin.toULong(),
+                                log(L_DEBUG, "%lu unknown cap %s", data->getUin(),
                                     qPrintable(makeCapStr(shortcap, sizeof(shortcap))));
 								break;
 							}
@@ -250,7 +250,7 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 
 							if (*m_client->capabilities[i] == 0)
 							{
-                                log( L_DEBUG, "%lu unknown cap %s", data->Uin.toULong(), qPrintable(makeCapStr( cap, size )) );
+                                log( L_DEBUG, "%lu unknown cap %s", data->getUin(), qPrintable(makeCapStr( cap, size )) );
 								break;
 							}
 							if ((i == CAP_MICQ) || (i == CAP_LICQ) || (i == CAP_SIM) || (i == CAP_KOPETE))
@@ -310,7 +310,7 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 								}
 								if (i == CAP_ICQJP)
 								{
-									log(L_DEBUG, "%lu ICQJP cap is set", data->Uin.toULong());
+                                    log(L_DEBUG, "%lu ICQJP cap is set", data->getUin());
 									data->Build.asULong() = cap[0x4] << 0x18 | cap[0x5] << 0x10 |
 										cap[0x6] << 8 | cap[0x7];				    
 								}
@@ -380,7 +380,7 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 				}
 
 				Tlv *tlvPlugin = tlv(0x0011);
-				if(tlvPlugin && data->Uin.toULong())
+                if(tlvPlugin && data->getUin())
 				{
 					ICQBuffer info(*tlvPlugin);
 					char type;
@@ -392,7 +392,7 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 					unsigned long plugin_status;
 					switch (type){
 						case 1:
-							m_client->addFullInfoRequest(data->Uin.toULong());
+                            m_client->addFullInfoRequest(data->getUin());
 							break;
 						case 2:
 							if		((m_client->getInvisible() && data->VisibleId.toULong()) ||
@@ -407,19 +407,19 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 								{
 									case PLUGIN_PHONEBOOK:
 										log(L_DEBUG, "Updated phonebook");
-										m_client->addPluginInfoRequest(data->Uin.toULong(), plugin_index);
+                                        m_client->addPluginInfoRequest(data->getUin(), plugin_index);
 										break;
 									case PLUGIN_PICTURE:
 										log(L_DEBUG, "Updated picture");
 										// when buddyID -> new avatar support, no need to ask for old picture plugin
 										if(data->buddyID.toULong() == 0 || data->buddyHash.toBinary().size() != 16) {
 											data->buddyID.asULong() = 0;
-											m_client->addPluginInfoRequest(data->Uin.toULong(), plugin_index);
+                                            m_client->addPluginInfoRequest(data->getUin(), plugin_index);
 										}
 										break;
 									case PLUGIN_QUERYxINFO:
 										log(L_DEBUG, "Updated info plugin list");
-										m_client->addPluginInfoRequest(data->Uin.toULong(), plugin_index);
+                                        m_client->addPluginInfoRequest(data->getUin(), plugin_index);
 										break;
 									default:
 										if (plugin_index >= PLUGIN_NULL)
@@ -476,10 +476,10 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 						if (infoUpdateTime == 0)
 							infoUpdateTime = 1;
 						if (infoUpdateTime != data->InfoFetchTime.toULong())
-							m_client->addFullInfoRequest(data->Uin.toULong());
+                            m_client->addFullInfoRequest(data->getUin());
 						if ((data->PluginInfoTime.toULong() != data->PluginInfoFetchTime.toULong())){
 							if (data->PluginInfoTime.toULong())
-								m_client->addPluginInfoRequest(data->Uin.toULong(), PLUGIN_QUERYxINFO);
+                                m_client->addPluginInfoRequest(data->getUin(), PLUGIN_QUERYxINFO);
 						}
 						if ((data->PluginInfoTime.toULong() != data->PluginInfoFetchTime.toULong()) ||
 								(data->PluginStatusTime.toULong() != data->PluginStatusFetchTime.toULong())){
@@ -496,7 +496,7 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 								bChanged = true;
 							}
 							if (data->PluginStatusTime.toULong())
-								m_client->addPluginInfoRequest(data->Uin.toULong(), PLUGIN_QUERYxSTATUS);
+                                m_client->addPluginInfoRequest(data->getUin(), PLUGIN_QUERYxSTATUS);
 						}
 					}
 				}
@@ -507,23 +507,23 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 				if (bChanged){
 					EventContact(contact, EventContact::eChanged).process();
 				}
-				if ((data->Status.toULong() != prevStatus) || bAwayChanged){
+                if ((data->getStatus() != prevStatus) || bAwayChanged){
 					unsigned status = STATUS_OFFLINE;
-					if ((data->Status.toULong() & 0xFFFF) != ICQ_STATUS_OFFLINE){
+                    if ((data->getStatus() & 0xFFFF) != ICQ_STATUS_OFFLINE){
 						status = STATUS_ONLINE;
-						if (data->Status.toULong() & ICQ_STATUS_DND){
+                        if (data->getStatus() & ICQ_STATUS_DND){
 							status = STATUS_DND;
-						}else if (data->Status.toULong() & ICQ_STATUS_OCCUPIED){
+                        }else if (data->getStatus() & ICQ_STATUS_OCCUPIED){
 							status = STATUS_OCCUPIED;
-						}else if (data->Status.toULong() & ICQ_STATUS_NA){
+                        }else if (data->getStatus() & ICQ_STATUS_NA){
 							status = STATUS_NA;
-						}else if (data->Status.toULong() & ICQ_STATUS_AWAY){
+                        }else if (data->getStatus() & ICQ_STATUS_AWAY){
 							status = STATUS_AWAY;
-						}else if (data->Status.toULong() & ICQ_STATUS_FFC){
+                        }else if (data->getStatus() & ICQ_STATUS_FFC){
 							status = STATUS_FFC;
 						}
 					}
-					if((status == STATUS_ONLINE) && (data->Class.toULong() & CLASS_AWAY))
+                    if((status == STATUS_ONLINE) && (data->getClass() & CLASS_AWAY))
 						status = STATUS_AWAY;
 					StatusMessage *m = new StatusMessage();
 					m->setContact(contact->id());
@@ -534,18 +534,18 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 					if(!e.process())
 						delete m;
 					if (!contact->getIgnore() &&
-							((data->Class.toULong() & CLASS_AWAY) == 0) &&
-							(((data->Status.toULong() & 0xFF) == ICQ_STATUS_ONLINE) &&
+                            ((data->getClass() & CLASS_AWAY) == 0) &&
+                            (((data->getStatus() & 0xFF) == ICQ_STATUS_ONLINE) &&
 							 (((prevStatus & 0xFF) != ICQ_STATUS_ONLINE)) || bAwayChanged) &&
 							(((prevStatus & 0xFFFF) != ICQ_STATUS_OFFLINE) ||
 							 (data->OnlineTime.toULong() > m_client->data.owner.OnlineTime.toULong()))){
 						EventContact e(contact, EventContact::eOnline);
 						e.process();
 					}
-					if (!m_client->getDisableAutoReplyUpdate() && ((data->Status.toULong() & 0xFF) != ICQ_STATUS_ONLINE)){
+                    if (!m_client->getDisableAutoReplyUpdate() && ((data->getStatus() & 0xFF) != ICQ_STATUS_ONLINE)){
 						if ((m_client->getInvisible() && data->VisibleId.toULong()) ||
 								(!m_client->getInvisible() && (data->InvisibleId.toULong() == 0)))
-							m_client->addPluginInfoRequest(data->Uin.toULong(), PLUGIN_AR);
+                            m_client->addPluginInfoRequest(data->getUin(), PLUGIN_AR);
 					}
 				}
 			}

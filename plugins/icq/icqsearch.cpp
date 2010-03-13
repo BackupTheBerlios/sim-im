@@ -387,7 +387,7 @@ bool ICQSearch::processEvent(Event *e)
         if (e->type() == eEventICQSearchDone){
             if (res->id == m_id_icq){
                 m_id_icq = 0;
-                if (res->data.Uin.toULong() && m_bAdd)
+                if (res->data.getUin() && m_bAdd)
                     icq_search();
             }
             if (res->id == m_id_aim)
@@ -397,9 +397,9 @@ bool ICQSearch::processEvent(Event *e)
             return false;
         }
         QString icon;
-        if (res->data.Uin.toULong()){
+        if (res->data.getUin()){
             icon = "ICQ_";
-            switch (res->data.Status.toULong()){
+            switch (res->data.getStatus()){
             case STATUS_ONLINE:
                 icon += "online";
                 break;
@@ -409,10 +409,10 @@ bool ICQSearch::processEvent(Event *e)
             default:
                 icon += "inactive";
             }
-            if (m_uins.indexOf (res->data.Uin.toULong()) != -1)
+            if (m_uins.indexOf (res->data.getUin()) != -1)
                 return false;
             m_bAdd = true;
-            m_uins.push_back(res->data.Uin.toULong());
+            m_uins.push_back(res->data.getUin());
         }else{
             icon = "AIM";
         }
@@ -431,7 +431,7 @@ bool ICQSearch::processEvent(Event *e)
         QStringList l;
         l.append(icon);
         QString key = m_client->screen(&res->data);
-        if (res->data.Uin.toULong()){
+        if (res->data.getUin()){
             while (key.length() < 13)
                 key = '.' + key;
         }

@@ -113,7 +113,7 @@ void AIMInfo::fill()
     ICQUserData *data = m_data;
     if (data == NULL) data = &m_client->data.owner;
 
-    edtScreen->setText(data->Screen.str());
+    edtScreen->setText(data->getScreen());
     edtFirst->setText(data->FirstName.str());
     edtLast->setText(data->LastName.str());
     edtMiddle->setText(data->MiddleName.str());
@@ -141,10 +141,10 @@ void AIMInfo::fill()
     cmbStatus->clear();
     unsigned status = STATUS_ONLINE;
     if (m_data){
-        switch (m_data->Status.toULong()){
+        switch (m_data->getStatus()){
         case STATUS_ONLINE:
         case STATUS_OFFLINE:
-            status = m_data->Status.toULong();
+            status = m_data->getStatus();
             break;
         default:
             status = STATUS_AWAY;
@@ -176,7 +176,7 @@ void AIMInfo::fill()
     disableWidget(cmbStatus);
     if (status == STATUS_OFFLINE){
         lblOnline->setText(i18n("Last online") + ':');
-        edtOnline->setText(formatDateTime(QDateTime::fromTime_t(data->StatusTime.toULong())));
+        edtOnline->setText(formatDateTime(QDateTime::fromTime_t(data->getStatusTime())));
         lblNA->hide();
         edtNA->hide();
     }else{
@@ -191,7 +191,7 @@ void AIMInfo::fill()
             edtNA->hide();
         }else{
             lblNA->setText(i18n(text));
-            edtNA->setText(formatDateTime(QDateTime::fromTime_t(data->StatusTime.toULong())));
+            edtNA->setText(formatDateTime(QDateTime::fromTime_t(data->getStatusTime())));
         }
     }
     if (data->IP.ip()){

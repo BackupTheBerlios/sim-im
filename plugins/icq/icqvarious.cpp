@@ -228,7 +228,7 @@ void ICQClient::snac_various(unsigned short type, unsigned short id)
                 serverRequest(ICQ_SRVxREQ_ACK_OFFLINE_MSG);
                 sendServerRequest();
                 setChatGroup();
-                addFullInfoRequest(data.owner.Uin.toULong());
+                addFullInfoRequest(data.owner.getUin());
                 m_bReady = true;
                 snacICBM()->processSendQueue();
                 break;
@@ -315,7 +315,7 @@ void ICQClient::serverRequest(unsigned short cmd, unsigned short seq)
 {
     snac(ICQ_SNACxFOOD_VARIOUS, ICQ_SNACxVAR_REQxSRV, true, false);
     socket()->writeBuffer().tlv(0x0001, 0);
-    socket()->writeBuffer().pack(data.owner.Uin.toULong());
+    socket()->writeBuffer().pack(data.owner.getUin());
     socket()->writeBuffer() << cmd;
     socket()->writeBuffer().pack((unsigned short)(seq ? seq : m_nMsgSequence));
 }
@@ -368,7 +368,7 @@ void FullInfoRequest::fail(unsigned short)
 {
     Contact *contact = NULL;
     if (m_nParts){
-        if (m_client->data.owner.Uin.toULong() == m_uin){
+        if (m_client->data.owner.getUin() == m_uin){
             EventClientChanged(m_client).process();
         }else{
             m_client->findContact(m_uin, NULL, false, contact);
@@ -409,7 +409,7 @@ bool FullInfoRequest::answer(ICQBuffer &b, unsigned short nSubtype)
 {
     Contact *contact = NULL;
     ICQUserData *data;
-    if (m_client->data.owner.Uin.toULong() == m_uin){
+    if (m_client->data.owner.getUin() == m_uin){
         data = &m_client->data.owner;
     }else{
         data = m_client->findContact(m_uin, NULL, false, contact);
@@ -611,7 +611,7 @@ unsigned ICQClient::processInfoRequest()
             return delay;
         unsigned long uin = it->uin;
         serverRequest(ICQ_SRVxREQ_MORE);
-        socket()->writeBuffer() << ((uin == data.owner.Uin.toULong()) ? ICQ_SRVxREQ_OWN_INFO : ICQ_SRVxREQ_FULL_INFO);
+        socket()->writeBuffer() << ((uin == data.owner.getUin()) ? ICQ_SRVxREQ_OWN_INFO : ICQ_SRVxREQ_FULL_INFO);
         socket()->writeBuffer().pack(uin);
         sendServerRequest();
         it->request_id = m_nMsgSequence;
@@ -704,7 +704,9 @@ bool SearchWPRequest::answer(ICQBuffer &b, unsigned short nSubType)
 
     unsigned short n;
     b >> n;
-    b.unpack(res.data.Uin.asULong());
+    unsigned long uin;
+    b.unpack(uin);
+    res.data.setUin(uin);
     char waitAuth;
     unsigned short state;
     char gender;
@@ -728,19 +730,19 @@ bool SearchWPRequest::answer(ICQBuffer &b, unsigned short nSubType)
         res.data.WaitAuth.asBool() = true;
     switch (state){
     case SEARCH_STATE_OFFLINE:
-        res.data.Status.asULong() = STATUS_OFFLINE;
+        res.data.setStatus(STATUS_OFFLINE);
         break;
     case SEARCH_STATE_ONLINE:
-        res.data.Status.asULong() = STATUS_ONLINE;
+        res.data.setStatus(STATUS_ONLINE);
         break;
     case SEARCH_STATE_DISABLED:
-        res.data.Status.asULong() = STATUS_UNKNOWN;
+        res.data.setStatus(STATUS_UNKNOWN);
         break;
     }
     res.data.Gender.asULong() = gender;
     res.data.Age.asULong()    = age;
 
-    if (res.data.Uin.toULong() != m_client->data.owner.Uin.toULong()){
+    if (res.data.getUin() != m_client->data.owner.getUin()){
         EventSearch(&res).process();
     }
     free_data(ICQProtocol::icqUserData, &res.data);
@@ -749,7 +751,7 @@ bool SearchWPRequest::answer(ICQBuffer &b, unsigned short nSubType)
         unsigned long all;
         b >> all;
         load_data(ICQProtocol::icqUserData, &res.data, NULL);
-        res.data.Uin.asULong() = all;
+        res.data.setUin(all);
         EventSearchDone(&res).process();
         free_data(ICQProtocol::icqUserData, &res.data);
         return true;
@@ -1717,7 +1719,7 @@ unsigned ICQClient::processSMSQueue()
         xmltree.pushnode(new XmlLeaf("text",part.toUtf8().data()));
         xmltree.pushnode(new XmlLeaf("codepage","1252"));
         xmltree.pushnode(new XmlLeaf("encoding","utf8"));
-        xmltree.pushnode(new XmlLeaf("senders_UIN",QString::number(data.owner.Uin.toULong()).toLatin1().data()));
+        xmltree.pushnode(new XmlLeaf("senders_UIN",QString::number(data.owner.getUin()).toLatin1().data()));
         xmltree.pushnode(new XmlLeaf("senders_name",""));
         xmltree.pushnode(new XmlLeaf("delivery_receipt","Yes"));
 

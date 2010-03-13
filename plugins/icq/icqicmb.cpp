@@ -227,7 +227,7 @@ void SnacIcqICBM::sendType1(const QString &text, bool bWide, ICQUserData *data)
     b.tlv(0x0501, "\x01", 1);
     b.tlv(0x0101, msgBuf);
     sendThroughServer(m_send.screen, 1, b, m_send.id, true, true);
-    if ((data->Status.toULong() != ICQ_STATUS_OFFLINE) || (client()->getAckMode() == 0))
+    if ((data->getStatus() != ICQ_STATUS_OFFLINE) || (client()->getAckMode() == 0))
         ackMessage(m_send);
 }
 
@@ -356,7 +356,7 @@ bool SnacIcqICBM::sendThruServer(Message *msg, void *_data)
     SendMsg s;
     switch (msg->type()){
     case MessageGeneric:
-        if ((data->Status.toULong() != ICQ_STATUS_OFFLINE) && (client()->getSendFormat() == 0) &&
+        if ((data->getStatus() != ICQ_STATUS_OFFLINE) && (client()->getSendFormat() == 0) &&
                 client()->hasCap(data, CAP_RTF) && (msg->getFlags() & MESSAGE_RICHTEXT) &&
                 !data->bBadClient.toBool()){
             s.flags  = SEND_RTF;
@@ -367,7 +367,7 @@ bool SnacIcqICBM::sendThruServer(Message *msg, void *_data)
             processSendQueue();
             return true;
         }
-        if ((data->Status.toULong() != ICQ_STATUS_OFFLINE) &&
+        if ((data->getStatus() != ICQ_STATUS_OFFLINE) &&
                 (client()->getSendFormat() <= 1) &&
                 client()->hasCap(data, CAP_UTF) &&
                 ((msg->getFlags() & MESSAGE_SECURE) == 0) &&
@@ -380,7 +380,7 @@ bool SnacIcqICBM::sendThruServer(Message *msg, void *_data)
             processSendQueue();
             return true;
         }
-        if ((data->Status.toULong() != ICQ_STATUS_OFFLINE) &&
+        if ((data->getStatus() != ICQ_STATUS_OFFLINE) &&
                 (data->Version.toULong() >= 8) &&
                 !data->bBadClient.toBool() &&
                 ((unsigned)msg->getPlainText().length() >= MAX_PLAIN_MESSAGE_SIZE)){
@@ -392,7 +392,7 @@ bool SnacIcqICBM::sendThruServer(Message *msg, void *_data)
             processSendQueue();
             return true;
         }
-        if ((data->Uin.toULong() == 0) || client()->m_bAIM){
+        if ((data->getUin() == 0) || client()->m_bAIM){
             s.msg	 = msg;
             if (msg->getFlags() & MESSAGE_RICHTEXT){
                 s.flags  = SEND_HTML;
@@ -414,7 +414,7 @@ bool SnacIcqICBM::sendThruServer(Message *msg, void *_data)
         processSendQueue();
         return true;
     case MessageUrl:
-        if ((data->Uin.toULong() == 0) || client()->m_bAIM){
+        if ((data->getUin() == 0) || client()->m_bAIM){
             UrlMessage *m = static_cast<UrlMessage*>(msg);
             QString text = "<a href=\"";
             text += m->getUrl();
@@ -1172,7 +1172,7 @@ bool SnacIcqICBM::process(unsigned short subtype, ICQBuffer* buf, unsigned short
                     Contact *contact;
                     ICQUserData *data = m_client->findContact(screen, NULL, false, contact);
                     if (((data == NULL) ||
-								(data->Status.toULong() == ICQ_STATUS_OFFLINE) ||
+                                (data->getStatus() == ICQ_STATUS_OFFLINE) ||
 								(m_client->getAckMode() == 1)) &&
                             (m_send.msg->type() != MessageFile)){
                         m_sendTimer->stop();
@@ -2153,7 +2153,7 @@ bool SnacIcqICBM::processMsg()
         switch (m_send.msg->type())
 		{
         case MessageContacts:
-            if (data->Uin.toULong() == 0){
+            if (data->getUin() == 0){
                 CONTACTS_MAP c;
                 QString nc = m_client->packContacts(static_cast<ContactsMessage*>(m_send.msg), data, c);
                 if (c.empty()){
@@ -2215,7 +2215,7 @@ bool SnacIcqICBM::processMsg()
                 return true;
             }
         case MessageUrl:{
-                if (data->Uin.toULong() == 0)
+                if (data->getUin() == 0)
                     break;
                 m_client->packMessage(b, m_send.msg, data, type, false);
                 QString err = m_send.msg->getError();
@@ -2227,9 +2227,9 @@ bool SnacIcqICBM::processMsg()
                     return false;
                 }
                 sendThroughServer(m_client->screen(data), 4, b, m_send.id, true, false);
-                if (data->Status.toULong() != ICQ_STATUS_OFFLINE)
+                if (data->getStatus() != ICQ_STATUS_OFFLINE)
                     m_sendTimer->stop();
-                if ((data->Status.toULong() != ICQ_STATUS_OFFLINE) || (m_client->getAckMode() == 0))
+                if ((data->getStatus() != ICQ_STATUS_OFFLINE) || (m_client->getAckMode() == 0))
                     ackMessage(m_send);
                 return true;
             }
@@ -2426,7 +2426,7 @@ bool SnacIcqICBM::processMsg()
             sendType2(m_send.screen, msgBuf, m_send.id, CAP_AIM_SENDFILE, false, m_send.socket->localPort(), &tlvs);
             return true;
         }
-        msgBuf.pack(m_client->data.owner.Uin.toULong());
+        msgBuf.pack(m_client->data.owner.getUin());
         unsigned long ip = get_ip(m_client->data.owner.IP);
         if (ip == get_ip(m_send.socket->m_data->IP))
             ip = get_ip(m_client->data.owner.RealIP);
@@ -2443,7 +2443,7 @@ bool SnacIcqICBM::processMsg()
     if (m_send.flags == PLUGIN_AR){
         log(L_DEBUG, "Request auto response %s", qPrintable(m_send.screen));
 
-        unsigned long status = data->Status.toULong();
+        unsigned long status = data->getStatus();
         if ((status == ICQ_STATUS_ONLINE) || (status == ICQ_STATUS_OFFLINE))
             return false;
 

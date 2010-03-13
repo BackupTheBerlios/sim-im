@@ -39,8 +39,8 @@ ICQConfig::ICQConfig(QWidget *parent, ICQClient *client, bool bConfig)
     if (m_bConfig){
         QTimer::singleShot(0, this, SLOT(changed()));
         connect(chkNew, SIGNAL(toggled(bool)), this, SLOT(newToggled(bool)));
-        if (m_client->data.owner.Uin.toULong()){
-            edtUin->setText(QString::number(m_client->data.owner.Uin.toULong()));
+        if (m_client->data.owner.getUin()){
+            edtUin->setText(QString::number(m_client->data.owner.getUin()));
             chkNew->setChecked(false);
             edtPasswd->setText(m_client->getPassword());
 /*         }else if(core->getRegNew()) {

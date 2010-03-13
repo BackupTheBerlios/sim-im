@@ -246,21 +246,21 @@ void ICQClient::parseRosterItem(unsigned short type,
                     data->GrpId.asULong() = grp_id;
                     Tlv *tlv_phone = inf ? (*inf)(TLV_CELLULAR) : NULL;
                     if (tlv_phone){
-                        data->Cellular.str() = QString::fromUtf8(*tlv_phone);
-                        QString phone = trimPhone(data->Cellular.str());
+                        data->setCellular(QString::fromUtf8(*tlv_phone));
+                        QString phone = trimPhone(data->getCellular());
                         QString phone_str = quoteChars(phone, ",");
                         phone_str += ",Private Cellular,";
                         phone_str += QString::number(CELLULAR);
                         bChanged |= contact->setPhones(phone_str, NULL);
                     }else{
-                        data->Cellular.clear();
+                        data->setCellular("");
                     }
                     if (bChanged){
                         EventContact e(contact, EventContact::eChanged);
                         e.process();
                     }
-                    if ((data->InfoFetchTime.toULong() == 0) && data->Uin.toULong())
-                        addFullInfoRequest(data->Uin.toULong());
+                    if ((data->InfoFetchTime.toULong() == 0) && data->getUin())
+                        addFullInfoRequest(data->getUin());
                 }
             }else{
                 bIgnoreTime = true;
@@ -305,8 +305,8 @@ void ICQClient::parseRosterItem(unsigned short type,
                         EventContact e(contact, EventContact::eChanged);
                         e.process();
                     }
-                    if ((data->InfoFetchTime.toULong() == 0) && data->Uin.toULong())
-                        addFullInfoRequest(data->Uin.toULong());
+                    if ((data->InfoFetchTime.toULong() == 0) && data->getUin())
+                        addFullInfoRequest(data->getUin());
                 }
             }
             break;
@@ -326,8 +326,8 @@ void ICQClient::parseRosterItem(unsigned short type,
                         EventContact e(contact, EventContact::eChanged);
                         e.process();
                     }
-                    if ((data->InfoFetchTime.toULong() == 0) && data->Uin.toULong())
-                        addFullInfoRequest(data->Uin.toULong());
+                    if ((data->InfoFetchTime.toULong() == 0) && data->getUin())
+                        addFullInfoRequest(data->getUin());
                 }
             }
             break;
@@ -730,8 +730,8 @@ void ICQClient::snac_lists(unsigned short type, unsigned short seq)
                 data->WaitAuth.asBool() = false;
                 EventContact e(contact, EventContact::eChanged);
                 e.process();
-                addPluginInfoRequest(data->Uin.toULong(), PLUGIN_QUERYxSTATUS);
-                addPluginInfoRequest(data->Uin.toULong(), PLUGIN_QUERYxINFO);
+                addPluginInfoRequest(data->getUin(), PLUGIN_QUERYxSTATUS);
+                addPluginInfoRequest(data->getUin(), PLUGIN_QUERYxINFO);
             }
         }
     case ICQ_SNACxLISTS_AUTH:{
@@ -767,8 +767,8 @@ void ICQClient::snac_lists(unsigned short type, unsigned short seq)
                     data->WaitAuth.asBool() = false;
                     EventContact e(contact, EventContact::eChanged);
                     e.process();
-                    addPluginInfoRequest(data->Uin.toULong(), PLUGIN_QUERYxSTATUS);
-                    addPluginInfoRequest(data->Uin.toULong(), PLUGIN_QUERYxINFO);
+                    addPluginInfoRequest(data->getUin(), PLUGIN_QUERYxSTATUS);
+                    addPluginInfoRequest(data->getUin(), PLUGIN_QUERYxINFO);
                 }
             }
             break;
@@ -908,7 +908,7 @@ void GroupServerRequest::process(ICQClient *client, unsigned short res)
     if (data == NULL)
         data = client->toICQUserData((SIM::IMContact*)group->clientData.createData(client)); // FIXME unsafe type conversion
     data->IcqID.asULong() = m_icqId;
-    data->Alias.str() = m_name;
+    data->setAlias(m_name);
 }
 
 //-----------------------------------------------------------------------------
@@ -962,15 +962,15 @@ void ContactServerRequest::process(ICQClient *client, unsigned short res)
         Tlv *tlv_alias = (*m_tlv)(TLV_ALIAS);
         if (tlv_alias){
             // ok here since Alias is utf8 and TLV_ALIAS too
-            data->Alias.str() = QString::fromUtf8(*tlv_alias);
+            data->setAlias(QString::fromUtf8(*tlv_alias));
         }else{
-            data->Alias.clear();
+            data->setAlias("");
         }
         Tlv *tlv_cell = (*m_tlv)(TLV_CELLULAR);
         if (tlv_cell){
-            data->Cellular.str() = QString::fromUtf8(*tlv_cell);
+            data->setCellular(QString::fromUtf8(*tlv_cell));
         }else{
-            data->Cellular.clear();
+            data->setCellular("");
         }
     }
     ListServerRequest::process(client, res);
@@ -1296,7 +1296,7 @@ void ICQClient::sendRosterGrp(const QString &name, unsigned short grpId, unsigne
 static QString userStr(Contact *contact, const ICQUserData *data)
 {
     QString name = contact ? contact->getName() : "unknown";
-    return QString::number(data->Uin.toULong()) + '[' + name + ']';
+    return QString::number(data->getUin()) + '[' + name + ']';
 }
 
 unsigned ICQClient::processListRequest()
@@ -1415,7 +1415,7 @@ unsigned ICQClient::processListRequest()
                 }
                 break;
             }
-            if ((data->IcqID.toULong() == 0) || (data->Uin.toULong() == 0))
+            if ((data->IcqID.toULong() == 0) || (data->getUin() == 0))
                 break;
             if (isContactRenamed(data, contact)){
                 log(L_DEBUG, "%s rename", qPrintable(userStr(contact, data)));
@@ -1471,7 +1471,7 @@ unsigned ICQClient::processListRequest()
                 data = toICQUserData((SIM::IMContact*)group->clientData.getData(this)); // FIXME unsafe type conversion
                 if (data){
                     icq_id = (unsigned short)(data->IcqID.toULong());
-                    QString alias = data->Alias.str();
+                    QString alias = data->getAlias();
                     if (alias != name){
                         log(L_DEBUG, "rename group %s", qPrintable(group->getName()));
                         seq = sendRoster(ICQ_SNACxLISTS_UPDATE, name, icq_id, 0, ICQ_GROUPS);
@@ -1583,7 +1583,7 @@ void ICQClient::addGroupRequest(Group *group)
         if (it->icq_id == data->IcqID.toULong())
             return;
     }
-    QString alias = data->Alias.str();
+    QString alias = data->getAlias();
     if (alias == name)
         return;
     ListRequest lr;
@@ -1675,16 +1675,16 @@ void ICQClient::addContactRequest(Contact *contact)
 
 bool ICQClient::isContactRenamed(ICQUserData *data, Contact *contact)
 {
-    QString alias = data->Alias.str();
+    QString alias = data->getAlias();
     if(alias.isEmpty())
-        alias.sprintf("%lu", data->Uin.toULong());
+        alias.sprintf("%lu", data->getUin());
 
     if (contact->getName() != alias){
-        log(L_DEBUG, "%lu renamed %s->%s", data->Uin.toULong(), qPrintable(alias), qPrintable(contact->getName()));
+        log(L_DEBUG, "%lu renamed %s->%s", data->getUin(), qPrintable(alias), qPrintable(contact->getName()));
         return true;
     }
     QString cell  = getUserCellular(contact);
-    QString phone = data->Cellular.str();
+    QString phone = data->getCellular();
     if (cell != phone){
         log(L_DEBUG, "%s phone changed %s->%s", qPrintable(userStr(contact, data)), qPrintable(phone), qPrintable(cell));
         return true;

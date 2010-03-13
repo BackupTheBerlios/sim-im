@@ -157,7 +157,7 @@ void ICQInfo::fill()
     ICQUserData *data = m_data;
     if (data == NULL) data = &m_client->data.owner;
 
-    edtUin->setText(QString::number(data->Uin.toULong()));
+    edtUin->setText(QString::number(data->getUin()));
     edtFirst->setText(data->FirstName.str());
     edtLast->setText(data->LastName.str());
     edtNick->setText(data->Nick.str());
@@ -179,7 +179,7 @@ void ICQInfo::fill()
     cmbStatus->clear();
     unsigned status = STATUS_ONLINE;
     if (m_data){
-        unsigned s = m_data->Status.toULong();
+        unsigned s = m_data->getStatus();
         if (s == ICQ_STATUS_OFFLINE){
             status = STATUS_OFFLINE;
         }else if (s & ICQ_STATUS_DND){
@@ -224,7 +224,7 @@ void ICQInfo::fill()
     disableWidget(cmbStatus);
     if (status == STATUS_OFFLINE){
         lblOnline->setText(i18n("Last online") + ':');
-        edtOnline->setText(formatDateTime(data->StatusTime.toULong()));
+        edtOnline->setText(formatDateTime(data->getStatusTime()));
         lblNA->hide();
         edtNA->hide();
     }else{
@@ -239,7 +239,7 @@ void ICQInfo::fill()
             edtNA->hide();
         }else{
             lblNA->setText(i18n(text));
-            edtNA->setText(formatDateTime(data->StatusTime.toULong()));
+            edtNA->setText(formatDateTime(data->getStatusTime()));
         }
     }
     if (data->IP.ip()){

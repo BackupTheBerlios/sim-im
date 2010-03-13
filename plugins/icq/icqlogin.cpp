@@ -70,7 +70,7 @@ void ICQClient::snac_login(unsigned short type, unsigned short)
     unsigned long newUin;
     switch (type){
     case ICQ_SNACxLOGIN_ERROR:
-        if (data.owner.Uin.toULong()){
+        if (data.owner.getUin()){
             m_reconnect = NO_RECONNECT;
             socket()->error_state(I18N_NOOP("Login error"), AuthError);
             break;
@@ -84,7 +84,7 @@ void ICQClient::snac_login(unsigned short type, unsigned short)
         socket()->connect(getServer(), getPort(), this);
         break;
     case ICQ_SNACxLOGIN_REGISTER:
-        if (data.owner.Uin.toULong()){
+        if (data.owner.getUin()){
             socket()->error_state(I18N_NOOP("Registered in no register state"));
             break;
         }
@@ -97,25 +97,25 @@ void ICQClient::snac_login(unsigned short type, unsigned short)
         break;
     case ICQ_SNACxLOGIN_AUTHxKEYxRESPONSE:
         log(L_DEBUG, "Sending MD5 key");
-        if (!data.owner.Screen.str().isEmpty() || data.owner.Uin.toULong()){
+        if (!data.owner.getScreen().isEmpty() || data.owner.getUin()){
             QByteArray md5_key;
             socket()->readBuffer().unpackStr(md5_key);
             snac(ICQ_SNACxFOOD_LOGIN, ICQ_SNACxLOGIN_MD5xLOGIN, false, false);
-            if (data.owner.Uin.toULong()){
+            if (data.owner.getUin()){
                 char uin[20];
-                sprintf(uin, "%lu", data.owner.Uin.toULong());
+                sprintf(uin, "%lu", data.owner.getUin());
                 socket()->writeBuffer().tlv(0x0001, uin);
             }
 			else
 			{
-                socket()->writeBuffer().tlv(0x0001, data.owner.Screen.str().toUtf8().data());
+                socket()->writeBuffer().tlv(0x0001, data.owner.getScreen().toUtf8().data());
             }
             QByteArray md = md5_key;
             md += getContacts()->fromUnicode(NULL, getPassword());
             md += "AOL Instant Messenger (SM)";
             md = QCryptographicHash::hash(md, QCryptographicHash::Md5);
             socket()->writeBuffer().tlv(0x0025, md.data(), md.size());
-	        if (data.owner.Uin.toULong()){
+            if (data.owner.getUin()){
                 socket()->writeBuffer().tlv(0x0003, "ICQBasic");  //ToDo: Should be updated anytime
                 socket()->writeBuffer().tlv(0x0016, 0x010A); // ID Number
                 socket()->writeBuffer().tlv(0x0017, 0x0014); // major
@@ -197,11 +197,11 @@ void ICQClient::chn_login()
         sendPacket(true);
         return;
     }
-    if (data.owner.Uin.toULong() && ! getUseMD5()){
+    if (data.owner.getUin() && ! getUseMD5()){
 	QByteArray pswd = cryptPassword();
-        log(L_DEBUG, "Login %lu [%s]", data.owner.Uin.toULong(), /*pswd.c_str()*/"");
+        log(L_DEBUG, "Login %lu [%s]", data.owner.getUin(), /*pswd.c_str()*/"");
         char uin[20];
-        sprintf(uin, "%lu", data.owner.Uin.toULong());
+        sprintf(uin, "%lu", data.owner.getUin());
 
         flap(ICQ_CHNxNEW);
         socket()->writeBuffer() << 0x00000001L;
@@ -220,18 +220,18 @@ void ICQClient::chn_login()
         sendPacket(true);
         return;
     }
-    if (!data.owner.Screen.str().isEmpty() || getUseMD5()){
+    if (!data.owner.getScreen().isEmpty() || getUseMD5()){
         log(L_DEBUG, "Requesting MD5 salt");
         flap(ICQ_CHNxNEW);
         socket()->writeBuffer() << 0x00000001L;
         sendPacket(true);
         snac(ICQ_SNACxFOOD_LOGIN, ICQ_SNACxLOGIN_AUTHxREQUEST, false, false);
-        if (data.owner.Uin.toULong())
+        if (data.owner.getUin())
 		{
-            QString uin = QString::number(data.owner.Uin.toULong());
+            QString uin = QString::number(data.owner.getUin());
             socket()->writeBuffer().tlv(0x0001, uin.toUtf8().data());
         }else{
-            socket()->writeBuffer().tlv(0x0001, data.owner.Screen.str().toUtf8().data());
+            socket()->writeBuffer().tlv(0x0001, data.owner.getScreen().toUtf8().data());
         }
         socket()->writeBuffer().tlv(0x004B);
         socket()->writeBuffer().tlv(0x005A);

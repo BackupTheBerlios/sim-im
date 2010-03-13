@@ -183,7 +183,7 @@ void ICQSecure::fillListView(ListView *lst, SIM::Data ICQUserData::* field)
                     mails += mailItem;
                 }
                 ListViewItem *item = new ListViewItem(lst);
-                item->setText(0,QString::number(data->Uin.toULong()));
+                item->setText(0,QString::number(data->getUin()));
                 item->setText(1,contact->getName());
                 item->setText(2,firstName);
                 item->setText(3,mails);

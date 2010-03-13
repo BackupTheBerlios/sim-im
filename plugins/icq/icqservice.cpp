@@ -324,7 +324,7 @@ bool SnacIcqService::process(unsigned short subtype, ICQBuffer* buf, unsigned sh
 					buf->incReadPos(n);
 					screen = buf->unpackScreen();
 				}
-				if (screen.toULong() != m_client->data.owner.Uin.toULong()){
+                if (screen.toULong() != m_client->data.owner.getUin()){
                     log(L_WARN, "Not my name info (%s)", qPrintable(screen));
 					break;
 				}
