@@ -152,8 +152,8 @@ void AIMInfo::fill()
     }else{
         status = m_client->getStatus();
     }
-    if (m_data && !m_data->AutoReply.str().isEmpty()){
-        edtAutoReply->setPlainText(m_data->AutoReply.str());
+    if (m_data && !m_data->getAutoReply().isEmpty()){
+        edtAutoReply->setPlainText(m_data->getAutoReply());
     }else{
         edtAutoReply->hide();
     }
@@ -180,8 +180,8 @@ void AIMInfo::fill()
         lblNA->hide();
         edtNA->hide();
     }else{
-        if (data->OnlineTime.toULong()){
-            edtOnline->setText(formatDateTime(QDateTime::fromTime_t(data->OnlineTime.toULong())));
+		if (data->getOnlineTime()){
+			edtOnline->setText(formatDateTime(QDateTime::fromTime_t(data->getOnlineTime())));
         }else{
             lblOnline->hide();
             edtOnline->hide();
@@ -194,14 +194,14 @@ void AIMInfo::fill()
             edtNA->setText(formatDateTime(QDateTime::fromTime_t(data->getStatusTime())));
         }
     }
-    if (data->IP.ip()){
-        edtExtIP->setText(formatAddr(data->IP, data->Port.toULong()));
+    if (data->getIP()){
+        edtExtIP->setText(formatAddr(data->getIP(), data->getPort()));
     }else{
         lblExtIP->hide();
         edtExtIP->hide();
     }
-    if (data->RealIP.ip() && ((data->IP.ip() == NULL) || (get_ip(data->IP) != get_ip(data->RealIP)))){
-        edtIntIP->setText(formatAddr(data->RealIP, data->Port.toULong()));
+    if (data->getRealIP() && ((data->getIP() == 0) || ((data->getIP()) != (data->getRealIP())))){
+        edtIntIP->setText(formatAddr(data->getRealIP(), data->getPort()));
     }else{
         lblIntIP->hide();
         edtIntIP->hide();

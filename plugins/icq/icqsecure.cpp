@@ -46,7 +46,7 @@ void ICQSecure::deleteVisibleItem(ListViewItem *item)
         ICQUserData *data;
         ClientDataIterator it = contact->clientDataIterator();
         while ((data = m_client->toICQUserData(++it)) != NULL){
-            data->VisibleId.asULong() = 0;
+            data->setVisibleId(0);
             EventContact eContact(contact, EventContact::eChanged);
             eContact.process();
         }
@@ -60,7 +60,7 @@ void ICQSecure::deleteInvisibleItem(ListViewItem *item)
         ICQUserData *data;
         ClientDataIterator it = contact->clientDataIterator();
         while ((data = m_client->toICQUserData(++it)) != NULL){
-            data->InvisibleId.asULong() = 0;
+            data->setInvisibleId(0);
             EventContact eContact(contact, EventContact::eChanged);
             eContact.process();
         }
@@ -121,8 +121,8 @@ void ICQSecure::fill()
 			break;
 
 	}
-    fillListView(lstVisible, &ICQUserData::VisibleId);
-    fillListView(lstInvisible, &ICQUserData::InvisibleId);
+    fillListView(lstVisible, 1);
+    fillListView(lstInvisible, 2);
     hideIpToggled(m_client->getHideIP());
 }
 
@@ -137,8 +137,8 @@ bool ICQSecure::processEvent(Event *e)
         EventContact *ec = static_cast<EventContact*>(e);
         if(ec->action() != EventContact::eChanged)
             return false;
-        fillListView(lstVisible, &ICQUserData::VisibleId);
-        fillListView(lstInvisible, &ICQUserData::InvisibleId);
+        fillListView(lstVisible, 1);
+        fillListView(lstInvisible, 2);
     }
     return false;
 }
@@ -164,6 +164,64 @@ void ICQSecure::fillListView(ListView *lst, SIM::Data ICQUserData::* field)
         ClientDataIterator it = contact->clientDataIterator(m_client);
         while ((data = m_client->toICQUserData(++it)) != NULL){
             if ((data->*field).toULong()){
+                QString firstName = contact->getFirstName();
+                QString lastName  = contact->getLastName();
+                firstName = getToken(firstName, '/');
+                lastName = getToken(lastName, '/');
+                if (!lastName.isEmpty()){
+                    if (!firstName.isEmpty())
+                        firstName += ' ';
+                    firstName += lastName;
+                }
+                QString mails;
+                QString emails = contact->getEMails();
+                while (emails.length()){
+                    QString mailItem = getToken(emails, ';', false);
+                    mailItem = getToken(mailItem, '/');
+                    if (!mails.isEmpty())
+                        mails += ", ";
+                    mails += mailItem;
+                }
+                ListViewItem *item = new ListViewItem(lst);
+                item->setText(0,QString::number(data->getUin()));
+                item->setText(1,contact->getName());
+                item->setText(2,firstName);
+                item->setText(3,mails);
+                item->setText(4,QString::number(contact->id()));
+                unsigned long status = STATUS_UNKNOWN;
+                unsigned style  = 0;
+                QString statusIcon;
+                ((Client*)m_client)->contactInfo(data, status, style, statusIcon);
+                item->setPixmap(0, Pict(statusIcon));
+            }
+        }
+    }
+}
+
+void ICQSecure::fillListView(ListView *lst, int v)
+{
+    lst->clear();
+    Contact *contact;
+    ContactList::ContactIterator it;
+    while ((contact = ++it) != NULL){
+        ICQUserData *data;
+        ClientDataIterator it = contact->clientDataIterator(m_client);
+        while ((data = m_client->toICQUserData(++it)) != NULL){
+            unsigned long val = 0;
+            switch(v)
+            {
+            case 0:
+                val = data->getIgnoreId();
+                break;
+            case 1:
+                val = data->getVisibleId();
+                break;
+            case 2:
+                val = data->getInvisibleId();
+                break;
+            }
+
+            if (val){
                 QString firstName = contact->getFirstName();
                 QString lastName  = contact->getLastName();
                 firstName = getToken(firstName, '/');

@@ -42,6 +42,7 @@ protected:
     void fill();
     void setListView(ListView*);
     void fillListView(ListView *lst, SIM::Data ICQUserData::* field);
+    void fillListView(ListView *lst, int v);
     ICQClient	*m_client;
 };
 

@@ -150,7 +150,7 @@ void ICQClient::snac_location(unsigned short type, unsigned short seq)
             Tlv *tlvAway = tlvs(0x04);
             if (tlvAway){
                 QString info = convert(tlvAway, tlvs, 0x03);
-                data->AutoReply.str() = info;
+                data->setAutoReply(info);
                 EventClientChanged(this).process();
             }
         }

@@ -441,6 +441,28 @@ EXPORT QString formatAddr(const Data &ip, unsigned port)
     return res;
 }
 
+EXPORT QString formatAddr(unsigned long ip, unsigned port)
+{
+    QString res;
+    if (ip == 0) {
+        log( L_ERROR, "formatAddr() with invalid data" );
+        return res;
+    }
+    struct in_addr inaddr;
+    inaddr.s_addr = ip;
+    res += inet_ntoa(inaddr);
+    if (port){
+        res += ':';
+        res += QString::number(port);
+    }
+//    QString host = get_host(ip);
+//    if (!host.isEmpty()){
+//        res += ' ';
+//        res += host;
+//    }
+    return res;
+}
+
 void initCombo(QComboBox *cmb, unsigned short code, const ext_info *tbl, bool bAddEmpty, const ext_info *tbl1)
 {
     if (cmb->isEnabled()){

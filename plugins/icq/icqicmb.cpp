@@ -245,14 +245,14 @@ void SnacIcqICBM::sendType2(const QString &screen, ICQBuffer &msgBuf, const Mess
 	{
 		if(type != 4)
 		{
-			b.tlv(0x03, (unsigned long)htonl(get_ip(client()->data.owner.RealIP)));
+            b.tlv(0x03, (unsigned long)htonl((client()->data.owner.getRealIP())));
 			if(type != 3)
 			{
-				b.tlv(0x04, (unsigned long)htonl(get_ip(client()->data.owner.IP)));
+                b.tlv(0x04, (unsigned long)htonl((client()->data.owner.getIP())));
 			}
 		}
         b.tlv(0x05, port);
-                log(L_DEBUG, "RealIP = %08x, IP = %08x, port = %04x", (unsigned int)(get_ip(client()->data.owner.RealIP)), (unsigned int)(get_ip(client()->data.owner.IP)), port);
+                log(L_DEBUG, "RealIP = %08x, IP = %08x, port = %04x", (unsigned int)((client()->data.owner.getRealIP())), (unsigned int)((client()->data.owner.getIP())), port);
     }
     copyTlv(b, tlvs, 0x17);
     copyTlv(b, tlvs, 0x0E);
@@ -294,7 +294,7 @@ void SnacIcqICBM::sendAdvMessage(const QString &screen, ICQBuffer &msgText, unsi
 	msgBuf.pack(0x00000000L);
 	msgBuf.pack(0x00000000L);
 	msgBuf.pack(msgText.data(0), msgText.size());
-	sendType2(screen, msgBuf, id, CAP_SRV_RELAY, bOffline, bDirect ? client()->data.owner.Port.toULong() : 0, NULL, type);
+    sendType2(screen, msgBuf, id, CAP_SRV_RELAY, bOffline, bDirect ? client()->data.owner.getPort() : 0, NULL, type);
 }
 
 void SnacIcqICBM::ackMessage(SendMsg &s)
@@ -595,7 +595,7 @@ void SnacIcqICBM::sendFile(TlvList& tlv, unsigned long primary_ip, unsigned long
 				if(data)
 				{
 					if(primary_ip)
-						set_ip(&data->RealIP, primary_ip);
+                        data->setRealIP(primary_ip);
 					AIMFileTransfer *ft = (*it); //Fixme:Local declaration of 'ft' hides declaration from line: 857
 
 					ft->setProxyActive(false);
@@ -1274,7 +1274,8 @@ bool SnacIcqICBM::process(unsigned short subtype, ICQBuffer* buf, unsigned short
                 log(L_DEBUG, "Autoreply from %s %s", qPrintable(screen), answer.data());
                 Contact *contact; //Fixme: Local declaration of 'contact' hides declaration of the same name in outer scope, see previous declaration at line '300'
                 ICQUserData *data = m_client->findContact(screen, NULL, false, contact);
-                if (data && data->AutoReply.setStr(getContacts()->toUnicode(contact, answer))){
+                if (data && getContacts()->toUnicode(contact, answer) != data->getAutoReply()){
+                    data->setAutoReply(getContacts()->toUnicode(contact, answer));
                     EventContact e(contact, EventContact::eChanged);
                     e.process();
                 }
@@ -1474,8 +1475,8 @@ void SnacIcqICBM::parseAdvancedMessage(const QString &screen, ICQBuffer &m, bool
             log(L_DEBUG, "Reverse direct request from unknown user");
             return;
         }
-        if (get_ip(data->RealIP) == 0)
-            set_ip(&data->RealIP, localIP);
+        if ((data->getRealIP()) == 0)
+            data->setRealIP(localIP);
         for (list<Message*>::iterator it = m_client->m_processMsg.begin(); it != m_client->m_processMsg.end(); ++it){
             if ((*it)->type() != MessageICQFile)
                 continue;
@@ -1523,11 +1524,11 @@ void SnacIcqICBM::parseAdvancedMessage(const QString &screen, ICQBuffer &m, bool
 		{
             //if(real_ip && (get_ip(data->RealIP) == 0))
             if(real_ip)
-                set_ip(&data->RealIP, real_ip);
-            if(ip && (get_ip(data->IP) == 0))
-                set_ip(&data->IP, ip);
-            if(port && (data->Port.toULong() == 0))
-                data->Port.asULong() = port;
+                data->setRealIP(real_ip);
+            if(ip && ((data->getIP()) == 0))
+                data->setIP(ip);
+            if(port && (data->getPort() == 0))
+                data->setPort(port);
         }
     }
 
@@ -1710,8 +1711,8 @@ void SnacIcqICBM::parseAdvancedMessage(const QString &screen, ICQBuffer &m, bool
             ICQUserData *data = m_client->findContact(screen, NULL, false, contact);
             if (data == NULL)
                 return;
-            if ((m_client->getInvisible() && (data->VisibleId.toULong() == 0)) ||
-                    (!m_client->getInvisible() && data->InvisibleId.toULong()))
+            if ((m_client->getInvisible() && (data->getVisibleId() == 0)) ||
+                    (!m_client->getInvisible() && data->getInvisibleId()))
                 return;
             ar_request req;
             req.screen  = screen;
@@ -1734,7 +1735,7 @@ void SnacIcqICBM::parseAdvancedMessage(const QString &screen, ICQBuffer &m, bool
                 Contact *contact; //Fixme: Local declaration of 'contact' hides declaration of the same name in outer scope, see previous declaration at line '1278'
                 ICQUserData *data = m_client->findContact(screen, NULL, false, contact); //Fixme: Local declaration of 'data' hides declaration of the same name in outer scope, see previous declaration at line '1279'
                 QString m = getContacts()->toUnicode(contact, msg); //Fixme: Local declaration of 'm' hides declaration of the same name in outer scope. For additional information, see previous declaration at line '1006'
-                data->AutoReply.str() = m;
+                data->setAutoReply(m);
                 EventContact e(contact, EventContact::eChanged);
                 e.process();
             }
@@ -2356,7 +2357,7 @@ bool SnacIcqICBM::processMsg()
             b << m_send.id.id_l << m_send.id.id_h;
             b.pack((char*)m_client->capabilities[CAP_AIM_SENDFILE], sizeof(capability));
             b.tlv(0x0A, (unsigned short)2);
-            b.tlv(0x03, (unsigned long)htonl(get_ip(m_client->data.owner.RealIP)));
+            b.tlv(0x03, (unsigned long)htonl((m_client->data.owner.getRealIP())));
             b.tlv(0x05, static_cast<AIMFileTransfer*>(msg->m_transfer)->remotePort());
             sendThroughServer(m_send.screen, 2, b, m_send.id, false, false);
             replyQueue.push_back(m_send);
@@ -2427,14 +2428,14 @@ bool SnacIcqICBM::processMsg()
             return true;
         }
         msgBuf.pack(m_client->data.owner.getUin());
-        unsigned long ip = get_ip(m_client->data.owner.IP);
-        if (ip == get_ip(m_send.socket->m_data->IP))
-            ip = get_ip(m_client->data.owner.RealIP);
+        unsigned long ip = (m_client->data.owner.getIP());
+        if (ip == (m_send.socket->m_data->getIP()))
+            ip = (m_client->data.owner.getRealIP());
         msgBuf.pack(ip);
         msgBuf.pack((unsigned long)(m_send.socket->localPort()));
         msgBuf.pack((char)MODE_DIRECT);
         msgBuf.pack((unsigned long)(m_send.socket->remotePort()));
-        msgBuf.pack(m_client->data.owner.Port.toULong());
+        msgBuf.pack(m_client->data.owner.getPort());
         msgBuf.pack((unsigned short)8);
         msgBuf.pack((unsigned long)m_client->m_nMsgSequence);
         sendType2(m_send.screen, msgBuf, m_send.id, CAP_DIRECT, false, 0);

@@ -162,7 +162,7 @@ QString Tmpl::process(TmplExpand &t, const QString &str)
             struct in_addr addr;
             e.process();
             if (e.ip())
-                addr.s_addr = e.ip()->ip();
+                addr.s_addr = e.ip();
             else
                 addr.s_addr = 0;
             res += inet_ntoa(addr);

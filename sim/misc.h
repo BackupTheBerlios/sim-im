@@ -77,6 +77,7 @@ EXPORT QString formatDateTime(QDateTime t);
 inline QString formatDateTime(unsigned int t){ return formatDateTime(QDateTime::fromTime_t(t)); }
 EXPORT QString formatDate(QDate t);
 EXPORT QString formatAddr(const Data &addr, unsigned port);
+EXPORT QString formatAddr(unsigned long ip, unsigned port);
 
 // _____________________________________________________________________________________
 // User interface

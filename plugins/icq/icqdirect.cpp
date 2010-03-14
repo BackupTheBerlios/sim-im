@@ -69,7 +69,7 @@ ICQListener::~ICQListener()
     if (m_client == NULL)
         return;
     m_client->m_listener = NULL;
-    m_client->data.owner.Port.asULong() = 0;
+    m_client->data.owner.setPort(0);
 }
 
 bool ICQListener::accept(Socket *s, unsigned long ip)
@@ -81,14 +81,14 @@ bool ICQListener::accept(Socket *s, unsigned long ip)
 
 void ICQListener::bind_ready(unsigned short port)
 {
-    m_client->data.owner.Port.asULong() = port;
+    m_client->data.owner.setPort(port);
 }
 
 bool ICQListener::error(const QString &err)
 {
     log(L_WARN, "ICQListener error: %s", qPrintable(err));
     m_client->m_listener = NULL;
-    m_client->data.owner.Port.asULong() = 0;
+    m_client->data.owner.setPort(0);
     m_client = NULL;
     return true;
 }
@@ -206,8 +206,8 @@ void DirectSocket::connect()
     }
     if (m_state == NotConnected){
         m_state = ConnectIP1;
-        unsigned long ip = get_ip(m_data->RealIP);
-        if (get_ip(m_data->IP) != get_ip(m_client->data.owner.IP))
+        unsigned long ip = (m_data->getRealIP());
+        if ((m_data->getIP()) != (m_client->data.owner.getIP()))
             ip = 0;
         if (ip){
             m_socket->connect(QHostAddress(ip).toString(), m_port, NULL);
@@ -216,8 +216,8 @@ void DirectSocket::connect()
     }
     if (m_state == ConnectIP1){
         m_state = ConnectIP2;
-        unsigned long ip = get_ip(m_data->IP);
-        if ((ip == get_ip(m_client->data.owner.IP)) && (ip == get_ip(m_data->RealIP)))
+        unsigned long ip = (m_data->getIP());
+        if ((ip == (m_client->data.owner.getIP())) && (ip == (m_data->getRealIP())))
             ip = 0;
         if (ip){
             m_socket->connect(QHostAddress(ip).toString(), m_port, m_client);
@@ -326,8 +326,8 @@ void DirectSocket::packet_ready()
                     m_socket->error_state("User not found");
                     return;
                 }
-                if ((m_client->getInvisible() && (m_data->VisibleId.toULong() == 0)) ||
-                        (!m_client->getInvisible() && m_data->InvisibleId.toULong())){
+                if ((m_client->getInvisible() && (m_data->getVisibleId() == 0)) ||
+                        (!m_client->getInvisible() && m_data->getInvisibleId())){
                     m_socket->error_state("User not found");
                     return;
                 }
@@ -336,8 +336,8 @@ void DirectSocket::packet_ready()
                 m_socket->error_state("Bad sender UIN");
                 return;
             }
-            if (get_ip(m_data->RealIP) == 0)
-                set_ip(&m_data->RealIP, m_ip);
+            if ((m_data->getRealIP()) == 0)
+                (m_data->setRealIP(m_ip));
             m_socket->readBuffer().incReadPos(13);
             unsigned long sessionId;
             m_socket->readBuffer().unpack(sessionId);
@@ -374,11 +374,11 @@ void DirectSocket::sendInit()
 {
 	log(L_DEBUG, "DirectSocket::sendInit()");
     if (!m_bIncoming && (m_state != ReverseConnect)){
-        if (m_data->DCcookie.toULong() == 0){
+        if (m_data->getDCcookie() == 0){
             m_socket->error_state("No direct info");
             return;
         }
-        m_nSessionId = m_data->DCcookie.toULong();
+        m_nSessionId = m_data->getDCcookie();
     }
 
     m_socket->writeBuffer().packetStart();
@@ -388,12 +388,12 @@ void DirectSocket::sendInit()
     m_socket->writeBuffer().pack((unsigned short)((m_version >= 7) ? 0x002b : 0x0027));
     m_socket->writeBuffer().pack(m_data->getUin());
     m_socket->writeBuffer().pack((unsigned short)0x0000);
-    m_socket->writeBuffer().pack(m_data->Port.toULong());
+    m_socket->writeBuffer().pack(m_data->getPort());
     m_socket->writeBuffer().pack(m_client->data.owner.getUin());
-    m_socket->writeBuffer().pack(get_ip(m_client->data.owner.IP));
-    m_socket->writeBuffer().pack(get_ip(m_client->data.owner.RealIP));
+    m_socket->writeBuffer().pack((m_client->data.owner.getIP()));
+    m_socket->writeBuffer().pack((m_client->data.owner.getRealIP()));
     m_socket->writeBuffer().pack((char)0x04);
-    m_socket->writeBuffer().pack(m_data->Port.toULong());
+    m_socket->writeBuffer().pack(m_data->getPort());
     m_socket->writeBuffer().pack(m_nSessionId);
     m_socket->writeBuffer().pack(0x00000050L);
     m_socket->writeBuffer().pack(0x00000003L);
@@ -458,7 +458,7 @@ DirectClient::DirectClient(ICQUserData *data, ICQClient *client, unsigned channe
 {
     m_state   = None;
     m_channel = channel;
-    m_port    = (unsigned short)(data->Port.toULong());
+    m_port    = (unsigned short)(data->getPort());
     m_ssl = NULL;
 }
 
@@ -789,7 +789,7 @@ void DirectClient::processPacket()
                 if (it->type == PLUGIN_AR){
                     Contact *contact = NULL;
                     m_client->findContact(m_client->screen(m_data), NULL, false, contact);
-                    m_data->AutoReply.str() = getContacts()->toUnicode(contact,msg_str);
+                    m_data->setAutoReply(getContacts()->toUnicode(contact,msg_str));
                     m_queue.erase(it);
                     itDeleted = true;
                     break;
@@ -1022,7 +1022,7 @@ bool DirectClient::error_state(const QString &_err, unsigned code)
     QString err = _err;
     if (!err.isEmpty() && !DirectSocket::error_state(err, code))
         return false;
-    if (m_data && (m_port == m_data->Port.toULong())){
+    if (m_data && (m_port == m_data->getPort())){
         switch (m_state){
         case ConnectIP1:
         case ConnectIP2:
@@ -2023,8 +2023,8 @@ void AIMFileTransfer::requestFT()
     b.pack((char*)m_client->capabilities[CAP_AIM_SENDFILE], sizeof(capability));
     b.tlv(0x0A, (unsigned short)m_stage);
 	b.tlv(0x0F);
-	b.tlv(0x03, (unsigned long)htonl(get_ip(m_client->data.owner.RealIP)));
-	b.tlv(0x04, (unsigned long)htonl(get_ip(m_client->data.owner.IP)));
+    b.tlv(0x03, (unsigned long)htonl((m_client->data.owner.getRealIP())));
+    b.tlv(0x04, (unsigned long)htonl((m_client->data.owner.getIP())));
 	b.tlv(0x05, this_port);
 
 	this_port = ~(htons(m_port));
@@ -2032,7 +2032,7 @@ void AIMFileTransfer::requestFT()
 
 	unsigned long this_ip = m_ip;
 	if(m_ip == 0)
-		this_ip = htonl(get_ip(m_client->data.owner.RealIP));
+        this_ip = htonl((m_client->data.owner.getRealIP()));
 
 	b.tlv(0x02, this_ip);
 	this_ip = ~this_ip;
@@ -2427,10 +2427,10 @@ void AIMIncomingFileTransfer::accept()
 	if(m_notify)
 		m_notify->process();
 
-	unsigned long ip = get_ip(m_data->RealIP);
+    unsigned long ip = (m_data->getRealIP());
 	if(!ip)
 	{
-		ip = get_ip(m_data->IP);
+        ip = (m_data->getIP());
 	}
 	m_socket->connect(ip, m_port, NULL);
 }

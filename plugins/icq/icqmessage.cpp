@@ -1393,7 +1393,7 @@ void ICQClient::pluginAnswer(unsigned plugin_type, unsigned long uin, ICQBuffer 
     unsigned long time = 0;
     switch (plugin_type){
     case PLUGIN_PHONEBOOK:{
-            if (data && data->GrpId.toULong() && !contact->getIgnore()){
+            if (data && data->getGrpID() && !contact->getIgnore()){
                 ICQBuffer answer1;
                 time = this->data.owner.PluginInfoTime.toULong();
                 QString phones = getContacts()->owner()->getPhones();

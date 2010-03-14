@@ -121,7 +121,7 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 
 				unsigned short level, len;
 				(*buf) >> level >> len;
-				data->WarningLevel.asULong() = level;
+				data->setWarningLevel(level);
 
 				TlvList tlv((*buf));
 				Tlv* tlvClass = tlv(TLV_USER_CLASS);
@@ -146,7 +146,7 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 						}
 						else
 						{
-							data->AutoReply.str() = QString::null;
+                            data->setAutoReply(QString::null);
 						}
 					}
 				}
@@ -160,7 +160,7 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 					{
                         data->setStatus(status);
 						if ((status & 0xFF) == 0)
-							data->AutoReply.str() = QString::null;
+                            data->setAutoReply(QString::null);
                         data->setStatusTime((unsigned long)time(NULL));
 					}
 				}
@@ -175,9 +175,9 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 				if(tlvOnlineTime)
 				{
 					uint32_t OnlineTime = *tlvOnlineTime;
-					if(OnlineTime != data->OnlineTime.toULong())
+					if(OnlineTime != data->getOnlineTime())
 					{
-						data->OnlineTime.asULong() = OnlineTime;
+						data->setOnlineTime(OnlineTime);
 						bChanged = true;
 					}
 				}
@@ -195,15 +195,17 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 
 				// IP TLV
 				Tlv *tlvIP = tlv(TLV_USER_EXT_IP);
+                unsigned long oldip = data->getIP();
+                data->setIP(htonl((uint32_t)(*tlvIP)));
 				if(tlvIP)
-					bChanged |= set_ip(&data->IP, htonl((uint32_t)(*tlvIP)));
+                    bChanged |= oldip != data->getIP();
 
 				// short caps tlv
 				Tlv *tlvCapShort = tlv(TLV_USER_NEWCAPS);
 				if(tlvCapShort)
 				{
-					data->Caps.asULong() = 0;
-					data->Caps2.asULong() = 0;
+                    data->setCaps(0);
+                    data->setCaps2(0);
 
 					ICQBuffer info(*tlvCapShort);
 
@@ -234,8 +236,8 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 				{
 					if(!tlvCapShort)
 					{
-						data->Caps.asULong() = 0;
-						data->Caps2.asULong() = 0;
+                        data->setCaps(0);
+                        data->setCaps2(0);
 					}
 					ICQBuffer info(*tlvCapability);
 					for(; info.readPos() < (unsigned)info.size(); )
@@ -362,11 +364,13 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 					info >> port;
 					if (realIP == 0x7F000001)
 						realIP = 0;
-					bChanged |= set_ip(&data->RealIP, htonl(realIP));
-					data->Port.asULong() = port;
+                    unsigned long oldip = data->getRealIP();
+                    data->setRealIP(htonl(realIP));
+                    bChanged |= oldip != data->getRealIP();
+                    data->setPort(port);
 					unsigned long DCcookie;
 					info >> mode >> junk >> version >> DCcookie;
-					data->DCcookie.asULong() = DCcookie;
+                    data->setDCcookie(DCcookie);
 					info.incReadPos(8);
 					info
 						>> infoUpdateTime
@@ -395,8 +399,8 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
                             m_client->addFullInfoRequest(data->getUin());
 							break;
 						case 2:
-							if		((m_client->getInvisible() && data->VisibleId.toULong()) ||
-									(!m_client->getInvisible() && (data->InvisibleId.toULong() == 0))){
+                            if		((m_client->getInvisible() && data->getVisibleId()) ||
+                                    (!m_client->getInvisible() && (data->getInvisibleId() == 0))){
 								info.incReadPos(6);
 								info.unpack((char*)p, sizeof(p));
 								data->PluginInfoTime.asULong() = time;
@@ -471,8 +475,8 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 					data->PluginInfoTime.asULong()   = pluginInfoTime;
 					data->PluginStatusTime.asULong() = pluginStatusTime;
 					if (!m_client->getDisableAutoUpdate() &&
-							((m_client->getInvisible() && data->VisibleId.toULong()) ||
-							 (!m_client->getInvisible() && (data->InvisibleId.toULong() == 0)))){
+                            ((m_client->getInvisible() && data->getVisibleId()) ||
+                             (!m_client->getInvisible() && (data->getInvisibleId() == 0)))){
 						if (infoUpdateTime == 0)
 							infoUpdateTime = 1;
 						if (infoUpdateTime != data->InfoFetchTime.toULong())
@@ -538,13 +542,13 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
                             (((data->getStatus() & 0xFF) == ICQ_STATUS_ONLINE) &&
 							 (((prevStatus & 0xFF) != ICQ_STATUS_ONLINE)) || bAwayChanged) &&
 							(((prevStatus & 0xFFFF) != ICQ_STATUS_OFFLINE) ||
-							 (data->OnlineTime.toULong() > m_client->data.owner.OnlineTime.toULong()))){
+							 (data->getOnlineTime() > m_client->data.owner.getOnlineTime()))){
 						EventContact e(contact, EventContact::eOnline);
 						e.process();
 					}
                     if (!m_client->getDisableAutoReplyUpdate() && ((data->getStatus() & 0xFF) != ICQ_STATUS_ONLINE)){
-						if ((m_client->getInvisible() && data->VisibleId.toULong()) ||
-								(!m_client->getInvisible() && (data->InvisibleId.toULong() == 0)))
+                        if ((m_client->getInvisible() && data->getVisibleId()) ||
+                                (!m_client->getInvisible() && (data->getInvisibleId() == 0)))
                             m_client->addPluginInfoRequest(data->getUin(), PLUGIN_AR);
 					}
 				}
@@ -572,7 +576,7 @@ void ICQClient::sendContactList()
         ClientDataIterator it_data = contact->clientDataIterator(this);
         ICQUserData *data;
         while ((data = toICQUserData(++it_data)) != NULL){
-            if (data->IgnoreId.toULong() == 0)
+            if (data->getIgnoreId() == 0)
                 buddies.push_back(screen(data));
         }
     }
@@ -584,7 +588,7 @@ void ICQClient::sendContactList()
         ClientDataIterator it_data = contact->clientDataIterator(this);
         ICQUserData *data;
         while ((data = toICQUserData(++it_data)) != NULL){
-            if (data->IgnoreId.toULong() == 0)
+            if (data->getIgnoreId() == 0)
                 socket()->writeBuffer().packScreen(screen(data));
         }
     }
@@ -603,7 +607,7 @@ void SnacIcqBuddy::addBuddy(Contact *contact)
         int it = m_client->buddies.indexOf(m_client->screen(data));
         if (it != -1)
             continue;
-        if ((data->IgnoreId.toULong() == 0)  && (data->WaitAuth.toBool() || (data->GrpId.toULong() == 0))){
+        if ((data->getIgnoreId() == 0)  && (data->WaitAuth.toBool() || (data->getGrpID() == 0))){
             m_client->snac(ICQ_SNACxFOOD_BUDDY, ICQ_SNACxBDY_ADDxTOxLIST);
             m_client->socket()->writeBuffer().packScreen(m_client->screen(data));
             m_client->sendPacket(true);

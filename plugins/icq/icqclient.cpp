@@ -195,22 +195,22 @@ void ICQUserData::dispatchDeserialization(const QString& key, const QString& val
         setStatusTime(val.toULong());
     }
     else if(key == "WarningLevel") {
-		WarningLevel.asULong() = val.toULong();
+		setWarningLevel(val.toULong());
     }
     else if(key == "IP") {
-		IP.asULong() = val.toULong();
+        setIP(val.toULong());
     }
     else if(key == "RealIP") {
-		RealIP.asULong() = val.toULong();
+        setRealIP(val.toULong());
     }
     else if(key == "Port") {
-		Port.asULong() = val.toULong();
+        setPort(val.toULong());
     }
     else if(key == "Caps") {
-		Caps.asULong() = val.toULong();
+        setCaps(val.toULong());
     }
     else if(key == "Caps2") {
-		Caps2.asULong() = val.toULong();
+        setCaps2(val.toULong());
     }
     else if(key == "Uin") {
         setUin(val.toULong());
@@ -219,19 +219,19 @@ void ICQUserData::dispatchDeserialization(const QString& key, const QString& val
         setScreen(val);
     }
     else if(key == "ID") {
-		IcqID.asULong() = val.toULong();
+        setIcqID(val.toULong());
     }
     else if(key == "GroupID") {
-		GrpId.asULong() = val.toULong();
+        setGrpID(val.toULong());
     }
     else if(key == "Ignore") {
-		IgnoreId.asULong() = val.toULong();
+        setIgnoreId(val.toULong());
     }
     else if(key == "Visible") {
-		ContactVisibleId.asULong() = val.toULong();
+        setContactVisibleId(val.toULong());
     }
     else if(key == "Invsible") {
-		ContactInvisibleId.asULong() = val.toULong();
+        setContactInvisibleId(val.toULong());
     }
     else if(key == "WaitAuth") {
 		WaitAuth.asBool() = (val == "true");
@@ -422,19 +422,19 @@ QByteArray ICQUserData::serialize()
     result += QString("Alias=%1\n").arg(getAlias());
     result += QString("Cellular=\"%1\"\n").arg(getCellular());
     result += QString("StatusTime=%1\n").arg(getStatusTime());
-	result += QString("WarningLevel=%1\n").arg(WarningLevel.toULong());
-	result += QString("IP=%1\n").arg(IP.toULong());
-	result += QString("RealIP=%1\n").arg(RealIP.toULong());
-	result += QString("Port=%1\n").arg(Port.toULong());
-	result += QString("Caps=%1\n").arg(Caps.toULong());
-	result += QString("Caps2=%1\n").arg(Caps2.toULong());
+	result += QString("WarningLevel=%1\n").arg(getWarningLevel());
+    result += QString("IP=%1\n").arg(getIP());
+    result += QString("RealIP=%1\n").arg(getRealIP());
+    result += QString("Port=%1\n").arg(getPort());
+    result += QString("Caps=%1\n").arg(getCaps());
+    result += QString("Caps2=%1\n").arg(getCaps2());
     result += QString("Uin=%1\n").arg(getUin());
     result += QString("Screen=%1\n").arg(getScreen());
-	result += QString("ID=%1\n").arg(IcqID.toULong());
-	result += QString("GroupID=%1\n").arg(GrpId.toULong());
-	result += QString("Ignore=%1\n").arg(IgnoreId.toULong());
-	result += QString("Visible=%1\n").arg(VisibleId.toULong());
-	result += QString("Invisible=%1\n").arg(InvisibleId.toULong());
+    result += QString("ID=%1\n").arg(getIcqID());
+    result += QString("GroupID=%1\n").arg(getGrpID());
+    result += QString("Ignore=%1\n").arg(getIgnoreId());
+    result += QString("Visible=%1\n").arg(getVisibleId());
+    result += QString("Invisible=%1\n").arg(getInvisibleId());
 	result += QString("WaitAuth=%1\n").arg(WaitAuth.toBool() ? "true" : "false");
 	result += QString("WantAuth=%1\n").arg(WantAuth.toBool() ? "true" : "false");
 	result += QString("WebAware=%1\n").arg(WebAware.toBool() ? "true" : "false");
@@ -702,7 +702,7 @@ ICQClient::ICQClient(Protocol *protocol, Buffer *cfg, bool bAIM)
 
     log(L_DEBUG, "aim: %d", m_bAIM);
 
-    data.owner.DCcookie.asULong() = rand();
+    data.owner.setDCcookie(rand());
 
     QString requests = getListRequests();
     while (requests.length())
@@ -1663,7 +1663,7 @@ ICQUserData *ICQClient::findGroup(unsigned id, const QString *alias, Group *&grp
     while ((grp = ++it) != NULL)
     {
         data = toICQUserData((SIM::IMContact*)grp->clientData.getData(this)); // FIXME unsafe type conversion
-        if (!data || data->IcqID.toULong() != id)
+        if (!data || data->getIcqID() != id)
             continue;
 
         if (alias)
@@ -1679,7 +1679,7 @@ ICQUserData *ICQClient::findGroup(unsigned id, const QString *alias, Group *&grp
         if (grp->getName() == name)
         {
             data = toICQUserData((SIM::IMContact*)grp->clientData.createData(this)); // FIXME unsafe type conversion
-            data->IcqID.asULong() = id;
+            data->setIcqID(id);
             data->setAlias(*alias);
             return data;
         }
@@ -1687,7 +1687,7 @@ ICQUserData *ICQClient::findGroup(unsigned id, const QString *alias, Group *&grp
     grp = getContacts()->group(0, true);
     grp->setName(name);
     data = toICQUserData((SIM::IMContact*)grp->clientData.createData(this)); // FIXME unsafe type conversion
-    data->IcqID.asULong() = id;
+    data->setIcqID(id);
     data->setAlias(*alias);
     EventGroup e(grp, EventGroup::eChanged);
     e.process();
@@ -1732,7 +1732,7 @@ void ICQClient::setOffline(ICQUserData *data)
     data->bBadClient.asBool() = false;
     data->bInvisible.asBool() = false;
     data->setStatusTime(QDateTime::currentDateTime().toTime_t());
-    data->AutoReply.str() = QString::null;
+    data->setAutoReply(QString::null);
 }
 
 static void addIcon(QSet<QString> *s, const QString &icon, const QString &statusIcon)
@@ -1842,9 +1842,9 @@ void ICQClient::contactInfo(void *_data, unsigned long &curStatus, unsigned &sty
         if (dc && dc->isSecure())
             addIcon(icons, "encrypted", statusIcon);
     }
-    if (data->InvisibleId.toULong())
+    if (data->getInvisibleId())
         style |= CONTACT_STRIKEOUT;
-    if (data->VisibleId.toULong())
+    if (data->getVisibleId())
         style |= CONTACT_ITALIC;
     if (data->WaitAuth.toBool())
         style |= CONTACT_UNDERLINE;
@@ -2059,12 +2059,12 @@ QString ICQClient::contactTip(void *_data)
         res += data->getScreen();
         res += "</b>";
     }
-    if (data->WarningLevel.toULong())
+	if (data->getWarningLevel())
     {
         res += "<br/>";
         res += i18n("Warning level");
         res += ": <b>";
-        res += QString::number(warnLevel(data->WarningLevel.toULong()));
+		res += QString::number(warnLevel(data->getWarningLevel()));
         res += "% </b></br>";
     }
     if (data->getStatus() == ICQ_STATUS_OFFLINE)
@@ -2078,12 +2078,12 @@ QString ICQClient::contactTip(void *_data)
     }
     else
     {
-        if (data->OnlineTime.toULong())
+		if (data->getOnlineTime())
         {
             res += "<br/><font size=-1>";
             res += i18n("Online");
             res += ": </font>";
-            res += formatDateTime(data->OnlineTime.toULong());
+			res += formatDateTime(data->getOnlineTime());
         }
         if (data->getStatus() & (ICQ_STATUS_AWAY | ICQ_STATUS_NA)){
             res += "<br/><font size=-1>";
@@ -2092,15 +2092,15 @@ QString ICQClient::contactTip(void *_data)
             res += formatDateTime(data->getStatusTime());
         }
     }
-    if (data->IP.ip())
+    if (data->getIP())
     {
         res += "<br/>";
-        res += formatAddr(data->IP, data->Port.toULong());
+        res += formatAddr(data->getIP(), data->getPort());
     }
-    if ((data->RealIP.ip()) && ((data->IP.ip() == NULL) || (get_ip(data->IP) != get_ip(data->RealIP))))
+    if ((data->getRealIP()) && ((data->getIP() == 0) || ((data->getIP()) != (data->getRealIP()))))
     {
         res += "<br/>";
-        res += formatAddr(data->RealIP, data->Port.toULong());
+        res += formatAddr(data->getRealIP(), data->getPort());
     }
     QString client_name = clientName(data);
     if (client_name.length())
@@ -2133,10 +2133,10 @@ QString ICQClient::contactTip(void *_data)
         res += QString::number(h);
         res += "\">";
     }
-    if (!data->AutoReply.str().isEmpty())
+    if (!data->getAutoReply().isEmpty())
     {
         res += "<br/><br/>";
-        res += quoteString(data->AutoReply.str());
+        res += quoteString(data->getAutoReply());
     }
     if (!(data->getStatus() & ICQ_STATUS_FxBIRTHDAY))
         return res;
@@ -2185,16 +2185,22 @@ unsigned long ICQClient::warnLevel(unsigned long level)
 
 bool ICQClient::hasCap(const ICQUserData *data, cap_id_t n)
 {
-    unsigned long val = n > 31 ? data->Caps2.toULong() : data->Caps.toULong();
+    unsigned long val = n > 31 ? data->getCaps2() : data->getCaps();
     int pos = (int)n % 32;
     return (val & (1 << pos)) != 0;
 }
 
 void ICQClient::setCap(ICQUserData *data, cap_id_t n)
 {
-    unsigned long &val = n > 31 ? data->Caps2.asULong() : data->Caps.asULong();
+    unsigned long val = n > 31 ? data->getCaps2() : data->getCaps();
     int pos = (int)n % 32;
     val |= (1 << pos);
+    if(n > 31)
+    {
+        data->setCaps2(val);
+    }
+    else
+        data->setCaps(val);
 }
 
 static QString verString(unsigned ver)
@@ -2463,7 +2469,7 @@ QString ICQClient::clientName(ICQUserData *data)
     if (data->InfoUpdateTime.toULong() &&
         (data->InfoUpdateTime.toULong() == data->PluginStatusTime.toULong()) &&
         (data->PluginStatusTime.toULong() == data->PluginInfoTime.toULong()) &&
-        (data->Caps.toULong() == 0) && (data->Caps2.toULong() == 0)){
+        (data->getCaps() == 0) && (data->getCaps2() == 0)){
             res += "vICQ";
             return res;
     }
@@ -3050,14 +3056,14 @@ bool ICQClient::processEvent(Event *e)
         ClientDataIterator it = contact->clientDataIterator(this);
         while ((data = toICQUserData(++it)) != NULL)
         {
-            if (data->RealIP.ip()) 
+            if (data->getRealIP())
             {
-                ei->setIP(data->RealIP.ip());
+                ei->setIP(data->getRealIP());
                 return true;
             }
-            if (data->IP.ip()) 
+            if (data->getIP())
             {
-                ei->setIP(data->IP.ip());
+                ei->setIP(data->getIP());
                 return true;
             }
         }
@@ -3167,7 +3173,7 @@ bool ICQClient::processEvent(Event *e)
         ICQUserData *data;
         ClientDataIterator it = contact->clientDataIterator(this);
         while ((data = toICQUserData(++it)) != NULL){
-            if (data->IcqID.toULong() == 0)
+            if (data->getIcqID() == 0)
                 continue;
             list<ListRequest>::iterator it;
             for (it = listRequests.begin(); it != listRequests.end(); it++){
@@ -3181,11 +3187,11 @@ bool ICQClient::processEvent(Event *e)
             ListRequest lr;
             lr.type = LIST_USER_DELETED;
             lr.screen = screen(data);
-            lr.icq_id = (unsigned short)(data->IcqID.toULong());
-            lr.grp_id = (unsigned short)(data->GrpId.toULong());
-            lr.visible_id   = (unsigned short)(data->ContactVisibleId.toULong());
-            lr.invisible_id = (unsigned short)(data->ContactInvisibleId.toULong());
-            lr.ignore_id    = (unsigned short)(data->IgnoreId.toULong());
+            lr.icq_id = (unsigned short)(data->getIcqID());
+            lr.grp_id = (unsigned short)(data->getGrpID());
+            lr.visible_id   = (unsigned short)(data->getContactVisibleId());
+            lr.invisible_id = (unsigned short)(data->getContactInvisibleId());
+            lr.ignore_id    = (unsigned short)(data->getIgnoreId());
             listRequests.push_back(lr);
             snacICBM()->processSendQueue();
         }
@@ -3247,7 +3253,7 @@ bool ICQClient::processEvent(Event *e)
         if (data){
             ListRequest lr;
             lr.type   = LIST_GROUP_DELETED;
-            lr.icq_id = (unsigned short)(data->IcqID.toULong());
+            lr.icq_id = (unsigned short)(data->getIcqID());
             listRequests.push_back(lr);
             snacICBM()->processSendQueue();
         }
@@ -3343,7 +3349,7 @@ bool ICQClient::processEvent(Event *e)
                 while ((data = toICQUserData(++it)) != NULL)
                 {
                     bOK = true;
-                    if (data->VisibleId.toULong())
+                    if (data->getVisibleId())
                         cmd->flags |= COMMAND_CHECKED;
                 }
                 return bOK;
@@ -3369,7 +3375,7 @@ bool ICQClient::processEvent(Event *e)
                 while ((data = toICQUserData(++it)) != NULL)
                 {
                     bOK = true;
-                    if (data->InvisibleId.toULong())
+                    if (data->getInvisibleId())
                         cmd->flags |= COMMAND_CHECKED;
                 }
                 return (void*)bOK;
@@ -3410,7 +3416,7 @@ bool ICQClient::processEvent(Event *e)
                     if (data->Sign.asULong() == ICQ_SIGN)
                     {  // Only ICQ contacts can be added to Visible list
                         icq_user_data=toICQUserData(data);
-                        icq_user_data->VisibleId.asULong() = (cmd->flags & COMMAND_CHECKED) ? getListId() : 0;
+                        icq_user_data->setVisibleId((cmd->flags & COMMAND_CHECKED) ? getListId() : 0);
                         EventContact eContact(contact, EventContact::eChanged);
                         eContact.process();
                     }
@@ -3429,7 +3435,7 @@ bool ICQClient::processEvent(Event *e)
                     if (data->Sign.asULong() == ICQ_SIGN)
                     { // Only ICQ contacts can be added to Invisible list
                         icq_user_data=toICQUserData(data);
-                        icq_user_data->InvisibleId.asULong() = (cmd->flags & COMMAND_CHECKED) ? getListId() : 0;
+                        icq_user_data->setInvisibleId((cmd->flags & COMMAND_CHECKED) ? getListId() : 0);
                         EventContact eContact(contact, EventContact::eChanged);
                         eContact.process();
                     }
@@ -3594,10 +3600,10 @@ bool ICQClient::send(Message *msg, void *_data)
         if((data->getStatus() & 0xFFFF) == ICQ_STATUS_OFFLINE)
             return false;
         if (getInvisible()){
-            if (data->VisibleId.toULong() == 0)
+            if (data->getVisibleId() == 0)
                 return false;
         }else{
-            if (data->InvisibleId.toULong())
+            if (data->getInvisibleId())
                 return false;
         }
         if (!hasCap(data, CAP_TYPING) && !hasCap(data, CAP_AIM_BUDDYCON))
@@ -3640,16 +3646,16 @@ bool ICQClient::send(Message *msg, void *_data)
         if ((dc == NULL) &&
                 !data->bNoDirect.toBool() &&
                 (data->getStatus() != ICQ_STATUS_OFFLINE) &&
-                (get_ip(data->IP) == get_ip(this->data.owner.IP)))
+                ((data->getIP()) == (this->data.owner.getIP())))
             bCreateDirect = true;
         if (!bCreateDirect &&
                 (msg->type() == MessageGeneric) &&
                 (data->getStatus() != ICQ_STATUS_OFFLINE) &&
-                (get_ip(data->IP)) &&
+                ((data->getIP())) &&
                 ((unsigned)msg->getPlainText().length() >= MAX_TYPE2_MESSAGE_SIZE))
             bCreateDirect = true;
-        if ((getInvisible() && (data->VisibleId.toULong() == 0)) ||
-                (!getInvisible() && data->InvisibleId.toULong()))
+        if ((getInvisible() && (data->getVisibleId() == 0)) ||
+                (!getInvisible() && data->getInvisibleId()))
             bCreateDirect = false;
         if (bCreateDirect){
             dc = new DirectClient(data, this, PLUGIN_NULL);
@@ -3697,7 +3703,7 @@ bool ICQClient::canSend(unsigned type, void *_data)
             DirectClient *dc = dynamic_cast<DirectClient*>(data->Direct.object());
             if (dc)
                 return !(dc->isSecure());
-            return get_ip(data->IP) || get_ip(data->RealIP);
+            return (data->getIP()) || (data->getRealIP());
         }
         return false;
     case MessageCloseSecure: {
@@ -3824,9 +3830,9 @@ void ICQClient::addPluginInfoRequest(unsigned long uin, unsigned plugin_index)
     Contact *contact;
     ICQUserData *data = findContact(uin, NULL, false, contact);
     if (data && !data->bNoDirect.toBool() &&
-            get_ip(data->IP) && (get_ip(data->IP) == get_ip(this->data.owner.IP)) &&
-            ((getInvisible() && data->VisibleId.toULong()) ||
-             (!getInvisible() && (data->InvisibleId.toULong() == 0)))){
+            (data->getIP()) && ((data->getIP()) == (this->data.owner.getIP())) &&
+            ((getInvisible() && data->getVisibleId()) ||
+             (!getInvisible() && (data->getInvisibleId() == 0)))){
         switch (plugin_index){
         case PLUGIN_AR: {
                 DirectClient *dc = dynamic_cast<DirectClient*>(data->Direct.object());

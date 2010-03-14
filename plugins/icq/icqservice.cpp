@@ -332,7 +332,7 @@ bool SnacIcqService::process(unsigned short subtype, ICQBuffer* buf, unsigned sh
 				TlvList tlv(*buf);
 				Tlv *tlvIP = tlv(0x000A);
 				if (tlvIP)
-					set_ip(&m_client->data.owner.IP, htonl((uint32_t)(*tlvIP)));
+                    m_client->data.owner.setIP(htonl((uint32_t)(*tlvIP)));
 				break;
 			}
 		case ICQ_SNACxSRV_SERVICExRESP:
@@ -384,7 +384,7 @@ bool SnacIcqService::process(unsigned short subtype, ICQBuffer* buf, unsigned sh
 				unsigned short level;
 				buf->unpack(level);
 				QString from = buf->unpackScreen();
-				m_client->data.owner.WarningLevel.asULong() = level;
+				m_client->data.owner.setWarningLevel(level);
 				if (from.isEmpty())
 					from = i18n("anonymous");
 				EventNotification::ClientNotificationData d;
@@ -510,7 +510,7 @@ void SnacIcqService::sendLogonStatus()
         m_client->data.owner.PluginStatusTime.asULong() = now.toTime_t();
     if (m_client->data.owner.InfoUpdateTime.toULong() == 0)
         m_client->data.owner.InfoUpdateTime.asULong() = now.toTime_t();
-    m_client->data.owner.OnlineTime.asULong() = now.toTime_t();
+	m_client->data.owner.setOnlineTime(now.toTime_t());
     if (getContacts()->owner()->getPhones() != m_client->data.owner.PhoneBook.str())
 	{
         m_client->data.owner.PhoneBook.str() = getContacts()->owner()->getPhones();
@@ -641,7 +641,7 @@ void SnacIcqService::sendUpdate()
 
 void SnacIcqService::fillDirectInfo(ICQBuffer &directInfo)
 {
-    set_ip(&m_client->data.owner.RealIP, m_client->socket()->localHost());
+    m_client->data.owner.setRealIP(m_client->socket()->localHost());
 	/*
     if (m_client->getHideIP()){
         directInfo
@@ -676,7 +676,7 @@ void SnacIcqService::fillDirectInfo(ICQBuffer &directInfo)
 	<< (char)0x00//mode
     << (char)0x00
     << (char)ICQ_TCP_VERSION
-    << m_client->data.owner.DCcookie.toULong()
+    << m_client->data.owner.getDCcookie()
 	<< 0x00000000L
 	<< 0x00000000L
 	<< 0x00000000L

@@ -591,14 +591,14 @@ class EXPORT EventGetContactIP : public Event
 {
 public:
     EventGetContactIP(Contact *contact)
-        : Event(eEventGetContactIP), m_contact(contact), m_ip(NULL) {}
+        : Event(eEventGetContactIP), m_contact(contact), m_ip(0) {}
     Contact *contact() const { return m_contact; }
     // out
-    void setIP(IP *ip) { m_ip = ip; }
-    IP *ip() const { return m_ip; }
+    void setIP(unsigned long ip) { m_ip = ip; }
+    unsigned long ip() const { return m_ip; }
 protected:
     Contact *m_contact;
-    IP *m_ip;
+    unsigned long m_ip;
 };
 
 class EXPORT EventSocketConnect : public Event

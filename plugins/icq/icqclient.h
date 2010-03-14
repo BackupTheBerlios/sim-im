@@ -202,30 +202,81 @@ public:
     unsigned long getStatusTime() const { return m_statusTime; }
     void setStatusTime(unsigned long statusTime) { m_statusTime = statusTime; }
 
+    unsigned long getOnlineTime() const { return m_onlineTime; }
+    void setOnlineTime(unsigned long onlineTime) { m_onlineTime = onlineTime; }
+
+    unsigned long getWarningLevel() const { return m_warningLevel; }
+    void setWarningLevel(unsigned long warningLevel) { m_warningLevel = warningLevel; }
+
+    unsigned long getIP() const { return m_ip; }
+    void setIP(unsigned long ip) { m_ip = ip; }
+
+    unsigned long getRealIP() const { return m_realip; }
+    void setRealIP(unsigned long ip) { m_realip = ip; }
+
+    unsigned long getPort() const { return m_port; }
+    void setPort(unsigned long port) { m_port = port; }
+
+    unsigned long getDCcookie() const { return m_dcCookie; }
+    void setDCcookie(unsigned long cookie) { m_dcCookie = cookie; }
+
+    unsigned long getCaps() const { return m_caps; }
+    void setCaps(unsigned long caps) { m_caps = caps; }
+
+    unsigned long getCaps2() const { return m_caps2; }
+    void setCaps2(unsigned long caps) { m_caps2 = caps; }
+
+    QString getAutoReply() const { return m_autoReply; }
+    void setAutoReply(const QString& autoreply) { m_autoReply = autoreply; }
+
+    unsigned long getIcqID() const { return m_icqId; }
+    void setIcqID(unsigned long id) { m_icqId = id; }
+
+    bool isChecked() const { return m_checked; }
+    void setChecked(bool c) { m_checked = c; }
+
+    unsigned long getGrpID() const { return m_grpId; }
+    void setGrpID(unsigned long id) { m_grpId = id; }
+
+    unsigned long getIgnoreId() const { return m_ignoreId; }
+    void setIgnoreId(unsigned long id) { m_ignoreId = id; }
+
+    unsigned long getVisibleId() const { return m_visibleId; }
+    void setVisibleId(unsigned long id) { m_visibleId = id; }
+
+    unsigned long getInvisibleId() const { return m_invisibleId; }
+    void setInvisibleId(unsigned long id) { m_invisibleId = id; }
+
+    unsigned long getContactVisibleId() const { return m_contactVisibleId; }
+    void setContactVisibleId(unsigned long id) { m_contactVisibleId = id; }
+
+    unsigned long getContactInvisibleId() const { return m_contactInvisibleId; }
+    void setContactInvisibleId(unsigned long id) { m_contactInvisibleId = id; }
+
     //SIM::Data        Alias;
     //SIM::Data        Cellular;
     //SIM::Data		Status;
     //SIM::Data		Class;
     //SIM::Data		StatusTime;
-	SIM::Data		OnlineTime;
-	SIM::Data		WarningLevel;
-	SIM::Data        IP;
-	SIM::Data        RealIP;
-	SIM::Data		Port;
-	SIM::Data		DCcookie;
-	SIM::Data		Caps;
-	SIM::Data		Caps2;
-	SIM::Data        AutoReply;
+    //SIM::Data		OnlineTime;
+    //SIM::Data		WarningLevel;
+    //SIM::Data        IP;
+    //SIM::Data        RealIP;
+    //SIM::Data		Port;
+    //SIM::Data		DCcookie;
+    //SIM::Data		Caps;
+    //SIM::Data		Caps2;
+    //SIM::Data        AutoReply;
     //SIM::Data		Uin;
     //SIM::Data        Screen;
-	SIM::Data		IcqID;
-	SIM::Data		bChecked;
-	SIM::Data		GrpId;
-	SIM::Data		IgnoreId;
-	SIM::Data		VisibleId;
-	SIM::Data		ContactVisibleId;
-	SIM::Data		InvisibleId;
-	SIM::Data		ContactInvisibleId;
+    //SIM::Data		IcqID;
+    //SIM::Data		bChecked;
+    //SIM::Data		GrpId;
+    //SIM::Data		IgnoreId;
+    //SIM::Data		VisibleId;
+    //SIM::Data		ContactVisibleId;
+    //SIM::Data		InvisibleId;
+    //SIM::Data		ContactInvisibleId;
 	SIM::Data		WaitAuth;
 	SIM::Data		WantAuth;
 	SIM::Data		WebAware;
@@ -309,6 +360,23 @@ private:
     unsigned long m_status;
     unsigned long m_class;
     unsigned long m_statusTime;
+	unsigned long m_onlineTime;
+	unsigned long m_warningLevel;
+    unsigned long m_ip;
+    unsigned long m_realip;
+    unsigned long m_port;
+    unsigned long m_dcCookie;
+    unsigned long m_caps;
+    unsigned long m_caps2;
+    QString m_autoReply;
+    unsigned long m_icqId;
+    bool m_checked;
+    unsigned long m_grpId;
+    unsigned long m_ignoreId;
+    unsigned long m_visibleId;
+    unsigned long m_invisibleId;
+    unsigned long m_contactVisibleId;
+    unsigned long m_contactInvisibleId;
 };
 
 class ICQClientData : public SIM::IMContact

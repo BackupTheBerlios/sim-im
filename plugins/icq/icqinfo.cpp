@@ -198,7 +198,7 @@ void ICQInfo::fill()
         initCombo(cmbRandom, m_client->getRandomChatGroup(), chat_groups);
     }
     if ((status != STATUS_ONLINE) && (status != STATUS_OFFLINE) && m_data){
-        edtAutoReply->setPlainText(m_data->AutoReply.str());
+        edtAutoReply->setPlainText(m_data->getAutoReply());
     }else{
         edtAutoReply->hide();
     }
@@ -228,8 +228,8 @@ void ICQInfo::fill()
         lblNA->hide();
         edtNA->hide();
     }else{
-        if (data->OnlineTime.toULong()){
-            edtOnline->setText(formatDateTime(data->OnlineTime.toULong()));
+		if (data->getOnlineTime()){
+			edtOnline->setText(formatDateTime(data->getOnlineTime()));
         }else{
             lblOnline->hide();
             edtOnline->hide();
@@ -242,14 +242,14 @@ void ICQInfo::fill()
             edtNA->setText(formatDateTime(data->getStatusTime()));
         }
     }
-    if (data->IP.ip()){
-        edtExtIP->setText(formatAddr(data->IP, data->Port.toULong()));
+    if (data->getIP()){
+        edtExtIP->setText(formatAddr(data->getIP(), data->getPort()));
     }else{
         lblExtIP->hide();
         edtExtIP->hide();
     }
-    if ((data->RealIP.ip()) && ((data->IP.ip() == NULL) || (get_ip(data->IP) != get_ip(data->RealIP)))){
-        edtIntIP->setText(formatAddr(data->RealIP, data->Port.toULong()));
+    if ((data->getRealIP()) && ((data->getIP() == 0) || ((data->getIP()) != (data->getRealIP())))){
+        edtIntIP->setText(formatAddr(data->getRealIP(), data->getPort()));
     }else{
         lblIntIP->hide();
         edtIntIP->hide();
