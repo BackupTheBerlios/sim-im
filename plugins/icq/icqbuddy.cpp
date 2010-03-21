@@ -273,25 +273,25 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 								{
 									unsigned char build = cap[sizeof(capability)-1];
 									if (build && ((build == 0x92) || (build < (1 << 6)))) continue;
-									data->Build.asULong() = build;
+                                    data->setBuild(build);
 								}
 								if ((i == CAP_MICQ) || (i == CAP_LICQ) || (i == CAP_SIM) || (i == CAP_KOPETE))
 								{
 									unsigned char *p = (unsigned char*)cap;
 									p += 12;
-									data->Build.asULong() = (p[0] << 24) + (p[1] << 16) + (p[2] << 8) + p[3];
+                                    data->setBuild((p[0] << 24) + (p[1] << 16) + (p[2] << 8) + p[3]);
 								}
 								if ((i == CAP_ANDRQ))
 								{
 									unsigned char *p = (unsigned char*)cap;
 									p += 9;
-									data->Build.asULong() = (p[0] << 24) + (p[1] << 16) + (p[2] << 8) + p[3];
+                                    data->setBuild((p[0] << 24) + (p[1] << 16) + (p[2] << 8) + p[3]);
 								}
 								if ((i == CAP_MIRANDA))
 								{
 									unsigned char *p = (unsigned char*)cap;
 									p += 8;
-									data->Build.asULong() = (p[0] << 24) + (p[1] << 16) + (p[2] << 8) + p[3];
+                                    data->setBuild((p[0] << 24) + (p[1] << 16) + (p[2] << 8) + p[3]);
 								}
 								if ((i == CAP_JIMM))
 								{
@@ -308,13 +308,13 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 									if(sl.count() > 2)
 										rev = sl[2].toUShort();
 
-									data->Build.asULong() = (maj << 24) + (min << 16) + rev;
+                                    data->setBuild((maj << 24) + (min << 16) + rev);
 								}
 								if (i == CAP_ICQJP)
 								{
                                     log(L_DEBUG, "%lu ICQJP cap is set", data->getUin());
-									data->Build.asULong() = cap[0x4] << 0x18 | cap[0x5] << 0x10 |
-										cap[0x6] << 8 | cap[0x7];				    
+                                    data->setBuild(cap[0x4] << 0x18 | cap[0x5] << 0x10 |
+                                        cap[0x6] << 8 | cap[0x7]);
 								}
 								m_client->setCap(data, (cap_id_t)i);
 								break;
@@ -327,7 +327,7 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 				Tlv *tlvBuddy = tlv(TLV_USER_BUDDYINFO);
 				if (tlvBuddy)
 				{
-					const QByteArray &ba = data->buddyHash.toBinary();
+                    QByteArray ba = data->getBuddyHash();
 					unsigned short iconID;
 					unsigned char iconFlags, hashSize;
 					ICQBuffer info(*tlvBuddy);
@@ -338,11 +338,11 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 					info >> iconID >> iconFlags >> hashSize;
 					hash.resize(hashSize);
 					info.unpack(hash.data(), hashSize);
-					if(data->buddyID.toULong() != iconID ||
+                    if(data->getBuddyID() != iconID ||
 							ba != hash ||
 							!fi.exists() || fi.size() == 0) {
-						data->buddyID.asULong() = iconID;
-						data->buddyHash.asBinary() = hash;
+                        data->setBuddyID(iconID);
+                        data->setBuddyHash(hash);
 						m_client->requestBuddy(data);
 					}
 				}
@@ -379,8 +379,8 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 					if (mode == MODE_DENIED) mode = MODE_INDIRECT;
 					if ((mode != MODE_DIRECT) && (mode != MODE_INDIRECT))
 						mode = MODE_INDIRECT;
-					data->Mode.asULong()    = mode;
-					data->Version.asULong() = version;
+                    data->setMode(mode);
+                    data->setVersion(version);
 				}
 
 				Tlv *tlvPlugin = tlv(0x0011);
@@ -403,7 +403,7 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
                                     (!m_client->getInvisible() && (data->getInvisibleId() == 0))){
 								info.incReadPos(6);
 								info.unpack((char*)p, sizeof(p));
-								data->PluginInfoTime.asULong() = time;
+                                data->setPluginInfoTime(time);
 								for (plugin_index = 0; plugin_index < PLUGIN_NULL; plugin_index++)
 									if (!memcmp(p, m_client->plugins[plugin_index], sizeof(p)))
 										break;
@@ -416,8 +416,8 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 									case PLUGIN_PICTURE:
 										log(L_DEBUG, "Updated picture");
 										// when buddyID -> new avatar support, no need to ask for old picture plugin
-										if(data->buddyID.toULong() == 0 || data->buddyHash.toBinary().size() != 16) {
-											data->buddyID.asULong() = 0;
+                                        if(data->getBuddyID() == 0 || data->getBuddyHash().size() != 16) {
+                                            data->setBuddyID(0);
                                             m_client->addPluginInfoRequest(data->getUin(), plugin_index);
 										}
 										break;
@@ -437,27 +437,27 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 							info.unpack((char*)p, sizeof(p));
 							info.incReadPos(1);
 							info.unpack(plugin_status);
-							data->PluginStatusTime.asULong() = time;
+                            data->setPluginStatusTime(time);
 							for (plugin_index = 0; plugin_index < PLUGIN_NULL; plugin_index++)
 								if (!memcmp(p, m_client->plugins[plugin_index], sizeof(p)))
 									break;
 							switch (plugin_index){
 								case PLUGIN_FOLLOWME:
-									if (data->FollowMe.toULong() == plugin_status)
+                                    if (data->getFollowMe() == plugin_status)
 										break;
-									data->FollowMe.asULong() = plugin_status;
+                                    data->setFollowMe(plugin_status);
 									bChanged = true;
 									break;
 								case PLUGIN_FILESERVER:
-									if ((data->SharedFiles.toBool() != 0) == (plugin_status != 0))
+                                    if ((data->getSharedFiles() != 0) == (plugin_status != 0))
 										break;
-									data->SharedFiles.asBool() = (plugin_status != 0);
+                                    data->setSharedFiles(plugin_status != 0);
 									bChanged = true;
 									break;
 								case PLUGIN_ICQPHONE:
-									if (data->ICQPhone.toULong() == plugin_status)
+                                    if (data->getICQPhone() == plugin_status)
 										break;
-									data->ICQPhone.asULong() = plugin_status;
+                                    data->setICQPhone(plugin_status);
 									bChanged = true;
 									break;
 								default:
@@ -471,41 +471,41 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 				}
 				else
 				{
-					data->InfoUpdateTime.asULong()   = infoUpdateTime;
-					data->PluginInfoTime.asULong()   = pluginInfoTime;
-					data->PluginStatusTime.asULong() = pluginStatusTime;
+                    data->setInfoUpdateTime(infoUpdateTime);
+                    data->setPluginInfoTime(pluginInfoTime);
+                    data->setPluginStatusTime(pluginStatusTime);
 					if (!m_client->getDisableAutoUpdate() &&
                             ((m_client->getInvisible() && data->getVisibleId()) ||
                              (!m_client->getInvisible() && (data->getInvisibleId() == 0)))){
 						if (infoUpdateTime == 0)
 							infoUpdateTime = 1;
-						if (infoUpdateTime != data->InfoFetchTime.toULong())
+                        if (infoUpdateTime != data->getInfoFetchTime())
                             m_client->addFullInfoRequest(data->getUin());
-						if ((data->PluginInfoTime.toULong() != data->PluginInfoFetchTime.toULong())){
-							if (data->PluginInfoTime.toULong())
+                        if ((data->getPluginInfoTime() != data->getPluginInfoFetchTime())){
+                            if (data->getPluginInfoTime())
                                 m_client->addPluginInfoRequest(data->getUin(), PLUGIN_QUERYxINFO);
 						}
-						if ((data->PluginInfoTime.toULong() != data->PluginInfoFetchTime.toULong()) ||
-								(data->PluginStatusTime.toULong() != data->PluginStatusFetchTime.toULong())){
-							if (data->SharedFiles.toBool()){
-								data->SharedFiles.asBool() = false;
+                        if ((data->getPluginInfoTime() != data->getPluginInfoFetchTime()) ||
+                                (data->getPluginStatusTime() != data->getPluginStatusFetchTime())){
+                            if (data->getSharedFiles()){
+                                data->setSharedFiles(false);
 								bChanged = true;
 							}
-							if (data->FollowMe.toULong()){
-								data->FollowMe.asULong() = 0;
+                            if (data->getFollowMe()){
+                                data->setFollowMe(0);
 								bChanged = true;
 							}
-							if (data->ICQPhone.toULong()){
-								data->ICQPhone.asULong() = 0;
+                            if (data->getICQPhone()){
+                                data->setICQPhone(0);
 								bChanged = true;
 							}
-							if (data->PluginStatusTime.toULong())
+                            if (data->getPluginStatusTime())
                                 m_client->addPluginInfoRequest(data->getUin(), PLUGIN_QUERYxSTATUS);
 						}
 					}
 				}
-				if (data->bInvisible.toBool()){
-					data->bInvisible.asBool() = false;
+                if (data->getInvisible()){
+                    data->setInvisible(false);
 					bChanged = true;
 				}
 				if (bChanged){
@@ -607,7 +607,7 @@ void SnacIcqBuddy::addBuddy(Contact *contact)
         int it = m_client->buddies.indexOf(m_client->screen(data));
         if (it != -1)
             continue;
-        if ((data->getIgnoreId() == 0)  && (data->WaitAuth.toBool() || (data->getGrpID() == 0))){
+        if ((data->getIgnoreId() == 0)  && (data->getWaitAuth() || (data->getGrpID() == 0))){
             m_client->snac(ICQ_SNACxFOOD_BUDDY, ICQ_SNACxBDY_ADDxTOxLIST);
             m_client->socket()->writeBuffer().packScreen(m_client->screen(data));
             m_client->sendPacket(true);
@@ -628,7 +628,7 @@ void SnacIcqBuddy::removeBuddy(Contact *contact)
         int it = m_client->buddies.indexOf(m_client->screen(data));
         if (it == -1)
             continue;
-        if(data->WantAuth.toBool())
+        if(data->getWantAuth())
 		{
             Message *msg = new Message;
             msg->setText(i18n("removed from buddy list"));

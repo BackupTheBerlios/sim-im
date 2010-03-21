@@ -48,10 +48,10 @@ SSBISocket *ICQClient::getSSBISocket()
 
 void ICQClient::requestBuddy(const ICQUserData *data)
 {
-    if(!data->buddyHash.toBinary().size())
+    if(!data->getBuddyHash().size())
         return;
     SSBISocket *s = getSSBISocket();
-    s->requestBuddy(screen(data), data->buddyID.toULong(), data->buddyHash.toBinary());
+    s->requestBuddy(screen(data), data->getBuddyID(), data->getBuddyHash());
 }
 
 void ICQClient::uploadBuddyIcon(unsigned short refNumber, const QImage &img)
@@ -272,7 +272,7 @@ void SSBISocket::process()
         else 
           data = m_client->findContact(screen, NULL, false, contact);
         if(data) {
-            requestBuddy(screen, data->buddyID.toULong(), data->buddyHash.toBinary());
+            requestBuddy(screen, data->getBuddyID(), data->getBuddyHash());
             return;
         }
     }

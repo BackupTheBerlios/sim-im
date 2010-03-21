@@ -42,7 +42,7 @@ void AboutInfo::apply(Client *client, void *_data)
     if (client != m_client)
         return;
     ICQUserData *data = m_client->toICQUserData((SIM::IMContact*)_data);  // FIXME unsafe type conversion
-    data->About.str() = edtAbout->toPlainText();
+    data->setAbout(edtAbout->toPlainText());
 }
 
 bool AboutInfo::processEvent(Event *e)
@@ -70,12 +70,12 @@ void AboutInfo::fill()
     if(data->getUin())
 	{
 //        edtAbout->setTextFormat(Qt::PlainText);
-        edtAbout->setText(data->About.str());
+        edtAbout->setText(data->getAbout());
     }
 	else
 	{
 //        edtAbout->setTextFormat(Qt::RichText);
-        edtAbout->setText(data->About.str());
+        edtAbout->setText(data->getAbout());
         //if (m_data == NULL)
             //edtAbout->showBar();
     }

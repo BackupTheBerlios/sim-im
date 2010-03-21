@@ -103,17 +103,10 @@
    <valuelist key="abstractProcess.Environment" type="QVariantList">
     <value type="QString">ALSA_PLUGINS_DIR=/usr/lib/alsa-lib</value>
     <value type="QString">ANT_HOME=/usr/share/java/apache-ant</value>
-    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-x2nb69TtDy,guid=04324f65e4231cf1614dd6184b946e29</value>
     <value type="QString">DERBY_HOME=/opt/java/db</value>
-    <value type="QString">DESKTOP_SESSION=kde</value>
     <value type="QString">DISPLAY=:0.0</value>
-    <value type="QString">DM_CONTROL=/var/run/xdmctl</value>
     <value type="QString">ECLIM_ECLIPSE_HOME=/usr/share/eclipse</value>
     <value type="QString">EDITOR=vim</value>
-    <value type="QString">GPG_AGENT_INFO=/tmp/gpg-pGbC76/S.gpg-agent:3852:1</value>
-    <value type="QString">GS_LIB=/home/todin/.fonts</value>
-    <value type="QString">GTK2_RC_FILES=/etc/gtk-2.0/gtkrc:/home/todin/.gtkrc-2.0::/home/todin/.kde4/share/config/gtkrc-2.0</value>
-    <value type="QString">GTK_RC_FILES=/etc/gtk/gtkrc:/home/todin/.gtkrc::/home/todin/.kde4/share/config/gtkrc</value>
     <value type="QString">G_BROKEN_FILENAMES=1</value>
     <value type="QString">HG=/usr/bin/hg</value>
     <value type="QString">HISTCONTROL=erasedups</value>
@@ -122,40 +115,31 @@
     <value type="QString">INPUTRC=/etc/inputrc</value>
     <value type="QString">J2SDKDIR=/opt/java</value>
     <value type="QString">JAVA_HOME=/opt/java</value>
-    <value type="QString">KDE_FULL_SESSION=true</value>
-    <value type="QString">KDE_MULTIHEAD=false</value>
-    <value type="QString">KDE_SESSION_UID=1000</value>
-    <value type="QString">KDE_SESSION_VERSION=4</value>
     <value type="QString">LANG=en_US.UTF-8</value>
     <value type="QString">LD_LIBRARY_PATH=/usr/lib/qtcreator:</value>
     <value type="QString">LESS=-R</value>
     <value type="QString">LOGNAME=todin</value>
+    <value type="QString">MAIL=/var/mail/todin</value>
     <value type="QString">MOZ_PLUGIN_PATH=/usr/lib/mozilla/plugins</value>
-    <value type="QString">PATH=/opt/wine/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/share/java/apache-ant/bin:/opt/java/bin:/opt/java/jre/bin:/opt/kde/bin:/usr/bin/perlbin/site:/usr/bin/perlbin/vendor:/usr/bin/perlbin/core:/opt/qt/bin:/home/todin/x-tools/arm-unknown-eabi/bin:/home/todin/projects/arm/crosstool-ng/bin:/home/todin/bin</value>
+    <value type="QString">PATH=/opt/wine/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/share/java/apache-ant/bin:/opt/java/bin:/opt/java/jre/bin:/opt/kde/bin:/usr/bin/perlbin/site:/usr/bin/perlbin/vendor:/usr/bin/perlbin/core:/opt/qt/bin:/usr/local/bin:/home/todin/x-tools/arm-unknown-eabi/bin:/home/todin/projects/arm/crosstool-ng/bin:/home/todin/bin</value>
     <value type="QString">PKG_CONFIG_PATH=/usr/lib/pkgconfig:/opt/qt/lib/pkgconfig</value>
     <value type="QString">PS3=> </value>
     <value type="QString">PS4=+ </value>
     <value type="QString">PWD=/home/todin</value>
     <value type="QString">QTDIR=/opt/qt</value>
-    <value type="QString">QT_PLUGIN_PATH=/home/todin/.kde4/lib/kde4/plugins/:/usr/lib/kde4/plugins/</value>
     <value type="QString">QT_XFT=true</value>
-    <value type="QString">SESSION_MANAGER=local/hell:@/tmp/.ICE-unix/3906,unix/hell:/tmp/.ICE-unix/3906</value>
     <value type="QString">SHELL=/bin/bash</value>
-    <value type="QString">SHLVL=1</value>
-    <value type="QString">SSH_AGENT_PID=3855</value>
-    <value type="QString">SSH_AUTH_SOCK=/tmp/ssh-GDrBjS3854/agent.3854</value>
+    <value type="QString">SHLVL=0</value>
     <value type="QString">SVN_EDITOR=vim</value>
+    <value type="QString">TERM=linux</value>
     <value type="QString">USER=todin</value>
-    <value type="QString">WINDOWPATH=7</value>
     <value type="QString">WINELOADER=/opt/wine/bin/wine</value>
-    <value type="QString">XCURSOR_THEME=Oxygen_Black</value>
+    <value type="QString">XAUTHORITY=/home/todin/.Xauthority</value>
     <value type="QString">XDG_CACHE_HOME=/home/todin/.cache</value>
     <value type="QString">XDG_CONFIG_DIRS=/etc/xdg:/etc/xdg:/etc/xdg:/etc/xdg</value>
     <value type="QString">XDG_CONFIG_HOME=/home/todin/.config</value>
     <value type="QString">XDG_DATA_DIRS=/usr/share:/usr/local/share:/usr/share:/usr/local/share:/usr/share:/usr/local/share:/usr/share:/usr/local/share:/opt/kde/share:/opt/kde/share:/opt/kde/share:/opt/kde/share</value>
     <value type="QString">XDG_DATA_HOME=/home/todin/.local/share</value>
-    <value type="QString">XDG_SESSION_COOKIE=46070e371950b58c8ac873a74ae405f7-1268018727.545372-466214211</value>
-    <value type="QString">XDM_MANAGED=method=classic</value>
    </valuelist>
    <value key="abstractProcess.IgnoreReturnValue" type="bool">false</value>
    <valuelist key="abstractProcess.arguments" type="QVariantList">

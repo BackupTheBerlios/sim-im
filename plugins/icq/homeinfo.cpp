@@ -54,11 +54,11 @@ void HomeInfo::apply(Client *client, void *_data)
     if (client != m_client)
         return;
     ICQUserData *data = m_client->toICQUserData((SIM::IMContact*)_data);  // FIXME unsafe type conversion
-    data->Address.str() = edtAddress->toPlainText();
-    data->City.str()    = edtCity->text();
-    data->State.str()   = edtState->text();
-    data->Zip.str()     = edtZip->text();
-    data->Country.asULong() = getComboValue(cmbCountry, getCountries());
+    data->setAddress(edtAddress->toPlainText());
+    data->setCity(edtCity->text());
+    data->setState(edtState->text());
+    data->setZip(edtZip->text());
+    data->setCountry(getComboValue(cmbCountry, getCountries()));
 }
 
 bool HomeInfo::processEvent(Event *e)
@@ -110,12 +110,12 @@ void HomeInfo::fill()
     ICQUserData *data = m_data;
     if (data == NULL)
         data = &m_client->data.owner;
-    edtAddress->setPlainText(data->Address.str());
-    edtCity->setText(data->City.str());
-    edtState->setText(data->State.str());
-    edtZip->setText(data->Zip.str());
-    initCombo(cmbCountry, data->Country.toULong(), getCountries());
-    initTZCombo(cmbZone, data->TimeZone.toULong());
+    edtAddress->setPlainText(data->getAddress());
+    edtCity->setText(data->getCity());
+    edtState->setText(data->getState());
+    edtZip->setText(data->getZip());
+    initCombo(cmbCountry, data->getCountry(), getCountries());
+    initTZCombo(cmbZone, data->getTimeZone());
 }
 
 void HomeInfo::goUrl()

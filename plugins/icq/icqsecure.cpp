@@ -94,14 +94,14 @@ void ICQSecure::apply(Client *client, void *_data)
     if (client != m_client)
         return;
     ICQUserData *data = m_client->toICQUserData((SIM::IMContact*)_data); // FIXME unsafe type conversion
-    data->WaitAuth.asBool() = chkAuth->isChecked();
-    data->WebAware.asBool() = chkWeb->isChecked();
+    data->setWaitAuth(chkAuth->isChecked());
+    data->setWebAware(chkWeb->isChecked());
 }
 
 void ICQSecure::fill()
 {
-    chkAuth->setChecked(m_client->data.owner.WaitAuth.toBool());
-    chkWeb->setChecked(m_client->data.owner.WebAware.toBool());
+    chkAuth->setChecked(m_client->data.owner.getWaitAuth());
+    chkWeb->setChecked(m_client->data.owner.getWebAware());
     chkHideIP->setChecked(m_client->getHideIP());
     chkIgnoreAuth->setChecked(m_client->getIgnoreAuth());
     chkUseMD5->setChecked(m_client->getUseMD5());

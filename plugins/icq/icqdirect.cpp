@@ -113,7 +113,7 @@ DirectSocket::DirectSocket(ICQUserData *data, ICQClient *client)
 {
     m_socket    = new ICQClientSocket(this);
     m_bIncoming = false;
-    m_version   = (char)(data->Version.toULong());
+    m_version   = (char)(data->getVersion());
     m_client    = client;
     m_state     = NotConnected;
     m_data		= data;
@@ -140,7 +140,7 @@ void DirectSocket::login_timeout()
 {
     m_socket->error_state("Timeout direct connection");
     if (m_data)
-        m_data->bNoDirect.asBool() = true;
+        m_data->setNoDirect(true);
 }
 
 void DirectSocket::removeFromClient()
@@ -467,16 +467,16 @@ DirectClient::~DirectClient()
     error_state(QString::null, 0);
     switch (m_channel){
     case PLUGIN_NULL:
-        if (m_data && (m_data->Direct.object() == this))
-            m_data->Direct.clear();
+        if (m_data && (m_data->getDirect() == this))
+            m_data->setDirect(0);
         break;
     case PLUGIN_INFOxMANAGER:
-        if (m_data && (m_data->DirectPluginInfo.object() == this))
-            m_data->DirectPluginInfo.clear();
+        if (m_data && (m_data->getDirectPluginInfo() == this))
+            m_data->setDirectPluginInfo(0);
         break;
     case PLUGIN_STATUSxMANAGER:
-        if (m_data && (m_data->DirectPluginStatus.object() == this))
-            m_data->DirectPluginStatus.clear();
+        if (m_data && (m_data->getDirectPluginStatus() == this))
+            m_data->setDirectPluginStatus(0);
         break;
     }
     secureStop(false);
@@ -499,7 +499,7 @@ void DirectClient::processPacket()
             ICQPlugin *plugin = static_cast<ICQPlugin*>(m_client->protocol()->plugin());
             EventLog::log_packet(m_socket->readBuffer(), false, plugin->ICQDirectPacket, QString::number((unsigned long)this));
             if (m_version < 8){
-                if (m_data->Direct.object()){
+                if (m_data->getDirect()){
                     m_socket->error_state("Direct connection already established");
                     return;
                 }
@@ -519,44 +519,44 @@ void DirectClient::processPacket()
             removeFromClient();
             switch (m_channel){
             case PLUGIN_INFOxMANAGER: {
-                DirectClient *dc = dynamic_cast<DirectClient*>(m_data->DirectPluginInfo.object());
+                DirectClient *dc = dynamic_cast<DirectClient*>(m_data->getDirectPluginInfo());
                 if (dc){
                     if (dc->copyQueue(this)){
                         delete dc;
-                        m_data->DirectPluginInfo.setObject(this);
+                        m_data->setDirectPluginInfo(this);
                     }else{
                         m_socket->error_state("Plugin info connection already established");
                     }
                 }else{
-                    m_data->DirectPluginInfo.setObject(this);
+                    m_data->setDirectPluginInfo(this);
                 }
                 break;
             }
             case PLUGIN_STATUSxMANAGER: {
-                DirectClient *dc = dynamic_cast<DirectClient*>(m_data->DirectPluginStatus.object());
+                DirectClient *dc = dynamic_cast<DirectClient*>(m_data->getDirectPluginStatus());
                 if (dc){
                     if (dc->copyQueue(this)){
                         delete dc;
-                        m_data->DirectPluginStatus.setObject(this);
+                        m_data->setDirectPluginStatus(this);
                     }else{
                         m_socket->error_state("Plugin status connection already established");
                     }
                 }else{
-                    m_data->DirectPluginStatus.setObject(this);
+                    m_data->setDirectPluginStatus(this);
                 }
                 break;
             }
             case PLUGIN_NULL: {
-                DirectClient *dc = dynamic_cast<DirectClient*>(m_data->Direct.object());
+                DirectClient *dc = dynamic_cast<DirectClient*>(m_data->getDirect());
                 if (dc){
                     if (dc->copyQueue(this)){
                         delete dc;
-                        m_data->Direct.setObject(this);
+                        m_data->setDirect(this);
                     }else{
                         m_socket->error_state("Direct connection already established");
                     }
                 }else{
-                    m_data->Direct.setObject(this);
+                    m_data->setDirect(this);
                 }
                 break;
             }
@@ -1026,7 +1026,7 @@ bool DirectClient::error_state(const QString &_err, unsigned code)
         switch (m_state){
         case ConnectIP1:
         case ConnectIP2:
-            m_data->bNoDirect.asBool() = true;
+            m_data->setNoDirect(true);
             break;
         default:
             break;

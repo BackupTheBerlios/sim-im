@@ -358,7 +358,7 @@ bool SnacIcqICBM::sendThruServer(Message *msg, void *_data)
     case MessageGeneric:
         if ((data->getStatus() != ICQ_STATUS_OFFLINE) && (client()->getSendFormat() == 0) &&
                 client()->hasCap(data, CAP_RTF) && (msg->getFlags() & MESSAGE_RICHTEXT) &&
-                !data->bBadClient.toBool()){
+                !data->getBadClient()){
             s.flags  = SEND_RTF;
             s.msg    = msg;
             s.text   = msg->getRichText();
@@ -371,7 +371,7 @@ bool SnacIcqICBM::sendThruServer(Message *msg, void *_data)
                 (client()->getSendFormat() <= 1) &&
                 client()->hasCap(data, CAP_UTF) &&
                 ((msg->getFlags() & MESSAGE_SECURE) == 0) &&
-                (data->Version.toULong() >= 8) && !data->bBadClient.toBool()){
+                (data->getVersion() >= 8) && !data->getBadClient()){
             s.flags  = SEND_UTF;
             s.msg    = msg;
             s.text   = client()->addCRLF(msg->getPlainText());
@@ -381,8 +381,8 @@ bool SnacIcqICBM::sendThruServer(Message *msg, void *_data)
             return true;
         }
         if ((data->getStatus() != ICQ_STATUS_OFFLINE) &&
-                (data->Version.toULong() >= 8) &&
-                !data->bBadClient.toBool() &&
+                (data->getVersion() >= 8) &&
+                !data->getBadClient() &&
                 ((unsigned)msg->getPlainText().length() >= MAX_PLAIN_MESSAGE_SIZE)){
             s.flags  = SEND_TYPE2;
             s.msg    = msg;
@@ -730,7 +730,7 @@ void SnacIcqICBM::accept(Message *msg, ICQUserData *data)
             log(L_WARN, "Data for request not found");
             return;
         }
-        DirectClient *dc = dynamic_cast<DirectClient*>(data->Direct.object());
+        DirectClient *dc = dynamic_cast<DirectClient*>(data->getDirect());
         if (dc == NULL){
             log(L_WARN, "No direct connection");
             return;
@@ -827,7 +827,7 @@ void SnacIcqICBM::decline(Message *msg, const QString &reason)
             log(L_WARN, "Data for request not found");
             return;
         }
-        DirectClient *dc = dynamic_cast<DirectClient*>(data->Direct.object());
+        DirectClient *dc = dynamic_cast<DirectClient*>(data->getDirect());
         if (dc == NULL){
             log(L_WARN, "No direct connection");
             return;
@@ -944,7 +944,7 @@ bool SnacIcqICBM::cancelMessage(SIM::Message* msg)
             ClientDataIterator it = contact->clientDataIterator(m_client);
 			while ((data = m_client->toICQUserData(++it)) != NULL)
 			{
-				DirectClient *dc = dynamic_cast<DirectClient*>(data->Direct.object());
+                DirectClient *dc = dynamic_cast<DirectClient*>(data->getDirect());
 				if (dc && dc->cancelMessage(msg))
 					return msg;
 			}
@@ -1028,9 +1028,9 @@ bool SnacIcqICBM::process(unsigned short subtype, ICQBuffer* buf, unsigned short
             ICQUserData *data = m_client->findContact(screen, NULL, false, contact);
             if (data == NULL)
                 break;
-            if (data->bTyping.toBool() == bType)
+            if (data->getTyping() == bType)
                 break;
-            data->bTyping.asBool() = bType;
+            data->setTyping(bType);
             EventContact e(contact, EventContact::eStatus);;
             e.process();
             break;
@@ -1074,7 +1074,7 @@ bool SnacIcqICBM::process(unsigned short subtype, ICQBuffer* buf, unsigned short
                         sendBgQueue.erase(it);
                         it = sendBgQueue.begin();
                     }
-                    data->bBadClient.asBool() = true;
+                    data->setBadClient(true);
                     if (m_send.msg)
                         sendThruServer(m_send.msg, data);
                     m_send.msg    = NULL;

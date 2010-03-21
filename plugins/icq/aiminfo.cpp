@@ -70,16 +70,16 @@ void AIMInfo::apply(Client *client, void *_data)
     if (client != m_client)
         return;
     ICQUserData *data = m_client->toICQUserData((SIM::IMContact*)_data);  // FIXME unsafe type conversion
-    data->FirstName.str()   = edtFirst->text();
-    data->LastName.str()    = edtLast->text();
-    data->MiddleName.str()  = edtMiddle->text();
-    data->Maiden.str()      = edtMaiden->text();
-    data->Nick.str()        = edtNick->text();
-    data->Address.str()     = edtStreet->text();
-    data->City.str()        = edtCity->text();
-    data->State.str()       = edtState->text();
-    data->Zip.str()         = edtZip->text();
-    data->Country.asULong() = getComboValue(cmbCountry, getCountries());
+    data->setFirstName(edtFirst->text());
+    data->setLastName(edtLast->text());
+	data->setMiddleName(edtMiddle->text());
+    data->setMaiden(edtMaiden->text());
+    data->setNick(edtNick->text());
+    data->setAddress(edtStreet->text());
+    data->setCity(edtCity->text());
+    data->setState(edtState->text());
+    data->setZip(edtZip->text());
+    data->setCountry(getComboValue(cmbCountry, getCountries()));
 }
 
 bool AIMInfo::processEvent(Event *e)
@@ -114,16 +114,16 @@ void AIMInfo::fill()
     if (data == NULL) data = &m_client->data.owner;
 
     edtScreen->setText(data->getScreen());
-    edtFirst->setText(data->FirstName.str());
-    edtLast->setText(data->LastName.str());
-    edtMiddle->setText(data->MiddleName.str());
-    edtMaiden->setText(data->Maiden.str());
-    edtNick->setText(data->Nick.str());
-    edtStreet->setText(data->Address.str());
-    edtCity->setText(data->City.str());
-    edtState->setText(data->State.str());
-    edtZip->setText(data->Zip.str());
-    initCombo(cmbCountry, data->Country.toULong(), getCountries());
+    edtFirst->setText(data->getFirstName());
+    edtLast->setText(data->getLastName());
+	edtMiddle->setText(data->getMiddleName());
+    edtMaiden->setText(data->getMaiden());
+    edtNick->setText(data->getNick());
+    edtStreet->setText(data->getAddress());
+    edtCity->setText(data->getCity());
+    edtState->setText(data->getState());
+    edtZip->setText(data->getZip());
+    initCombo(cmbCountry, data->getCountry(), getCountries());
 
     if (m_data == NULL){
         if (edtFirst->text().isEmpty()) {

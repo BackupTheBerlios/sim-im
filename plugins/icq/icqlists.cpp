@@ -210,34 +210,34 @@ void ICQClient::parseRosterItem(unsigned short type,
                     Group *grp = NULL;
                     ICQUserData *data = findGroup(grp_id, NULL, grp);
                     data = findContact(str, &alias, true, contact, grp);
-					if(data)
-					{
-						Tlv* unknown2 = inf ? (*inf)(TLV_UNKNOWN2) : NULL;
-						if(unknown2)
-						{
-							data->unknown2.setBinary(unknown2->byteArray());
-						}
-						Tlv* unknown4 = inf ? (*inf)(TLV_UNKNOWN4) : NULL;
-						if(unknown4)
-						{
-							data->unknown4.setBinary(unknown4->byteArray());
-						}
-						Tlv* unknown5 = inf ? (*inf)(TLV_UNKNOWN5) : NULL;
-						if(unknown5)
-						{
-							data->unknown5.setBinary(unknown5->byteArray());
-						}
-					}
+                    if(data)
+                    {
+                        Tlv* unknown2 = inf ? (*inf)(TLV_UNKNOWN2) : NULL;
+                        if(unknown2)
+                        {
+                            data->setUnknown(2, unknown2->byteArray());
+                        }
+                        Tlv* unknown4 = inf ? (*inf)(TLV_UNKNOWN4) : NULL;
+                        if(unknown4)
+                        {
+                            data->setUnknown(4, unknown4->byteArray());
+                        }
+                        Tlv* unknown5 = inf ? (*inf)(TLV_UNKNOWN5) : NULL;
+                        if(unknown5)
+                        {
+                            data->setUnknown(5, unknown5->byteArray());
+                        }
+                    }
                     if (inf && (*inf)(TLV_WAIT_AUTH)){
-                        if (!data->WaitAuth.toBool()){
-                            data->WaitAuth.asBool() = true;
+                        if (!data->getWaitAuth()){
+                            data->setWaitAuth(true);
                             bChanged = true;
                         }
                     } else {
                         /* if not TLV(WAIT_AUTH) we are authorized ... */
                         if (inf && !(*inf)(TLV_WAIT_AUTH)) {
-                            if (data->WaitAuth.toBool()){
-                                data->WaitAuth.asBool() = false;
+                            if (data->getWaitAuth()){
+                                data->setWaitAuth(false);
                                 bChanged = true;
                             }
                         }
@@ -259,7 +259,7 @@ void ICQClient::parseRosterItem(unsigned short type,
                         EventContact e(contact, EventContact::eChanged);
                         e.process();
                     }
-                    if ((data->InfoFetchTime.toULong() == 0) && data->getUin())
+                    if ((data->getInfoFetchTime() == 0) && data->getUin())
                         addFullInfoRequest(data->getUin());
                 }
             }else{
@@ -305,7 +305,7 @@ void ICQClient::parseRosterItem(unsigned short type,
                         EventContact e(contact, EventContact::eChanged);
                         e.process();
                     }
-                    if ((data->InfoFetchTime.toULong() == 0) && data->getUin())
+                    if ((data->getInfoFetchTime() == 0) && data->getUin())
                         addFullInfoRequest(data->getUin());
                 }
             }
@@ -326,7 +326,7 @@ void ICQClient::parseRosterItem(unsigned short type,
                         EventContact e(contact, EventContact::eChanged);
                         e.process();
                     }
-                    if ((data->InfoFetchTime.toULong() == 0) && data->getUin())
+                    if ((data->getInfoFetchTime() == 0) && data->getUin())
                         addFullInfoRequest(data->getUin());
                 }
             }
@@ -360,7 +360,7 @@ void ICQClient::parseRosterItem(unsigned short type,
             if (str.length()){
                 Tlv *tlv_buddyHash = inf ? (*inf)(TLV_BUDDYHASH) : NULL;
                 if(tlv_buddyHash) {
-                    const QByteArray &ba = data.owner.buddyHash.toBinary();
+                    QByteArray ba = data.owner.getBuddyHash();
                     unsigned char flag, size;
                     QByteArray buddyHash;
 
@@ -370,10 +370,10 @@ void ICQClient::parseRosterItem(unsigned short type,
                     memcpy(buddyHash.data(), &tlv_buddyHash->Data()[2], size);
 
                     if(ba != buddyHash) {
-                        data.owner.buddyHash.asBinary() = buddyHash;
-                        data.owner.buddyID.asULong() = flag;
+                        data.owner.setBuddyHash(buddyHash);
+                        data.owner.setBuddyID(flag);
                     }
-                    data.owner.buddyRosterID.asULong() = id;
+                    data.owner.setBuddyRosterID(id);
                 }
             }
             break;
@@ -437,7 +437,7 @@ void ICQClient::parseRosterItem(unsigned short type,
                 ICQUserData *data;
                 if ((data = findContact(str, NULL, false, contact)) != NULL) {
                     addFullInfoRequest(str.toULong());
-                    data->WantAuth.asBool() = true;
+                    data->setWantAuth(true);
                 } else {
                    log(L_DEBUG, "not in contact list, skipped");
                 }
@@ -709,7 +709,7 @@ void ICQClient::snac_lists(unsigned short type, unsigned short seq)
             Contact *contact;
             ICQUserData *data = findContact(screen, NULL, false, contact);
             if (data)
-                data->WantAuth.asBool() = true;
+                data->setWantAuth(true);
             break;
         }
     case ICQ_SNACxLISTS_FUTURE_GRANT:{
@@ -727,7 +727,7 @@ void ICQClient::snac_lists(unsigned short type, unsigned short seq)
             Contact *contact;
             ICQUserData *data = findContact(screen, NULL, false, contact);
             if (data){
-                data->WaitAuth.asBool() = false;
+                data->setWaitAuth(false);
                 EventContact e(contact, EventContact::eChanged);
                 e.process();
                 addPluginInfoRequest(data->getUin(), PLUGIN_QUERYxSTATUS);
@@ -764,7 +764,7 @@ void ICQClient::snac_lists(unsigned short type, unsigned short seq)
                 Contact *contact;
                 ICQUserData *data = findContact(screen, NULL, false, contact);
                 if (data){
-                    data->WaitAuth.asBool() = false;
+                    data->setWaitAuth(false);
                     EventContact e(contact, EventContact::eChanged);
                     e.process();
                     addPluginInfoRequest(data->getUin(), PLUGIN_QUERYxSTATUS);
@@ -938,13 +938,13 @@ void ContactServerRequest::process(ICQClient *client, unsigned short res)
 	if(res == 0x0e)
 	{
 		//data->GrpId.setULong(0);
-		if(data->WaitAuth.toBool())
+        if(data->getWaitAuth())
 		{
 			client->ssiEndTransaction();
 			client->ssiStartTransaction();
 			TlvList *tlv = client->createListTlv(data, contact);
             client->ssiAddBuddy(m_screen, m_grpId, (unsigned short) data->getIcqID(), 0, tlv);
-			data->WaitAuth.setBool(true);
+            data->setWaitAuth(true);
 		}
 		EventContact e(contact, EventContact::eChanged);
 		e.process();
@@ -953,8 +953,8 @@ void ContactServerRequest::process(ICQClient *client, unsigned short res)
 	}
     data->setIcqID(m_icqId);
     data->setGrpID(m_grpId);
-    if ((data->getGrpID() == 0) && data->WaitAuth.toBool()){
-        data->WaitAuth.asBool() = false;
+    if ((data->getGrpID() == 0) && data->getWaitAuth()){
+        data->setWaitAuth(false);
         EventContact e(contact, EventContact::eChanged);
         e.process();
     }
@@ -1033,7 +1033,7 @@ void SetBuddyRequest::process(ICQClient *client, unsigned short res)
     if(res == 2) {
         ListRequest lr;
         lr.type        = LIST_BUDDY_CHECKSUM;
-        lr.icq_id      = m_icqUserData->buddyRosterID.toULong();
+        lr.icq_id      = m_icqUserData->getBuddyRosterID();
         lr.icqUserData = m_icqUserData;
         client->listRequests.push_back(lr);
         client->snacICBM()->processSendQueue();
@@ -1086,17 +1086,17 @@ TlvList *ICQClient::createListTlv(ICQUserData *data, Contact *contact)
     TlvList *tlv = new TlvList; //Fixme Leak, warning C6211: Leaking memory 'tlv' due to an exception. Consider using a local catch block to clean up memory: Lines: 1086, 1087, 1088
     QByteArray name = contact->getName().toUtf8();
     *tlv += new Tlv(TLV_ALIAS, (unsigned short)(name.length()), name);
-    if(data->WaitAuth.toBool())
+    if(data->getWaitAuth())
 		*tlv += new Tlv(TLV_WAIT_AUTH, 0, NULL);
     QString cell = getUserCellular(contact);
     if (cell.length())
         *tlv += new Tlv(TLV_CELLULAR, (unsigned short)(cell.length()), cell.toLatin1());
-	if(data->unknown2.asBinary().size() > 0)
-		*tlv += new Tlv(TLV_UNKNOWN2, data->unknown2.asBinary().size() - 1, data->unknown2.asBinary().data());
-	if(data->unknown4.asBinary().size() > 0)
-		*tlv += new Tlv(TLV_UNKNOWN4, data->unknown4.asBinary().size() - 1, data->unknown4.asBinary().data());
-	if(data->unknown5.asBinary().size() > 0)
-		*tlv += new Tlv(TLV_UNKNOWN5, data->unknown5.asBinary().size() - 1, data->unknown5.asBinary().data());
+    if(data->getUnknown(2).size() > 0)
+        *tlv += new Tlv(TLV_UNKNOWN2, data->getUnknown(2).size() - 1, data->getUnknown(2).data());
+    if(data->getUnknown(4).size() > 0)
+        *tlv += new Tlv(TLV_UNKNOWN4, data->getUnknown(4).size() - 1, data->getUnknown(4).data());
+    if(data->getUnknown(5).size() > 0)
+        *tlv += new Tlv(TLV_UNKNOWN5, data->getUnknown(5).size() - 1, data->getUnknown(5).data());
     return tlv;
 }
 
@@ -1104,7 +1104,7 @@ void ICQClient::uploadBuddy(const ICQUserData *data)
 {
     ListRequest lr;
     lr.type        = LIST_BUDDY_CHECKSUM;
-    lr.icq_id      = data->buddyRosterID.toULong();
+    lr.icq_id      = data->getBuddyRosterID();
     lr.icqUserData = data;
     listRequests.push_back(lr);
     snacICBM()->processSendQueue();
@@ -1379,7 +1379,7 @@ unsigned ICQClient::processListRequest()
                         snac(ICQ_SNACxFOOD_LISTS, ICQ_SNACxLISTS_FUTURE_AUTH, true, false);
                         socket()->writeBuffer().packScreen(screen(data));
                         socket()->writeBuffer() << 0x00000000L;
-						data->WaitAuth.setBool(true);
+                        data->setWaitAuth(true);
                         sendPacket(true);
                     }
                     if (data->getIcqID() == 0)
@@ -1512,8 +1512,8 @@ unsigned ICQClient::processListRequest()
                 }
                 buf.close();
                 QByteArray hash = QCryptographicHash::hash(ba, QCryptographicHash::Md5);
-                if(hash == this->data.owner.buddyHash.toBinary() &&
-                   1 == this->data.owner.buddyID.toULong()) {
+                if(hash == this->data.owner.getBuddyHash() &&
+                   1 == this->data.owner.getBuddyID()) {
                     log(L_DEBUG, "No need to upload buddy");
                  //   break;
                 }
@@ -1755,7 +1755,7 @@ bool ICQClient::sendAuthGranted(Message *msg, void *_data)
     if ((getState() != Connected) || (_data == NULL))
         return false;
     ICQUserData *data = toICQUserData((SIM::IMContact*)_data); // FIXME unsafe type conversion
-    data->WantAuth.asBool() = false;
+    data->setWantAuth(false);
 
     snac(ICQ_SNACxFOOD_LISTS, ICQ_SNACxLISTS_AUTHxSEND, true, false);
     socket()->writeBuffer().packScreen(screen(data));
@@ -1776,7 +1776,7 @@ bool ICQClient::sendAuthRefused(Message *msg, void *_data)
     if ((getState() != Connected) || (_data == NULL))
         return false;
     ICQUserData *data = toICQUserData((SIM::IMContact*)_data); // FIXME unsafe type conversion
-    data->WantAuth.asBool() = false;
+    data->setWantAuth(false);
 
     snac(ICQ_SNACxFOOD_LISTS, ICQ_SNACxLISTS_AUTHxSEND, true, false);
     socket()->writeBuffer().packScreen(screen(data));

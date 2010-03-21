@@ -319,42 +319,42 @@ void SearchSocket::snac_search(unsigned short type, unsigned short seq)
                     if (tlv)
 					{
                         QString str = ICQClient::convert(tlv, tlvs, 0x1C);
-                        res.data.FirstName.str() = str;
+                        res.data.setFirstName(str);
                     }
                     tlv = tlvs(0x02);
                     if (tlv)
 					{
                         QString str = ICQClient::convert(tlv, tlvs, 0x1C);
-                        res.data.LastName.str() = str;
+                        res.data.setLastName(str);
                     }
                     tlv = tlvs(0x03);
                     if (tlv)
 					{
                         QString str = ICQClient::convert(tlv, tlvs, 0x1C);
-                        res.data.MiddleName.str() = str;
+						res.data.setMiddleName(str);
                     }
                     tlv = tlvs(0x07);
                     if (tlv){
                         QString str = ICQClient::convert(tlv, tlvs, 0x1C);
-                        res.data.Address.str() = str;
+                        res.data.setAddress(str);
                     }
                     tlv = tlvs(0x08);
                     if (tlv)
 					{
                         QString str = ICQClient::convert(tlv, tlvs, 0x1C);
-                        res.data.City.str() = str;
+                        res.data.setCity(str);
                     }
                     tlv = tlvs(0x0C);
                     if (tlv)
 					{
                         QString str = ICQClient::convert(tlv, tlvs, 0x1C);
-                        res.data.Nick.str() = str;
+                        res.data.setNick(str);
                     }
                     tlv = tlvs(0x07);
                     if (tlv)
 					{
                         QString str = ICQClient::convert(tlv, tlvs, 0x1C);
-                        res.data.State.str() = str;
+                        res.data.setState(str);
                     }
                     tlv = tlvs(0x06);
                     if (tlv)
@@ -367,7 +367,7 @@ void SearchSocket::snac_search(unsigned short type, unsigned short seq)
 							if (country_text != info->szName)
 								continue;
 
-							res.data.Country.asULong() = info->nCode;
+                            res.data.setCountry(info->nCode);
 							break;
 						}
                     }

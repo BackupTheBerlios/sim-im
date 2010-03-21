@@ -161,19 +161,19 @@ void MoreInfo::fill()
     ICQUserData *data = m_data;
     if (data == NULL)
         data = &m_client->data.owner;
-    edtHomePage->setText(data->Homepage.str());
-    initCombo(cmbGender, data->Gender.toULong(), genders);
+    edtHomePage->setText(data->getHomepage());
+    initCombo(cmbGender, data->getGender(), genders);
     if (spnAge->text() == "0")
         spnAge->setSpecialValueText(QString::null);
     
-	if (data->BirthYear.toULong()>0 && data->BirthMonth.toULong()>0 && data->BirthDay.toULong()>0) {
+    if (data->getBirthYear() > 0 && data->getBirthMonth() > 0 && data->getBirthDay() > 0) {
 		QDate date;
-		date.setYMD(data->BirthYear.toULong(), data->BirthMonth.toULong(), data->BirthDay.toULong());
+        date.setYMD(data->getBirthYear(), data->getBirthMonth(), data->getBirthDay());
 		edtDate->setDate(date);
 		birthDayChanged();
 	}
 
-    unsigned l = data->Language.toULong();
+    unsigned l = data->getLanguage();
     char l1 = (char)(l & 0xFF);
     l = l >> 8;
     char l2 = (char)(l & 0xFF);
@@ -240,15 +240,15 @@ void MoreInfo::apply(Client *client, void *_data)
     if (client != m_client)
         return;
     ICQUserData *data = m_client->toICQUserData((SIM::IMContact*)_data);  // FIXME unsafe type conversion
-    data->Homepage.str() = edtHomePage->text();
-    data->Gender.asULong() = getComboValue(cmbGender, genders);
-    data->BirthMonth.asULong() = edtDate->getDate().month();
-    data->BirthDay.asULong()   = edtDate->getDate().day();
-    data->BirthYear.asULong()  = edtDate->getDate().year();
+    data->setHomepage(edtHomePage->text());
+    data->setGender(getComboValue(cmbGender, genders));
+    data->setBirthMonth(edtDate->getDate().month());
+    data->setBirthDay(edtDate->getDate().day());
+    data->setBirthYear(edtDate->getDate().year());
     unsigned l1 = getComboValue(cmbLang1, languages);
     unsigned l2 = getComboValue(cmbLang2, languages);
     unsigned l3 = getComboValue(cmbLang3, languages);
-    data->Language.asULong() = (l3 << 16) | (l2 << 8) | l1;
+    data->setLanguage((l3 << 16) | (l2 << 8) | l1);
 }
 
 void MoreInfo::urlChanged(const QString &text)

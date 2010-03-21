@@ -70,7 +70,7 @@ void InterestsInfo::apply(Client *client, void *_data)
             res += ';';
         res += info[i];
     }
-    data->Interests.str() = res;
+    data->setInterests(res);
 }
 
 bool InterestsInfo::processEvent(Event *e)
@@ -154,7 +154,7 @@ void InterestsInfo::fill()
     ICQUserData *data = m_data;
     if (data == NULL) data = &m_client->data.owner;
     unsigned i = 0;
-    QString str = data->Interests.str();
+    QString str = data->getInterests();
     while (str.length()){
         QString info = getToken(str, ';', false);
         QString n = getToken(info, ',');

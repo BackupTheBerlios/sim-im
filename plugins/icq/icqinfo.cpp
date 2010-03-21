@@ -121,9 +121,9 @@ void ICQInfo::apply(Client *client, void *_data)
     if (client != m_client)
         return;
     ICQUserData *data = m_client->toICQUserData((SIM::IMContact*)_data);  // FIXME unsafe type conversion
-    data->FirstName.str() = edtFirst->text();
-    data->LastName.str()  = edtLast->text();
-    data->Nick.str()      = edtNick->text();
+    data->setFirstName(edtFirst->text());
+    data->setLastName(edtLast->text());
+    data->setNick(edtNick->text());
 }
 
 bool ICQInfo::processEvent(Event *e)
@@ -158,9 +158,9 @@ void ICQInfo::fill()
     if (data == NULL) data = &m_client->data.owner;
 
     edtUin->setText(QString::number(data->getUin()));
-    edtFirst->setText(data->FirstName.str());
-    edtLast->setText(data->LastName.str());
-    edtNick->setText(data->Nick.str());
+    edtFirst->setText(data->getFirstName());
+    edtLast->setText(data->getLastName());
+    edtNick->setText(data->getNick());
 
     if (m_data == NULL){
         if (edtFirst->text().isEmpty()) {
@@ -205,7 +205,7 @@ void ICQInfo::fill()
 
     int current = 0;
     QString text;
-    if (m_data && (status == STATUS_OFFLINE) && m_data->bInvisible.toBool()){
+    if (m_data && (status == STATUS_OFFLINE) && m_data->getInvisible()){
         cmbStatus->addItem(Pict("ICQ_invisible"), i18n("Possibly invisible"));
     }else{
 		ProtocolPtr proto = ICQPlugin::icq_plugin->m_icq;

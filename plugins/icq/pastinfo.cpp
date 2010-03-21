@@ -124,7 +124,7 @@ void PastInfo::fill()
     if (data == NULL)
         data = &m_client->data.owner;
     unsigned i = 0;
-    QString str = data->Backgrounds.str();
+    QString str = data->getBackgrounds();
     while (str.length()){
         QString info = getToken(str, ';', false);
         QString n = getToken(info, ',');
@@ -159,7 +159,7 @@ void PastInfo::fill()
         }
     }
     i = 0;
-    str = data->Affilations.str();
+    str = data->getAffilations();
     while (str.length()){
         QString info = getToken(str, ';', false);
         QString n = getToken(info, ',');
@@ -283,7 +283,7 @@ void PastInfo::apply(Client *client, void *_data)
             res += ';';
         res += bg[i];
     }
-    data->Backgrounds.str() = res;
+    data->setBackgrounds(res);
     res = QString::null;
     QString af[3];
     af[0] = getInfo(cmbAf1, edtAf1, affilations);
@@ -296,7 +296,7 @@ void PastInfo::apply(Client *client, void *_data)
             res += ';';
         res += af[i];
     }
-    data->Affilations.str() = res;
+    data->setAffilations(res);
 }
 
 QString PastInfo::getInfo(QComboBox *cmb, QLineEdit *edt, const ext_info *info)

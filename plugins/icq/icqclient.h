@@ -253,103 +253,218 @@ public:
     unsigned long getContactInvisibleId() const { return m_contactInvisibleId; }
     void setContactInvisibleId(unsigned long id) { m_contactInvisibleId = id; }
 
-    //SIM::Data        Alias;
-    //SIM::Data        Cellular;
-    //SIM::Data		Status;
-    //SIM::Data		Class;
-    //SIM::Data		StatusTime;
-    //SIM::Data		OnlineTime;
-    //SIM::Data		WarningLevel;
-    //SIM::Data        IP;
-    //SIM::Data        RealIP;
-    //SIM::Data		Port;
-    //SIM::Data		DCcookie;
-    //SIM::Data		Caps;
-    //SIM::Data		Caps2;
-    //SIM::Data        AutoReply;
-    //SIM::Data		Uin;
-    //SIM::Data        Screen;
-    //SIM::Data		IcqID;
-    //SIM::Data		bChecked;
-    //SIM::Data		GrpId;
-    //SIM::Data		IgnoreId;
-    //SIM::Data		VisibleId;
-    //SIM::Data		ContactVisibleId;
-    //SIM::Data		InvisibleId;
-    //SIM::Data		ContactInvisibleId;
-	SIM::Data		WaitAuth;
-	SIM::Data		WantAuth;
-	SIM::Data		WebAware;
-	SIM::Data		InfoUpdateTime;
-	SIM::Data		PluginInfoTime;
-	SIM::Data		PluginStatusTime;
-	SIM::Data		InfoFetchTime;
-	SIM::Data		PluginInfoFetchTime;
-	SIM::Data		PluginStatusFetchTime;
-	SIM::Data		Mode;
-	SIM::Data		Version;
-	SIM::Data		Build;
-	SIM::Data        Nick;
-	SIM::Data        FirstName;
-	SIM::Data        LastName;
-    SIM::Data		MiddleName;
-	SIM::Data		Maiden;
-	SIM::Data        EMail;
-	SIM::Data		HiddenEMail;
-	SIM::Data        City;
-	SIM::Data        State;
-	SIM::Data        HomePhone;
-	SIM::Data        HomeFax;
-	SIM::Data        Address;
-	SIM::Data        PrivateCellular;
-	SIM::Data        Zip;
-	SIM::Data		Country;
-	SIM::Data		TimeZone;
-	SIM::Data		Age;
-	SIM::Data		Gender;
-	SIM::Data        Homepage;
-	SIM::Data		BirthYear;
-	SIM::Data		BirthMonth;
-	SIM::Data		BirthDay;
-	SIM::Data		Language;
-	SIM::Data        EMails;
-	SIM::Data        WorkCity;
-	SIM::Data        WorkState;
-	SIM::Data        WorkPhone;
-	SIM::Data        WorkFax;
-	SIM::Data        WorkAddress;
-	SIM::Data        WorkZip;
-	SIM::Data		WorkCountry;
-	SIM::Data        WorkName;
-	SIM::Data        WorkDepartment;
-	SIM::Data        WorkPosition;
-	SIM::Data		Occupation;
-	SIM::Data        WorkHomepage;
-	SIM::Data        About;
-	SIM::Data        Interests;
-	SIM::Data        Backgrounds;
-	SIM::Data        Affilations;
-	SIM::Data		FollowMe;
-	SIM::Data		SharedFiles;
-	SIM::Data		ICQPhone;
-	SIM::Data        Picture;
-	SIM::Data		PictureWidth;
-	SIM::Data		PictureHeight;
-	SIM::Data        PhoneBook;
-	SIM::Data		ProfileFetch;
-	SIM::Data		bTyping;
-	SIM::Data		bBadClient;
-	SIM::Data		Direct;
-	SIM::Data		DirectPluginInfo;
-	SIM::Data		DirectPluginStatus;
-	SIM::Data		bNoDirect;
-	SIM::Data		bInvisible;
-	SIM::Data       buddyRosterID;
-	SIM::Data       buddyID;
-	SIM::Data       buddyHash;
-	SIM::Data		unknown2;
-	SIM::Data		unknown4;
-	SIM::Data		unknown5;
+    bool getWaitAuth() const { return m_waitAuth; }
+    void setWaitAuth(bool w) { m_waitAuth = w; }
+
+    bool getWantAuth() const { return m_wantAuth; }
+    void setWantAuth(bool w) { m_wantAuth = w; }
+
+    bool getWebAware() const { return m_webAware; }
+    void setWebAware(bool w) { m_webAware = w; }
+
+    unsigned long getInfoUpdateTime() const { return m_infoUpdateTime; }
+    void setInfoUpdateTime(unsigned long t) { m_infoUpdateTime = t; }
+
+    unsigned long getPluginInfoTime() const { return m_pluginInfoTime; }
+    void setPluginInfoTime(unsigned long t) { m_pluginInfoTime = t; }
+
+    unsigned long getPluginStatusTime() const { return m_pluginStatusTime; }
+    void setPluginStatusTime(unsigned long t) { m_pluginStatusTime = t; }
+
+    unsigned long getInfoFetchTime() const { return m_infoFetchTime; }
+    void setInfoFetchTime(unsigned long t) { m_infoFetchTime = t; }
+
+    unsigned long getPluginInfoFetchTime() const { return m_pluginInfoFetchTime; }
+    void setPluginInfoFetchTime(unsigned long t) { m_pluginInfoFetchTime = t; }
+
+    unsigned long getPluginStatusFetchTime() const { return m_pluginStatusFetchTime; }
+    void setPluginStatusFetchTime(unsigned long t) { m_pluginStatusFetchTime = t; }
+
+    unsigned long getMode() const { return m_mode; }
+    void setMode(unsigned long mode) { m_mode = mode; }
+
+    unsigned long getVersion() const { return m_version; }
+    void setVersion(unsigned long version) { m_version = version; }
+
+    unsigned long getBuild() const { return m_build; }
+    void setBuild(unsigned long build) { m_build = build; }
+
+    QString getNick() const { return m_nick; }
+    void setNick(const QString& nick) { m_nick = nick; }
+
+    QString getFirstName() const { return m_firstName; }
+    void setFirstName(const QString& firstName) { m_firstName = firstName; }
+
+    QString getLastName() const { return m_lastName; }
+    void setLastName(const QString& lastName) { m_lastName = lastName; }
+
+    QString getMiddleName() const { return m_middleName; }
+    void setMiddleName(const QString& middlename) { m_middleName = middlename; }
+
+    QString getMaiden() const { return m_maiden; }
+    void setMaiden(const QString& maiden) { m_maiden = maiden; }
+
+    QString getEmail() const { return m_email; }
+    void setEmail(const QString& email) { m_email = email; }
+
+    bool getHiddenEmail() const { return m_hiddenEmail; }
+    void setHiddenEmail(bool b) { m_hiddenEmail = b; }
+
+    QString getCity() const { return m_city; }
+    void setCity(const QString& city) { m_city = city; }
+
+    QString getState() const { return m_state; }
+    void setState(const QString& state) { m_state = state; }
+
+    QString getHomePhone() const { return m_homephone; }
+    void setHomePhone(const QString& homephone) { m_homephone = homephone; }
+
+    QString getHomeFax() const { return m_homefax; }
+    void setHomeFax(const QString& homefax) { m_homefax = homefax; }
+
+    QString getAddress() const { return m_address; }
+    void setAddress(const QString& address) { m_address = address; }
+
+    QString getPrivateCellular() const { return m_privateCellular; }
+    void setPrivateCellular(const QString& cellular) { m_privateCellular = cellular; }
+
+    QString getZip() const { return m_zip; }
+    void setZip(const QString& zip) { m_zip = zip; }
+
+    unsigned long getCountry() const { return m_country; }
+    void setCountry(unsigned long country) { m_country =  country; }
+
+    unsigned long getTimeZone() const { return m_timezone; }
+    void setTimeZone(unsigned long timezone) { m_timezone = timezone; }
+
+    unsigned long getAge() const { return m_age; }
+    void setAge(unsigned long age) { m_age = age; }
+
+    unsigned long getGender() const { return m_gender; }
+    void setGender(unsigned long gender) { m_gender = gender; }
+
+    QString getHomepage() const { return m_homepage; }
+    void setHomepage(const QString& homepage) { m_homepage = homepage; }
+
+    unsigned long getBirthYear() const { return m_birthday.year(); }
+    void setBirthYear(unsigned long year) { m_birthday.setYMD(year, m_birthday.month(), m_birthday.day()); }
+
+    unsigned long getBirthMonth() const { return m_birthday.month(); }
+    void setBirthMonth(unsigned long month) { m_birthday.setYMD(m_birthday.year(), month, m_birthday.day()); }
+
+    unsigned long getBirthDay() const { return m_birthday.day(); }
+    void setBirthDay(unsigned long day) { m_birthday.setYMD(m_birthday.year(), m_birthday.month(), day); }
+
+    unsigned long getLanguage() const { return m_language; }
+    void setLanguage(unsigned long language) { m_language = language; }
+
+    QString getEMails() const { return m_emails; }
+    void setEMails(const QString& emails) { m_emails = emails; }
+
+    QString getWorkCity() const { return m_workcity; }
+    void setWorkCity(const QString& workcity) { m_workcity = workcity; }
+
+    QString getWorkState() const { return m_workstate; }
+    void setWorkState(const QString& workstate) { m_workstate = workstate; }
+
+    QString getWorkPhone() const { return m_workphone; }
+    void setWorkPhone(const QString& workphone) { m_workphone = workphone; }
+
+    QString getWorkFax() const { return m_workfax; }
+    void setWorkFax(const QString& workfax) { m_workfax = workfax; }
+
+    QString getWorkAddress() const { return m_workaddress; }
+    void setWorkAddress(const QString& workaddress) { m_workaddress = workaddress; }
+
+    QString getWorkZip() const { return m_workzip; }
+    void setWorkZip(const QString& workzip) { m_workzip = workzip; }
+
+    unsigned long getWorkCountry() const { return m_workcountry; }
+    void setWorkCountry(unsigned long workcountry) { m_workcountry = workcountry; }
+
+    QString getWorkName() const { return m_workname; }
+    void setWorkName(const QString& workname) { m_workname = workname; }
+
+    QString getWorkDepartment() const { return m_workdepartment; }
+    void setWorkDepartment(const QString& workdepartment) { m_workdepartment = workdepartment; }
+
+    QString getWorkPosition() const { return m_workposition; }
+    void setWorkPosition(const QString& workposition) { m_workposition = workposition; }
+
+    unsigned long getOccupation() const { return m_occupation; }
+    void setOccupation(unsigned long occupation) { m_occupation = occupation; }
+
+    QString getWorkHomepage() const { return m_workhomepage; }
+    void setWorkHomepage(const QString& homepage) { m_workhomepage = homepage; }
+
+    QString getAbout() const { return m_about; }
+    void setAbout(const QString& about) { m_about = about; }
+
+    QString getInterests() const { return m_interests; }
+    void setInterests(const QString& interests) { m_interests = interests; }
+
+    QString getBackgrounds() const { return m_backgrounds; }
+    void setBackgrounds(const QString& backgrounds) { m_backgrounds = backgrounds; }
+
+    QString getAffilations() const { return m_affilations; }
+    void setAffilations(const QString& affilations) { m_affilations = affilations; }
+
+    unsigned long getFollowMe() const { return m_followme; }
+    void setFollowMe(unsigned long followme) { m_followme = followme; }
+
+    bool getSharedFiles() const { return m_sharedFiles; }
+    void setSharedFiles(bool b) { m_sharedFiles = b; }
+
+    unsigned long getICQPhone() const { return m_icqPhone; }
+    void setICQPhone(unsigned long phone) { m_icqPhone = phone; }
+
+    QString getPicture() const { return m_picture; }
+    void setPicture(const QString& picture) { m_picture = picture; }
+
+    unsigned long getPictureWidth() const { return m_pictureSize.width(); }
+    void setPictureWidth(unsigned long width) { m_pictureSize.setWidth(width); }
+
+    unsigned long getPictureHeight() const { return m_pictureSize.height(); }
+    void setPictureHeight(unsigned long height) { m_pictureSize.setHeight(height); }
+
+    QString getPhoneBook() const { return m_phoneBook; }
+    void setPhoneBook(const QString& phonebook) { m_phoneBook = phonebook; }
+
+    bool getProfileFetch() const { return m_profileFetch; }
+    void setProfileFetch(bool pf) { m_profileFetch = pf; }
+
+    bool getTyping() const { return m_typing; }
+    void setTyping(bool t) { m_typing = t; }
+
+    bool getBadClient() const { return m_badClient; }
+    void setBadClient(bool bc) { m_badClient = bc; };
+
+    bool getNoDirect() const { return m_noDirect; }
+    void setNoDirect(bool nd) { m_noDirect = nd; }
+
+    bool getInvisible() const { return m_invisible; }
+    void setInvisible(bool i) { m_invisible = i; }
+
+    unsigned long getBuddyRosterID() const { return m_buddyRosterId; }
+    void setBuddyRosterID(unsigned long id) { m_buddyRosterId = id; }
+
+    unsigned long getBuddyID() const { return m_buddyId; }
+    void setBuddyID(unsigned long id) { m_buddyId = id; }
+
+    QByteArray getBuddyHash() const { return m_buddyHash; }
+    void setBuddyHash(const QByteArray& arr) { m_buddyHash = arr; }
+
+    QByteArray getUnknown(int i) const { return m_unknown[i]; }
+    void setUnknown(int i, const QByteArray& arr) { m_unknown[i] = arr; }
+
+    QObject* getDirect() const { return m_direct; }
+    void setDirect(QObject* obj) { m_direct = obj; }
+
+    QObject* getDirectPluginInfo() const { return m_directPluginInfo; }
+    void setDirectPluginInfo(QObject* obj) { m_directPluginInfo = obj; }
+
+    QObject* getDirectPluginStatus() const { return m_directPluginStatus; }
+    void setDirectPluginStatus(QObject* obj) { m_directPluginStatus = obj; }
 
     void dispatchDeserialization(const QString& key, const QString& value);
 private:
@@ -377,6 +492,74 @@ private:
     unsigned long m_invisibleId;
     unsigned long m_contactVisibleId;
     unsigned long m_contactInvisibleId;
+    bool m_waitAuth;
+    bool m_wantAuth;
+    bool m_webAware;
+    unsigned long m_infoUpdateTime;
+    unsigned long m_pluginInfoTime;
+    unsigned long m_pluginStatusTime;
+    unsigned long m_infoFetchTime;
+    unsigned long m_pluginInfoFetchTime;
+    unsigned long m_pluginStatusFetchTime;
+    unsigned long m_mode;
+    unsigned long m_version;
+    unsigned long m_build;
+    QString m_nick;
+    QString m_firstName;
+    QString m_lastName;
+    QString m_middleName;
+    QString m_maiden;
+    QString m_email;
+    bool m_hiddenEmail;
+    QString m_city;
+    QString m_state;
+    QString m_homephone;
+    QString m_homefax;
+    QString m_address;
+    QString m_privateCellular;
+    QString m_zip;
+    unsigned long m_country;
+    unsigned long m_timezone;
+    unsigned long m_age;
+    unsigned long m_gender;
+    QString m_homepage;
+    QDate m_birthday;
+    unsigned long m_language;
+    QString m_emails;
+    QString m_workcity;
+    QString m_workstate;
+    QString m_workphone;
+    QString m_workfax;
+    QString m_workaddress;
+    QString m_workzip;
+    unsigned long m_workcountry;
+    QString m_workname;
+    QString m_workdepartment;
+    QString m_workposition;
+    unsigned long m_occupation;
+    QString m_workhomepage;
+    QString m_about;
+    QString m_interests;
+    QString m_backgrounds;
+    QString m_affilations;
+    unsigned long m_followme;
+    bool m_sharedFiles;
+    unsigned long m_icqPhone;
+    QString m_picture;
+    QSize m_pictureSize;
+    QString m_phoneBook;
+    bool m_profileFetch;
+    bool m_typing;
+    bool m_badClient;
+    bool m_noDirect;
+    bool m_invisible;
+    unsigned long m_buddyRosterId;
+    unsigned long m_buddyId;
+    QByteArray m_buddyHash;
+    QObject* m_direct;
+    QObject* m_directPluginInfo;
+    QObject* m_directPluginStatus;
+    QByteArray m_unknown[6];
 };
 
 class ICQClientData : public SIM::IMContact

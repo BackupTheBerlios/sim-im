@@ -417,7 +417,7 @@ bool ICQSearch::processEvent(Event *e)
             icon = "AIM";
         }
         QString gender;
-        switch (res->data.Gender.toULong()){
+        switch (res->data.getGender()){
         case 1:
             gender = i18n("Female");
             break;
@@ -426,8 +426,8 @@ bool ICQSearch::processEvent(Event *e)
             break;
         }
         QString age;
-        if (res->data.Age.toULong())
-            age = QString::number(res->data.Age.toULong());
+        if (res->data.getAge())
+            age = QString::number(res->data.getAge());
         QStringList l;
         l.append(icon);
         QString key = m_client->screen(&res->data);
@@ -439,14 +439,14 @@ bool ICQSearch::processEvent(Event *e)
         l.append(m_client->screen(&res->data));;
         if (m_client->m_bAIM){
             QString s;
-            l.append(res->data.Nick.str());
-            l.append(res->data.FirstName.str());
-            l.append(res->data.LastName.str());
-            l.append(res->data.City.str());
-            l.append(res->data.State.str());
-            if (res->data.Country.toULong()){
+            l.append(res->data.getNick());
+            l.append(res->data.getFirstName());
+            l.append(res->data.getLastName());
+            l.append(res->data.getCity());
+            l.append(res->data.getState());
+            if (res->data.getCountry()){
                 for (const ext_info *info = getCountries(); info->szName; info++){
-                    if (info->nCode == res->data.Country.toULong()){
+                    if (info->nCode == res->data.getCountry()){
                         s = i18n(info->szName);
                         break;
                     }
@@ -454,12 +454,12 @@ bool ICQSearch::processEvent(Event *e)
             }
             l.append(s);
         }else{
-            l.append(res->data.Nick.str());
-            l.append(res->data.FirstName.str());
-            l.append(res->data.LastName.str());
+            l.append(res->data.getNick());
+            l.append(res->data.getFirstName());
+            l.append(res->data.getLastName());
             l.append(gender);
             l.append(age);
-            l.append(res->data.EMail.str());
+            l.append(res->data.getEmail());
         }
         emit addItem(l, this);
     }

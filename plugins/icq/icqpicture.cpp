@@ -90,13 +90,13 @@ void ICQPicture::apply(Client *client, void *_data)
     QString pict = edtPict->text();
     log(L_DEBUG, "Pict: %s", qPrintable(pict));
     m_client->setPicture(pict);
-    m_client->data.owner.Picture.setStr(pict);
+    m_client->data.owner.setPicture(pict);
     ICQUserData *data = m_client->toICQUserData((SIM::IMContact*)_data);  // FIXME unsafe type conversion
     if (lblPict->pixmap() == NULL)
         pict.clear();
     if(pict != m_client->getPicture())
     {
-        data->PluginInfoTime.asULong() = time(NULL);
+        data->setPluginInfoTime(time(NULL));
     }
 }
 
