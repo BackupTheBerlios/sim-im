@@ -20,6 +20,7 @@
 
 #include <list>
 #include "simgui/listview.h"
+#include "contacts/contact.h"
 #include <QMouseEvent>
 
 using namespace std;
@@ -121,8 +122,15 @@ public:
     UserListBase(QWidget *parent);
     ~UserListBase();
     virtual void fill();
+
 protected slots:
     void drawUpdates();
+    bool updateGroups();
+    bool updateContacts(DivItem* itemOnline, DivItem* itemOffline);
+    bool updateContactNoGroups(SIM::Contact* contact, DivItem *itemOnline, DivItem *itemOffline);
+    bool updateContactGroupMode1(SIM::Contact* contact, DivItem *itemOnline, DivItem *itemOffline);
+    bool updateContactGroupMode2(SIM::Contact* contact, DivItem *itemOnline, DivItem *itemOffline);
+
 protected:
     unsigned m_groupMode;
     unsigned m_bShowOnline;

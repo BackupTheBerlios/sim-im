@@ -312,25 +312,25 @@ void setWndProc(QWidget *w)
 
 void setWndClass(QWidget *w, const char *name)
 {
-    Display *dsp = QX11Info::display();
-    WId win = w->winId();
-
-    XClassHint classhint;
-    classhint.res_name  = (char*)"sim";
-    classhint.res_class = (char*)name;
-    XSetClassHint(dsp, win, &classhint);
-
-    XWMHints *hints;  
-    hints = XGetWMHints(dsp, win);  
-    hints->window_group = win;  
-    hints->flags = WindowGroupHint;  
-    XSetWMHints(dsp, win, hints);  
-    XFree( hints );
-
-    const char *argv[2];
-    argv[0] = name;
-    argv[1] = NULL;
-    XSetCommand(dsp, win, (char**)argv, 1);
+//    Display *dsp = QX11Info::display();
+//    WId win = w->winId();
+//
+//    XClassHint classhint;
+//    classhint.res_name  = (char*)"sim";
+//    classhint.res_class = (char*)name;
+//    XSetClassHint(dsp, win, &classhint);
+//
+//    XWMHints *hints;
+//    hints = XGetWMHints(dsp, win);
+//    hints->window_group = win;
+//    hints->flags = WindowGroupHint;
+//    XSetWMHints(dsp, win, hints);
+//    XFree( hints );
+//
+//    const char *argv[2];
+//    argv[0] = name;
+//    argv[1] = NULL;
+//    XSetCommand(dsp, win, (char**)argv, 1);
 }
 
 #else
