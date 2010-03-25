@@ -15,6 +15,7 @@ namespace test
 
         virtual QByteArray serialize();
         virtual void deserialize(Buffer* cfg);
+        virtual unsigned long getSign();
 
         SIM::Data Alpha;
 

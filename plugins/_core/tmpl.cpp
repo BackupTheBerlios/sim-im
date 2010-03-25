@@ -198,12 +198,12 @@ QString Tmpl::process(TmplExpand &t, const QString &str)
 //            continue;
 
         IMContact *data;
-        ClientDataIterator itc = contact->clientDataIterator();
-        while ((data = ++itc) != NULL){
-            if (getTag(tag, &(data->Sign), itc.client()->protocol()->userDataDef(), res))
-                break;
-        }
-        if (data)
+//        ClientDataIterator itc = contact->clientDataIterator();
+//        while ((data = ++itc) != NULL){
+//            if (getTag(tag, &(data->Sign), itc.client()->protocol()->userDataDef(), res))
+//                break;
+//        }
+//        if (data)
             continue;
 
 //        UserDataDef *def;

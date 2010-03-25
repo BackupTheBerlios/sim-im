@@ -11,7 +11,8 @@ namespace SIM
     public:
         IMContact();
 
-        Data    Sign;       // Protocol ID, must be ICQ_SIGN, JABBER_SIGN etc
+        //Data    Sign;       // Protocol ID, must be ICQ_SIGN, JABBER_SIGN etc
+        virtual unsigned long getSign() = 0;
         Data    LastSend;
 
         virtual QByteArray serialize() = 0;

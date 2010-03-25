@@ -52,6 +52,8 @@ public:
     virtual QByteArray serialize();
     virtual void deserialize(Buffer* cfg);
 
+    virtual unsigned long getSign();
+
     SIM::Data		ID;
     SIM::Data		Node;
     SIM::Data		Resource;

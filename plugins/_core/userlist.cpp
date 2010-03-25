@@ -303,6 +303,7 @@ QVariant ContactItem::data( int column, int role ) const
             UserView* uv = dynamic_cast<UserView*>( treeWidget() );
             if( m_unread && uv->m_bUnreadBlink ) {
                 CommandDef *def = CorePlugin::instance()->messageTypes.find( m_unread );
+                log(L_DEBUG, "Unread: %d", m_unread);
                 if (def)
                     icon = Icon( def->icon );
             }
@@ -351,6 +352,7 @@ UserListBase::~UserListBase()
 
 void UserListBase::drawUpdates()
 {
+    log(L_DEBUG, "UserListBase::drawUpdates()");
     m_bDirty = false;
     updTimer->stop();
     ListViewItem *item;
@@ -440,6 +442,7 @@ void UserListBase::drawUpdates()
             bShow = true;
         switch (m_groupMode){
         case 0:
+            log(L_DEBUG, "Alpha");
             if (status <= STATUS_OFFLINE){
                 if (itemOnline){
                     m_contactItem = findContactItem(contact->id(), itemOnline);
@@ -471,21 +474,25 @@ void UserListBase::drawUpdates()
                     setOpen(itemOffline, true);
                     bChanged = true;
                 }
+                log(L_DEBUG, "Beta");
                 m_contactItem = findContactItem(contact->id(), itemOffline);
                 if (m_contactItem)
 				{
+                    log(L_DEBUG, "Gamma");
                     if (m_contactItem->update(contact, status, style, icons, unread))
                         addSortItem(itemOffline);
                     addUpdatedItem(m_contactItem);
                 }
 				else
 				{
+                    log(L_DEBUG, "Delta");
                     m_contactItem = new ContactItem( itemOffline, contact, status, style, icons, unread, m_bCheckable );
                     bChanged = true;
                 }
             }
 			else
 			{
+                log(L_DEBUG, "Epsilon");
                 if (itemOffline)
 				{
                     m_contactItem = findContactItem(contact->id(), itemOffline);
@@ -503,17 +510,25 @@ void UserListBase::drawUpdates()
                     setOpen(itemOnline, true);
                     bChanged = true;
                 }
+                log(L_DEBUG, "Zeta");
                 m_contactItem = findContactItem(contact->id(), itemOnline);
                 if (m_contactItem)
-				{
+                {
+                    log(L_DEBUG, "Eta");
                     if (m_contactItem->update(contact, status, style, icons, unread))
                         addSortItem(itemOnline);
                     addUpdatedItem(m_contactItem);
                 }
 				else
 				{
+                    log(L_DEBUG, "Theta");
                     m_contactItem = new ContactItem( itemOnline, contact, status, style, icons, unread, m_bCheckable );
                     bChanged = true;
+                    if (!m_bDirty){
+                        m_bDirty = true;
+                        updTimer->start(800);
+                        log(L_DEBUG, "updTimer->start[3]");
+                    }
                 }
             }
             break;
@@ -692,6 +707,7 @@ void UserListBase::addGroupForUpdate(unsigned long id)
     if (!m_bDirty){
         m_bDirty = true;
         updTimer->start(800);
+        log(L_DEBUG, "updTimer->start[1]");
     }
 }
 
@@ -705,6 +721,7 @@ void UserListBase::addContactForUpdate(unsigned long id)
     if (!m_bDirty){
         m_bDirty = true;
         updTimer->start(800);
+        log(L_DEBUG, "updTimer->start[2]");
     }
 }
 
@@ -715,6 +732,7 @@ void UserListBase::addSortItem(ListViewItem *item)
             return;
     }
     sortItems.push_back(item);
+
 }
 
 void UserListBase::addUpdatedItem(ListViewItem *item)
@@ -724,6 +742,11 @@ void UserListBase::addUpdatedItem(ListViewItem *item)
             return;
     }
     updatedItems.push_back(item);
+    if (!m_bDirty){
+        m_bDirty = true;
+        updTimer->start(800);
+    
+    }
 }
 
 unsigned UserListBase::getUnread(unsigned)

@@ -94,7 +94,7 @@ namespace SIM
         for (it = p->begin(); it != p->end(); ++it){
             if ((it->client == client) && (it->data == data))
                 break;
-            if (((IMContact*)(it->data))->Sign.toULong() != ((IMContact*)data)->Sign.toULong())
+            if (((IMContact*)(it->data))->getSign() != ((IMContact*)data)->getSign())
                 continue;
             if (client->compareData(data, it->data))
                 return NULL;
@@ -106,7 +106,7 @@ namespace SIM
         for (++it; it != p->end(); ++it){
             if (it->client->getState() != Client::Connected)
                 continue;
-            if (((IMContact*)(it->data))->Sign.toULong() != ((IMContact*)data)->Sign.toULong())
+            if (((IMContact*)(it->data))->getSign() != ((IMContact*)data)->getSign())
                 continue;
             if (client->compareData(data, it->data)){
                 data = it->data;
@@ -230,7 +230,7 @@ namespace SIM
     void ClientUserData::join(IMContact *cData, ClientUserData &data)
     {
         for (ClientUserDataPrivate::iterator it = data.p->begin(); it != data.p->end(); ++it){
-            if (&it->data->Sign == &(cData->Sign)){
+            if (it->data->getSign() == (cData->getSign())){
                 p->push_back(*it);
                 data.p->erase(it);
                 break;

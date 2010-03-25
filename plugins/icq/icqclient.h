@@ -181,6 +181,8 @@ public:
     virtual QByteArray serialize();
     virtual void deserialize(Buffer* cfg);
 
+    virtual unsigned long getSign();
+
     unsigned long getUin() const { return m_uin; }
     void setUin(unsigned long uin) { m_uin = uin; }
 
@@ -565,44 +567,165 @@ private:
 class ICQClientData : public SIM::IMContact
 {
 public:
+
+    ICQClientData();
     virtual QByteArray serialize();
     virtual void deserialize(Buffer* cfg);
 
-    SIM::Data        Server;
-    SIM::Data		Port;
-    SIM::Data		ContactsTime;
-    SIM::Data		ContactsLength;
-    SIM::Data		ContactsInvisible;
-    SIM::Data		HideIP;
-    SIM::Data		IgnoreAuth;
-    SIM::Data		UseMD5;
-    SIM::Data		DirectMode;
-    SIM::Data		IdleTime;
-    SIM::Data        ListRequests;
-    SIM::Data        Picture;
-    SIM::Data		RandomChatGroup;
-    SIM::Data		RandomChatGroupCurrent;
-    SIM::Data		SendFormat;
-    SIM::Data		DisablePlugins;
-    SIM::Data		DisableAutoUpdate;
-    SIM::Data		DisableAutoReplyUpdate;
-    SIM::Data		DisableTypingNotification;
+    virtual unsigned long getSign();
+
+    QString getServer() const { return m_server; }
+    void setServer(const QString& server) { m_server = server; }
+
+    unsigned long getPort() const { return m_port; }
+    void setPort(unsigned long port) { m_port = port; }
+
+    unsigned long getContactsTime() const { return m_contactsTime; }
+    void setContactsTime(unsigned long ct) { m_contactsTime = ct; }
+
+    unsigned long getContactsLength() const { return m_contactsLength; }
+    void setContactsLength(unsigned long cl) { m_contactsLength = cl; }
+
+    unsigned long getContactsInvisible() const { return m_contactsInvisible; }
+    void setContactsInvisible(unsigned long ci) { m_contactsInvisible = ci; }
+
+    bool getHideIP() const { return m_hideIp; }
+    void setHideIP(bool hideip) { m_hideIp = hideip; }
+
+    bool getIgnoreAuth() const { return m_ignoreAuth; }
+    void setIgnoreAuth(bool ignoreAuth) { m_ignoreAuth = ignoreAuth; }
+
+    bool getUseMD5() const { return m_useMd5; }
+    void setUseMD5(bool useMd5) { m_useMd5 = useMd5; }
+
+    unsigned long getDirectMode() const { return m_directMode; }
+    void setDirectMode(unsigned long mode) { m_directMode = mode; }
+
+    unsigned long getIdleTime() const { return m_idleTime; }
+    void setIdleTime(unsigned long time) { m_idleTime = time; }
+
+    QString getListRequests() const { return m_listRequests; }
+    void setListRequests(const QString& listrequests) { m_listRequests = listrequests; }
+
+    QString getPicture() const { return m_picture; }
+    void setPicture(const QString& pic) { m_picture = pic; }
+
+    unsigned long getRandomChatGroup() const { return m_randomChatGroup; }
+    void setRandomChatGroup(unsigned long group) { m_randomChatGroup = group; }
+
+    unsigned long getRandomChatGroupCurrent() const { return m_randomChatGroupCurrent; }
+    void setRandomChatGroupCurrent(unsigned long group) { m_randomChatGroupCurrent = group; }
+
+    unsigned long getSendFormat() const { return m_sendFormat; }
+    void setSendFormat(unsigned long format) { m_sendFormat = format; }
+
+    bool getDisablePlugins() const { return m_disablePlugins; }
+    void setDisablePlugins(bool p) { m_disablePlugins = p; }
+
+    bool getDisableAutoUpdate() const { return m_disableAutoUpdate; }
+    void setDisableAutoUpdate(bool b) { m_disableAutoUpdate = b; }
+
+    bool getDisableAutoReplyUpdate() const { return m_disableAutoReplyUpdate; }
+    void setDisableAutoReplyUpdate(bool b) { m_disableAutoReplyUpdate = b; }
+
+    bool getDisableTypingNotification() const { return m_disableTypingNotification; }
+    void setDisableTypingNotification(bool b) { m_disableTypingNotification = b; }
+
+    bool getAcceptInDND() const { return m_acceptInDnd; }
+    void setAcceptInDND(bool b) {m_acceptInDnd = b; }
+
+    bool getAcceptInOccupied() const { return m_acceptInOccupied; }
+    void setAcceptInOccupied(bool b) {m_acceptInOccupied = b; }
+
+    unsigned long getMinPort() const { return m_minPort; }
+    void setMinPort(unsigned long port) { m_minPort = port; }
+
+    unsigned long getMaxPort() const { return m_maxPort; }
+    void setMaxPort(unsigned long port) { m_maxPort = port; }
+
+    bool getWarnAnonymously() const { return m_warnAnonymously; }
+    void setWarnAnonymously(bool b) { m_warnAnonymously = b; }
+
+    unsigned long getAckMode() const { return m_ackMode; }
+    void setAckMode(unsigned long ackmode) { m_ackMode = ackmode; }
+
+    bool getUseHttp() const { return m_useHttp; }
+    void setUseHttp(bool b) { m_useHttp = b; }
+
+    bool getAutoHttp() const { return m_autoHttp; }
+    void setAutoHttp(bool b) { m_autoHttp = b; }
+
+    bool getKeepAlive() const { return m_keepAlive; }
+    void setKeepAlive(bool b) { m_keepAlive = b; }
+
+    bool getMediaSense() const { return m_mediaSense; }
+    void setMediaSense(bool b) { m_mediaSense = b; }
+
+    //SIM::Data       Server;
+    //SIM::Data		Port;
+    //SIM::Data		ContactsTime;
+//    SIM::Data		ContactsLength;
+//    SIM::Data		ContactsInvisible;
+//    SIM::Data		HideIP;
+//    SIM::Data		IgnoreAuth;
+//    SIM::Data		UseMD5;
+    //SIM::Data		DirectMode;
+    //SIM::Data		IdleTime;
+    //SIM::Data        ListRequests;
+    //SIM::Data        Picture;
+    //SIM::Data		RandomChatGroup;
+    //SIM::Data		RandomChatGroupCurrent;
+    //SIM::Data		SendFormat;
+    //SIM::Data		DisablePlugins;
+    //SIM::Data		DisableAutoUpdate;
+    //SIM::Data		DisableAutoReplyUpdate;
+    //SIM::Data		DisableTypingNotification;
 //    Data		AutoCheckInvisible;
 //    Data		CheckInvisibleInterval;
-    SIM::Data		AcceptInDND;
-    SIM::Data		AcceptInOccupied;
-    SIM::Data		MinPort;
-    SIM::Data		MaxPort;
-    SIM::Data		WarnAnonimously;
-    SIM::Data		AckMode;
-    SIM::Data		UseHTTP;
-    SIM::Data		AutoHTTP;
-    SIM::Data		KeepAlive;
-	SIM::Data		MediaSense;
+    //SIM::Data		AcceptInDND;
+    //SIM::Data		AcceptInOccupied;
+//    SIM::Data		MinPort;
+//    SIM::Data		MaxPort;
+    //SIM::Data		WarnAnonimously;
+    //SIM::Data		AckMode;
+    //SIM::Data		UseHTTP;
+    //SIM::Data		AutoHTTP;
+    //SIM::Data		KeepAlive;
+    //SIM::Data		MediaSense;
     ICQUserData	owner;
 
 private:
     void dispatchDeserialization(const QString& key, const QString& value);
+
+    QString m_server;
+    unsigned long m_port;
+    unsigned long m_contactsTime;
+    unsigned long m_contactsLength;
+    unsigned long m_contactsInvisible;
+    bool m_hideIp;
+    bool m_ignoreAuth;
+    bool m_useMd5;
+    unsigned long m_directMode;
+    unsigned long m_idleTime;
+    QString m_listRequests;
+    QString m_picture;
+    unsigned long m_randomChatGroup;
+    unsigned long m_randomChatGroupCurrent;
+    unsigned long m_sendFormat;
+    bool m_disablePlugins;
+    bool m_disableAutoUpdate;
+    bool m_disableAutoReplyUpdate;
+    bool m_disableTypingNotification;
+    bool m_acceptInDnd;
+    bool m_acceptInOccupied;
+    unsigned long m_minPort;
+    unsigned long m_maxPort;
+    bool m_warnAnonymously;
+    unsigned long m_ackMode;
+    bool m_useHttp;
+    bool m_autoHttp;
+    bool m_keepAlive;
+    bool m_mediaSense;
 };
 
 class ICQClient;
@@ -818,36 +941,122 @@ public:
     void setUin(unsigned long);
     void setScreen(const QString &);
     unsigned long getUin();
+
     QString getServer() const;
     void setServer(const QString &);
-    PROP_USHORT(Port);
-    PROP_ULONG(ContactsTime);
-    PROP_USHORT(ContactsLength);
-    PROP_USHORT(ContactsInvisible);
-    PROP_BOOL(HideIP);
-    PROP_BOOL(IgnoreAuth);
-    PROP_BOOL(UseMD5);
-    PROP_ULONG(DirectMode);
-    PROP_ULONG(IdleTime);
-    PROP_STR(ListRequests);
-    PROP_UTF8(Picture);
-    PROP_USHORT(RandomChatGroup);
-    PROP_ULONG(RandomChatGroupCurrent);
-    PROP_ULONG(SendFormat);
-    PROP_BOOL(DisablePlugins);
-    PROP_BOOL(DisableAutoUpdate);
-    PROP_BOOL(DisableAutoReplyUpdate);
-    PROP_BOOL(DisableTypingNotification);
-    PROP_BOOL(AcceptInDND);
-    PROP_BOOL(AcceptInOccupied);
-    PROP_USHORT(MinPort);
-    PROP_USHORT(MaxPort);
-    PROP_BOOL(WarnAnonimously);
-    PROP_USHORT(AckMode);
-    PROP_BOOL(UseHTTP);
-    PROP_BOOL(AutoHTTP);
-    PROP_BOOL(KeepAlive);
-	PROP_BOOL(MediaSense);
+
+    //PROP_USHORT(Port);
+    unsigned short getPort() const;
+    void setPort(unsigned short port);
+
+    //PROP_ULONG(ContactsTime);
+    unsigned long getContactsTime() const;
+    void setContactsTime(unsigned long contactsTime);
+
+    //PROP_USHORT(ContactsLength);
+    unsigned short getContactsLength() const;
+    void setContactsLength(unsigned short contactsLength);
+
+    //PROP_USHORT(ContactsInvisible);
+    unsigned short getContactsInvisible() const;
+    void setContactsInvisible(unsigned short contactsInvisible);
+
+    //PROP_BOOL(HideIP);
+    bool getHideIP() const;
+    void setHideIP(bool hideip);
+
+    //PROP_BOOL(IgnoreAuth);
+    bool getIgnoreAuth() const;
+    void setIgnoreAuth(bool ignoreAuth);
+
+    //PROP_BOOL(UseMD5);
+    bool getUseMD5() const;
+    void setUseMD5(bool usemd5);
+
+    //PROP_ULONG(DirectMode);
+    unsigned long getDirectMode();
+    void setDirectMode(unsigned long mode);
+
+    //PROP_ULONG(IdleTime);
+    unsigned long getIdleTime() const;
+    void setIdleTime(unsigned long time);
+
+    //PROP_STR(ListRequests);
+    QString getListRequests() const;
+    void setListRequests(const QString& listrequests);
+
+    //PROP_UTF8(Picture);
+    QString getPicture() const;
+    void setPicture(const QString& pic);
+
+    //PROP_USHORT(RandomChatGroup);
+    unsigned long getRandomChatGroup() const;
+    void setRandomChatGroup(unsigned long group);
+
+    //PROP_ULONG(RandomChatGroupCurrent);
+    unsigned long getRandomChatGroupCurrent() const;
+    void setRandomChatGroupCurrent(unsigned long group);
+
+    //PROP_ULONG(SendFormat);
+    unsigned long getSendFormat() const;
+    void setSendFormat(unsigned long format);
+
+    //PROP_BOOL(DisablePlugins);
+    bool getDisablePlugins() const;
+    void setDisablePlugins(bool b);
+
+    //PROP_BOOL(DisableAutoUpdate);
+    bool getDisableAutoUpdate() const;
+    void setDisableAutoUpdate(bool b);
+
+    //PROP_BOOL(DisableAutoReplyUpdate);
+    bool getDisableAutoReplyUpdate() const;
+    void setDisableAutoReplyUpdate(bool b);
+
+    //PROP_BOOL(DisableTypingNotification);
+    bool getDisableTypingNotification() const;
+    void setDisableTypingNotification(bool b);
+
+    //PROP_BOOL(AcceptInDND);
+    bool getAcceptInDND() const;
+    void setAcceptInDND(bool b);
+
+    //PROP_BOOL(AcceptInOccupied);
+    bool getAcceptInOccupied() const;
+    void setAcceptInOccupied(bool b);
+
+//    PROP_USHORT(MinPort);
+//    PROP_USHORT(MaxPort);
+    unsigned long getMinPort() const;
+    void setMinPort(unsigned long port);
+
+    unsigned long getMaxPort() const;
+    void setMaxPort(unsigned long port);
+
+//    PROP_BOOL(WarnAnonimously);
+    bool getWarnAnonymously() const;
+    void setWarnAnonymously(bool b);
+
+    //PROP_USHORT(AckMode);
+    unsigned long getAckMode() const;
+    void setAckMode(unsigned long mode);
+
+    //PROP_BOOL(UseHTTP);
+    bool getUseHTTP() const;
+    void setUseHTTP(bool b);
+
+    //PROP_BOOL(AutoHTTP);
+    bool getAutoHTTP() const;
+    void setAutoHTTP(bool b);
+
+    //PROP_BOOL(KeepAlive);
+    bool getKeepAlive() const;
+    void setKeepAlive(bool b);
+
+    //PROP_BOOL(MediaSense);
+    bool getMediaSense() const;
+    void setMediaSense(bool b);
+
     ICQClientData   data;
     // reimplement socket() to get correct Buffer
     virtual ICQClientSocket *socket() { return static_cast<ICQClientSocket*>(TCPClient::socket()); }

@@ -49,7 +49,7 @@ WarnDlg::WarnDlg(QWidget *parent, ICQUserData *data, ICQClient *client)
     if (m_client->findContact(client->screen(data), NULL, false, contact))
         m_contact = contact->id();
     lblInfo->setText(lblInfo->text().replace(QRegExp("\\%1"), m_client->screen(data)));
-    chkAnon->setChecked(m_client->getWarnAnonimously());
+    chkAnon->setChecked(m_client->getWarnAnonymously());
 }
 
 WarnDlg::~WarnDlg()
@@ -64,7 +64,7 @@ void WarnDlg::accept()
     m_msg->setClient(m_client->dataName(m_data));
     m_msg->setContact(m_contact);
     m_msg->setAnonymous(chkAnon->isChecked());
-    m_client->setWarnAnonimously(chkAnon->isChecked());
+    m_client->setWarnAnonymously(chkAnon->isChecked());
     if (!((Client*)m_client)->send(m_msg, m_data)){
         delete m_msg;
         m_msg = NULL;

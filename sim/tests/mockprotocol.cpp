@@ -32,13 +32,18 @@ namespace test
 
     MockUserData::MockUserData()
     {
-        Sign.asLong() = 1;
+        //Sign.asLong() = 1;
+    }
+
+    unsigned long MockUserData::getSign()
+    {
+        return 1;
     }
 
     QByteArray MockUserData::serialize()
     {
         QString result;
-        result += QString("Sign=%1\n").arg(Sign.toULong());
+        result += QString("Sign=%1\n").arg(getSign());
         result += QString("LastSend=%1\n").arg(LastSend.toULong());
         result += QString("Alpha=%1\n").arg(Alpha.toULong());
         return result.toLocal8Bit();
@@ -50,7 +55,7 @@ namespace test
         if(val.startsWith('\"') && val.endsWith('\"'))
             val = val.mid(1, val.length() - 2);
         if(key == "Sign") {
-            Sign.asULong() = val.toULong();
+            //Sign.asULong() = val.toULong();
         }
         else if(key == "LastSend") {
             LastSend.asULong() = val.toULong();

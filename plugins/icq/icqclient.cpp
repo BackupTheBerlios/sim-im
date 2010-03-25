@@ -172,7 +172,53 @@ static DataDef _icqUserData[] =
         { NULL, DATA_UNKNOWN, 0, 0 }
     };
 
-ICQUserData::ICQUserData() : IMContact(), m_uin(0)
+ICQUserData::ICQUserData() : IMContact(), m_uin(0),
+    m_status(0),
+    m_class(0),
+    m_statusTime(0),
+    m_onlineTime(0),
+    m_warningLevel(0),
+    m_ip(0),
+    m_realip(0),
+    m_port(0),
+    m_dcCookie(0),
+    m_caps(0),
+    m_caps2(0),
+    m_icqId(0),
+    m_checked(true),
+    m_grpId(0),
+    m_ignoreId(0),
+    m_visibleId(0),
+    m_invisibleId(0),
+    m_contactVisibleId(0),
+    m_contactInvisibleId(0),
+    m_waitAuth(false),
+    m_wantAuth(false),
+    m_webAware(true),
+    m_infoUpdateTime(0),
+    m_pluginInfoTime(0),
+    m_pluginStatusTime(0),
+    m_infoFetchTime(0),
+    m_pluginInfoFetchTime(0),
+    m_pluginStatusFetchTime(0),
+    m_mode(0),
+    m_version(0),
+    m_build(0),
+    m_hiddenEmail(false),
+    m_workcountry(0),
+    m_occupation(0),
+    m_followme(0),
+    m_sharedFiles(false),
+    m_profileFetch(false),
+    m_typing(false),
+    m_badClient(false),
+    m_noDirect(false),
+    m_invisible(false),
+    m_buddyRosterId(0),
+    m_buddyId(0),
+    m_direct(0),
+    m_directPluginInfo(0),
+    m_directPluginStatus(0)
 {
 
 }
@@ -494,6 +540,11 @@ QByteArray ICQUserData::serialize()
 	return result.toLocal8Bit();
 }
 
+unsigned long ICQUserData::getSign()
+{
+    return ICQ_SIGN;
+}
+
 void ICQUserData::deserialize(Buffer* cfg)
 {
     while(1) {
@@ -544,33 +595,43 @@ static DataDef icqClientData[] =
         { NULL, DATA_UNKNOWN, 0, 0 }
     };
 
+
+static const char aim_server[] = "login.oscar.aol.com";
+static const char icq_server[] = "login.icq.com";
+
+ICQClientData::ICQClientData() : IMContact(),
+    m_port(5190)
+{
+
+}
+
 QByteArray ICQClientData::serialize()
 {
     QString result;
-    result += QString("Server=%1\n").arg(Server.str());
-    result += QString("ServerPort=%1\n").arg(Port.toULong());
-    result += QString("HideIP=%1\n").arg(HideIP.toBool() ? "true" : "false");
-    result += QString("IgnoreAuth=%1\n").arg(IgnoreAuth.toBool() ? "true" : "false");
-    result += QString("UseMD5=%1\n").arg(UseMD5.toBool() ? "true" : "false");
-    result += QString("DirectMode=%1\n").arg(DirectMode.toULong());
-    result += QString("IdleTime=%1\n").arg(IdleTime.toULong());
-    result += QString("ListRequests=%1\n").arg(ListRequests.str());
-    result += QString("Picture=\"%1\"\n").arg(Picture.str());
-    result += QString("RandomChatGroup=\"%1\"\n").arg(RandomChatGroup.toULong());
-    result += QString("DisablePlugins=%1\n").arg(DisablePlugins.toBool() ? "true" : "false");
-    result += QString("DisableAutoUpdate=%1\n").arg(DisableAutoUpdate.toBool() ? "true" : "false");
-    result += QString("DisableAutoReplyUpdate=%1\n").arg(DisableAutoReplyUpdate.toBool() ? "true" : "false");
-    result += QString("DisableTypingNotification=%1\n").arg(DisableTypingNotification.toBool() ? "true" : "false");
-    result += QString("AcceptInDND=%1\n").arg(AcceptInDND.toBool() ? "true" : "false");
-    result += QString("AcceptInOccupied=%1\n").arg(AcceptInOccupied.toBool() ? "true" : "false");
-    result += QString("MinPort=%1\n").arg(MinPort.toULong());
-    result += QString("MaxPort=%1\n").arg(MaxPort.toULong());
-    result += QString("WarnAnonimously=%1\n").arg(WarnAnonimously.toBool() ? "true" : "false");
-    result += QString("ACKMode=%1\n").arg(AckMode.toULong());
-    result += QString("UseHTTP=%1\n").arg(UseHTTP.toBool() ? "true" : "false");
-    result += QString("AutoHTTP=%1\n").arg(AutoHTTP.toBool() ? "true" : "false");
-    result += QString("KeepAlive=%1\n").arg(KeepAlive.toBool() ? "true" : "false");
-    result += QString("MediaSense=%1\n").arg(MediaSense.toBool() ? "true" : "false");
+    result += QString("Server=%1\n").arg(getServer());
+    result += QString("ServerPort=%1\n").arg(getPort());
+    result += QString("HideIP=%1\n").arg(getHideIP() ? "true" : "false");
+    result += QString("IgnoreAuth=%1\n").arg(getIgnoreAuth() ? "true" : "false");
+    result += QString("UseMD5=%1\n").arg(getUseMD5() ? "true" : "false");
+    result += QString("DirectMode=%1\n").arg(getDirectMode());
+    result += QString("IdleTime=%1\n").arg(getIdleTime());
+    result += QString("ListRequests=%1\n").arg(getListRequests());
+    result += QString("Picture=\"%1\"\n").arg(getPicture());
+    result += QString("RandomChatGroup=%1\n").arg(getRandomChatGroup());
+    result += QString("DisablePlugins=%1\n").arg(getDisablePlugins() ? "true" : "false");
+    result += QString("DisableAutoUpdate=%1\n").arg(getDisableAutoUpdate() ? "true" : "false");
+    result += QString("DisableAutoReplyUpdate=%1\n").arg(getDisableAutoReplyUpdate() ? "true" : "false");
+    result += QString("DisableTypingNotification=%1\n").arg(getDisableTypingNotification() ? "true" : "false");
+    result += QString("AcceptInDND=%1\n").arg(getAcceptInDND() ? "true" : "false");
+    result += QString("AcceptInOccupied=%1\n").arg(getAcceptInOccupied() ? "true" : "false");
+    result += QString("MinPort=%1\n").arg(getMinPort());
+    result += QString("MaxPort=%1\n").arg(getMaxPort());
+    result += QString("WarnAnonimously=%1\n").arg(getWarnAnonymously() ? "true" : "false");
+    result += QString("ACKMode=%1\n").arg(getAckMode());
+    result += QString("UseHTTP=%1\n").arg(getUseHttp() ? "true" : "false");
+    result += QString("AutoHTTP=%1\n").arg(getAutoHttp() ? "true" : "false");
+    result += QString("KeepAlive=%1\n").arg(getKeepAlive() ? "true" : "false");
+    result += QString("MediaSense=%1\n").arg(getMediaSense() ? "true" : "false");
 
     return result.toLocal8Bit();
 }
@@ -595,82 +656,87 @@ void ICQClientData::dispatchDeserialization(const QString& key, const QString& v
     if(val.startsWith('\"') && val.endsWith('\"'))
         val = val.mid(1, val.length() - 2);
     if(key == "Server") {
-        Server.setStr(val);
+        setServer(val);
     }
     else if(key == "ServerPort") {
-        Port.asULong() = val.toULong();
+        setPort(val.toULong());
     }
     else if(key == "HideIP") {
-        HideIP.asBool() = val == "true";
+        setHideIP(val == "true");
     }
     else if(key == "IgnoreAuth") {
-        IgnoreAuth.asBool() = val == "true";
+        setIgnoreAuth(val == "true");
     }
     else if(key == "UseMD5") {
-        UseMD5.asBool() = val == "true";
+        setUseMD5(val == "true");
     }
     else if(key == "DirectMode") {
-        DirectMode.asULong() = val.toULong();
+        setDirectMode(val.toULong());
     }
     else if(key == "IdleTime") {
-        IdleTime.asULong() = val.toULong();
+        setIdleTime(val.toULong());
     }
     else if(key == "ListRequests") {
-       ListRequests.setStr(val);
+       setListRequests  (val);
     }
     else if(key == "Picture") {
-       Picture.setStr(val);
+       setPicture(val);
     }
     else if(key == "RandomChatGroup") {
-        RandomChatGroup.asULong() = val.toULong();
+        setRandomChatGroup(val.toULong());
     }
     else if(key == "SendFormat") {
-        SendFormat.asULong() = val.toULong();
+        setSendFormat(val.toULong());
     }
     else if(key == "DisablePlugins") {
-        DisablePlugins.asBool() = val == "true";
+        setDisablePlugins(val == "true");
     }
     else if(key == "DisableAutoUpdate") {
-        DisableAutoUpdate.asBool() = val == "true";
+        setDisableAutoUpdate(val == "true");
     }
     else if(key == "DisableAutoReplyUpdate") {
-        DisableAutoReplyUpdate.asBool() = val == "true";
+        setDisableAutoReplyUpdate(val == "true");
     }
     else if(key == "DisableTypingNotification") {
-        DisableTypingNotification.asBool() = val == "true";
+        setDisableTypingNotification(val == "true");
     }
     else if(key == "AcceptInDND") {
-        AcceptInDND.asBool() = val == "true";
+        setAcceptInDND(val == "true");
     }
     else if(key == "AcceptInOccupied") {
-        AcceptInOccupied.asBool() = val == "true";
+        setAcceptInOccupied(val == "true");
     }
     else if(key == "MinPort") {
-        MinPort.asULong() = val.toULong();
+        setMinPort(val.toULong());
     }
     else if(key == "MaxPort") {
-        MaxPort.asULong() = val.toULong();
+        setMaxPort(val.toULong());
     }
     else if(key == "WarnAnonimously") {
-        WarnAnonimously.asBool() = val == "true";
+        setWarnAnonymously(val == "true");
     }
     else if(key == "ACKMode") {
-        AckMode.asULong() = val.toULong();
+        setAckMode(val.toULong());
     }
     else if(key == "UseHTTP") {
-        UseHTTP.asBool() = val == "true";
+        setUseHttp(val == "true");
     }
     else if(key == "AutoHTTP") {
-        AutoHTTP.asBool() = val == "true";
+        setAutoHttp(val == "true");
     }
     else if(key == "KeepAlive") {
-        KeepAlive.asBool() = val == "true";
+        setKeepAlive(val == "true");
     }
     else if(key == "MediaSense") {
-        MediaSense.asBool() = val == "true";
+        setMediaSense(val == "true");
     }
     else
         owner.dispatchDeserialization(key, value);
+}
+
+unsigned long ICQClientData::getSign()
+{
+    return 0;
 }
 
 ICQClient::ICQClient(Protocol *protocol, Buffer *cfg, bool bAIM)
@@ -766,6 +832,276 @@ ICQClient::~ICQClient()
     while (!m_sockets.empty())
         delete m_sockets.front();
     m_processMsg.clear();
+}
+
+unsigned long ICQClient::getContactsTime() const
+{
+    return data.getContactsTime();
+}
+
+void ICQClient::setContactsTime(unsigned long contactsTime)
+{
+    data.setContactsTime(contactsTime);
+}
+
+unsigned short ICQClient::getContactsLength() const
+{
+    return data.getContactsLength();
+}
+
+void ICQClient::setContactsLength(unsigned short contactsLength)
+{
+    data.setContactsLength(contactsLength);
+}
+
+unsigned short ICQClient::getContactsInvisible() const
+{
+    return data.getContactsInvisible();
+}
+
+void ICQClient::setContactsInvisible(unsigned short contactsInvisible)
+{
+    data.setContactsInvisible(contactsInvisible);
+}
+
+bool ICQClient::getHideIP() const
+{
+    return data.getHideIP();
+}
+
+void ICQClient::setHideIP(bool hideip)
+{
+    data.setHideIP(hideip);
+}
+
+bool ICQClient::getIgnoreAuth() const
+{
+    return data.getIgnoreAuth();
+}
+
+void ICQClient::setIgnoreAuth(bool ignoreAuth)
+{
+    data.setIgnoreAuth(ignoreAuth);
+}
+
+bool ICQClient::getUseMD5() const
+{
+    return data.getUseMD5();
+}
+
+void ICQClient::setUseMD5(bool usemd5)
+{
+    data.setUseMD5(usemd5);
+}
+
+unsigned long ICQClient::getDirectMode()
+{
+    return data.getDirectMode();
+}
+
+void ICQClient::setDirectMode(unsigned long mode)
+{
+    data.setDirectMode(mode);
+}
+
+unsigned long ICQClient::getIdleTime() const
+{
+    return data.getIdleTime();
+}
+
+void ICQClient::setIdleTime(unsigned long time)
+{
+    data.setIdleTime(time);
+}
+
+QString ICQClient::getListRequests() const
+{
+    return data.getListRequests();
+}
+
+void ICQClient::setListRequests(const QString& listrequests)
+{
+    data.setListRequests(listrequests);
+}
+
+QString ICQClient::getPicture() const
+{
+    return data.getPicture();
+}
+
+void ICQClient::setPicture(const QString& pic)
+{
+    data.setPicture(pic);
+}
+
+unsigned long ICQClient::getRandomChatGroup() const
+{
+    return data.getRandomChatGroup();
+}
+
+void ICQClient::setRandomChatGroup(unsigned long group)
+{
+    data.setRandomChatGroup(group);
+}
+
+unsigned long ICQClient::getRandomChatGroupCurrent() const
+{
+    return data.getRandomChatGroupCurrent();
+}
+
+void ICQClient::setRandomChatGroupCurrent(unsigned long group)
+{
+    data.setRandomChatGroupCurrent(group);
+}
+
+unsigned long ICQClient::getSendFormat() const
+{
+    return data.getSendFormat();
+}
+
+void ICQClient::setSendFormat(unsigned long format)
+{
+    data.setSendFormat(format);
+}
+
+bool ICQClient::getDisablePlugins() const
+{
+    return data.getDisablePlugins();
+}
+
+void ICQClient::setDisablePlugins(bool b)
+{
+    data.setDisablePlugins(b);
+}
+
+bool ICQClient::getDisableAutoUpdate() const
+{
+    return data.getDisableAutoUpdate();
+}
+
+void ICQClient::setDisableAutoUpdate(bool b)
+{
+    data.setDisableAutoUpdate(b);
+}
+
+bool ICQClient::getDisableAutoReplyUpdate() const
+{
+    return data.getDisableAutoReplyUpdate();
+}
+
+void ICQClient::setDisableAutoReplyUpdate(bool b)
+{
+    data.setDisableAutoReplyUpdate(b);
+}
+
+bool ICQClient::getDisableTypingNotification() const
+{
+    return data.getDisableTypingNotification();
+}
+
+void ICQClient::setDisableTypingNotification(bool b)
+{
+    data.setDisableTypingNotification(b);
+}
+
+bool ICQClient::getAcceptInDND() const
+{
+    return data.getAcceptInDND();
+}
+
+void ICQClient::setAcceptInDND(bool b)
+{
+    data.setAcceptInDND(b);
+}
+
+bool ICQClient::getAcceptInOccupied() const
+{
+    return data.getAcceptInOccupied();
+}
+
+void ICQClient::setAcceptInOccupied(bool b)
+{
+    data.setAcceptInOccupied(b);
+}
+
+unsigned long ICQClient::getMinPort() const
+{
+    return data.getMinPort();
+}
+
+void ICQClient::setMinPort(unsigned long port)
+{
+    data.setMinPort(port);
+}
+
+unsigned long ICQClient::getMaxPort() const
+{
+    return data.getMinPort();
+}
+
+void ICQClient::setMaxPort(unsigned long port)
+{
+    data.setMinPort(port);
+}
+
+bool ICQClient::getWarnAnonymously() const
+{
+    return data.getWarnAnonymously();
+}
+
+void ICQClient::setWarnAnonymously(bool b)
+{
+    data.setWarnAnonymously(b);
+}
+
+unsigned long ICQClient::getAckMode() const
+{
+    return data.getAckMode();
+}
+
+void ICQClient::setAckMode(unsigned long mode)
+{
+    data.setAckMode(mode);
+}
+
+bool ICQClient::getUseHTTP() const
+{
+    return data.getUseHttp();
+}
+
+void ICQClient::setUseHTTP(bool b)
+{
+    data.setUseHttp(b);
+}
+
+bool ICQClient::getAutoHTTP() const
+{
+    return data.getAutoHttp();
+}
+
+void ICQClient::setAutoHTTP(bool b)
+{
+    data.setAutoHttp(b);
+}
+
+bool ICQClient::getKeepAlive() const
+{
+    return data.getKeepAlive();
+}
+
+void ICQClient::setKeepAlive(bool b)
+{
+    data.setKeepAlive(b);
+}
+
+bool ICQClient::getMediaSense() const
+{
+    return data.getMediaSense();
+}
+
+void ICQClient::setMediaSense(bool b)
+{
+    data.setMediaSense(b);
 }
 
 bool ICQClient::addSnacHandler(SnacHandler* handler)
@@ -878,23 +1214,31 @@ QWidget	*ICQClient::setupWnd()
     return new ICQConfig(NULL, this, true);
 }
 
-static const char aim_server[] = "login.oscar.aol.com";
-static const char icq_server[] = "login.icq.com";
-
 QString ICQClient::getServer() const
 {
-    if (!data.Server.str().isEmpty())
-        return data.Server.str();
+    if (!data.getServer().isEmpty())
+        return data.getServer();
     return m_bAIM ? aim_server : icq_server;
 }
 
 void ICQClient::setServer(const QString &server)
 {
     if (server == (m_bAIM ? aim_server : icq_server))
-        data.Server.str() = QString::null;
+        data.setServer(QString::null);
     else
-        data.Server.str() = server;
+        data.setServer(server);
 }
+
+unsigned short ICQClient::getPort() const
+{
+    return data.getPort();
+}
+
+void ICQClient::setPort(unsigned short port)
+{
+    data.setPort(port);
+}
+
 
 void ICQClient::setUin(unsigned long uin)
 {
@@ -920,7 +1264,7 @@ void ICQClient::generateCookie(MessageId& id)
 
 bool ICQClient::isMyData(IMContact *&_data, Contact *&contact)
 {
-    if (_data->Sign.toULong() != ICQ_SIGN)
+    if (_data->getSign() != ICQ_SIGN)
         return false;
     ICQUserData *data = toICQUserData(_data);
     if (m_bAIM)
@@ -3410,7 +3754,7 @@ bool ICQClient::processEvent(Event *e)
                 ClientDataIterator it = contact->clientDataIterator();
                 while ((data = ++it) != NULL) 
                 {
-                    if (data->Sign.asULong() == ICQ_SIGN)
+                    if (data->getSign() == ICQ_SIGN)
                     {  // Only ICQ contacts can be added to Visible list
                         icq_user_data=toICQUserData(data);
                         icq_user_data->setVisibleId((cmd->flags & COMMAND_CHECKED) ? getListId() : 0);
@@ -3429,7 +3773,7 @@ bool ICQClient::processEvent(Event *e)
                 ClientDataIterator it = contact->clientDataIterator();
                 while ((data = ++it) != NULL)
                 {
-                    if (data->Sign.asULong() == ICQ_SIGN)
+                    if (data->getSign() == ICQ_SIGN)
                     { // Only ICQ contacts can be added to Invisible list
                         icq_user_data=toICQUserData(data);
                         icq_user_data->setInvisibleId((cmd->flags & COMMAND_CHECKED) ? getListId() : 0);
@@ -3667,7 +4011,7 @@ bool ICQClient::send(Message *msg, void *_data)
 
 bool ICQClient::canSend(unsigned type, void *_data)
 {
-    if (_data && (((IMContact*)_data)->Sign.toULong() != ICQ_SIGN))
+    if (_data && (((IMContact*)_data)->getSign() != ICQ_SIGN))
         return false;
     if (getState() != Connected)
         return false;
@@ -4012,7 +4356,7 @@ ICQUserData* ICQClient::toICQUserData(SIM::IMContact * data)
    // It will at least warn if the content of the structure is not ICQUserData
    // Brave wariors may uncomment abort() function call to know for sure about wrong conversion ;-)
    if (! data) return NULL;
-   if (data->Sign.asULong() != ICQ_SIGN)
+   if (data->getSign() != ICQ_SIGN)
    {
       QString Signs[] = {
         "Unknown(0)" ,     // 0x0000
@@ -4027,8 +4371,8 @@ ICQUserData* ICQClient::toICQUserData(SIM::IMContact * data)
         "YAHOO_SIGN"       // 0x0009
       };
       QString Sign;
-      if (data->Sign.toULong()<=9) // is always >=0 as it is unsigned int
-        Sign = Signs[data->Sign.toULong()];
+      if (data->getSign()<=9) // is always >=0 as it is unsigned int
+        Sign = Signs[data->getSign()];
       else
         Sign = QString("Unknown(%1)").arg(Sign.toULong());
 

@@ -155,6 +155,11 @@ void JabberUserData::deserialize(Buffer* cfg)
 	}
 }
 
+unsigned long JabberUserData::getSign()
+{
+    return JABBER_SIGN;
+}
+
 static DataDef jabberClientData[] =
     {
         { "Server", DATA_STRING, 1, "jabber.org" },
@@ -289,7 +294,7 @@ QWidget	*JabberClient::setupWnd()
 
 bool JabberClient::isMyData(IMContact *&_data, Contact *&contact)
 {
-    if (_data->Sign.toULong() != JABBER_SIGN)
+    if (_data->getSign() != JABBER_SIGN)
         return false;
     QString resource;
     JabberUserData *data = toJabberUserData(_data);
@@ -1858,7 +1863,7 @@ QString JabberClient::resources(void *_data)
 
 bool JabberClient::canSend(unsigned type, void *_data)
 {
-    if ((_data == NULL) || (((IMContact*)_data)->Sign.toULong() != JABBER_SIGN))
+    if ((_data == NULL) || (((IMContact*)_data)->getSign() != JABBER_SIGN))
         return false;
     if (getState() != Connected)
         return false;
@@ -2817,7 +2822,7 @@ JabberUserData* JabberClient::toJabberUserData(SIM::IMContact * data)
    // It will at least warn if the content of the structure is not JabberUserData
    // Brave wariors may uncomment abort() function call to know for sure about wrong conversion ;-)
    if (! data) return NULL;
-   if (data->Sign.asULong() != JABBER_SIGN)
+   if (data->getSign() != JABBER_SIGN)
    {
       QString Signs[] = {
         "Unknown(0)" ,     // 0x0000
@@ -2832,8 +2837,8 @@ JabberUserData* JabberClient::toJabberUserData(SIM::IMContact * data)
         "YAHOO_SIGN"       // 0x0009
       };
       QString Sign;
-      if (data->Sign.toULong()<=9) // is always >=0 as it is unsigned int
-        Sign = Signs[data->Sign.toULong()];
+      if (data->getSign()<=9) // is always >=0 as it is unsigned int
+        Sign = Signs[data->getSign()];
       else
         Sign = QString("Unknown(%1)").arg(Sign.toULong());
 

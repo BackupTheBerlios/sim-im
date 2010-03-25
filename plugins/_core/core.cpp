@@ -812,7 +812,7 @@ void CorePlugin::getWays(vector<clientContact> &ways, Contact *contact)
         {
 			if (data1 == data)
 				break;
-			if (data->Sign.toULong() != data1->Sign.toULong())
+            if (data->getSign() != data1->getSign())
 				continue;
 			if (it.client()->compareData(data, data1))
             {
