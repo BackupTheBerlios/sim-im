@@ -77,6 +77,7 @@ public:
     void addColumn(const QString& name);
     void setOpen(bool o);
     void setOpen(ListViewItem* item, bool o);
+    void repaint(ListViewItem* item);
 
 signals:
     void clickItem(ListViewItem*);

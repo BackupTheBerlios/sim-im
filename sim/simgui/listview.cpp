@@ -137,6 +137,11 @@ ListView::~ListView()
 {
 }
 
+void ListView::repaint(ListViewItem* item)
+{
+    update(indexFromItem(item));
+}
+
 void ListView::sizeChange(int,int,int)
 {
     QTimer::singleShot(0, this, SLOT(adjustColumn()));
@@ -223,15 +228,9 @@ void ListView::mousePressEvent(QMouseEvent *e)
     if (e->button() == Qt::LeftButton)
     {
         m_pressedItem = itemAt(e->pos());
-        /*
-           if (m_pressedItem && !m_pressedItem->isSelectable())
-           m_pressedItem = NULL;
-           */
         if (m_pressedItem)
         {
             update();
-            //repaintItem(m_pressedItem);
-            //update(model()->index(m_pressedItem->row(), 0));
         }
     }
     QTreeWidget::mousePressEvent(e);

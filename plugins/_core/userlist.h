@@ -22,11 +22,11 @@
 #include "simgui/listview.h"
 #include "contacts/contact.h"
 #include <QMouseEvent>
+#include <QTimer>
 
 using namespace std;
 
 class UserListBase;
-class QTimer;
 class UserViewDelegate;
 
 const unsigned DIV_ITEM = 0;
@@ -113,6 +113,7 @@ protected:
     QIcon m_Icon;
     QString m_sExtraIcons;
     SIM::Contact *contact;
+    friend class UserViewDelegate;
 };
 
 class UserListBase : public ListView
@@ -126,10 +127,15 @@ public:
 protected slots:
     void drawUpdates();
     bool updateGroups();
-    bool updateContacts(DivItem* itemOnline, DivItem* itemOffline);
-    bool updateContactNoGroups(SIM::Contact* contact, DivItem *itemOnline, DivItem *itemOffline);
-    bool updateContactGroupMode1(SIM::Contact* contact, DivItem *itemOnline, DivItem *itemOffline);
-    bool updateContactGroupMode2(SIM::Contact* contact, DivItem *itemOnline, DivItem *itemOffline);
+    bool updateContacts();
+    bool updateContactNoGroups(SIM::Contact* contact);
+    bool updateContactGroupMode1(SIM::Contact* contact);
+    bool updateContactGroupMode2(SIM::Contact* contact);
+
+    bool removeContactFromItem(unsigned long contactId, DivItem* item);
+    void refreshOnlineOfflineGroups();
+
+    void updateUnread();
 
 protected:
     unsigned m_groupMode;
@@ -147,14 +153,18 @@ protected:
     virtual void deleteItem(ListViewItem *item);
     std::list<ListViewItem*> sortItems;
     std::list<ListViewItem*> updatedItems;
+    std::list<ContactItem*> m_unreadItems;
     std::list<unsigned long>	updGroups;
     std::list<unsigned long>	updContacts;
     bool m_bDirty;
     bool m_bInit;
     QTimer *updTimer;
+    QTimer m_unreadTimer;
     friend class UserViewItemBase;
     bool m_bCheckable;
 	ContactItem *m_contactItem;
+    DivItem* m_itemOnline;
+    DivItem* m_itemOffline;
 };
 
 class UserList
