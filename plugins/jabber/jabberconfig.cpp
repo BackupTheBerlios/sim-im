@@ -45,7 +45,7 @@ JabberConfig::JabberConfig(QWidget *parent, JabberClient *client, bool bConfig) 
     edtServer->setText(m_client->getServer());
     edtPort->setValue(m_client->getPort());
     edtPriority->setValue(m_client->getPriority());
-    edtResource->setText(m_client->data.owner.Resource.str());
+    edtResource->setText(m_client->data.owner.getResource());
     edtVHost->setText(m_client->data.VHost.str());
     if (m_bConfig){
         tabCfg->removeTab(tabCfg->indexOf(tabJabber));
@@ -139,7 +139,7 @@ void JabberConfig::apply()
         EventRepaintView e;
         e.process();
     }
-    m_client->data.owner.Resource.str() = edtResource->text();
+    m_client->data.owner.getResource() = edtResource->text();
     m_client->setPriority(edtPriority->text().toLong());
     m_client->setUseHTTP(chkHTTP->isChecked());
     m_client->setURL(edtUrl->text());

@@ -64,7 +64,7 @@ bool JabberHomeInfo::processEvent(Event *e)
     if (m_data && (e->type() == eEventVCard)){
         EventVCard *evc = static_cast<EventVCard*>(e);
         JabberUserData *data = evc->data();
-        if (m_data->ID.str() == data->ID.str() && m_data->Node.str() == data->Node.str())
+        if (m_data->getId() == data->getId() && m_data->getNode() == data->getNode())
             fill(data);
     }
     return false;
@@ -73,12 +73,12 @@ bool JabberHomeInfo::processEvent(Event *e)
 void JabberHomeInfo::fill(JabberUserData *data)
 {
     if (data == NULL) data = &m_client->data.owner;
-    edtStreet->setPlainText(data->Street.str());
-    edtExt->setPlainText(data->ExtAddr.str());
-    edtCity->setText(data->City.str());
-    edtState->setText(data->Region.str());
-    edtZip->setText(data->PCode.str());
-    edtCountry->setText(data->Country.str());
+    edtStreet->setPlainText(data->getStreet());
+    edtExt->setPlainText(data->getExtAddr());
+    edtCity->setText(data->getCity());
+    edtState->setText(data->getRegion());
+    edtZip->setText(data->getPCode());
+    edtCountry->setText(data->getCountry());
 }
 
 void JabberHomeInfo::apply(Client *client, void *_data)
@@ -86,17 +86,11 @@ void JabberHomeInfo::apply(Client *client, void *_data)
     if (client != m_client)
         return;
     JabberUserData *data = m_client->toJabberUserData((SIM::IMContact*)_data); // FIXME unsafe type conversion
-    data->Street.str() = edtStreet->toPlainText();
-    data->ExtAddr.str() = edtExt->toPlainText();
-    data->City.str()    = edtCity->text();
-    data->Region.str()  = edtState->text();
-    data->PCode.str()   = edtZip->text();
-    data->Country.str() = edtCountry->text();
+    data->setStreet(edtStreet->toPlainText());
+    data->setExtAddr(edtExt->toPlainText());
+    data->setCity(edtCity->text());
+    data->setRegion(edtState->text());
+    data->setPCode(edtZip->text());
+    data->setCountry(edtCountry->text());
 }
-
-/*
-#ifndef NO_MOC_INCLUDES
-#include "jabberhomeinfo.moc"
-#endif
-*/
 

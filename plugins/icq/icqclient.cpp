@@ -1190,7 +1190,7 @@ QByteArray ICQClient::getConfig()
     QByteArray res = Client::getConfig();
     if (res.length())
         res += '\n';
-    return res += save_data(icqClientData, &data);
+    return res += data.serialize(); //save_data(icqClientData, &data);
 }
 
 QString ICQClient::name()

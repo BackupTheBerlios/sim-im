@@ -65,7 +65,7 @@ RostersRequest::RostersRequest(JabberClient *client)
         ClientDataIterator it = contact->clientDataIterator(client);
         JabberUserData *data;
         while ((data = m_client->toJabberUserData(++it)) != NULL)
-            data->bChecked.asBool() = false;
+            data->setChecked(false);
     }
     client->m_bJoin = false;
 }
@@ -80,8 +80,8 @@ RostersRequest::~RostersRequest()
         JabberUserData *data;
         list<void*> dataRemoved;
         while ((data = m_client->toJabberUserData(++it)) != NULL){
-            if (!data->bChecked.toBool()){
-                QString jid = data->ID.str();
+            if (!data->isChecked()){
+                QString jid = data->getId();
                 JabberListRequest *lr = m_client->findRequest(jid, false);
                 if (lr && lr->bDelete)
                     m_client->findRequest(jid, true);
@@ -183,12 +183,12 @@ void RostersRequest::element_end(const QString& el)
         }
         if (data == NULL)
             return;
-        if (data->Subscribe.toULong() != m_subscribe){
+        if (data->getSubscribe() != m_subscribe){
             bChanged = true;
-            data->Subscribe.asULong() = m_subscribe;
+            data->setSubscribe(m_subscribe);
         }
-        data->Group.str() = m_grp;
-        data->bChecked.asBool() = true;
+        data->setGroup(m_grp);
+        data->setChecked(true);
         if (lr == NULL){
             unsigned grp = 0;
             if (!m_grp.isEmpty()){
@@ -293,8 +293,8 @@ extern DataDef jabberUserData[];
 InfoRequest::InfoRequest(JabberClient *client, JabberUserData *data, bool bVCard)
         : JabberClient::ServerRequest(client, _GET, NULL, client->buildId(data))
 {
-    m_jid   = data->ID.str();
-    m_node  = data->Node.str();
+    m_jid   = data->getId();
+    m_node  = data->getNode();
     m_bStarted = false;
     m_data  = NULL;
     m_bPhoto = false;
@@ -311,10 +311,10 @@ InfoRequest::~InfoRequest()
         if (m_bVCard){
             load_data(jabberUserData, &u_data, NULL);
             data = &u_data;
-            data->ID.str() = m_jid;
-            data->Node.str() = m_node;
+            data->setId(m_jid);
+            data->setNode(m_node);
         }else{
-            if (m_jid == m_client->data.owner.ID.str()){
+            if (m_jid == m_client->data.owner.getId()){
                 data = &m_client->data.owner;
             }else{
                 QString jid = m_jid;
@@ -329,23 +329,74 @@ InfoRequest::~InfoRequest()
             }
         }
         bool bChanged = false;
-        bChanged |= data->FirstName.setStr(m_firstName);
-        bChanged |= data->Nick.setStr(m_nick);
-        bChanged |= data->Desc.setStr(m_desc);
-        bChanged |= data->Bday.setStr(m_bday);
-        bChanged |= data->Url.setStr(m_url);
-        bChanged |= data->OrgName.setStr(m_orgName);
-        bChanged |= data->OrgUnit.setStr(m_orgUnit);
-        bChanged |= data->Title.setStr(m_title);
-        bChanged |= data->Role.setStr(m_role);
-        bChanged |= data->Street.setStr(m_street);
-        bChanged |= data->ExtAddr.setStr(m_ext);
-        bChanged |= data->City.setStr(m_city);
-        bChanged |= data->Region.setStr(m_region);
-        bChanged |= data->PCode.setStr(m_pcode);
-        bChanged |= data->Country.setStr(m_country);
-        bChanged |= data->EMail.setStr(m_email);
-        bChanged |= data->Phone.setStr(m_phone);
+        if(data->getFirstName() != m_firstName) {
+            bChanged = true;
+            data->setFirstName(m_firstName);
+        }
+        if(data->getNick() != m_nick) {
+            bChanged = true;
+            data->setNick(m_nick);
+        }
+        if(data->getDesc() != m_desc) {
+            bChanged = true;
+            data->setDesc(m_desc);
+        }
+        if(data->getBirthday() != m_bday) {
+            bChanged = true;
+            data->setBirthday(m_bday);
+        }
+        if(data->getUrl() != m_url) {
+            bChanged = true;
+            data->setUrl(m_url);
+        }
+        if(data->getOrgName() != m_orgName) {
+            bChanged = true;
+            data->setOrgName(m_orgName);
+        }
+        if(data->getOrgUnit() != m_orgUnit) {
+            bChanged = true;
+            data->setOrgUnit(m_orgUnit);
+        }
+        if(data->getTitle() != m_title) {
+            bChanged = true;
+            data->setTitle(m_title);
+        }
+        if(data->getRole() != m_role) {
+            bChanged = true;
+            data->setRole(m_role);
+        }
+        if(data->getStreet() != m_street) {
+            bChanged = true;
+            data->setStreet(m_street);
+        }
+        if(data->getExtAddr() != m_ext) {
+            bChanged = true;
+            data->setExtAddr(m_ext);
+        }
+        if(data->getCity() != m_city) {
+            bChanged = true;
+            data->setCity(m_city);
+        }
+        if(data->getRegion() != m_region) {
+            bChanged = true;
+            data->setRegion(m_region);
+        }
+        if(data->getPCode() != m_pcode) {
+            bChanged = true;
+            data->setPCode(m_pcode);
+        }
+        if(data->getCountry() != m_country) {
+            bChanged = true;
+            data->setCountry(m_country);
+        }
+        if(data->getEmail() != m_email) {
+            bChanged = true;
+            data->setEmail(m_email);
+        }
+        if(data->getPhone() != m_phone) {
+            bChanged = true;
+            data->setPhone(m_phone);
+        }
 
         if (m_bVCard){
             EventVCard(data).process();
@@ -366,18 +417,18 @@ InfoRequest::~InfoRequest()
             }
         }
         if (photo.width() && photo.height()){
-            if ((photo.width() != (int)(data->PhotoWidth.toLong())) ||
-                    (photo.height() != (int)(data->PhotoHeight.toLong())))
+            if ((photo.width() != (int)(data->getPhotoWidth())) ||
+                    (photo.height() != (int)(data->getPhotoHeight())))
                 bChanged = true;
-            data->PhotoWidth.asLong()  = photo.width();
-            data->PhotoHeight.asLong() = photo.height();
-            if (m_jid == m_client->data.owner.ID.str())
+            data->setPhotoWidth(photo.width());
+            data->setPhotoHeight(photo.height());
+            if (m_jid == m_client->data.owner.getId())
                 m_client->setPhoto(m_client->photoFile(data));
         }else{
-            if (data->PhotoWidth.toLong() || data->PhotoHeight.toLong())
+            if (data->getPhotoWidth() || data->getPhotoHeight())
                 bChanged = true;
-            data->PhotoWidth.asLong()  = 0;
-            data->PhotoHeight.asLong() = 0;
+            data->setPhotoWidth(0);
+            data->setPhotoHeight(0);
         }
 
         QImage logo;
@@ -394,18 +445,18 @@ InfoRequest::~InfoRequest()
             }
         }
         if (logo.width() && logo.height()){
-            if ((logo.width() != (int)(data->LogoWidth.toLong())) ||
-                    (logo.height() != (int)(data->LogoHeight.toLong())))
+            if ((logo.width() != (int)(data->getLogoWidth())) ||
+                    (logo.height() != (int)(data->getLogoHeight())))
                 bChanged = true;
-            data->LogoWidth.asLong()  = logo.width();
-            data->LogoHeight.asLong() = logo.height();
-            if (m_jid == m_client->data.owner.ID.str())
+            data->setLogoWidth(logo.width());
+            data->setLogoHeight(logo.height());
+            if (m_jid == m_client->data.owner.getId())
                 m_client->setLogo(m_client->logoFile(data));
         }else{
-            if (data->LogoWidth.toLong() || data->LogoHeight.toLong())
+            if (data->getLogoWidth() || data->getLogoHeight())
                 bChanged = true;
-            data->LogoWidth.asLong()  = 0;
-            data->LogoHeight.asLong() = 0;
+            data->setLogoWidth(0);
+            data->setLogoHeight(0);
         }
 
         if (bChanged){
@@ -544,8 +595,8 @@ void JabberClient::info_request(JabberUserData *user_data, bool bVCard)
     req->add_attribute("prodid", "-//HandGen//NONSGML vGen v1.0//EN");
     req->add_attribute("xmlns", "vcard-temp");
     req->add_attribute("version", "2.0");
-    if (!user_data->Node.str().isEmpty())
-        req->add_attribute("node", user_data->Node.str());
+    if (!user_data->getNode().isEmpty())
+        req->add_attribute("node", user_data->getNode());
     req->send();
     m_requests.push_back(req);
 }
@@ -576,21 +627,21 @@ void JabberClient::setClientInfo(void *_data)
 {
     JabberUserData *data = toJabberUserData((SIM::IMContact*)_data);  // FIXME unsafe type conversion
     if (data != &this->data.owner){
-        this->data.owner.FirstName.str() = data->FirstName.str();
-        this->data.owner.Nick.str() = data->Nick.str();
-        this->data.owner.Desc.str() = data->Desc.str();
-        this->data.owner.Bday.str() = data->Bday.str();
-        this->data.owner.Url.str() = data->Url.str();
-        this->data.owner.OrgName.str() = data->OrgName.str();
-        this->data.owner.OrgUnit.str() = data->OrgUnit.str();
-        this->data.owner.Title.str() = data->Title.str();
-        this->data.owner.Role.str() = data->Role.str();
-        this->data.owner.Street.str() = data->Street.str();
-        this->data.owner.ExtAddr.str() = data->ExtAddr.str();
-        this->data.owner.City.str() = data->City.str();
-        this->data.owner.Region.str() = data->Region.str();
-        this->data.owner.PCode.str() = data->PCode.str();
-        this->data.owner.Country.str() = data->Country.str();
+        this->data.owner.setFirstName(data->getFirstName());
+        this->data.owner.setNick(data->getNick());
+        this->data.owner.setDesc(data->getDesc());
+        this->data.owner.setBirthday(data->getBirthday());
+        this->data.owner.setUrl(data->getUrl());
+        this->data.owner.setOrgName(data->getOrgName());
+        this->data.owner.setOrgUnit(data->getOrgUnit());
+        this->data.owner.setTitle(data->getTitle());
+        this->data.owner.setRole(data->getRole());
+        this->data.owner.setStreet(data->getStreet());
+        this->data.owner.setExtAddr(data->getExtAddr());
+        this->data.owner.setCity(data->getCity());
+        this->data.owner.setRegion(data->getRegion());
+        this->data.owner.setPCode(data->getPCode());
+        this->data.owner.setCountry(data->getCountry());
     }
     setInfoUpdated(true);
     if (getState() != Connected)
@@ -600,10 +651,10 @@ void JabberClient::setClientInfo(void *_data)
     req->add_attribute("prodid", "-//HandGen//NONSGML vGen v1.0//EN");
     req->add_attribute("xmlns", "vcard-temp");
     req->add_attribute("version", "2.0");
-    req->add_attribute("node", data->Node.str());
-    req->text_tag("FN", data->FirstName.str());
-    req->text_tag("NICKNAME", data->Nick.str());
-    req->text_tag("DESC", data->Desc.str());
+    req->add_attribute("node", data->getNode());
+    req->text_tag("FN", data->getFirstName());
+    req->text_tag("NICKNAME", data->getNick());
+    req->text_tag("DESC", data->getDesc());
     QString mails = getContacts()->owner()->getEMails();
     while (mails.length()){
         QString mailItem = getToken(mails, ';', false);
@@ -613,14 +664,14 @@ void JabberClient::setClientInfo(void *_data)
         req->text_tag("EMAIL", mail);
         break;
     }
-    req->text_tag("BDAY", data->Bday.str());
-    req->text_tag("URL", data->Url.str());
+    req->text_tag("BDAY", data->getBirthday());
+    req->text_tag("URL", data->getUrl());
     req->start_element("ORG");
-    req->text_tag("ORGNAME", data->OrgName.str());
-    req->text_tag("ORGUNIT", data->OrgUnit.str());
+    req->text_tag("ORGNAME", data->getOrgName());
+    req->text_tag("ORGUNIT", data->getOrgUnit());
     req->end_element();
-    req->text_tag("TITLE", data->Title.str());
-    req->text_tag("ROLE", data->Role.str());
+    req->text_tag("TITLE", data->getTitle());
+    req->text_tag("ROLE", data->getRole());
     QString phone;
     QString phones = getContacts()->owner()->getPhones();
     while (phones.length()){
@@ -645,12 +696,12 @@ void JabberClient::setClientInfo(void *_data)
     req->start_element("ADDR");
     req->start_element("HOME");
     req->end_element();
-    req->text_tag("STREET", data->Street.str());
-    req->text_tag("EXTADD", data->ExtAddr.str());
-    req->text_tag("LOCALITY", data->City.str());
-    req->text_tag("REGION", data->Region.str());
-    req->text_tag("PCODE", data->PCode.str());
-    req->text_tag("COUNTRY", data->Country.str());
+    req->text_tag("STREET", data->getStreet());
+    req->text_tag("EXTADD", data->getExtAddr());
+    req->text_tag("LOCALITY", data->getCity());
+    req->text_tag("REGION", data->getRegion());
+    req->text_tag("PCODE", data->getPCode());
+    req->text_tag("COUNTRY", data->getCountry());
     req->end_element();
     if (!getPhoto().isEmpty()){
         QFile img(getPhoto());
@@ -873,13 +924,13 @@ JabberClient::PresenceRequest::~PresenceRequest()
         JabberUserData *data = m_client->findContact(m_from, QString::null, false, contact, resource);
         if (data){
             unsigned i;
-            for (i = 1; i <= data->nResources.toULong(); i++){
-                if (resource == get_str(data->Resources, i))
+            for (i = 1; i <= data->getNResources(); i++){
+                if (resource == data->getResource(i))
                     break;
             }
             bool bChanged = false;
             if (status == STATUS_OFFLINE){
-                if (i <= data->nResources.toULong()){
+                if (i <= data->getNResources()){
                     bChanged = true;
                     vector<QString> resources;
                     vector<QString> resourceReply;
@@ -889,86 +940,86 @@ JabberClient::PresenceRequest::~PresenceRequest()
                     vector<QString> resourceClientName;
                     vector<QString> resourceClientVersion;
                     vector<QString> resourceClientOS;
-                    for (unsigned n = 1; n <= data->nResources.toULong(); n++){
+                    for (unsigned n = 1; n <= data->getNResources(); n++){
                         if (i == n)
                             continue;
-                        resources.push_back(get_str(data->Resources, n));
-                        resourceReply.push_back(get_str(data->ResourceReply, n));
-                        resourceStatus.push_back(get_str(data->ResourceStatus, n));
-                        resourceStatusTime.push_back(get_str(data->ResourceStatusTime, n));
-                        resourceOnlineTime.push_back(get_str(data->ResourceOnlineTime, n));
-                        resourceClientName.push_back(get_str(data->ResourceClientName, n));
-                        resourceClientVersion.push_back(get_str(data->ResourceClientVersion, n));
-                        resourceClientOS.push_back(get_str(data->ResourceClientOS, n));
+                        resources.push_back(data->getResource(n));
+                        resourceReply.push_back(data->getResourceReply(n));
+                        resourceStatus.push_back(data->getResourceStatus(n));
+                        resourceStatusTime.push_back(data->getResourceStatusTime(n));
+                        resourceOnlineTime.push_back(data->getResourceOnlineTime(n));
+                        resourceClientName.push_back(data->getResourceClientName(n));
+                        resourceClientVersion.push_back(data->getResourceClientVersion(n));
+                        resourceClientOS.push_back(data->getResourceClientOS(n));
                     }
-                    data->Resources.clear();
-                    data->ResourceReply.clear();
-                    data->ResourceStatus.clear();
-                    data->ResourceStatusTime.clear();
-                    data->ResourceOnlineTime.clear();
-                    data->ResourceClientName.clear();
-                    data->ResourceClientVersion.clear();
-                    data->ResourceClientOS.clear();
+                    data->clearResources();
+                    data->clearResourceReplies();
+                    data->clearResourceStatuses();
+                    data->clearResourceStatusTimes();
+                    data->clearResourceOnlineTimes();
+                    data->clearResourceClientNames();
+                    data->clearResourceClientVersions();
+                    data->clearResourceClientOSes();
                     for (i = 0; i < resources.size(); i++){
-                        set_str(&data->Resources, i + 1, resources[i]);
-                        set_str(&data->ResourceReply, i + 1, resourceReply[i]);
-                        set_str(&data->ResourceStatus, i + 1, resourceStatus[i]);
-                        set_str(&data->ResourceStatusTime, i + 1, resourceStatusTime[i]);
-                        set_str(&data->ResourceOnlineTime, i + 1, resourceOnlineTime[i]);
-                        set_str(&data->ResourceClientName, i + 1, resourceClientName[i]);
-                        set_str(&data->ResourceClientVersion, i + 1, resourceClientVersion[i]);
-                        set_str(&data->ResourceClientOS, i + 1, resourceClientOS[i]);
+                        data->setResource(i + 1, resources[i]);
+                        data->setResourceReply(i + 1, resourceReply[i]);
+                        data->setResourceStatus(i + 1, resourceStatus[i]);
+                        data->setResourceStatusTime(i + 1, resourceStatusTime[i]);
+                        data->setResourceOnlineTime(i + 1, resourceOnlineTime[i]);
+                        data->setResourceClientName(i + 1, resourceClientName[i]);
+                        data->setResourceClientVersion(i + 1, resourceClientVersion[i]);
+                        data->setResourceClientOS(i + 1, resourceClientOS[i]);
                     }
-                    data->nResources.asULong() = resources.size();
+                    data->setNResources(resources.size());
                 }
-                if (data->nResources.toULong() == 0)
-                    data->AutoReply.str() = m_status;
+                if (data->getNResources() == 0)
+                    data->setAutoReply(m_status);
             }else{
-                if (i > data->nResources.toULong()){
+                if (i > data->getNResources()){
                     bChanged = true;
-                    data->nResources.asULong() = i;
-                    set_str(&data->Resources, i, resource);
-                    set_str(&data->ResourceOnlineTime, i, QString::number(!time2.isNull() ? time2.toTime_t() : time1.toTime_t()));
+                    data->setNResources(i);
+                    data->setResource(i, resource);
+                    data->setResourceOnlineTime(i, QString::number(!time2.isNull() ? time2.toTime_t() : time1.toTime_t()));
                     if (m_client->getUseVersion())
                         m_client->versionInfo(m_from);
                 }
-                if (QString::number(status) != get_str(data->ResourceStatus, i)){
+                if (QString::number(status) != data->getResourceStatus(i)){
                     bChanged = true;
-                    set_str(&data->ResourceStatus, i, QString::number(status));
-                    set_str(&data->ResourceStatusTime, i, QString::number(time1.toTime_t()));
+                    data->setResourceStatus(i, QString::number(status));
+                    data->setResourceStatusTime(i, QString::number(time1.toTime_t()));
                 }
-                if (m_status != get_str(data->ResourceReply, i)){
+                if (m_status != data->getResourceReply(i)){
                     bChanged = true;
-                    set_str(&data->ResourceReply, i, m_status);
+                    data->setResourceReply(i, m_status);
                 }
             }
             bool bOnLine = false;
             status = STATUS_OFFLINE;
-            for (i = 1; i <= data->nResources.toULong(); i++){
-                unsigned rStatus = get_str(data->ResourceStatus, i).toUInt();
+            for (i = 1; i <= data->getNResources(); i++){
+                unsigned rStatus = data->getResourceStatus(i).toUInt();
                 if (rStatus > status)
                     status = rStatus;
             }
-            if (data->Status.toULong() != status){
+            if (data->getStatus() != status){
                 bChanged = true;
                 if ((status == STATUS_ONLINE) &&
-                        (((int)(time1.toTime_t() - m_client->data.owner.OnlineTime.toULong()) > 60) ||
-                         (data->Status.toULong() != STATUS_OFFLINE)))
+                        (((int)(time1.toTime_t() - m_client->data.owner.getOnlineTime()) > 60) ||
+                         (data->getStatus() != STATUS_OFFLINE)))
                     bOnLine = true;
-                if (data->Status.toULong() == STATUS_OFFLINE){
-                    data->OnlineTime.asULong() = time1.toTime_t();
-                    data->richText.asBool() = true;
+                if (data->getStatus() == STATUS_OFFLINE){
+                    data->setOnlineTime(time1.toTime_t());
+                    data->setRichText(true);
                 }
-                if (status == STATUS_OFFLINE && data->IsTyping.toBool()){
-                    data->IsTyping.asBool() = false;
+                if (status == STATUS_OFFLINE && data->isTyping()){
+                    data->setTyping(false);
                     EventContact e(contact, EventContact::eStatus);;
                     e.process();
                 }
-                data->Status.asULong() = status;
-                data->StatusTime.asULong() = time1.toTime_t();
+                data->setStatus(status);
+                data->setStatusTime(time1.toTime_t());
             }
-            if (data->invisible.toBool() != bInvisible){
-                data->invisible.asBool() = bInvisible;
+            if (data->isInvisible() != bInvisible){
+                data->setInvisible(bInvisible);
                 bChanged = true;
             }
             if (bChanged){
@@ -981,7 +1032,7 @@ JabberClient::PresenceRequest::~PresenceRequest()
                 if(!e.process())
                     delete m;
             }
-            if (bOnLine && !contact->getIgnore() && !m_client->isAgent(data->ID.str())){
+            if (bOnLine && !contact->getIgnore() && !m_client->isAgent(data->getId())){
                 EventContact e(contact, EventContact::eOnline);
                 e.process();
             }
@@ -1141,8 +1192,8 @@ void JabberClient::IqRequest::element_start(const QString& el, const QXmlAttribu
                     if ((data == NULL) && (subscribe != SUBSCRIBE_NONE)){
                         data = m_client->findContact(jid, name, true, contact, resource);
                     }
-                    if (data && (data->Subscribe.toULong() != subscribe)){
-                        data->Subscribe.asULong() = subscribe;
+                    if (data && (data->getSubscribe() != subscribe)){
+                        data->setSubscribe(subscribe);
                         EventContact e(contact, EventContact::eChanged);
                         e.process();
                         if (m_client->getAutoSubscribe() && ((subscribe & SUBSCRIBE_FROM) == 0)){
@@ -1338,12 +1389,12 @@ JabberClient::MessageRequest::~MessageRequest()
             // Msg contains normal message.
             // <composing/> here means "send me composing events, please", so we should do it.
             // But if that tag is absent, we must not send them.
-            data->SendTypingEvents.asBool() = m_bCompose;
-            data->TypingId.str() = (m_bCompose ? m_id : QString::null);
+            data->setSendTypingEvents(m_bCompose);
+            data->setTypingId(m_bCompose ? m_id : QString::null);
 
             // also, incoming message implicitly means that user has stopped typing
-            if (data->IsTyping.toBool()){
-                data->IsTyping.asBool() = false;
+            if (data->isTyping()){
+                data->setTyping(false);
                 EventContact e(contact, EventContact::eStatus);;
                 e.process();
             }
@@ -1351,7 +1402,7 @@ JabberClient::MessageRequest::~MessageRequest()
         else{
             // Msg has no body ==> it is event message.
             // Presence of <composing/> here means "I'm typing", absence - "I'm not typing anymore".
-            data->IsTyping.asBool() = m_bCompose;
+            data->setTyping(m_bCompose);
             EventContact e(contact, EventContact::eStatus);;
             e.process();
         }
@@ -1380,10 +1431,10 @@ JabberClient::MessageRequest::~MessageRequest()
         return;
     if (m_bBody && m_contacts.isEmpty()){
         if (!m_enc.isEmpty()){
-            data->richText.asBool() = false;
+            data->setRichText(false);
 			msg->setText(m_enc);
 		}else if (m_richText.isEmpty()){
-			data->richText.asBool() = false;
+            data->setRichText(false);
             msg->setText(m_body);
         }else{
             JabberBgParser p;
@@ -2191,11 +2242,11 @@ void SendFileRequest::char_data(const QString&)
 
 void JabberClient::sendFileRequest(FileMessage *msg, unsigned short, JabberUserData *data, const QString &fname, unsigned size)
 {
-    QString jid = data->ID.str();
+    QString jid = data->getId();
     if (msg->getResource().isEmpty()){
-        if (!data->Resource.str().isEmpty()){
+        if (!data->getResource().isEmpty()){
             jid += '/';
-            jid += data->Resource.str();
+            jid += data->getResource();
         }
     }else{
         jid += '/';
@@ -2246,11 +2297,11 @@ void JabberClient::sendFileRequest(FileMessage *msg, unsigned short, JabberUserD
 void JabberClient::sendFileAccept(FileMessage *msg, JabberUserData *data)
 {
     JabberFileMessage *m = static_cast<JabberFileMessage*>(msg);
-    QString jid = data->ID.str();
+    QString jid = data->getId();
     if (msg->getResource().isEmpty()){
-        if (!data->Resource.str().isEmpty()){
+        if (!data->getResource().isEmpty()){
             jid += '/';
-            jid += data->Resource.str();
+            jid += data->getResource();
         }
     }else{
         jid += '/';
@@ -2874,7 +2925,7 @@ void JabberClient::changePassword(const QString &password)
 {
     if (getState() != Connected)
         return;
-	QString id_name = data.owner.ID.str();
+    QString id_name = data.owner.getId();
 	int pos = id_name.indexOf('@');
 
 	if(pos != -1)

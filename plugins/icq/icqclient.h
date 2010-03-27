@@ -661,37 +661,6 @@ public:
     bool getMediaSense() const { return m_mediaSense; }
     void setMediaSense(bool b) { m_mediaSense = b; }
 
-    //SIM::Data       Server;
-    //SIM::Data		Port;
-    //SIM::Data		ContactsTime;
-//    SIM::Data		ContactsLength;
-//    SIM::Data		ContactsInvisible;
-//    SIM::Data		HideIP;
-//    SIM::Data		IgnoreAuth;
-//    SIM::Data		UseMD5;
-    //SIM::Data		DirectMode;
-    //SIM::Data		IdleTime;
-    //SIM::Data        ListRequests;
-    //SIM::Data        Picture;
-    //SIM::Data		RandomChatGroup;
-    //SIM::Data		RandomChatGroupCurrent;
-    //SIM::Data		SendFormat;
-    //SIM::Data		DisablePlugins;
-    //SIM::Data		DisableAutoUpdate;
-    //SIM::Data		DisableAutoReplyUpdate;
-    //SIM::Data		DisableTypingNotification;
-//    Data		AutoCheckInvisible;
-//    Data		CheckInvisibleInterval;
-    //SIM::Data		AcceptInDND;
-    //SIM::Data		AcceptInOccupied;
-//    SIM::Data		MinPort;
-//    SIM::Data		MaxPort;
-    //SIM::Data		WarnAnonimously;
-    //SIM::Data		AckMode;
-    //SIM::Data		UseHTTP;
-    //SIM::Data		AutoHTTP;
-    //SIM::Data		KeepAlive;
-    //SIM::Data		MediaSense;
     ICQUserData	owner;
 
 private:

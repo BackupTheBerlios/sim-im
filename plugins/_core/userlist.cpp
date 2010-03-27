@@ -335,11 +335,9 @@ UserListBase::UserListBase(QWidget *parent)
 	, updTimer		(new QTimer(this))
 	, m_contactItem	(NULL)
 {
-    //header()->hide();
     addColumn("");
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    //setSorting(0); //Fixme
     connect(updTimer, SIGNAL(timeout()), this, SLOT(drawUpdates()));
     m_unreadTimer.setInterval(400);
     connect(&m_unreadTimer, SIGNAL(timeout()), this, SLOT(updateUnread()));

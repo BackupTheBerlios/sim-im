@@ -55,7 +55,7 @@ bool JabberAboutInfo::processEvent(Event *e)
     if (m_data && (e->type() == eEventVCard)){
         EventVCard *evc = static_cast<EventVCard*>(e);
         JabberUserData *data = evc->data();
-        if (m_data->ID.str() == data->ID.str() && m_data->Node.str() == data->Node.str())
+        if (m_data->getId() == data->getId() && m_data->getNode() == data->getNode())
             fill(data);
     }
     return false;
@@ -64,7 +64,7 @@ bool JabberAboutInfo::processEvent(Event *e)
 void JabberAboutInfo::fill(JabberUserData *data)
 {
     if (data == NULL) data = &m_client->data.owner;
-    edtAbout->setPlainText(data->Desc.str());
+    edtAbout->setPlainText(data->getDesc());
 }
 
 void JabberAboutInfo::apply(Client *client, void *_data)
@@ -72,7 +72,7 @@ void JabberAboutInfo::apply(Client *client, void *_data)
     if (client != m_client)
         return;
     JabberUserData *data = m_client->toJabberUserData((SIM::IMContact*)_data); // FIXME unsafe type conversion
-    data->Desc.str() = edtAbout->toPlainText();
+    data->setDesc(edtAbout->toPlainText());
 }
 
 /*

@@ -23,6 +23,7 @@
 #include "contacts/contact.h"
 #include <QMouseEvent>
 #include <QTimer>
+#include <QSharedPointer>
 
 using namespace std;
 
@@ -71,6 +72,8 @@ protected:
     virtual QVariant data( int column, int role ) const;
 };
 
+typedef QSharedPointer<DivItem> DivItemPtr;
+
 class GroupItem : public UserViewItemBase
 {
 public:
@@ -90,6 +93,7 @@ protected:
     unsigned long m_id;
     bool m_bOffline;
 };
+typedef QSharedPointer<GroupItem> GroupItemPtr;
 
 class ContactItem : public UserViewItemBase
 {
@@ -115,6 +119,7 @@ protected:
     SIM::Contact *contact;
     friend class UserViewDelegate;
 };
+typedef QSharedPointer<ContactItem> ContactItemPtr;
 
 class UserListBase : public ListView
 {
