@@ -261,31 +261,106 @@ private:
     QStringList m_resourceClientOSes;
 };
 
-struct JabberClientData
+struct JabberClientData : public SIM::IMContact
 {
-    SIM::Data		Server;
-    SIM::Data		Port;
-    SIM::Data		UseSSL;
-    SIM::Data		UsePlain;
-    SIM::Data		UseVHost;
-    SIM::Data		Register;
-    SIM::Data		Priority;
-    SIM::Data		ListRequest;
-    SIM::Data		VHost;
-    SIM::Data		Typing;
-    SIM::Data		RichText;
-    SIM::Data		UseVersion;
-    SIM::Data		ProtocolIcons;
-    SIM::Data		MinPort;
-    SIM::Data		MaxPort;
-    SIM::Data		Photo;
-    SIM::Data		Logo;
-    SIM::Data		AutoSubscribe;
-    SIM::Data		AutoAccept;
-    SIM::Data		UseHTTP;
-    SIM::Data		URL;
-    SIM::Data		InfoUpdated;
+public:
+    JabberClientData();
+    virtual QByteArray serialize();
+    virtual void deserialize(Buffer* cfg);
+
+    virtual unsigned long getSign();
+
+    QString getServer() const { return m_server;}
+    void setServer(const QString& server) { m_server = server; }
+
+    unsigned long getPort() const { return m_port; }
+    void setPort(unsigned long port) { m_port = port; }
+
+    bool getUseSSL() const { return m_useSSL; }
+    void setUseSSL(bool b) { m_useSSL = b; }
+
+    bool getUsePlain() const { return m_usePlain; }
+    void setUsePlain(bool b) { m_usePlain = b; }
+
+    bool getUseVHost() const { return m_useVHost; }
+    void setUseVHost(bool b) { m_useVHost = b; }
+
+    bool getRegister() const { return m_register; }
+    void setRegister(bool b) { m_register = b; }
+
+    unsigned long getPriority() const { return m_priority; }
+    void setPriority(unsigned long priority) { m_priority = priority; }
+
+    QString getListRequest() const { return m_listRequest; }
+    void setListRequest(const QString& list) { m_listRequest = list; }
+
+    QString getVHost() const { return m_vHost; }
+    void setVHost(const QString& vhost) { m_vHost = vhost; }
+
+    bool isTyping() const { return m_typing; }
+    void setTyping(bool t) { m_typing = t; }
+
+    bool isRichText() const { return m_richText; }
+    void setRichText(bool rt) { m_richText = rt; }
+
+    bool getUseVersion() const { return m_useVersion; }
+    void setUseVersion(bool b) { m_useVersion = b; }
+
+    bool getProtocolIcons() const { return m_protocolIcons; }
+    void setProtocolIcons(bool b) { m_protocolIcons = b; } 
+
+    unsigned long getMinPort() const { return m_minPort; }
+    void setMinPort(unsigned long port) { m_minPort = port; }
+
+    unsigned long getMaxPort() const { return m_maxPort; }
+    void setMaxPort(unsigned long port) { m_maxPort = port; }
+
+    QString getPhoto() const { return m_photo; }
+    void setPhoto(const QString& photo) { m_photo = photo; }
+
+    QString getLogo() const { return m_logo; }
+    void setLogo(const QString& logo) { m_logo = logo; }
+
+    bool getAutoSubscribe() const { return m_autoSubscribe; }
+    void setAutoSubscribe(bool b) { m_autoSubscribe = b; }
+
+    bool getAutoAccept() const { return m_autoAccept; }
+    void setAutoAccept(bool b) { m_autoAccept = b; }
+
+    bool getUseHttp() const { return m_useHttp; }
+    void setUseHttp(bool b) { m_useHttp = b; }
+
+    QString getUrl() const { return m_url; }
+    void setUrl(const QString& url) { m_url = url; }
+
+    bool getInfoUpdated() const { return m_infoUpdated; }
+    void setInfoUpdated(bool b) { m_infoUpdated = b; }
+
     JabberUserData	owner;
+
+private:
+    QString m_server;
+    unsigned long m_port;
+    bool m_useSSL;
+    bool m_usePlain;
+    bool m_useVHost;
+    bool m_register;
+    unsigned long m_priority;
+    QString m_listRequest;
+    QString m_vHost;
+    bool m_typing;
+    bool m_richText;
+    bool m_useVersion;
+    bool m_protocolIcons;
+    unsigned long m_minPort;
+    unsigned long m_maxPort;
+    QString m_photo;
+    QString m_logo;
+    bool m_autoSubscribe;
+    bool m_autoAccept;
+    bool m_useHttp;
+    QString m_url;
+    bool m_infoUpdated;
 };
 
 struct JabberAgentsInfo
@@ -502,28 +577,94 @@ public:
         return data.owner.getId();
     }
 
-    PROP_STR(Server);
-    PROP_STR(VHost);
-    PROP_USHORT(Port);
-    PROP_BOOL(UseSSL);
-    PROP_BOOL(UsePlain);
-    PROP_BOOL(UseVHost);
-    PROP_BOOL(Register);
-    PROP_ULONG(Priority);
-    PROP_UTF8(ListRequest);
-    PROP_BOOL(Typing);
-    PROP_BOOL(RichText);
-    PROP_BOOL(UseVersion);
-    PROP_BOOL(ProtocolIcons);
-    PROP_USHORT(MinPort);
-    PROP_USHORT(MaxPort);
-    PROP_UTF8(Photo);
-    PROP_UTF8(Logo);
-    PROP_BOOL(AutoSubscribe);
-    PROP_BOOL(AutoAccept);
-    PROP_BOOL(UseHTTP);
-    PROP_STR(URL);
-    PROP_BOOL(InfoUpdated);
+    //PROP_STR(Server);
+    QString getServer() const;
+    void setServer(const QString& server);
+
+    //PROP_STR(VHost);
+    QString getVHost() const;
+    void setVHost(const QString& vhost);
+
+    //PROP_USHORT(Port);
+    unsigned short getPort() const;
+    void setPort(unsigned long port);
+    
+    //PROP_BOOL(UseSSL);
+    bool getUseSSL() const;
+    void setUseSSL(bool b);
+
+    //PROP_BOOL(UsePlain);
+    bool getUsePlain() const; 
+    void setUsePlain(bool b);
+
+    //PROP_BOOL(UseVHost);
+    bool getUseVHost() const;
+    void setUseVHost(bool b);
+
+    //PROP_BOOL(Register);
+    bool getRegister() const;
+    void setRegister(bool b);
+
+    //PROP_ULONG(Priority);
+    unsigned long getPriority() const;
+    void setPriority(unsigned long p);
+
+    //PROP_UTF8(ListRequest);
+    QString getListRequest() const;
+    void setListRequest(const QString& request);
+
+    //PROP_BOOL(Typing);
+    bool getTyping() const;
+    void setTyping(bool t);
+
+    //PROP_BOOL(RichText);
+    bool getRichText() const;
+    void setRichText(bool rt);
+
+    //PROP_BOOL(UseVersion);
+    bool getUseVersion();
+    void setUseVersion(bool b);
+
+    //PROP_BOOL(ProtocolIcons);
+    bool getProtocolIcons() const;
+    void setProtocolIcons(bool b);
+
+    //PROP_USHORT(MinPort);
+    unsigned long getMinPort() const;
+    void setMinPort(unsigned long port);
+
+    //PROP_USHORT(MaxPort);
+    unsigned long getMaxPort() const;
+    void setMaxPort(unsigned long port);
+
+    //PROP_UTF8(Photo);
+    QString getPhoto() const;
+    void setPhoto(const QString& photo);
+
+    //PROP_UTF8(Logo);
+    QString getLogo() const;
+    void setLogo(const QString& logo);
+
+    //PROP_BOOL(AutoSubscribe);
+    bool getAutoSubscribe() const;
+    void setAutoSubscribe(bool b);
+
+    //PROP_BOOL(AutoAccept);
+    bool getAutoAccept() const;
+    void setAutoAccept(bool b);
+    
+    //PROP_BOOL(UseHTTP);
+    bool getUseHTTP() const;
+    void setUseHTTP(bool b);
+
+    //PROP_STR(URL);
+    QString getURL() const;
+    void setURL(const QString& url);
+
+    //PROP_BOOL(InfoUpdated);
+    bool getInfoUpdated() const;
+    void setInfoUpdated(bool b);
+
 
     QString         buildId(JabberUserData *data);
     JabberUserData *findContact(const QString &jid, const QString &name, bool bCreate, SIM::Contact *&contact, QString &resource, bool bJoin=true);

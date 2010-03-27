@@ -155,6 +155,27 @@ void JabberUserData::dispatchDeserialization(const QString& key, const QString& 
     else if(key == "Desc") {
         setDesc(val);
     }
+    else if(key == "BirthDay") {
+        setBirthday(val);
+    }
+    else if(key == "Url") {
+        setUrl(val);
+    }
+    else if(key == "OrgName") {
+        setOrgName(val);
+    }
+    else if(key == "OrgUnit") {
+        setOrgUnit(val);
+    }
+    else if(key == "Title") {
+        setTitle(val);
+    }
+    else if(key == "Role") {
+        setRole(val);
+    }
+    else if(key == "Street") {
+        setStreet(val);
+    }
 }
 
 void JabberUserData::deserialize(Buffer* cfg)
@@ -202,6 +223,38 @@ static DataDef jabberClientData[] =
         { "", DATA_STRUCT, sizeof(JabberUserData) / sizeof(Data), DATA(jabberUserData) },
         { NULL, DATA_UNKNOWN, 0, 0 }
     };
+
+JabberClientData::JabberClientData() : SIM::IMContact(),
+    m_server("jabber.org"),
+    m_port(5222),
+    m_useSSL(false),
+    m_usePlain(false),
+    m_useVHost(false),
+    m_priority(5),
+    m_typing(true),
+    m_richText(true),
+    m_useVersion(true),
+    m_protocolIcons(true),
+    m_minPort(1024),
+    m_maxPort(0xffff),
+    m_autoSubscribe(true),
+    m_autoAccept(true)
+{
+}
+
+QByteArray JabberClientData::serialize()
+{
+    return QByteArray();
+}
+
+void JabberClientData::deserialize(Buffer* cfg)
+{
+}
+
+unsigned long JabberClientData::getSign()
+{
+    return JABBER_SIGN;
+}
 
 JabberClient::JabberClient(JabberProtocol *protocol, Buffer *cfg) : TCPClient(protocol, cfg)
 {
@@ -274,6 +327,226 @@ bool JabberClient::compareData(void *d1, void *d2)
 void JabberClient::setID(const QString &id)
 {
     data.owner.setId(id);
+}
+
+QString JabberClient::getServer() const
+{
+    return data.getServer();
+}
+
+void JabberClient::setServer(const QString& server)
+{
+    data.setServer(server);
+}
+
+QString JabberClient::getVHost() const
+{
+    return data.getVHost();
+}
+
+void JabberClient::setVHost(const QString& vhost)
+{
+    data.setVHost(vhost);
+}
+
+unsigned short JabberClient::getPort() const
+{
+    return data.getPort();
+}
+
+void JabberClient::setPort(unsigned long port)
+{
+    data.setPort(port);
+}
+
+bool JabberClient::getUseSSL() const
+{
+    return data.getUseSSL();
+}
+
+void JabberClient::setUseSSL(bool b)
+{
+    data.setUseSSL(b);
+}
+
+bool JabberClient::getUsePlain() const
+{
+    return data.getUsePlain();
+}
+
+void JabberClient::setUsePlain(bool b)
+{
+    data.setUsePlain(b);
+}
+
+bool JabberClient::getUseVHost() const
+{
+    return data.getUseVHost();
+}
+
+void JabberClient::setUseVHost(bool b)
+{
+    data.setUseVHost(b);
+}
+
+bool JabberClient::getRegister() const
+{
+    return data.getRegister();
+}
+
+void JabberClient::setRegister(bool b)
+{
+    data.setRegister(b);
+}
+
+unsigned long JabberClient::getPriority() const
+{
+    return data.getPriority();
+}
+
+void JabberClient::setPriority(unsigned long p)
+{
+    data.setPriority(p);
+}
+
+QString JabberClient::getListRequest() const
+{
+    return data.getListRequest();
+}
+
+void JabberClient::setListRequest(const QString& request)
+{
+    data.setListRequest(request);
+}
+
+bool JabberClient::getTyping() const
+{
+    return data.isTyping();
+}
+
+void JabberClient::setTyping(bool t)
+{
+    data.setTyping(t);
+}
+
+bool JabberClient::getRichText() const
+{
+    return data.isRichText();
+}
+
+void JabberClient::setRichText(bool rt)
+{
+    data.setRichText(rt);
+}
+
+bool JabberClient::getUseVersion()
+{
+    return data.getUseVersion();
+}
+
+void JabberClient::setUseVersion(bool b)
+{
+    data.setUseVersion(b);
+}
+
+bool JabberClient::getProtocolIcons() const
+{
+    return data.getProtocolIcons();
+}
+
+void JabberClient::setProtocolIcons(bool b)
+{
+    data.setProtocolIcons(b);
+}
+
+unsigned long JabberClient::getMinPort() const
+{
+    return data.getMinPort();
+}
+
+void JabberClient::setMinPort(unsigned long port)
+{
+    data.setMinPort(port);
+}
+
+unsigned long JabberClient::getMaxPort() const
+{
+    return data.getMaxPort();
+}
+
+void JabberClient::setMaxPort(unsigned long port)
+{
+    data.setMaxPort(port);
+}
+
+QString JabberClient::getPhoto() const
+{
+    return data.getPhoto();
+}
+
+void JabberClient::setPhoto(const QString& photo)
+{
+    data.setPhoto(photo);
+}
+
+QString JabberClient::getLogo() const
+{
+    return data.getLogo();
+}
+
+void JabberClient::setLogo(const QString& logo)
+{
+    data.setLogo(logo);
+}
+
+bool JabberClient::getAutoSubscribe() const
+{
+    return data.getAutoSubscribe();
+}
+
+void JabberClient::setAutoSubscribe(bool b)
+{
+    data.setAutoSubscribe(b);
+}
+
+bool JabberClient::getAutoAccept() const
+{
+    return data.getAutoAccept();
+}
+
+void JabberClient::setAutoAccept(bool b)
+{
+    data.setAutoAccept(b);
+}
+
+bool JabberClient::getUseHTTP() const
+{
+    return data.getUseHttp();
+}
+
+void JabberClient::setUseHTTP(bool b)
+{
+    data.setUseHttp(b);
+}
+
+QString JabberClient::getURL() const
+{
+    return data.getUrl();
+}
+
+void JabberClient::setURL(const QString& url)
+{
+    data.setUrl(url);
+}
+
+bool JabberClient::getInfoUpdated() const
+{
+    return data.getInfoUpdated();
+}
+
+void JabberClient::setInfoUpdated(bool b)
+{
+    data.setInfoUpdated(b);
 }
 
 QByteArray JabberClient::getConfig()
@@ -2738,9 +3011,9 @@ void JabberClient::setInvisible(bool bState)
 
 QString JabberClient::VHost()
 {
-    if (data.UseVHost.toBool() && !data.VHost.str().isEmpty())
-        return data.VHost.str();
-    return data.Server.str();
+    if (data.getUseVHost() && !data.getVHost().isEmpty())
+        return data.getVHost();
+    return data.getServer();
 }
 
 static char PICT_PATH[] = "pictures/";
