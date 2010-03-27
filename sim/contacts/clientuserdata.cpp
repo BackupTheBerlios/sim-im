@@ -196,12 +196,13 @@ namespace SIM
     {
         SIM::Data *data = (SIM::Data*)_data;
         for (ClientUserDataPrivate::iterator it = p->begin(); it != p->end(); ++it){
-            if ((void*)it->data == data){
-                free_data(it->client->protocol()->userDataDef(), data);
-                delete data;
-                p->erase(it);
-                return;
-            }
+            if ((void*)it->data != data)
+                continue;
+
+            free_data(it->client->protocol()->userDataDef(), data);
+            delete data;
+            p->erase(it);
+            return;
         }
     }
 
@@ -230,11 +231,12 @@ namespace SIM
     void ClientUserData::join(IMContact *cData, ClientUserData &data)
     {
         for (ClientUserDataPrivate::iterator it = data.p->begin(); it != data.p->end(); ++it){
-            if (it->data->getSign() == (cData->getSign())){
-                p->push_back(*it);
-                data.p->erase(it);
-                break;
-            }
+            if (it->data->getSign() != cData->getSign())
+                continue;
+
+            p->push_back(*it);
+            data.p->erase(it);
+            break;
         }
         sort();
     }
@@ -262,12 +264,13 @@ namespace SIM
     void *ClientDataIteratorPrivate::operator ++()
     {
         for (; m_it != m_p->end(); ++m_it){
-            if ((m_client == NULL) || ((*m_it).client == m_client)){
-                void *res = (*m_it).data;
-                m_lastClient = (*m_it).client;
-                ++m_it;
-                return res;
-            }
+            if (m_client != NULL && m_it->client != m_client)
+                continue;
+
+            void *res = m_it->data;
+            m_lastClient = m_it->client;
+            ++m_it;
+            return res;
         }
         return NULL;
     }

@@ -24,7 +24,7 @@
 #include "ui_homeinfobase.h"
 
 class ICQClient;
-struct ICQUserData;
+class ICQUserData;
 
 class HomeInfo : public QWidget, public Ui::HomeInfo, public SIM::EventReceiver
 {

@@ -22,7 +22,7 @@
 #include "event.h"
 
 class ICQClient;
-struct ICQUserData;
+class ICQUserData;
 
 class SecureDlg : public QDialog, public Ui::SecureDlgBase, public SIM::EventReceiver
 {

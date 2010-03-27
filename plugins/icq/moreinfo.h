@@ -22,7 +22,7 @@
 
 #include "event.h"
 class ICQClient;
-struct ICQUserData;
+class ICQUserData;
 
 class MoreInfo : public QWidget, public Ui::MoreInfoBase, public SIM::EventReceiver
 {

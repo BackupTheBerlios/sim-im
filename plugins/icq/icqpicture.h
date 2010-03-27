@@ -23,7 +23,7 @@
 #include "ui_icqpicturebase.h"
 
 class ICQClient;
-struct ICQUserData;
+class ICQUserData;
 
 class QImage;
 

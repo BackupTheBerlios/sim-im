@@ -14,7 +14,7 @@
 #define AOL_PROXY_HOST "ars.oscar.aol.com"
 #define AOL_PROXY_PORT 5190
 
-struct ICQUserData;
+class ICQUserData;
 class ICQClient;
 struct OftData
 {

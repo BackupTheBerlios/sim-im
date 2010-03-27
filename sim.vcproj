@@ -806,7 +806,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputName).h ..."
-						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h"
+						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h&#x0D;&#x0A;"
 						Outputs="$(InputDir)moc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
@@ -816,7 +816,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputName).h ..."
-						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h"
+						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h&#x0D;&#x0A;"
 						Outputs="$(InputDir)moc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
@@ -1559,15 +1559,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\sim\contacts\clientdataiterator.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\sim\contacts\clientuserdata.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\sim\contacts\clientuserdataprivate.cpp"
 					>
 				</File>
 				<File
@@ -1613,15 +1605,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\sim\contacts\clientdataiterator.h"
-					>
-				</File>
-				<File
 					RelativePath=".\sim\contacts\clientuserdata.h"
-					>
-				</File>
-				<File
-					RelativePath=".\sim\contacts\clientuserdataprivate.h"
 					>
 				</File>
 				<File

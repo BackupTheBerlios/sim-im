@@ -24,7 +24,7 @@
 #include "ui_pastinfobase.h"
 
 class ICQClient;
-struct ICQUserData;
+class ICQUserData;
 
 class PastInfo : public QWidget, public Ui::PastInfoBase, public SIM::EventReceiver
 {

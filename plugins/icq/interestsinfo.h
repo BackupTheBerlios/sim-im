@@ -22,7 +22,7 @@
 #include "ui_interestsinfobase.h"
 
 class ICQClient;
-struct ICQUserData;
+class ICQUserData;
 
 class InterestsInfo : public QWidget, public Ui::InterestsInfoBase, public SIM::EventReceiver
 {

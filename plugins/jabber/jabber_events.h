@@ -12,7 +12,7 @@ struct DiscoItem;
 struct JabberAgentInfo;
 struct JabberSearchData;
 struct agentRegisterInfo;
-struct JabberUserData;
+class JabberUserData;
 
 class EventAgentInfo : public SIM::Event
 {
