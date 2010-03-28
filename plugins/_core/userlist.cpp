@@ -461,10 +461,12 @@ bool UserListBase::updateContactNoGroups(SIM::Contact* contact, DivItem *itemOnl
             if (itemOffline)
             {
                 m_contactItem = findContactItem(contact->id(), itemOffline);
-                if (m_contactItem){
+                if (m_contactItem)
+                {
                     deleteItem(m_contactItem);
                     changed = true;
-                    if (itemOffline->child(0) == NULL){
+                    if (itemOffline->child(0) == NULL)
+                    {
                         deleteItem(itemOffline);
                         itemOffline = NULL;
                     }
@@ -472,7 +474,8 @@ bool UserListBase::updateContactNoGroups(SIM::Contact* contact, DivItem *itemOnl
             }
             return changed;
         }
-        if (itemOffline == NULL){
+        if (itemOffline == NULL)
+        {
             itemOffline = new DivItem(this, DIV_OFFLINE);
             setOpen(itemOffline, true);
             changed = true;
@@ -495,16 +498,19 @@ bool UserListBase::updateContactNoGroups(SIM::Contact* contact, DivItem *itemOnl
         if (itemOffline)
         {
             m_contactItem = findContactItem(contact->id(), itemOffline);
-            if (m_contactItem){
+            if (m_contactItem)
+            {
                 deleteItem(m_contactItem);
                 changed = true;
-                if (itemOffline->child(0) == NULL){
+                if (itemOffline->child(0) == NULL)
+                {
                     deleteItem(itemOffline);
                     itemOffline = NULL;
                 }
             }
         }
-        if (itemOnline == NULL){
+        if (itemOnline == NULL)
+        {
             itemOnline = new DivItem(this, DIV_ONLINE);
             setOpen(itemOnline, true);
             changed = true;
@@ -520,7 +526,8 @@ bool UserListBase::updateContactNoGroups(SIM::Contact* contact, DivItem *itemOnl
         {
             m_contactItem = new ContactItem( itemOnline, contact, status, style, icons, getUnread(contact), m_bCheckable );
             changed = true;
-            if (!m_bDirty){
+            if (!m_bDirty)
+            {
                 m_bDirty = true;
                 updTimer->start(800);
             }
@@ -542,10 +549,14 @@ bool UserListBase::updateContactGroupMode1(SIM::Contact* contact, DivItem *itemO
     unsigned unread = getUnread(contact->id());
     m_contactItem = findContactItem(contact->id());
     GroupItem *grpItem = NULL;
-    if (m_contactItem){
+    if (m_contactItem)
+    {
         grpItem = static_cast<GroupItem*>(m_contactItem->parent());
-        if (((status <= STATUS_OFFLINE) && (unread == 0) && !bShow && m_bShowOnline) ||
-                (contact->getGroup() != (int)grpItem->id())){
+        if (status <= STATUS_OFFLINE && 
+            unread == 0 && 
+            !bShow && 
+            m_bShowOnline || contact->getGroup() != (int)grpItem->id())
+        {
             grpItem->m_nContacts--;
             if (m_contactItem->m_bOnline)
                 grpItem->m_nContactsOnline--;
@@ -558,24 +569,31 @@ bool UserListBase::updateContactGroupMode1(SIM::Contact* contact, DivItem *itemO
             grpItem = NULL;
         }
     }
-    if ((status > STATUS_OFFLINE) || unread || bShow || !m_bShowOnline){
-        if (grpItem == NULL){
+    if ((status > STATUS_OFFLINE) || unread || bShow || !m_bShowOnline)
+    {
+        if (grpItem == NULL)
+        {
             grpItem = findGroupItem(contact->getGroup());
-            if (grpItem == NULL){
+            if (grpItem == NULL)
+            {
                 Group *grp = getContacts()->group(contact->getGroup());
-                if (grp){
+                if (grp)
+                {
                     grpItem = new GroupItem( this, grp, true, m_bCheckable );
                     changed = true;
                 }
             }
         }
-        if (grpItem){
-            if (m_contactItem){
+        if (grpItem)
+        {
+            if (m_contactItem)
+            {
                 if (m_contactItem->update(contact, status, style, icons, unread))
                     addSortItem(grpItem);
                 addUpdatedItem(m_contactItem);
                 if (!m_bShowOnline &&
-                        (m_contactItem->m_bOnline != (status > STATUS_OFFLINE))){
+                        (m_contactItem->m_bOnline != (status > STATUS_OFFLINE)))
+                {
                     if (status <= STATUS_OFFLINE)
                     {
                         grpItem->m_nContactsOnline--;
@@ -621,9 +639,11 @@ bool UserListBase::updateContactGroupMode2(SIM::Contact* contact, DivItem *itemO
     GroupItem *grpItem = NULL;
     m_contactItem = findContactItem(contact->id(), itemOnline);
     grpItem = NULL;
-    if (m_contactItem){
+    if (m_contactItem)
+    {
         grpItem = static_cast<GroupItem*>(m_contactItem->parent());
-        if ((status <= STATUS_OFFLINE) || ((int)grpItem->id() != contact->getGroup())){
+        if ((status <= STATUS_OFFLINE) || ((int)grpItem->id() != contact->getGroup()))
+        {
             grpItem->m_nContacts--;
             addGroupForUpdate(grpItem->id());
             deleteItem(m_contactItem);
@@ -634,21 +654,26 @@ bool UserListBase::updateContactGroupMode2(SIM::Contact* contact, DivItem *itemO
             m_contactItem = NULL;
         }
     }
-    if (itemOffline){
+    if (itemOffline)
+    {
         m_contactItem = findContactItem(contact->id(), itemOffline);
         grpItem = NULL;
-        if (m_contactItem){
+        if (m_contactItem)
+        {
             grpItem = static_cast<GroupItem*>(m_contactItem->parent());
-            if ((status > STATUS_OFFLINE) || ((int)grpItem->id() != contact->getGroup())){
+            if ((status > STATUS_OFFLINE) || ((int)grpItem->id() != contact->getGroup()))
+            {
                 grpItem->m_nContacts--;
                 addGroupForUpdate(grpItem->id());
                 deleteItem(m_contactItem);
                 m_contactItem = NULL;
                 changed = true;
-                if (m_bShowOnline && (grpItem->child(0) == NULL)){
+                if (m_bShowOnline && (grpItem->child(0) == NULL))
+                {
                     deleteItem(grpItem);
                     grpItem = NULL;
-                    if (itemOffline->child(0) == NULL){
+                    if (itemOffline->child(0) == NULL)
+                    {
                         deleteItem(itemOffline);
                         itemOffline = NULL;
                     }
@@ -656,7 +681,7 @@ bool UserListBase::updateContactGroupMode2(SIM::Contact* contact, DivItem *itemO
             }
         }
     }
-    if ((unread == 0) && !bShow && (status <= STATUS_OFFLINE) && m_bShowOnline)
+    if (unread == 0 && !bShow && status <= STATUS_OFFLINE && m_bShowOnline)
         return changed;
     DivItem *divItem;
     if (status <= STATUS_OFFLINE)
@@ -721,6 +746,7 @@ bool UserListBase::updateContacts(DivItem* itemOnline, DivItem* itemOffline)
                 log(L_WARN, "Invalid group mode in UserListBase::updateContacts");
         }
     }
+    return changed;
 }
 
 void UserListBase::drawUpdates()
