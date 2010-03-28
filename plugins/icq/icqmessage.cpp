@@ -36,6 +36,7 @@
 #include "core.h"
 #include "xml.h"
 #include "contacts/contact.h"
+#include "clientmanager.h".h"
 
 using namespace std;
 using namespace SIM;
@@ -1119,20 +1120,20 @@ void ICQClient::parsePluginPacket(ICQBuffer &b, unsigned plugin_type, ICQUserDat
                 b.unpack(country);
                 b.unpack(language);
                 b.unpackStr(homepage);
-                ICQUserData data;
-                load_data(static_cast<ICQProtocol*>(protocol())->icqUserData, &data, NULL);
-                data.setUin(uin);
-                data.setAlias(QString::fromUtf8(name));
-                data.setAbout(QString::fromUtf8(topic));
-                data.setAge(age);
-                data.setGender(gender);
-                data.setCountry(country);
-                data.setLanguage(language);
-                data.setHomepage(QString::fromUtf8(homepage));
+                ICQUserData* data = static_cast<ICQUserData*>(static_cast<ICQProtocol*>(protocol())->createIMContact(getClientManager()->client(this->name())));
+                //load_data(static_cast<ICQProtocol*>(protocol())->icqUserData, &data, NULL);
+                data->setUin(uin);
+                data->setAlias(QString::fromUtf8(name));
+                data->setAbout(QString::fromUtf8(topic));
+                data->setAge(age);
+                data->setGender(gender);
+                data->setCountry(country);
+                data->setLanguage(language);
+                data->setHomepage(QString::fromUtf8(homepage));
 // currently unhandled
 //                Event e(EventRandomChatInfo, &data);
 //                e.process();
-                free_data(static_cast<ICQProtocol*>(protocol())->icqUserData, &data);
+                //free_data(static_cast<ICQProtocol*>(protocol())->icqUserData, &data);
                 break;
             }
         case PLUGIN_QUERYxSTATUS:

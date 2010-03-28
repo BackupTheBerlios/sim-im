@@ -176,12 +176,16 @@ class DirectClient;
 class ICQUserData : public SIM::IMContact
 {
 public:
-    ICQUserData();
+    ICQUserData(const SIM::ClientPtr& cl);
 
     virtual QByteArray serialize();
     virtual void deserialize(Buffer* cfg);
 
     virtual unsigned long getSign();
+    virtual SIM::ClientPtr client() { return m_client.toStrongRef(); }
+
+    virtual void serialize(QDomElement& element);
+    virtual void deserialize(QDomElement& element);
 
     unsigned long getUin() const { return m_uin; }
     void setUin(unsigned long uin) { m_uin = uin; }
@@ -201,13 +205,13 @@ public:
     unsigned long getClass() const { return m_class; }
     void setClass(unsigned long cl) { m_class = cl; }
 
-    unsigned long getStatusTime() const { return m_statusTime; }
+    unsigned int getStatusTime() const { return m_statusTime; }
     void setStatusTime(unsigned long statusTime) { m_statusTime = statusTime; }
 
-    unsigned long getOnlineTime() const { return m_onlineTime; }
+    unsigned int getOnlineTime() const { return m_onlineTime; }
     void setOnlineTime(unsigned long onlineTime) { m_onlineTime = onlineTime; }
 
-    unsigned long getWarningLevel() const { return m_warningLevel; }
+    unsigned int getWarningLevel() const { return m_warningLevel; }
     void setWarningLevel(unsigned long warningLevel) { m_warningLevel = warningLevel; }
 
     unsigned long getIP() const { return m_ip; }
@@ -216,8 +220,8 @@ public:
     unsigned long getRealIP() const { return m_realip; }
     void setRealIP(unsigned long ip) { m_realip = ip; }
 
-    unsigned long getPort() const { return m_port; }
-    void setPort(unsigned long port) { m_port = port; }
+    unsigned int getPort() const { return m_port; }
+    void setPort(unsigned int port) { m_port = port; }
 
     unsigned long getDCcookie() const { return m_dcCookie; }
     void setDCcookie(unsigned long cookie) { m_dcCookie = cookie; }
@@ -282,14 +286,14 @@ public:
     unsigned long getPluginStatusFetchTime() const { return m_pluginStatusFetchTime; }
     void setPluginStatusFetchTime(unsigned long t) { m_pluginStatusFetchTime = t; }
 
-    unsigned long getMode() const { return m_mode; }
-    void setMode(unsigned long mode) { m_mode = mode; }
+    unsigned int getMode() const { return m_mode; }
+    void setMode(unsigned int mode) { m_mode = mode; }
 
-    unsigned long getVersion() const { return m_version; }
-    void setVersion(unsigned long version) { m_version = version; }
+    unsigned int getVersion() const { return m_version; }
+    void setVersion(unsigned int version) { m_version = version; }
 
-    unsigned long getBuild() const { return m_build; }
-    void setBuild(unsigned long build) { m_build = build; }
+    unsigned int getBuild() const { return m_build; }
+    void setBuild(unsigned int build) { m_build = build; }
 
     QString getNick() const { return m_nick; }
     void setNick(const QString& nick) { m_nick = nick; }
@@ -468,7 +472,7 @@ public:
     QObject* getDirectPluginStatus() const { return m_directPluginStatus; }
     void setDirectPluginStatus(QObject* obj) { m_directPluginStatus = obj; }
 
-    void dispatchDeserialization(const QString& key, const QString& value);
+    void deserializeLine(const QString& key, const QString& value);
 private:
     unsigned long m_uin;
     QString m_screen;
@@ -476,12 +480,12 @@ private:
     QString m_cellular;
     unsigned long m_status;
     unsigned long m_class;
-    unsigned long m_statusTime;
-	unsigned long m_onlineTime;
-	unsigned long m_warningLevel;
+    unsigned int m_statusTime;
+    unsigned int m_onlineTime;
+    unsigned int m_warningLevel;
     unsigned long m_ip;
     unsigned long m_realip;
-    unsigned long m_port;
+    unsigned int m_port;
     unsigned long m_dcCookie;
     unsigned long m_caps;
     unsigned long m_caps2;
@@ -503,9 +507,9 @@ private:
     unsigned long m_infoFetchTime;
     unsigned long m_pluginInfoFetchTime;
     unsigned long m_pluginStatusFetchTime;
-    unsigned long m_mode;
-    unsigned long m_version;
-    unsigned long m_build;
+    unsigned int m_mode;
+    unsigned int m_version;
+    unsigned int m_build;
     QString m_nick;
     QString m_firstName;
     QString m_lastName;
@@ -562,6 +566,8 @@ private:
     QObject* m_directPluginInfo;
     QObject* m_directPluginStatus;
     QByteArray m_unknown[6];
+
+    QWeakPointer<SIM::Client> m_client;
 };
 
 class ICQClientData : public SIM::IMContact
@@ -571,6 +577,11 @@ public:
     ICQClientData();
     virtual QByteArray serialize();
     virtual void deserialize(Buffer* cfg);
+
+    virtual void serialize(QDomElement& element) {};
+    virtual void deserialize(QDomElement& element) {};
+
+    virtual SIM::ClientPtr client() { Q_ASSERT_X(false, "ICQClientData::client", "Shouldn't be called"); return SIM::ClientPtr(); }
 
     virtual unsigned long getSign();
 
@@ -663,8 +674,8 @@ public:
 
     ICQUserData	owner;
 
-private:
-    void dispatchDeserialization(const QString& key, const QString& value);
+    virtual void deserializeLine(const QString& key, const QString& value);
+public:
 
     QString m_server;
     unsigned long m_port;
@@ -701,6 +712,7 @@ class ICQClient;
 
 struct SearchResult
 {
+    SearchResult() : data(SIM::ClientPtr(0)) {};
     ICQUserData       data;
     unsigned short    id;
     ICQClient         *client;

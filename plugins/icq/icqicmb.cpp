@@ -2435,7 +2435,7 @@ bool SnacIcqICBM::processMsg()
         msgBuf.pack((unsigned long)(m_send.socket->localPort()));
         msgBuf.pack((char)MODE_DIRECT);
         msgBuf.pack((unsigned long)(m_send.socket->remotePort()));
-        msgBuf.pack(m_client->data.owner.getPort());
+        msgBuf.pack((unsigned long)m_client->data.owner.getPort());
         msgBuf.pack((unsigned short)8);
         msgBuf.pack((unsigned long)m_client->m_nMsgSequence);
         sendType2(m_send.screen, msgBuf, m_send.id, CAP_DIRECT, false, 0);

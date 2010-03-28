@@ -37,6 +37,7 @@ email                : vovan@shutoff.ru
 #include "contacts/contact.h"
 #include "contacts/group.h"
 #include "contacts/client.h"
+#include "clientmanager.h"
 
 #ifdef WIN32
 #include <windows.h>
@@ -784,6 +785,8 @@ void ContactList::load_old()
     }
 
     PropertyHubPtr currenthub;
+    IMContact* imcontact = 0;
+    Contact* c = 0;
     UserDataPtr currentUserData = getUserData();
     while(!f.atEnd())
     {
@@ -805,21 +808,34 @@ void ContactList::load_old()
         }
         else if(line.startsWith("["))
         {
-            QString clientName = line.mid(1, line.length() - 2);
-            if(!currentUserData.isNull())
-                currenthub = currentUserData->createUserData(clientName);
+            QString dataname = line.mid(1, line.length() - 2);
+            int dotindex = line.indexOf(".");
+            if(dotindex > 0)
+            {
+                ClientPtr client = getClientManager()->client(dataname);
+                imcontact = c->createData(client.data());
+                currenthub.clear();
+            }
+            else
+            {
+                if(!currentUserData.isNull())
+                    currenthub = currentUserData->createUserData(dataname);
+                imcontact = 0;
+            }
         }
         else
         {
+            QStringList keyval = line.split("=");
+            QString val = keyval.at(1);
+            if(val.startsWith('"') && val.endsWith('"'))
+                val = val.mid(1, val.length() - 2);
             if(!currenthub.isNull())
             {
-                QStringList keyval = line.split("=");
-                QString val = keyval.at(1);
-                if(val.startsWith('"') && val.endsWith('"'))
-                    currenthub->setValue(keyval.at(0), val.mid(1, val.length() - 2));
-                else
-                    currenthub->setValue(keyval.at(0), val);
-
+                currenthub->setValue(keyval.at(0), val);
+            }
+            if(imcontact)
+            {
+                imcontact->deserializeLine(keyval.at(0), val);
             }
         }
     }
@@ -1362,9 +1378,10 @@ EXPORT QString g_i18n(const char *text, SIM::Contact *contact)
     QString female = i18n("female", text);
     if (male == female)
         return male;
-    QString gender = contact->property("Gender");
-    if (gender.toLong() == 1)
-        return female;
+    // FIXME
+    //QString gender = contact->property("Gender");
+    //if (gender.toLong() == 1)
+    //    return female;
     return male;
 }
 

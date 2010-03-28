@@ -48,9 +48,15 @@ const unsigned SUBSCRIBE_BOTH	= (SUBSCRIBE_FROM | SUBSCRIBE_TO);
 class JabberUserData : public SIM::IMContact
 {
 public:
+    JabberUserData(const SIM::ClientPtr& cl);
 
     virtual QByteArray serialize();
     virtual void deserialize(Buffer* cfg);
+
+    virtual void serialize(QDomElement& element);
+    virtual void deserialize(QDomElement& element);
+
+    virtual SIM::ClientPtr client() { return m_client.toStrongRef(); }
 
     virtual unsigned long getSign();
 
@@ -211,8 +217,8 @@ public:
     void appendResourceClientOS(const QString& resourceclientos) { m_resourceClientOSes.append(resourceclientos); }
     void clearResourceClientOSes() { m_resourceClientOSes.clear(); }
 
-private:
-	void dispatchDeserialization(const QString& key, const QString& value);
+    virtual void deserializeLine(const QString& key, const QString& value);
+public:
 
     QString m_id;
     QString m_node;
@@ -259,14 +265,20 @@ private:
     QStringList m_resourceClientNames;
     QStringList m_resourceClientVersions;
     QStringList m_resourceClientOSes;
+
+    QWeakPointer<SIM::Client> m_client;
 };
 
 struct JabberClientData : public SIM::IMContact
 {
 public:
-    JabberClientData();
+    JabberClientData(const SIM::ClientPtr& client);
     virtual QByteArray serialize();
     virtual void deserialize(Buffer* cfg);
+    virtual void serialize(QDomElement& element) {};
+    virtual void deserialize(QDomElement& element) {};
+
+    virtual SIM::ClientPtr client() { Q_ASSERT_X(false, "ICQClientData::client", "Shouldn't be called"); return SIM::ClientPtr(); }
 
     virtual unsigned long getSign();
 
@@ -338,7 +350,9 @@ public:
 
     JabberUserData	owner;
 
-private:
+    virtual void deserializeLine(const QString& key, const QString& value);
+public:
+
     QString m_server;
     unsigned long m_port;
     bool m_useSSL;
@@ -664,7 +678,6 @@ public:
     //PROP_BOOL(InfoUpdated);
     bool getInfoUpdated() const;
     void setInfoUpdated(bool b);
-
 
     QString         buildId(JabberUserData *data);
     JabberUserData *findContact(const QString &jid, const QString &name, bool bCreate, SIM::Contact *&contact, QString &resource, bool bJoin=true);

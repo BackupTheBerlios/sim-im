@@ -37,7 +37,7 @@ namespace testProtocolManager
         {
             return 0;
         }
-        virtual IMContact* createIMContact()
+        virtual IMContact* createIMContact(const QSharedPointer<Client>& client)
         {
             return 0;
         }

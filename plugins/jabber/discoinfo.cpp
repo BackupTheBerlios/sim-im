@@ -33,10 +33,11 @@
 
 using namespace SIM;
 
-extern DataDef jabberUserData[];
+//extern DataDef jabberUserData[];
 
 DiscoInfo::DiscoInfo(JabberBrowser *browser, const QString &features,
-                     const QString &name, const QString &type, const QString &category) : QDialog(browser)
+                     const QString &name, const QString &type, const QString &category) : QDialog(browser),
+    m_data(ClientPtr())
 {
     setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose,true);
@@ -55,7 +56,7 @@ DiscoInfo::DiscoInfo(JabberBrowser *browser, const QString &features,
     m_name	   = name;
     m_type	   = type;
     m_category = category;
-    load_data(jabberUserData, &m_data, NULL);
+    //load_data(jabberUserData, &m_data, NULL);
     disableWidget(edtJName);
     disableWidget(edtType);
     disableWidget(edtCategory);
@@ -76,7 +77,7 @@ DiscoInfo::DiscoInfo(JabberBrowser *browser, const QString &features,
 
 DiscoInfo::~DiscoInfo()
 {
-    free_data(jabberUserData, &m_data);
+    //free_data(jabberUserData, &m_data);
     m_browser->m_info = NULL;
 }
 
@@ -96,8 +97,8 @@ void DiscoInfo::reset()
         m_url  = m_browser->m_list->currentItem()->text(COL_JID);
         m_node = m_browser->m_list->currentItem()->text(COL_NODE);
     }
-    free_data(jabberUserData, &m_data);
-    load_data(jabberUserData, &m_data, NULL);
+    //free_data(jabberUserData, &m_data);
+    //load_data(jabberUserData, &m_data, NULL);
     m_data.setId(m_url);
     m_data.setNode(m_node);
     setTitle();

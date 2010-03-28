@@ -5,6 +5,7 @@
 #include "clientuserdata.h"
 #include "contacts.h"
 #include "client.h"
+#include "clientmanager.h"
 #include "imcontact.h"
 
 namespace SIM
@@ -51,38 +52,10 @@ namespace SIM
         return p->size();
     }
 
-    QString ClientUserData::property(const char *name)
+    bool ClientUserData::have(IMContact *data)
     {
         for (ClientUserDataPrivate::iterator it = p->begin(); it != p->end(); ++it){
-            _ClientUserData &d = *it;
-            Data *user_data = (Data*)d.data;
-            for (const DataDef *def = d.client->protocol()->userDataDef(); def->name; def++){
-                if (!strcmp(def->name, name)){
-                    switch (def->type){
-                        case DATA_STRING:
-                        case DATA_UTF:
-                            if (!user_data->str().isEmpty())
-                                return user_data->str();
-                        case DATA_ULONG:
-                            if (user_data->toULong() != (unsigned long)(def->def_value))
-                                return QString::number(user_data->toULong());
-                        case DATA_LONG:
-                            if (user_data->toLong() != (long)(def->def_value))
-                                return QString::number(user_data->toLong());
-                        default:
-                            break;
-                    }
-                }
-                user_data += def->n_values;
-            }
-        }
-        return QString::null;
-    }
-
-    bool ClientUserData::have(void *data)
-    {
-        for (ClientUserDataPrivate::iterator it = p->begin(); it != p->end(); ++it){
-            if ((void*)it->data == data)
+            if (it->data == data)
                 return true;
         }
         return false;
@@ -168,22 +141,29 @@ namespace SIM
         _ClientUserData data;
         data.client = client;
         const DataDef *def = client->protocol()->userDataDef();
-        data.data = client->protocol()->createIMContact();
+        data.data = client->protocol()->createIMContact(getClientManager()->client(client->name()));
         data.data->deserialize(cfg);
         p->push_back(data);
     }
-    
 
-    void *ClientUserData::createData(Client *client)
+    void ClientUserData::addData(IMContact* d)
+    {
+        _ClientUserData data;
+        data.client = d->client().data();
+        data.data = d;
+        p->push_back(data);
+    }
+
+    IMContact* ClientUserData::createData(Client *client)
     {
         _ClientUserData data;
         data.client = client;
-        data.data = client->protocol()->createIMContact();
+        data.data = client->protocol()->createIMContact(getClientManager()->client(client->name()));
         p->push_back(data);
         return data.data;
     }
 
-    void *ClientUserData::getData(Client *client)
+    IMContact* ClientUserData::getData(Client *client)
     {
         for (ClientUserDataPrivate::iterator it = p->begin(); it != p->end(); ++it){
             if (it->client == client)
@@ -192,12 +172,10 @@ namespace SIM
         return NULL;
     }
 
-    void ClientUserData::freeData(void *_data)
+    void ClientUserData::freeData(SIM::IMContact *data)
     {
-        SIM::Data *data = (SIM::Data*)_data;
         for (ClientUserDataPrivate::iterator it = p->begin(); it != p->end(); ++it){
-            if ((void*)it->data == data){
-                free_data(it->client->protocol()->userDataDef(), data);
+            if (it->data == data){
                 delete data;
                 p->erase(it);
                 return;
@@ -212,7 +190,6 @@ namespace SIM
                 ++it;
                 continue;
             }
-            //free_data(it->client->protocol()->userDataDef(), it->data);
             delete it->data;
             p->erase(it);
             it = p->begin();

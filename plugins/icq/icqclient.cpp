@@ -172,7 +172,7 @@ static DataDef _icqUserData[] =
         { NULL, DATA_UNKNOWN, 0, 0 }
     };
 
-ICQUserData::ICQUserData() : IMContact(), m_uin(0),
+ICQUserData::ICQUserData(const ClientPtr& cl) : IMContact(), m_uin(0),
     m_status(0),
     m_class(0),
     m_statusTime(0),
@@ -218,18 +218,19 @@ ICQUserData::ICQUserData() : IMContact(), m_uin(0),
     m_buddyId(0),
     m_direct(0),
     m_directPluginInfo(0),
-    m_directPluginStatus(0)
+    m_directPluginStatus(0),
+    m_client(cl)
 {
 
 }
 
-void ICQUserData::dispatchDeserialization(const QString& key, const QString& value)
+void ICQUserData::deserializeLine(const QString& key, const QString& value)
 {
     QString val = value;
     if(val.startsWith('\"') && val.endsWith('\"'))
         val = val.mid(1, val.length() - 2);
     if(key == "LastSend") {
-        LastSend.asULong() = val.toULong();
+        setLastSend(val.toULong());
     }
     else if(key == "Alias") {
         setAlias(val);
@@ -461,7 +462,7 @@ void ICQUserData::dispatchDeserialization(const QString& key, const QString& val
 QByteArray ICQUserData::serialize()
 {
 	QString result;
-	result += QString("LastSend=%1\n").arg(LastSend.toULong());
+    result += QString("LastSend=%1\n").arg(getLastSend());
     result += QString("Alias=%1\n").arg(getAlias());
     result += QString("Cellular=\"%1\"\n").arg(getCellular());
     result += QString("StatusTime=%1\n").arg(getStatusTime());
@@ -554,8 +555,97 @@ void ICQUserData::deserialize(Buffer* cfg)
         QStringList keyval = line.split('=');
         if(keyval.size() < 2)
             continue;
-        dispatchDeserialization(keyval.at(0), keyval.at(1));
+        deserializeLine(keyval.at(0), keyval.at(1));
     }
+}
+
+void ICQUserData::serialize(QDomElement& element)
+{
+    SIM::PropertyHubPtr hub = SIM::PropertyHub::create();
+    hub->setValue("Alias", getAlias());
+    hub->setValue("Cellular", getCellular());
+    hub->setValue("StatusTime", getStatusTime());
+    hub->setValue("WarningLevel", getWarningLevel());
+    hub->setValue("IP", (unsigned int)getIP());
+    hub->setValue("RealIP", (unsigned int)getRealIP());
+    hub->setValue("Port", getPort());
+    hub->setValue("Caps", (unsigned int)getCaps());
+    hub->setValue("Caps2", (unsigned int)getCaps2());
+    hub->setValue("Uin", (unsigned int)getUin());
+    hub->setValue("Screen", getScreen());
+    hub->setValue("ID", (unsigned int)getIcqID());
+    hub->setValue("GroupID", (unsigned int)getGrpID());
+    hub->setValue("Ignore", (unsigned int)getIgnoreId());
+    hub->setValue("Visible", (unsigned int)getVisibleId());
+    hub->setValue("Invisible", (unsigned int)getInvisibleId());
+    hub->setValue("WaitAuth", getWaitAuth());
+    hub->setValue("WantAuth", getWantAuth());
+    hub->setValue("WebAware", getWebAware());
+    hub->setValue("InfoUpdateTime", (unsigned int)getInfoUpdateTime());
+    hub->setValue("PluginInfoTime", (unsigned int)getPluginInfoTime());
+    hub->setValue("PluginStatusTime", (unsigned int)getPluginStatusTime());
+    hub->setValue("InfoFetchTime", (unsigned int)getInfoFetchTime());
+    hub->setValue("PluginInfoFetchTime", (unsigned int)getPluginInfoFetchTime());
+    hub->setValue("PluginStatusFetchTime", (unsigned int)getPluginStatusFetchTime());
+    hub->setValue("Mode", getMode());
+    hub->setValue("Version", getVersion());
+    hub->setValue("Build", getBuild());
+    hub->setValue("Nick", getNick());
+    hub->setValue("FirstName", getFirstName());
+    hub->setValue("LastName", getLastName());
+    hub->setValue("MiddleName", getMiddleName());
+    hub->setValue("Maiden", getMaiden());
+    hub->setValue("EMail", getEmail());
+    hub->setValue("HiddenEMail", getHiddenEmail());
+    hub->setValue("City", getCity());
+    hub->setValue("State", getState());
+    hub->setValue("HomePhone", getHomePhone());
+    hub->setValue("HomeFax", getHomeFax());
+    hub->setValue("Address", getAddress());
+    hub->setValue("PrivateCellular", getPrivateCellular());
+    hub->setValue("Zip", getZip());
+    hub->setValue("Country", (unsigned int)getCountry());
+    hub->setValue("TimeZone", (unsigned int)getTimeZone());
+    hub->setValue("Age", (unsigned int)getAge());
+    hub->setValue("Gender", (unsigned int)getGender());
+    hub->setValue("HomePage", getHomepage());
+    hub->setValue("BirthYear", (unsigned int)getBirthYear());
+    hub->setValue("BirthMonth", (unsigned int)getBirthMonth());
+    hub->setValue("BirthDay", (unsigned int)getBirthDay());
+    hub->setValue("Language", (unsigned int)getLanguage());
+    hub->setValue("WorkCity", getWorkCity());
+    hub->setValue("WorkState", getWorkState());
+    hub->setValue("WorkAddress", getWorkAddress());
+    hub->setValue("WorkZip", getWorkZip());
+    hub->setValue("WorkCountry", (unsigned int)getWorkCountry());
+    hub->setValue("WorkName", getWorkName());
+    hub->setValue("WorkDepartment", getWorkDepartment());
+    hub->setValue("WorkPosition", getWorkPosition());
+    hub->setValue("Occupation", (unsigned int)getOccupation());
+    hub->setValue("WorkHomepage", getWorkHomepage());
+    hub->setValue("About", getAbout());
+    hub->setValue("Interests", getInterests());
+    hub->setValue("Backgrounds", getBackgrounds());
+    hub->setValue("Affilations", getAffilations());
+    hub->setValue("FollowMe", (unsigned int)getFollowMe());
+    hub->setValue("SharedFiles", getSharedFiles());
+    hub->setValue("ICQPhone", (unsigned int)getICQPhone());
+    hub->setValue("Picture", getPicture());
+    hub->setValue("PictureWidth", (unsigned int)getPictureWidth());
+    hub->setValue("PictureHeight", (unsigned int)getPictureHeight());
+    hub->setValue("PhoneBook", getPhoneBook());
+    hub->setValue("ProfileFetch", getProfileFetch());
+    hub->setValue("buddyID", (unsigned int)getBuddyID());
+    hub->setValue("buddyHash", getBuddyHash());
+    hub->setValue("unknown2", getUnknown(2));
+    hub->setValue("unknown4", getUnknown(4));
+    hub->setValue("unknown5", getUnknown(5));
+    hub->serialize(element);
+}
+
+void ICQUserData::deserialize(QDomElement& element)
+{
+
 }
 
 const DataDef *ICQProtocol::icqUserData = _icqUserData;
@@ -600,7 +690,7 @@ static const char aim_server[] = "login.oscar.aol.com";
 static const char icq_server[] = "login.icq.com";
 
 ICQClientData::ICQClientData() : IMContact(),
-    m_port(5190)
+m_port(5190), owner(SIM::ClientPtr(0))
 {
 
 }
@@ -645,11 +735,11 @@ void ICQClientData::deserialize(Buffer* cfg)
         QStringList keyval = line.split('=');
         if(keyval.size() < 2)
             continue;
-        dispatchDeserialization(keyval.at(0), keyval.at(1));
+        deserializeLine(keyval.at(0), keyval.at(1));
     }
 }
 
-void ICQClientData::dispatchDeserialization(const QString& key, const QString& value)
+void ICQClientData::deserializeLine(const QString& key, const QString& value)
 {
     log(L_DEBUG, "key: %s, value: %s", qPrintable(key), qPrintable(value));
     QString val = value;
@@ -731,7 +821,7 @@ void ICQClientData::dispatchDeserialization(const QString& key, const QString& v
         setMediaSense(val == "true");
     }
     else
-        owner.dispatchDeserialization(key, value);
+        owner.deserializeLine(key, value);
 }
 
 unsigned long ICQClientData::getSign()
@@ -757,13 +847,10 @@ ICQClient::ICQClient(Protocol *protocol, Buffer *cfg, bool bAIM)
     m_bAIM = bAIM;
 
     data.deserialize(cfg);
-	//load_data(icqClientData, &data, cfg);
     if (data.owner.getUin() != 0)
         m_bAIM = false;
     if (!data.owner.getScreen().isEmpty())
         m_bAIM = true;
-
-    log(L_DEBUG, "aim: %d", m_bAIM);
 
     data.owner.setDCcookie(rand());
 

@@ -25,7 +25,7 @@ namespace SIM
         virtual QStringList statuses() = 0;
         virtual IMStatusPtr status(const QString& id) = 0;
         virtual const DataDef *userDataDef() = 0;
-        virtual IMContact* createIMContact() = 0;
+        virtual IMContact* createIMContact(const QSharedPointer<Client>& client) = 0;
 
     protected:
         Plugin *m_plugin;

@@ -78,16 +78,16 @@ namespace SIM
         ClientDataIterator clientDataIterator(Client* client = NULL);
         QByteArray saveUserData() const;
         void loadUserData(Client *client, Buffer *cfg);
-        void *createData(Client *client);
-        void *getData(Client *client);
-        bool have(void*);
+        IMContact* createData(Client* client);
+        IMContact* getData(Client *client);
+        bool have(IMContact*);
         void sort();
         void join(Contact* c);
         void join(SIM::IMContact *cData, Contact* c);
         unsigned size();
         Client *activeClient(void *&data, Client *client);
-        QString property(const char *name);
-        void freeData(void*);
+        //QString property(const char *name);
+        void freeData(SIM::IMContact*);
         void freeClientData(Client *client);
         // m_clientData accessors end
     protected:

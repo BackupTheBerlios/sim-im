@@ -100,9 +100,9 @@ namespace SIM
 
     static bool cmp_sd(sortClientData p1, sortClientData p2)
     {
-        if (((IMContact*)(p1.data))->LastSend.asULong() > ((IMContact*)(p2.data))->LastSend.asULong())
+        if (((IMContact*)(p1.data))->getLastSend() > ((IMContact*)(p2.data))->getLastSend())
             return true;
-        if (((IMContact*)(p1.data))->LastSend.asULong() < ((IMContact*)(p2.data))->LastSend.asULong())
+        if (((IMContact*)(p1.data))->getLastSend() < ((IMContact*)(p2.data))->getLastSend())
             return false;
         return p1.nClient < p2.nClient;
     }
@@ -441,17 +441,17 @@ namespace SIM
         getUserData()->root()->setValue("Encoding", enc);
     }
 
-    void* Contact::createData(Client *client)
+    IMContact* Contact::createData(Client *client)
     {
         return m_clientData.createData(client);
     }
 
-    void* Contact::getData(Client *client)
+    IMContact* Contact::getData(Client *client)
     {
         return m_clientData.getData(client);
     }
 
-    bool Contact::have(void* d)
+    bool Contact::have(IMContact* d)
     {
         return m_clientData.have(d);
     }
@@ -481,12 +481,12 @@ namespace SIM
         return m_clientData.activeClient(data, client);
     }
 
-    QString Contact::property(const char *name)
-    {
-        return m_clientData.property(name);
-    }
+//    QString Contact::property(const char *name)
+//    {
+//        return m_clientData.property(name);
+//    }
 
-    void Contact::freeData(void* d)
+    void Contact::freeData(SIM::IMContact* d)
     {
         m_clientData.freeData(d);
     }

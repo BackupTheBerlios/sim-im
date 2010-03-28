@@ -121,18 +121,34 @@ DataDef jabberUserData[] =
         { NULL, DATA_UNKNOWN, 0, 0 }
     };
 
+JabberUserData::JabberUserData(const ClientPtr& cl) : IMContact(),
+    m_client(cl)
+{
+
+}
+
+void JabberUserData::serialize(QDomElement& element)
+{
+
+}
+
+void JabberUserData::deserialize(QDomElement& element)
+{
+
+}
+
 QByteArray JabberUserData::serialize()
 {
     return QByteArray();
 }
 
-void JabberUserData::dispatchDeserialization(const QString& key, const QString& value)
+void JabberUserData::deserializeLine(const QString& key, const QString& value)
 {
 	QString val = value;
 	if(val.startsWith('\"') && val.endsWith('\"'))
 		val = val.mid(1, val.length() - 2);
 	if(key == "LastSend") {
-		LastSend.asULong() = val.toULong();
+        setLastSend(val.toULong());
 	}
 	else if(key == "ID") {
         setId(val);
@@ -176,6 +192,54 @@ void JabberUserData::dispatchDeserialization(const QString& key, const QString& 
     else if(key == "Street") {
         setStreet(val);
     }
+    else if(key == "ExtAddr") {
+        setExtAddr(val);
+    }
+    else if(key == "City") {
+        setCity(val);
+    }
+    else if(key == "Region") {
+        setRegion(val);
+    }
+    else if(key == "PCode") {
+        setPCode(val);
+    }
+    else if(key == "Country") {
+        setCountry(val);
+    }
+    else if(key == "EMail") {
+        setEmail(val);
+    }
+    else if(key == "Phone") {
+        setPhone(val);
+    }
+    else if(key == "StatusTime") {
+        setStatusTime(val.toUInt());
+    }
+    else if(key == "OnlineTime") {
+        setOnlineTime(val.toUInt());
+    }
+    else if(key == "Subscribe") {
+        setSubscribe(val.toUInt());
+    }
+    else if(key == "Group") {
+        setGroup(val);
+    }
+    else if(key == "PhotoWidth") {
+        setPhotoWidth(val.toUInt());
+    }
+    else if(key == "PhotoHeight") {
+        setPhotoHeight(val.toUInt());
+    }
+    else if(key == "LogoWidth") {
+        setLogoWidth(val.toUInt());
+    }
+    else if(key == "LogoHeight") {
+        setLogoHeight(val.toUInt());
+    }
+    else if(key == "AutoReply") {
+        setAutoReply(val);
+    }
 }
 
 void JabberUserData::deserialize(Buffer* cfg)
@@ -187,7 +251,7 @@ void JabberUserData::deserialize(Buffer* cfg)
 		QStringList keyval = line.split('=');
 		if(keyval.size() < 2)
 			continue;
-		dispatchDeserialization(keyval.at(0), keyval.at(1));
+        deserializeLine(keyval.at(0), keyval.at(1));
 	}
 }
 
@@ -224,7 +288,7 @@ static DataDef jabberClientData[] =
         { NULL, DATA_UNKNOWN, 0, 0 }
     };
 
-JabberClientData::JabberClientData() : SIM::IMContact(),
+JabberClientData::JabberClientData(const SIM::ClientPtr& client) : SIM::IMContact(),
     m_server("jabber.org"),
     m_port(5222),
     m_useSSL(false),
@@ -238,7 +302,8 @@ JabberClientData::JabberClientData() : SIM::IMContact(),
     m_minPort(1024),
     m_maxPort(0xffff),
     m_autoSubscribe(true),
-    m_autoAccept(true)
+    m_autoAccept(true),
+    owner(client)
 {
 }
 
@@ -249,6 +314,87 @@ QByteArray JabberClientData::serialize()
 
 void JabberClientData::deserialize(Buffer* cfg)
 {
+    while(1) {
+        const QString line = QString::fromUtf8(cfg->getLine());
+        if (line.isEmpty())
+            break;
+        QStringList keyval = line.split('=');
+        if(keyval.size() < 2)
+            continue;
+        deserializeLine(keyval.at(0), keyval.at(1));
+    }
+}
+
+void JabberClientData::deserializeLine(const QString& key, const QString& value)
+{
+    QString val = value;
+    if(val.startsWith('\"') && val.endsWith('\"'))
+        val = val.mid(1, val.length() - 2);
+    if(val == "Server") {
+        setServer(key);
+    }
+    else if(val == "Port") {
+        setPort(val.toUInt());
+    }
+    else if(val == "UseSSL") {
+        setUseSSL(val == "true");
+    }
+    else if(val == "UsePlain") {
+        setUsePlain(val == "true");
+    }
+    else if(val == "UseVHost") {
+        setUseVHost(val == "true");
+    }
+    else if(val == "Priority") {
+        setPriority(val.toUInt());
+    }
+    else if(val == "ListRequest") {
+        setListRequest(val);
+    }
+    else if(val == "VHost") {
+        setVHost(val);
+    }
+    else if(val == "Typing") {
+        setTyping(val == "true");
+    }
+    else if(val == "RichText") {
+        setRichText(val == "true");
+    }
+    else if(val == "UseVersion") {
+        setUseVersion(val == "true");
+    }
+    else if(val == "ProtocolIcons") {
+        setProtocolIcons(val == "true");
+    }
+    else if(val == "MinPort") {
+        setMinPort(val.toUInt());
+    }
+    else if(val == "MaxPort") {
+        setMaxPort(val.toUInt());
+    }
+    else if(val == "Photo") {
+        setPhoto(val);
+    }
+    else if(val == "Logo") {
+        setLogo(val);
+    }
+    else if(val == "AutoSubscribe") {
+        setAutoSubscribe(val == "true");
+    }
+    else if(val == "AutoAccept") {
+        setAutoAccept(val == "true");
+    }
+    else if(val == "UseHTTP") {
+        setUseHttp(val == "true");
+    }
+    else if(val == "URL") {
+        setUrl(val);
+    }
+    else if(val == "InfoUpdated") {
+        setInfoUpdated(val == "true");
+    }
+    else
+        owner.deserializeLine(key, value);
 }
 
 unsigned long JabberClientData::getSign()
@@ -256,7 +402,8 @@ unsigned long JabberClientData::getSign()
     return JABBER_SIGN;
 }
 
-JabberClient::JabberClient(JabberProtocol *protocol, Buffer *cfg) : TCPClient(protocol, cfg)
+JabberClient::JabberClient(JabberProtocol *protocol, Buffer *cfg) : TCPClient(protocol, cfg),
+data(SIM::ClientPtr(0))
 {
 	//load_data(jabberClientData, &data, cfg);
     QString jid = data.owner.getId();

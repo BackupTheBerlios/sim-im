@@ -44,12 +44,12 @@ namespace test
     {
         QString result;
         result += QString("Sign=%1\n").arg(getSign());
-        result += QString("LastSend=%1\n").arg(LastSend.toULong());
+        result += QString("LastSend=%1\n").arg(getLastSend());
         result += QString("Alpha=%1\n").arg(Alpha.toULong());
         return result.toLocal8Bit();
     }
 
-    void MockUserData::dispatchDeserialization(const QString& key, const QString& value)
+    void MockUserData::deserializeLine(const QString& key, const QString& value)
     {
         QString val = value;
         if(val.startsWith('\"') && val.endsWith('\"'))
@@ -58,7 +58,7 @@ namespace test
             //Sign.asULong() = val.toULong();
         }
         else if(key == "LastSend") {
-            LastSend.asULong() = val.toULong();
+            setLastSend(val.toULong());
         }
         else if(key == "Alpha") {
             Alpha.asULong() = val.toULong();
@@ -74,7 +74,7 @@ namespace test
             QStringList keyval = line.split('=');
             if(keyval.size() < 2)
                 continue;
-            dispatchDeserialization(keyval.at(0), keyval.at(1));
+            deserializeLine(keyval.at(0), keyval.at(1));
         }
     }
 
@@ -117,7 +117,7 @@ namespace test
         return mockUserData;
     }
 
-    IMContact* MockProtocol::createIMContact()
+    IMContact* MockProtocol::createIMContact(const QSharedPointer<SIM::Client>& client)
     {
         return new MockUserData();
     }

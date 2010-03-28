@@ -29,6 +29,7 @@
 #include "core_events.h"
 #include "contacts/contact.h"
 #include "contacts/group.h"
+#include "contacts/client.h"
 
 #include "jabberclient.h"
 #include "jabber.h"
@@ -78,7 +79,7 @@ RostersRequest::~RostersRequest()
     while ((contact = ++itc) != NULL){
         ClientDataIterator it = contact->clientDataIterator(m_client);
         JabberUserData *data;
-        list<void*> dataRemoved;
+        list<SIM::IMContact*> dataRemoved;
         while ((data = m_client->toJabberUserData(++it)) != NULL){
             if (!data->isChecked()){
                 QString jid = data->getId();
@@ -90,7 +91,7 @@ RostersRequest::~RostersRequest()
         }
         if (dataRemoved.empty())
             continue;
-        for (list<void*>::iterator itr = dataRemoved.begin(); itr != dataRemoved.end(); ++itr)
+        for (list<SIM::IMContact*>::iterator itr = dataRemoved.begin(); itr != dataRemoved.end(); ++itr)
             contact->freeData(*itr);
         if (contact->size() == 0)
             contactRemoved.push_back(contact);
@@ -307,9 +308,9 @@ InfoRequest::~InfoRequest()
     if (m_bStarted){
         Contact *contact = NULL;
         JabberUserData *data;
-        JabberUserData u_data;
+        JabberUserData u_data(SIM::ClientPtr(0));
         if (m_bVCard){
-            load_data(jabberUserData, &u_data, NULL);
+            //load_data(jabberUserData, &u_data, NULL);
             data = &u_data;
             data->setId(m_jid);
             data->setNode(m_node);
@@ -400,7 +401,7 @@ InfoRequest::~InfoRequest()
 
         if (m_bVCard){
             EventVCard(data).process();
-            free_data(jabberUserData, &u_data);
+            //free_data(jabberUserData, &u_data);
             return;
         }
         QImage photo;

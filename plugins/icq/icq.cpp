@@ -63,9 +63,9 @@ ClientPtr ICQProtocol::createClient(Buffer *cfg)
     return icq;
 }
 
-IMContact* ICQProtocol::createIMContact()
+IMContact* ICQProtocol::createIMContact(const QSharedPointer<Client>& client)
 {
-    return new ICQUserData();
+    return new ICQUserData(client);
 }
 
 QStringList ICQProtocol::statuses()
@@ -268,9 +268,9 @@ SIM::IMStatusPtr AIMProtocol::status(const QString& /*id*/)
 	return SIM::IMStatusPtr();
 }
 
-IMContact* AIMProtocol::createIMContact()
+IMContact* AIMProtocol::createIMContact(const QSharedPointer<Client>& client)
 {
-    return new ICQUserData();
+    return new ICQUserData(client);
 }
 
 ClientPtr AIMProtocol::createClient(Buffer *cfg)
