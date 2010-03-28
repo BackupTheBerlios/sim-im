@@ -21,7 +21,7 @@
 #include "ui_jabberpicturebase.h"
 #include "event.h"
 
-struct JabberUserData;
+class JabberUserData;
 class JabberClient;
 
 class QImage;

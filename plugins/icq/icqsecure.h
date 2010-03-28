@@ -24,7 +24,7 @@
 #include "ui_icqsecurebase.h"
 
 class ICQClient;
-struct ICQUserData;
+class ICQUserData;
 
 class ICQSecure : public QWidget, public Ui::Secure, public SIM::EventReceiver
 {

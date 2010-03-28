@@ -23,7 +23,7 @@
 
 #include <QShowEvent>
 
-struct JabberUserData;
+class JabberUserData;
 class JabberClient;
 class JIDAdvSearch;
 

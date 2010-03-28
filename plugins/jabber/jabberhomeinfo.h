@@ -21,7 +21,7 @@
 #include "ui_jabberhomeinfobase.h"
 #include "event.h"
 
-struct JabberUserData;
+class JabberUserData;
 class JabberClient;
 
 class JabberHomeInfo : public QWidget, public Ui::LocationInfo, public SIM::EventReceiver
