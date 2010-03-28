@@ -30,7 +30,8 @@ namespace SIM
     ClientUserDataPrivate::~ClientUserDataPrivate()
     {
         // why do I have to delete something here which is created somehwere else??
-        for (ClientUserDataPrivate::iterator it = begin(); it != end(); ++it){
+        for (ClientUserDataPrivate::iterator it = begin(); it != end(); ++it)
+        {
             _ClientUserData &d = *it;
             //free_data(d.client->protocol()->userDataDef(), d.data);
             delete d.data;
@@ -64,8 +65,9 @@ namespace SIM
     Client *ClientUserData::activeClient(void *&data, Client *client)
     {
         ClientUserDataPrivate::iterator it;
-        for (it = p->begin(); it != p->end(); ++it){
-            if ((it->client == client) && (it->data == data))
+        for (it = p->begin(); it != p->end(); ++it)
+        {
+            if (it->client == client && it->data == data)
                 break;
             if (((IMContact*)(it->data))->getSign() != ((IMContact*)data)->getSign())
                 continue;
@@ -76,12 +78,12 @@ namespace SIM
             return NULL;
         if (client->getState() == Client::Connected)
             return client;
-        for (++it; it != p->end(); ++it){
-            if (it->client->getState() != Client::Connected)
+        for (++it; it != p->end(); ++it)
+        {
+            if (it->client->getState() != Client::Connected || ((IMContact*)(it->data))->getSign() != ((IMContact*)data)->getSign())
                 continue;
-            if (((IMContact*)(it->data))->getSign() != ((IMContact*)data)->getSign())
-                continue;
-            if (client->compareData(data, it->data)){
+            if (client->compareData(data, it->data))
+            {
                 data = it->data;
                 return it->client;
             }
@@ -92,9 +94,11 @@ namespace SIM
 
     static bool cmp_client_data(_ClientUserData p1, _ClientUserData p2)
     {
-        for (unsigned i = 0; i < getContacts()->nClients(); i++){
+        for (unsigned i = 0; i < getContacts()->nClients(); i++)
+        {
             Client *c = getContacts()->getClient(i);
-            if (c == p1.client){
+            if (c == p1.client)
+            {
                 if (c != p2.client)
                     return true;
                 return p1.data < p2.data;
@@ -114,12 +118,14 @@ namespace SIM
     QByteArray ClientUserData::save() const
     {
         QByteArray res;
-        for (ClientUserDataPrivate::iterator it = p->begin(); it != p->end(); ++it){
+        for (ClientUserDataPrivate::iterator it = p->begin(); it != p->end(); ++it)
+        {
             _ClientUserData &d = *it;
             if (d.client->protocol()->description()->flags & PROTOCOL_TEMP_DATA)
                 continue;
             QByteArray cfg = d.data->serialize(); //save_data(d.client->protocol()->userDataDef(), d.data);
-            if (cfg.length()){
+            if (cfg.length())
+            {
                 if (res.length())
                     res += '\n';
                 res += '[';
@@ -133,7 +139,8 @@ namespace SIM
 
     void ClientUserData::load(Client *client, Buffer *cfg)
     {
-        for (ClientUserDataPrivate::iterator it = p->begin(); it != p->end(); ++it){
+        for (ClientUserDataPrivate::iterator it = p->begin(); it != p->end(); ++it)
+        {
             Client *c = it->client;
             if(c == client)
                 return;
@@ -165,10 +172,9 @@ namespace SIM
 
     IMContact* ClientUserData::getData(Client *client)
     {
-        for (ClientUserDataPrivate::iterator it = p->begin(); it != p->end(); ++it){
+        for (ClientUserDataPrivate::iterator it = p->begin(); it != p->end(); ++it)
             if (it->client == client)
                 return it->data;
-        }
         return NULL;
     }
 
@@ -194,8 +200,10 @@ namespace SIM
 
     void ClientUserData::freeClientData(Client *client)
     {
-        for (ClientUserDataPrivate::iterator it = p->begin(); it != p->end();){
-            if (it->client != client){
+        for (ClientUserDataPrivate::iterator it = p->begin(); it != p->end();)
+        {
+            if (it->client != client)
+            {
                 ++it;
                 continue;
             }
@@ -261,7 +269,6 @@ namespace SIM
         for (; m_it != m_p->end(); ++m_it){
             if (m_client != NULL && m_it->client != m_client)
                 continue;
-
             void *res = m_it->data;
             m_lastClient = m_it->client;
             ++m_it;

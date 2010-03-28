@@ -32,8 +32,7 @@
 #include <QScrollBar>
 
 #include "log.h"
-#include "contacts/contact.h"
-#include "contacts/group.h"
+
 
 using namespace std;
 using namespace SIM;
@@ -52,12 +51,15 @@ void UserViewItemBase::setup()
 {
 }
 
-void UserViewItemBase::setCheckable( bool bCheckable ) {
-    if( bCheckable ) {
+void UserViewItemBase::setCheckable( bool bCheckable ) 
+{
+    if( bCheckable ) 
+    {
         setFlags( flags() | Qt::ItemIsUserCheckable );
         setCheckState( 0, Qt::Unchecked );
     }
-    else {
+    else 
+    {
         setFlags( flags() & ~Qt::ItemIsUserCheckable );
     }
 }
@@ -77,7 +79,8 @@ QVariant DivItem::data( int column, int role ) const
 
     switch( role )
     {
-        case Qt::DisplayRole : {
+        case Qt::DisplayRole : 
+        {
             QString text;
             switch( m_type )
             {
@@ -124,15 +127,12 @@ void GroupItem::init(Group *grp)
     setExpandable(true);
     //setSelectable(true);
     SIM::PropertyHubPtr data = grp->getUserData("list");
-    if (data.isNull()){
+    if (data.isNull())
         setOpen(true);
-    }else{
-        if (m_bOffline){
-            setOpen(data->value("OfflineOpen").toBool());
-        }else{
-            setOpen(data->value("OnlineOpen").toBool());
-        }
-    }
+    else if (m_bOffline)
+        setOpen(data->value("OfflineOpen").toBool());
+    else
+        setOpen(data->value("OnlineOpen").toBool());
     update(grp, true);
 }
 
@@ -140,11 +140,11 @@ void GroupItem::update(Group *grp, bool bInit)
 {
     QString s;
     s = "A";
-    if (grp->id()){
+    if (grp->id())
+    {
         s = QString::number(getContacts()->groupIndex(grp->id()));
-        while (s.length() < 12){
+        while (s.length() < 12)
             s = QString("0") + s;
-        }
     }
     if (s == text(0))
         return;
@@ -152,10 +152,9 @@ void GroupItem::update(Group *grp, bool bInit)
     if (bInit)
         return;
     ListViewItem *p = static_cast<ListViewItem*>(parent());
-    if (p){
+    if (p)
         //p->sort();
         return;
-    }
     //listView()->sort();
 }
 
@@ -163,38 +162,45 @@ void GroupItem::setOpen(bool bOpen)
 {
     //UserViewItemBase::setOpen(bOpen);
     Group *grp = getContacts()->group(m_id);
-    if (grp){
+    if (grp)
+    {
         SIM::PropertyHubPtr data = grp->getUserData("list", !bOpen);
-        if (!data.isNull()){
-            if (m_bOffline){
-                data->setValue("OfflineOpen", bOpen);
-            }else{
-                data->setValue("OnlineOpen", bOpen);
-            }
+        if (data.isNull())
+            return;
+
+        if (m_bOffline)
+        {
+            data->setValue("OfflineOpen", bOpen);
+            return;
         }
+        data->setValue("OnlineOpen", bOpen);
     }
 }
 
-QVariant GroupItem::data( int column, int role ) const {
+QVariant GroupItem::data( int column, int role ) const 
+{
     QVariant result;
 
     switch( role )
     {
-        case Qt::DisplayRole : {
+        case Qt::DisplayRole : 
+        {
             QString text;
-            if (id()){
-                Group *grp = getContacts()->group(id());
-                if (grp){
-                    text = grp->getName();
-                }else{
-                    text = "???";
-                }
-            }else{
+            if (!id())
                 text = i18n("Not in list");
+            else
+            {
+                Group *grp = getContacts()->group(id());
+                if (grp)
+                    text = grp->getName();
+                else
+                    text = "???";
             }
-            if (m_nContacts){
+            if (m_nContacts)
+            {
                 text += " (";
-                if (m_nContactsOnline){
+                if (m_nContactsOnline)
+                {
                     text += QString::number(m_nContactsOnline);
                     text += '/';
                 }
@@ -211,12 +217,13 @@ QVariant GroupItem::data( int column, int role ) const {
     return result;
 }
 
-void GroupItem::setData( int column, int role, const QVariant &value ) {
-    if( Qt::CheckStateRole == role ) {
+void GroupItem::setData( int column, int role, const QVariant &value ) 
+{
+    if( Qt::CheckStateRole == role ) 
+    {
         Qt::CheckState cs = (Qt::CheckState)value.toInt();
-        for( int i = 0 ; i < childCount() ; i++ ) {
+        for( int i = 0 ; i < childCount() ; i++ ) 
             child( i )->setCheckState( 0, cs );
-        }
     }
 
     UserViewItemBase::setData( column, role, value );
@@ -258,21 +265,24 @@ bool ContactItem::update(Contact *contact, unsigned status, unsigned style, cons
 
 QString ContactItem::key(int column/*, bool ascending */) const //Fixme?
 {
-    if (column == 0){
+    if (column == 0)
+    {
         unsigned mode = CorePlugin::instance()->value("SortMode").toUInt();
         QString res;
-        for (;;){
+        for (;;)
+        {
             int n = 0;
-            switch (mode & 0xFF){
-            case SORT_STATUS:
-                n = CONTACT_STATUS;
-                break;
-            case SORT_ACTIVE:
-                n = CONTACT_ACTIVE;
-                break;
-            case SORT_NAME:
-                n = CONTACT_TEXT;
-                break;
+            switch (mode & 0xFF)
+            {
+                case SORT_STATUS:
+                    n = CONTACT_STATUS;
+                    break;
+                case SORT_ACTIVE:
+                    n = CONTACT_ACTIVE;
+                    break;
+                case SORT_NAME:
+                    n = CONTACT_TEXT;
+                    break;
             }
             if (n == 0)
                 break;
@@ -294,14 +304,17 @@ QVariant ContactItem::data( int column, int role ) const
 
     switch( role )
     {
-        case Qt::DisplayRole : {
+        case Qt::DisplayRole : 
+        {
             result = QVariant( contact->getName() );
             break;
         }
-        case Qt::DecorationRole : {
+        case Qt::DecorationRole : 
+        {
             QIcon icon = m_Icon;
             UserView* uv = dynamic_cast<UserView*>( treeWidget() );
-            if( m_unread && uv->m_bUnreadBlink ) {
+            if( m_unread && uv->m_bUnreadBlink ) 
+            {
                 CommandDef *def = CorePlugin::instance()->messageTypes.find( m_unread );
                 if (def)
                     icon = Icon( def->icon );
@@ -309,11 +322,13 @@ QVariant ContactItem::data( int column, int role ) const
             result = QVariant( icon );
             break;
         }
-        case Qt::ToolTipRole : {
+        case Qt::ToolTipRole : 
+        {
             result = QVariant( contact->tipText() );
             break;
         }
-        case SIM::ExtraIconsRole : {
+        case SIM::ExtraIconsRole : 
+        {
             result = QVariant( m_sExtraIcons );
             break;
         }
@@ -350,31 +365,36 @@ UserListBase::~UserListBase()
 {
 }
 
+
 bool UserListBase::updateGroups()
 {
     ListViewItem *item = 0;
     bool changed = false;
     list<unsigned long>::iterator it;
-    for (it = updGroups.begin(); it != updGroups.end(); ++it){
+    for (it = updGroups.begin(); it != updGroups.end(); ++it)
+    {
         Group *group = getContacts()->group(*it);
         if (group == NULL)
             continue;
-        switch (m_groupMode){
+        switch (m_groupMode)
+        {
         case 1:
             item = findGroupItem(group->id());
-            if (item){
-                if (!m_bShowEmpty && (item->child(0) == NULL)){
+            if (item)
+                if (!m_bShowEmpty && item->child(0) == NULL)
+                {
                     delete item;
                     changed = true;
-                }else{
+                }
+                else
+                {
                     static_cast<GroupItem*>(item)->update(group);
                     addUpdatedItem(item);
                 }
-            }else{
-                if (m_bShowEmpty){
-                    new GroupItem( this, group, true, m_bCheckable );
-                    changed = true;
-                }
+            else if (m_bShowEmpty)
+            {
+                new GroupItem( this, group, true, m_bCheckable );
+                changed = true;
             }
             break;
         case 2:
@@ -382,22 +402,26 @@ bool UserListBase::updateGroups()
             {
                 item = static_cast<ListViewItem*>(topLevelItem(c));
                 UserViewItemBase *i = static_cast<UserViewItemBase*>(item);
-                if (i->type() != DIV_ITEM) continue;
+                if (i->type() != DIV_ITEM) 
+                    continue;
                 DivItem *divItem = static_cast<DivItem*>(i);
-                GroupItem *grpItem = findGroupItem(group->id(), divItem);
-                if (grpItem){
-                    if (!m_bShowEmpty && (item->child(0) == NULL)){
-                        delete grpItem;
-                        changed = true;
-                    }else{
-                        grpItem->update(group);
-                        addUpdatedItem(grpItem);
-                    }
-                }else{
-                    if (m_bShowEmpty){
-                        new GroupItem( divItem, group, divItem->state() == DIV_OFFLINE, m_bCheckable );
+                if (getGrpItem(group, divItem))
+                {
+                    if (!m_bShowEmpty && (item->child(0) == NULL))
+                    {
+                        delete getGrpItem(group, divItem);
                         changed = true;
                     }
+                    else
+                    {
+                        getGrpItem(group, divItem)->update(group);
+                        addUpdatedItem(getGrpItem(group, divItem));
+                    }
+                }
+                else if (m_bShowEmpty)
+                {
+                    new GroupItem( divItem, group, divItem->state() == DIV_OFFLINE, m_bCheckable );
+                    changed = true;
                 }
             }
             break;
@@ -440,7 +464,6 @@ bool UserListBase::updateContactNoGroups(SIM::Contact* contact)
     unsigned style;
     QString icons;
     unsigned status = getUserStatus(contact, style, icons);
-    unsigned unread = getUnread(contact->id());
     bool bShow = false;
     SIM::PropertyHubPtr data = contact->getUserData("list");
     if (!data.isNull() && data->value("ShowAlways").toBool())
@@ -448,7 +471,7 @@ bool UserListBase::updateContactNoGroups(SIM::Contact* contact)
     bool changed = false;
     if (status <= STATUS_OFFLINE) {
         changed |= removeContactFromItem(contact->id(), m_itemOnline);
-        if ((unread == 0) && !bShow && m_bShowOnline) {
+        if ((getUnread(contact) == 0) && !bShow && m_bShowOnline) {
             changed |= removeContactFromItem(contact->id(), m_itemOffline);
             return changed;
         }
@@ -460,13 +483,13 @@ bool UserListBase::updateContactNoGroups(SIM::Contact* contact)
         m_contactItem = findContactItem(contact->id(), m_itemOffline);
         if (m_contactItem)
         {
-            if (m_contactItem->update(contact, status, style, icons, unread))
+            if (m_contactItem->update(contact, status, style, icons, getUnread(contact)))
                 addSortItem(m_itemOffline);
             addUpdatedItem(m_contactItem);
         }
         else
         {
-            m_contactItem = new ContactItem( m_itemOffline, contact, status, style, icons, unread, m_bCheckable );
+            m_contactItem = new ContactItem( m_itemOffline, contact, status, style, icons, getUnread(contact), m_bCheckable );
             changed = true;
         }
     }
@@ -481,16 +504,16 @@ bool UserListBase::updateContactNoGroups(SIM::Contact* contact)
         m_contactItem = findContactItem(contact->id(), m_itemOnline);
         if (m_contactItem)
         {
-            if (m_contactItem->update(contact, status, style, icons, unread))
+            if (m_contactItem->update(contact, status, style, icons, getUnread(contact)))
                 addSortItem(m_itemOnline);
             addUpdatedItem(m_contactItem);
         }
         else
         {
-            m_contactItem = new ContactItem( m_itemOnline, contact, status, style, icons, unread, m_bCheckable );
+            m_contactItem = new ContactItem( m_itemOnline, contact, status, style, icons, getUnread(contact), m_bCheckable );
             changed = true;
         }
-        if(unread) {
+        if(getUnread(contact)) {
             m_unreadItems.push_back(m_contactItem);
         }
     }
@@ -669,23 +692,25 @@ bool UserListBase::updateContactGroupMode2(SIM::Contact* contact)
 bool UserListBase::updateContacts()
 {
     bool changed = false;
-    for (list<unsigned long>::iterator it = updContacts.begin(); it != updContacts.end(); ++it){ //Fixme, got crash: list operator not incremenable!
+    for (list<unsigned long>::iterator it = updContacts.begin(); it != updContacts.end(); ++it)
+    { //Fixme, got crash: list operator not incremenable!
         Contact *contact = getContacts()->contact(*it);
         if (contact == NULL)
             continue;
-        log(L_DEBUG, "UPD: %s", qPrintable(contact->getName()));
-        switch (m_groupMode){
-        case 0:
-            changed |= updateContactNoGroups(contact);
-            break;
-        case 1:
-            changed |= updateContactGroupMode1(contact);
-            break;
-        case 2:
-            changed |= updateContactGroupMode2(contact);
-            break;
-        default:
-            log(L_WARN, "Invalid group mode in UserListBase::updateContacts");
+
+        switch (m_groupMode)
+        {
+            case 0:
+                changed |= updateContactNoGroups(contact);
+                break;
+            case 1:
+                changed |= updateContactGroupMode1(contact);
+                break;
+            case 2:
+                changed |= updateContactGroupMode2(contact);
+                break;
+            default:
+                log(L_WARN, "Invalid group mode in UserListBase::updateContacts");
         }
     }
 }
@@ -726,13 +751,15 @@ void UserListBase::drawUpdates()
     if(updateContacts())
         bChanged = true;
     updContacts.clear();
-    for (list<ListViewItem*>::iterator it_sort = sortItems.begin(); it_sort != sortItems.end(); ++it_sort){
+    for (list<ListViewItem*>::iterator it_sort = sortItems.begin(); it_sort != sortItems.end(); ++it_sort)
+    {
         if ((*it_sort)->child(0) == NULL)
             continue;
         bChanged = true;
     }
     sortItems.clear();
     viewport()->setUpdatesEnabled(true);
+
     viewport()->repaint();
     for (list<ListViewItem*>::iterator it = updatedItems.begin(); it != updatedItems.end(); ++it)
         repaint(*it);
@@ -743,12 +770,14 @@ const unsigned UPDATE_TIME = 800;
 
 void UserListBase::addGroupForUpdate(unsigned long id)
 {
-    for (list<unsigned long>::iterator it = updGroups.begin(); it != updGroups.end(); ++it){
+    for (list<unsigned long>::iterator it = updGroups.begin(); it != updGroups.end(); ++it)
+    {
         if (*it == id)
             return;
     }
     updGroups.push_back(id);
-    if (!m_bDirty){
+    if (!m_bDirty)
+    {
         m_bDirty = true;
         updTimer->start(800);
         log(L_DEBUG, "updTimer->start[1]");
@@ -757,12 +786,14 @@ void UserListBase::addGroupForUpdate(unsigned long id)
 
 void UserListBase::addContactForUpdate(unsigned long id)
 {
-    for (list<unsigned long>::iterator it = updContacts.begin(); it != updContacts.end(); ++it){
+    for (list<unsigned long>::iterator it = updContacts.begin(); it != updContacts.end(); ++it)
+    {
         if (*it == id)
             return;
     }
     updContacts.push_back(id);
-    if (!m_bDirty){
+    if (!m_bDirty)
+    {
         m_bDirty = true;
         updTimer->start(800);
         log(L_DEBUG, "updTimer->start[2]");
@@ -771,25 +802,25 @@ void UserListBase::addContactForUpdate(unsigned long id)
 
 void UserListBase::addSortItem(ListViewItem *item)
 {
-    for (list<ListViewItem*>::iterator it = sortItems.begin(); it != sortItems.end(); ++it){
+    for (list<ListViewItem*>::iterator it = sortItems.begin(); it != sortItems.end(); ++it)
         if ((*it) == item)
             return;
-    }
     sortItems.push_back(item);
 
 }
 
 void UserListBase::addUpdatedItem(ListViewItem *item)
 {
-    for (list<ListViewItem*>::iterator it = updatedItems.begin(); it != updatedItems.end(); ++it){
+    for (list<ListViewItem*>::iterator it = updatedItems.begin(); it != updatedItems.end(); ++it)
+    {
         if ((*it) == item)
             return;
     }
     updatedItems.push_back(item);
-    if (!m_bDirty){
+    if (!m_bDirty)
+    {
         m_bDirty = true;
         updTimer->start(800);
-    
     }
 }
 
@@ -797,6 +828,12 @@ unsigned UserListBase::getUnread(unsigned)
 {
     return 0;
 }
+
+unsigned UserListBase::getUnread(SIM::Contact *contact)
+{
+    return getUnread(contact->id());
+}
+
 
 void UserListBase::fill()
 {
@@ -811,11 +848,13 @@ void UserListBase::fill()
     ContactList::ContactIterator contact_it;
     Group *grp;
     Contact *contact;
-    switch (m_groupMode){
+    switch (m_groupMode)
+    {
     case 0:
         divItemOnline  = NULL;
         divItemOffline = NULL;
-        while ((contact = ++contact_it) != NULL){
+        while ((contact = ++contact_it) != NULL)
+        {
             if (contact->getIgnore() || (contact->getFlags() & CONTACT_TEMPORARY))
                 continue;
             unsigned style;
@@ -830,12 +869,16 @@ void UserListBase::fill()
             if ((unread == 0) && !bShow && (status <= STATUS_OFFLINE) && m_bShowOnline)
                 continue;
             divItem = (status <= STATUS_OFFLINE) ? divItemOffline : divItemOnline;
-            if (divItem == NULL){
-                if (status <= STATUS_OFFLINE){
+            if (divItem == NULL)
+            {
+                if (status <= STATUS_OFFLINE)
+                {
                     divItemOffline = new DivItem(this, DIV_OFFLINE);
                     setOpen(divItemOffline, true);
                     divItem = divItemOffline;
-                }else{
+                }
+                else
+                {
                     divItemOnline = new DivItem(this, DIV_ONLINE);
                     setOpen(divItemOnline, true);
                     divItem = divItemOnline;
@@ -846,14 +889,16 @@ void UserListBase::fill()
         break;
     case 1:
         if (m_bShowEmpty){
-            while ((grp = ++grp_it) != NULL){
+            while ((grp = ++grp_it) != NULL)
+            {
                 if (grp->id() == 0)
                     continue;
                 grpItem = new GroupItem( this, grp, true, m_bCheckable );
             }
             grpItem = new GroupItem( this, list->group(0), true, m_bCheckable );
         }
-        while ((contact = ++contact_it) != NULL){
+        while ((contact = ++contact_it) != NULL)
+        {
             if (contact->getIgnore() || (contact->getFlags() & CONTACT_TEMPORARY))
                 continue;
             unsigned style;
@@ -864,10 +909,11 @@ void UserListBase::fill()
             SIM::PropertyHubPtr data = contact->getUserData("list");
             if (!data.isNull() && data->value("ShowAlways").toBool())
                 bShow = true;
-            if ((status <= STATUS_OFFLINE) && !bShow && (unread == 0) && m_bShowOnline)
+            if (status <= STATUS_OFFLINE && !bShow && unread == 0 && m_bShowOnline)
                 continue;
             grpItem = findGroupItem(contact->getGroup());
-            if (grpItem == NULL){
+            if (grpItem == NULL)
+            {
                 grp = list->group(contact->getGroup());
                 if (grp)
                     grpItem = new GroupItem( this, grp, true, m_bCheckable );
@@ -876,7 +922,8 @@ void UserListBase::fill()
             }
             m_contactItem = new ContactItem( grpItem, contact, status, style, icons, unread, m_bCheckable );
             grpItem->m_nContacts++;
-            if ((status > STATUS_OFFLINE) && !m_bShowOnline){
+            if ((status > STATUS_OFFLINE) && !m_bShowOnline)
+            {
                 grpItem->m_nContactsOnline++;
                 m_contactItem->m_bOnline = true;
             }
@@ -885,20 +932,25 @@ void UserListBase::fill()
     case 2:
         divItemOnline = new DivItem(this, DIV_ONLINE);
         setOpen(divItemOnline, true);
-        if (m_bShowEmpty){
-            while ((grp = ++grp_it) != NULL){
+        if (m_bShowEmpty)
+        {
+            while ((grp = ++grp_it) != NULL)
+            {
                 if (grp->id() == 0)
                     continue;
                 grpItem = new GroupItem( divItemOnline, grp, false, m_bCheckable );
             }
             grpItem = new GroupItem( divItemOnline, list->group(0), false, m_bCheckable );
         }
-        if (!m_bShowOnline){
+        if (!m_bShowOnline)
+        {
             divItemOffline = new DivItem(this, DIV_OFFLINE);
             setOpen(divItemOffline, true);
             grp_it.reset();
-            if (m_bShowEmpty){
-                while ((grp = ++grp_it) != NULL){
+            if (m_bShowEmpty)
+            {
+                while ((grp = ++grp_it) != NULL)
+                {
                     if (grp->id() == 0)
                         continue;
                     grpItem = new GroupItem( divItemOffline, grp, true, m_bCheckable );
@@ -906,7 +958,8 @@ void UserListBase::fill()
                 grpItem = new GroupItem( divItemOffline, list->group(0), true, m_bCheckable );
             }
         }
-        while ((contact = ++contact_it) != NULL){
+        while ((contact = ++contact_it) != NULL)
+        {
             if (contact->getIgnore() || (contact->getFlags() & CONTACT_TEMPORARY))
                 continue;
             unsigned style;
@@ -917,19 +970,22 @@ void UserListBase::fill()
             SIM::PropertyHubPtr data = contact->getUserData("list");
             if (!data.isNull() && data->value("ShowAlways").toBool())
                 bShow = true;
-            if ((unread == 0) && !bShow && (status <= STATUS_OFFLINE) && m_bShowOnline)
+            if (unread == 0 && !bShow && status <= STATUS_OFFLINE && m_bShowOnline)
                 continue;
-            if (status <= STATUS_OFFLINE){
-                if (divItemOffline == NULL){
+            if (status > STATUS_OFFLINE)
+                divItem = divItemOnline;
+            else
+            {
+                if (divItemOffline == NULL)
+                {
                     divItemOffline = new DivItem(this, DIV_OFFLINE);
                     setOpen(divItemOffline, true);
                 }
                 divItem = divItemOffline;
-            }else{
-                divItem = divItemOnline;
             }
             grpItem = findGroupItem(contact->getGroup(), divItem);
-            if (grpItem == NULL){
+            if (grpItem == NULL)
+            {
                 Group *grp = getContacts()->group(contact->getGroup());
                 if (grp == NULL)
                     continue;
@@ -954,9 +1010,25 @@ static void resort(ListViewItem *item)
 		*/
 }
 
+ContactItem* UserListBase::getContactItem(Contact *contact)
+{
+    return findContactItem(contact->id());
+}
+
+GroupItem* UserListBase::getGrpItem(Group *g)
+{
+    return findGroupItem(g->id());
+}
+
+GroupItem* UserListBase::getGrpItem(Group *group, DivItem *divItem)
+{
+    return findGroupItem(group->id(), divItem);
+}
+
 bool UserListBase::processEvent(Event *e)
 {
-    if (e->type() == eEventRepaintView){
+    if (e->type() == eEventRepaintView)
+    {
         //sort();
         for(int c = 0; c < topLevelItemCount(); c++)
         {
@@ -965,111 +1037,119 @@ bool UserListBase::processEvent(Event *e)
         }
         viewport()->repaint();
     }
-    if (m_bInit){
-        switch (e->type()){
-        case eEventGroup:{
-            EventGroup *ev = static_cast<EventGroup*>(e);
-            Group *g = ev->group();
-            switch (ev->action()) {
-                case EventGroup::eAdded:
-                case EventGroup::eChanged:
-                    addGroupForUpdate(g->id());
-                    break;
-                case EventGroup::eDeleted:
-                    for (list<unsigned long>::iterator it = updGroups.begin(); it != updGroups.end(); ++it){
-                        if (*it == g->id()){
+    if (m_bInit)
+    {
+        switch (e->type())
+        {
+            case eEventGroup:
+            {
+                EventGroup *ev = static_cast<EventGroup*>(e);
+                Group *g = ev->group();
+                switch (ev->action()) 
+                {
+                    case EventGroup::eAdded:
+                    case EventGroup::eChanged:
+                        addGroupForUpdate(g->id());
+                        break;
+                    case EventGroup::eDeleted:
+                        for (list<unsigned long>::iterator it = updGroups.begin(); it != updGroups.end(); ++it)
+                        {
+                            if (*it != g->id())
+                                continue;
                             updGroups.erase(it);
                             break;
                         }
-                    }
-                    GroupItem *grpItem;
-                    switch (m_groupMode){
-                    case 1:
-                        grpItem = findGroupItem(g->id());
-                        deleteItem(grpItem);
-                        break;
-                    case 2:
-                        for(int c = 0; c < topLevelItemCount(); c++)
+                        GroupItem *grpItem;
+                        switch (m_groupMode)
                         {
-                            ListViewItem *item = static_cast<ListViewItem*>(topLevelItem(c));
-                            UserViewItemBase *i = static_cast<UserViewItemBase*>(item);
-                            if (i->type() != DIV_ITEM) continue;
-                            DivItem *divItem = static_cast<DivItem*>(i);
-                            grpItem = findGroupItem(g->id(), divItem);
-                            deleteItem(grpItem);
-                        }
-                        break;
-                   }
-            }
-            break;
-        }
-        case eEventContact: {
-            EventContact *ec = static_cast<EventContact*>(e);
-            Contact *contact = ec->contact();
-            switch(ec->action()) {
-                case EventContact::eDeleted: {
-                    for (list<unsigned long>::iterator it = updContacts.begin(); it != updContacts.end(); ++it){
-                        if (*it == contact->id()){
-                            updContacts.erase(it);
-                            break;
-                        }
-                    }
-                    ContactItem *item = findContactItem(contact->id());
-                    if (item){
-                        if (m_groupMode){
-                            GroupItem *grpItem = static_cast<GroupItem*>(item->parent());
-                            grpItem->m_nContacts--;
-                            if (item->m_bOnline)
-                                grpItem->m_nContactsOnline--;
-                            addGroupForUpdate(grpItem->id());
-                            deleteItem(item);
-                            if ((m_groupMode == 2) &&
-                                    (grpItem->child(0) == NULL) &&
-                                    m_bShowOnline){
-                                DivItem *div = static_cast<DivItem*>(grpItem->parent());
-                                if (div->state() == DIV_OFFLINE){
+                            case 1:
+                                deleteItem(getGrpItem(g));
+                                break;
+                            case 2:
+                                for(int c = 0; c < topLevelItemCount(); c++)
+                                {
+                                    ListViewItem *item = static_cast<ListViewItem*>(topLevelItem(c));
+                                    UserViewItemBase *i = static_cast<UserViewItemBase*>(item);
+                                    if (i->type() != DIV_ITEM) 
+                                        continue;
+                                    DivItem *divItem = static_cast<DivItem*>(i);
+                                    grpItem = findGroupItem(g->id(), divItem);
                                     deleteItem(grpItem);
-                                    if (div->child(0) == NULL)
-                                        deleteItem(div);
                                 }
-                            }
-                        }else{
-                            ListViewItem *p = static_cast<ListViewItem*>(item->parent());
-                            deleteItem(item);
-                            if (p->child(0) == NULL)
-                                deleteItem(p);
-                        }
-                    }
-                    break;
-                }
-                case EventContact::eStatus:
-                case EventContact::eChanged: {
-                    if (!contact->getIgnore() && ((contact->getFlags() & CONTACT_TEMPORARY) == 0)){
-                        addContactForUpdate(contact->id());
-                    }else{
-                        EventContact e(contact, EventContact::eDeleted);
-                        processEvent(&e);
-                        e.setNoProcess();
-                    }
-                    break;
-                }
-                default:
-                    break;
-            }
-            break;
-        }
-        case eEventMessageReceived:{
-                EventMessage *em = static_cast<EventMessage*>(e);
-                Message *msg = em->msg();
-                if (msg->type() == MessageStatus){
-                    Contact *contact = getContacts()->contact(msg->contact());
-                    if (contact)
-                        addContactForUpdate(contact->id());
+                                break;
+                       }
                 }
                 break;
             }
-        default:
-            break;
+            case eEventContact: 
+            {
+                EventContact *ec = static_cast<EventContact*>(e);
+                Contact *contact = ec->contact();
+                switch(ec->action()) 
+                {
+                    case EventContact::eDeleted: 
+                    {
+                        for (list<unsigned long>::iterator it = updContacts.begin(); it != updContacts.end(); ++it)
+                            if (*it == contact->id())
+                            {
+                                updContacts.erase(it);
+                                break;
+                            }
+                            if (getContactItem(contact)){
+                            if (m_groupMode){
+                                GroupItem *grpItem = static_cast<GroupItem*>(getContactItem(contact)->parent());
+                                grpItem->m_nContacts--;
+                                if (getContactItem(contact)->m_bOnline)
+                                    grpItem->m_nContactsOnline--;
+                                addGroupForUpdate(grpItem->id());
+                                deleteItem(getContactItem(contact));
+                                if ((m_groupMode == 2) &&
+                                        (grpItem->child(0) == NULL) &&
+                                        m_bShowOnline){
+                                    DivItem *div = static_cast<DivItem*>(grpItem->parent());
+                                    if (div->state() == DIV_OFFLINE){
+                                        deleteItem(grpItem);
+                                        if (div->child(0) == NULL)
+                                            deleteItem(div);
+                                    }
+                                }
+                            }else{
+                                ListViewItem *p = static_cast<ListViewItem*>(getContactItem(contact)->parent());
+                                deleteItem(getContactItem(contact));
+                                if (p->child(0) == NULL)
+                                    deleteItem(p);
+                            }
+                        }
+                        break;
+                    }
+                    case EventContact::eStatus:
+                    case EventContact::eChanged: {
+                        if (!contact->getIgnore() && ((contact->getFlags() & CONTACT_TEMPORARY) == 0)){
+                            addContactForUpdate(contact->id());
+                        }else{
+                            EventContact e(contact, EventContact::eDeleted);
+                            processEvent(&e);
+                            e.setNoProcess();
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                break;
+            }
+            case eEventMessageReceived:{
+                    EventMessage *em = static_cast<EventMessage*>(e);
+                    Message *msg = em->msg();
+                    if (msg->type() == MessageStatus){
+                        Contact *contact = getContacts()->contact(msg->contact());
+                        if (contact)
+                            addContactForUpdate(contact->id());
+                    }
+                    break;
+                }
+            default:
+                break;
         }
     }
     return ListView::processEvent(e);
