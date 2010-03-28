@@ -821,7 +821,7 @@ void ICQClientData::deserialize(Buffer* cfg)
 
 void ICQClientData::deserializeLine(const QString& key, const QString& value)
 {
-    log(L_DEBUG, "key: %s, value: %s", qPrintable(key), qPrintable(value));
+    log(L_DEBUG, "[ICQClientData]key: %s, value: %s", qPrintable(key), qPrintable(value));
     QString val = value;
     if(val.startsWith('\"') && val.endsWith('\"'))
         val = val.mid(1, val.length() - 2);
@@ -909,6 +909,25 @@ unsigned long ICQClientData::getSign()
     return 0;
 }
 
+ICQClient::ICQClient(SIM::Protocol* protocol, const QString& name, bool bAIM) : TCPClient(protocol, NULL, HighPriority - 1),
+        m_bVerifying			(false),
+        m_listener				(NULL),
+        m_listRequest			(NULL),
+        m_bRosters				(false),
+        m_bBirthday				(false),
+        m_bNoSend				(true),
+        m_bJoin                             (false),
+        m_bFirstTry				(false),
+        m_bReady				(false),
+        m_bconnectionLost                   (false),
+        m_ifChecker                         (NULL),
+        m_bBirthdayInfoDisplayed            (false),
+        m_name(name)
+{
+
+    initialize(bAIM);
+}
+
 ICQClient::ICQClient(Protocol *protocol, Buffer *cfg, bool bAIM)
     : TCPClient(protocol, cfg, HighPriority - 1),
     m_bVerifying			(false),
@@ -924,13 +943,18 @@ ICQClient::ICQClient(Protocol *protocol, Buffer *cfg, bool bAIM)
     m_ifChecker                         (NULL),
     m_bBirthdayInfoDisplayed            (false)
 {
+    initialize(bAIM);
+}
+
+void ICQClient::initialize(bool bAIM)
+{
     m_bAIM = bAIM;
 
-    data.deserialize(cfg);
-    if (data.owner.getUin() != 0)
-        m_bAIM = false;
-    if (!data.owner.getScreen().isEmpty())
-        m_bAIM = true;
+    //data.deserialize(cfg);
+//    if (data.owner.getUin() != 0)
+//        m_bAIM = false;
+//    if (!data.owner.getScreen().isEmpty())
+//        m_bAIM = true;
 
     data.owner.setDCcookie(rand());
 
@@ -972,7 +996,6 @@ ICQClient::ICQClient(Protocol *protocol, Buffer *cfg, bool bAIM)
     m_ifChecker = new SIM::InterfaceChecker();
     connect(m_ifChecker, SIGNAL(interfaceDown(QString)), this, SLOT(interfaceDown(QString)));
     connect(m_ifChecker, SIGNAL(interfaceUp(QString)), this, SLOT(interfaceUp(QString)));
-
 }
 
 ICQClient::~ICQClient()
@@ -1004,6 +1027,52 @@ ICQClient::~ICQClient()
 SIM::IMContact* ICQClient::getOwnerContact()
 {
     return &data.owner;
+}
+
+bool ICQClient::serialize(QDomElement& element)
+{
+    SIM::PropertyHubPtr hub = SIM::PropertyHub::create();
+    hub->setValue("Server", getServer());
+    hub->setValue("ServerPort", (unsigned int)getPort());
+    hub->setValue("HideIP", getHideIP());
+    hub->setValue("IgnoreAuth", getIgnoreAuth());
+    hub->setValue("UseMD5", getUseMD5());
+    hub->setValue("DirectMode", (unsigned int)getDirectMode());
+    hub->setValue("IdleTime", (unsigned int)getIdleTime());
+    hub->setValue("ListRequest", getListRequests());
+    hub->setValue("Picture", getPicture());
+    hub->setValue("RandomChatGroup", (unsigned int)getRandomChatGroup());
+    hub->setValue("SendFormat", (unsigned int)getSendFormat());
+    hub->setValue("DisablePlugins", getDisablePlugins());
+    hub->setValue("DisableAutoUpdate", getDisableAutoUpdate());
+    hub->setValue("DisableAutoReplyUpdate", getDisableAutoReplyUpdate());
+    hub->setValue("DisableTypingNotification", getDisableTypingNotification());
+    hub->setValue("AcceptInDND", getAcceptInDND());
+    hub->setValue("AcceptInOccupied", getAcceptInOccupied());
+    hub->setValue("MinPort", (unsigned int)getMinPort());
+    hub->setValue("MaxPort", (unsigned int)getMaxPort());
+    hub->setValue("WarnAnonymously", getWarnAnonymously());
+    hub->setValue("ACKMode", (unsigned int)getAckMode());
+    hub->setValue("UseHTTP", getUseHTTP());
+    hub->setValue("AutoHTTP", getAutoHTTP());
+    hub->setValue("KeepAlive", getKeepAlive());
+    hub->setValue("MediaSense", getMediaSense());
+    hub->serialize(element);
+    return Client::serialize(element);
+}
+
+bool ICQClient::deserialize(QDomElement& element)
+{
+
+}
+
+bool ICQClient::deserialize(Buffer* cfg)
+{
+    log(L_DEBUG, "ICQClient::deserialize");
+    data.deserialize(cfg);
+    Client::deserialize(cfg);
+    m_name = "";
+    return true;
 }
 
 void ICQClient::setOwnerContact(SIM::IMContact* contact)
@@ -1377,9 +1446,15 @@ QByteArray ICQClient::getConfig()
 
 QString ICQClient::name()
 {
-    if (m_bAIM)
-        return "AIM." + data.owner.getScreen();
-    return "ICQ." + QString::number(data.owner.getUin());
+    if(!m_name.isEmpty())
+        return m_name;
+    if (m_bAIM) {
+        m_name = "AIM." + data.owner.getScreen();
+    }
+    else {
+        m_name = "ICQ." + QString::number(data.owner.getUin());
+    }
+    return m_name;
 }
 
 QString ICQClient::getScreen()

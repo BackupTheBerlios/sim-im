@@ -912,6 +912,7 @@ class ICQClient : public SIM::TCPClient, public OscarSocket
     Q_OBJECT
 public:
     ICQClient(SIM::Protocol*, Buffer *cfg, bool bAIM);
+    ICQClient(SIM::Protocol*, const QString& name, bool bAIM);
     ~ICQClient();
     virtual QString     name();
     virtual QString getScreen();
@@ -922,6 +923,10 @@ public:
 
     virtual SIM::IMContact*  getOwnerContact();
     virtual void setOwnerContact(SIM::IMContact* contact);
+
+    virtual bool serialize(QDomElement& element);
+    virtual bool deserialize(QDomElement& element);
+    virtual bool deserialize(Buffer* cfg);
 
     void setUin(unsigned long);
     void setScreen(const QString &);
@@ -1296,9 +1301,12 @@ protected:
     friend class SnacIcqICBM;
 
 private:
+    void initialize(bool bAIM);
+
 	SIM::PropertyHubPtr m_propertyHub;
     SIM::InterfaceChecker* m_ifChecker;
     bool m_bBirthdayInfoDisplayed;
+    QString m_name;
 };
 
 class ServiceSocket : public SIM::ClientSocketNotify, public OscarSocket

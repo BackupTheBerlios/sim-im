@@ -62,6 +62,7 @@ public:
     JabberProtocol(SIM::Plugin *plugin);
     ~JabberProtocol();
     SIM::ClientPtr createClient(Buffer *cfg);
+    SIM::ClientPtr createClient(const QString& name);
     const SIM::CommandDef *description();
     const SIM::CommandDef *statusList();
     virtual const SIM::DataDef *userDataDef();

@@ -92,6 +92,11 @@ namespace test
         return QSharedPointer<Client>(new MockClient(n, this));
     }
 
+    QSharedPointer<Client> MockProtocol::createClient(const QString& name)
+    {
+        return createClient(name, 0);
+    }
+
     const CommandDef *MockProtocol::description()
     {
         return &mock_descr;

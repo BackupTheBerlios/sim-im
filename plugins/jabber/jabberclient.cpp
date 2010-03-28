@@ -402,6 +402,55 @@ unsigned long JabberClientData::getSign()
     return JABBER_SIGN;
 }
 
+JabberClient::JabberClient(JabberProtocol* protocol, const QString& name): TCPClient(protocol, NULL),
+    data(SIM::ClientPtr(0))
+{
+    //load_data(jabberClientData, &data, cfg);
+    QString jid = data.owner.getId();
+    //log(L_DEBUG, "JID: %s", jid.toUtf8().data());
+
+    //For old configs, where server part in own jid is missing
+    if (!jid.isEmpty() && jid.indexOf('@')==-1)
+    {
+        jid += '@';
+        if (getUseVHost())
+        {
+            jid += getVHost();
+        }
+        else
+        {
+            jid += getServer();
+        }
+        data.owner.setId(jid);
+    }
+    if (data.owner.getResource().isEmpty())
+    {
+        QString resource = PACKAGE;
+        data.owner.setResource(resource.simplified());
+    }
+
+    TCPClient::changeStatus(this->protocol()->status("offline"));
+
+    QString listRequests = getListRequest();
+    while (!listRequests.isEmpty()){
+        QString item = getToken(listRequests, ';', false);
+        JabberListRequest lr;
+        lr.bDelete = false;
+        lr.jid = getToken(item, ',');
+        lr.grp = getToken(item, ',');
+        if (!item.isEmpty())
+            lr.bDelete = true;
+        m_listRequests.push_back(lr);
+    }
+    setListRequest(QString::null);
+
+    m_bSSL		 = false;
+    m_curRequest = NULL;
+    m_msg_id	 = 0;
+    m_bJoin		 = false;
+    init();
+}
+
 JabberClient::JabberClient(JabberProtocol *protocol, Buffer *cfg) : TCPClient(protocol, cfg),
 data(SIM::ClientPtr(0))
 {

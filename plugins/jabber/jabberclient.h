@@ -577,6 +577,7 @@ public:
     };
 
     JabberClient(JabberProtocol*, Buffer *cfg);
+    JabberClient(JabberProtocol*, const QString& name);
     ~JabberClient();
     virtual QString name();
     virtual QString dataName(void*);

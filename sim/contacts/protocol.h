@@ -20,6 +20,7 @@ namespace SIM
         virtual ~Protocol();
         Plugin  *plugin() { return m_plugin; }
         virtual QSharedPointer<Client> createClient(Buffer *cfg) = 0;
+        virtual QSharedPointer<Client> createClient(const QString& name) = 0;
         virtual const CommandDef *description() = 0;
         virtual const CommandDef *statusList() = 0;
         virtual QStringList statuses() = 0;

@@ -46,6 +46,7 @@ public:
     ICQProtocol(SIM::Plugin *plugin);
     ~ICQProtocol();
     SIM::ClientPtr createClient(Buffer *cfg);
+    SIM::ClientPtr createClient(const QString& name);
     const SIM::CommandDef *description();
     const SIM::CommandDef *statusList();
     static const SIM::CommandDef *_statusList();
@@ -67,6 +68,7 @@ public:
     AIMProtocol(SIM::Plugin *plugin);
     ~AIMProtocol();
     SIM::ClientPtr createClient(Buffer *cfg);
+    SIM::ClientPtr createClient(const QString& name);
     const SIM::CommandDef *description();
     const SIM::CommandDef *statusList();
     virtual const SIM::DataDef *userDataDef();

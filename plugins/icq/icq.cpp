@@ -59,8 +59,13 @@ ICQProtocol::~ICQProtocol()
 ClientPtr ICQProtocol::createClient(Buffer *cfg)
 {
 	ClientPtr icq = ClientPtr(new ICQClient(this, cfg, false));
-	getClientManager()->addClient(icq);
+    //getClientManager()->addClient(icq);
     return icq;
+}
+
+SIM::ClientPtr ICQProtocol::createClient(const QString& name)
+{
+
 }
 
 IMContact* ICQProtocol::createIMContact(const QSharedPointer<Client>& client)
@@ -278,6 +283,13 @@ ClientPtr AIMProtocol::createClient(Buffer *cfg)
 	ClientPtr aim = ClientPtr(new ICQClient(this, cfg, true));
 	getClientManager()->addClient(aim);
 	return aim;
+}
+
+SIM::ClientPtr AIMProtocol::createClient(const QString& name)
+{
+    ClientPtr aim = ClientPtr(new ICQClient(this, 0, true));
+    getClientManager()->addClient(aim);
+    return aim;
 }
 
 static CommandDef aim_descr =

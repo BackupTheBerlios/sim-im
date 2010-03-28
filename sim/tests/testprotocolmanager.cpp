@@ -23,6 +23,11 @@ namespace testProtocolManager
             return ClientPtr();
         }
 
+        virtual ClientPtr createClient(const QString& name)
+        {
+            return ClientPtr();
+        }
+
         virtual const CommandDef *description()
         {
             return 0;

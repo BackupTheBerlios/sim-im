@@ -105,6 +105,13 @@ ClientPtr JabberProtocol::createClient(Buffer *cfg)
 	return jabber;
 }
 
+SIM::ClientPtr JabberProtocol::createClient(const QString& name)
+{
+    ClientPtr jabber = ClientPtr(new JabberClient(this, name));
+    getClientManager()->addClient(jabber);
+    return jabber;
+}
+
 static CommandDef jabber_descr =
     CommandDef (
         0,

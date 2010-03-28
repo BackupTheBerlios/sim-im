@@ -31,6 +31,7 @@ namespace test
     public:
         MockProtocol();
         virtual QSharedPointer<Client> createClient(Buffer *cfg);
+        virtual QSharedPointer<Client> createClient(const QString& name);
         virtual QSharedPointer<Client> createClient(const QString& n, Buffer *cfg);
         virtual const CommandDef *description();
         virtual const CommandDef *statusList();

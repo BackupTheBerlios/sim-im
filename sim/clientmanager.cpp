@@ -31,6 +31,7 @@ namespace SIM
     
     void ClientManager::load()
     {
+        log(L_DEBUG, "ClientManager::load()");
         load_old();
         // TODO
     }
@@ -44,29 +45,51 @@ namespace SIM
             return;
         }
 
-        PropertyHubPtr currenthub;
-        while(!f.atEnd())
-        {
-            QString line = f.readLine();
-            line = line.trimmed();
-            if(line.startsWith("["))
-            {
-                QString section = line.mid(1, line.length() - 2);
-                ClientPtr client = createClient(section);
-                currenthub = client->properties();
-            }
-            else
-            {
-                if(!currenthub.isNull())
+        Buffer cfg;
+        ClientPtr client;
+        while(!f.atEnd()) {
+            QByteArray l = f.readLine();
+            QString line = l.trimmed();
+            if(line.startsWith("[")) {
+                if(client) {
+                    cfg.setWritePos(cfg.size() - 1);
+                    client->deserialize(&cfg);
+                    addClient(client);
+                    cfg.clear();
+                }
+                QString clientName = line.mid(1, line.length() - 2);
+                QString pluginName = getToken(clientName, '/');
+                if (pluginName.isEmpty() || clientName.length() == 0)
+                    return;
+                if(!getPluginManager()->isPluginProtocol(pluginName))
                 {
-                    QStringList keyval = line.split('=');
-                    QString val = keyval.at(1);
-                    if(val.startsWith('"') && val.endsWith('"'))
-                        currenthub->setValue(keyval.at(0), val.mid(1, val.length() - 2));
-                    else
-                        currenthub->setValue(keyval.at(0), val);
+                    log(L_DEBUG, "Plugin %s is not a protocol plugin", qPrintable(pluginName));
+                    return;
+                }
+                PluginPtr plugin = getPluginManager()->plugin(pluginName);
+                if(plugin.isNull())
+                {
+                    log(L_WARN, "Plugin %s not found", qPrintable(pluginName));
+                    return;
+                }
+                ProfileManager::instance()->currentProfile()->enablePlugin(pluginName);
+                ProtocolPtr protocol;
+                ProtocolIterator it;
+                while ((protocol = ++it) != NULL)
+                    if (protocol->description()->text == clientName)
+                        client = protocol->createClient(0);
+            }
+            else {
+                if(!l.isEmpty()) {
+                    cfg += l;
                 }
             }
+        }
+        if(client) {
+            cfg.setWritePos(cfg.size() - 1);
+            client->deserialize(&cfg);
+            addClient(client);
+            cfg.clear();
         }
     }
 
@@ -80,6 +103,7 @@ namespace SIM
         foreach(const ClientPtr& client, m_clients)
         {
             QDomElement el = doc.createElement("client");
+            el.setAttribute("name", client->name());
             el.setAttribute("plugin", client->protocol()->plugin()->name());
             el.setAttribute("protocol", client->protocol()->description()->text);
             client->properties()->serialize(el);
@@ -117,7 +141,7 @@ namespace SIM
         ProfileManager::instance()->currentProfile()->enablePlugin(pluginname);
         ProtocolPtr protocol = getProtocolManager()->protocol(protocolname);
         if(protocol)
-            return protocol->createClient(0);
+            return protocol->createClient(name);
         log(L_DEBUG, "Protocol %s not found", qPrintable(protocolname));
         return ClientPtr();
     }

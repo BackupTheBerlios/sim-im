@@ -48,6 +48,11 @@ namespace SIM
         virtual void setOwnerContact(IMContact* contact) = 0;
 
         virtual QByteArray getConfig();
+
+        virtual bool serialize(QDomElement& element);
+        virtual bool deserialize(QDomElement& element);
+        virtual bool deserialize(Buffer* cfg);
+
         virtual QImage userPicture(unsigned) {return QImage();};
         virtual CommandDef *configWindows();
         virtual QWidget *configWindow(QWidget *parent, unsigned id);
@@ -103,10 +108,14 @@ namespace SIM
 
     protected:
         void  freeData();
-        ClientData  data;
+        //ClientData  data;
         unsigned m_status;
 
     private:
+        void deserializeLine(const QString& key, const QString& value);
+        QString cryptPassword(const QString& passwd);
+        QString uncryptPassword(const QString& passwd);
+
         unsigned long m_ulStatus;
         bool m_commonStatus;
         QString m_password;
