@@ -144,14 +144,14 @@ namespace SIM
     void Client::freeData()
     {
         getContacts()->removeClient(this);
-        Group *grp;
-        ContactList::GroupIterator itg;
-        while ((grp = ++itg) != NULL)
-        {
-            if (grp->clientData.size() == 0)
-                continue;
-            grp->clientData.freeClientData(this);
-        }
+//        Group *grp;
+//        ContactList::GroupIterator itg;
+//        while ((grp = ++itg) != NULL)
+//        {
+//            if (grp->clientData.size() == 0)
+//                continue;
+//            grp->clientData.freeClientData(this);
+//        }
 
         Contact *contact;
         ContactList::ContactIterator itc;

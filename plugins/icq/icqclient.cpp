@@ -2185,7 +2185,7 @@ ICQUserData *ICQClient::findGroup(unsigned id, const QString *alias, Group *&grp
     ICQUserData *data;
     while ((grp = ++it) != NULL)
     {
-        data = toICQUserData((SIM::IMContact*)grp->clientData.getData(this)); // FIXME unsafe type conversion
+        data = toICQUserData((SIM::IMContact*)grp->getData(this)); // FIXME unsafe type conversion
         if (!data || data->getIcqID() != id)
             continue;
 
@@ -2201,7 +2201,7 @@ ICQUserData *ICQClient::findGroup(unsigned id, const QString *alias, Group *&grp
     {
         if (grp->getName() == name)
         {
-            data = toICQUserData((SIM::IMContact*)grp->clientData.createData(this)); // FIXME unsafe type conversion
+            data = toICQUserData((SIM::IMContact*)grp->createData(this)); // FIXME unsafe type conversion
             data->setIcqID(id);
             data->setAlias(*alias);
             return data;
@@ -2209,7 +2209,7 @@ ICQUserData *ICQClient::findGroup(unsigned id, const QString *alias, Group *&grp
     }
     grp = getContacts()->group(0, true);
     grp->setName(name);
-    data = toICQUserData((SIM::IMContact*)grp->clientData.createData(this)); // FIXME unsafe type conversion
+    data = toICQUserData((SIM::IMContact*)grp->createData(this)); // FIXME unsafe type conversion
     data->setIcqID(id);
     data->setAlias(*alias);
     EventGroup e(grp, EventGroup::eChanged);
@@ -3772,7 +3772,7 @@ bool ICQClient::processEvent(Event *e)
         addGroupRequest(group);
         break;
     case EventGroup::eDeleted: {
-        ICQUserData *data = toICQUserData((SIM::IMContact*)group->clientData.getData(this));
+        ICQUserData *data = toICQUserData((SIM::IMContact*)group->getData(this));
         if (data){
             ListRequest lr;
             lr.type   = LIST_GROUP_DELETED;

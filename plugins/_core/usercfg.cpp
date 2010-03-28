@@ -378,7 +378,7 @@ void UserConfig::fill()
     if (m_contact) 
         it = m_contact->clientDataIterator();
 	else 
-        it = ClientDataIterator(m_group->clientData);
+        it = m_group->clientDataIterator();
     //ClientDataIterator it(*data);
     list<unsigned> st;
 	ARItem *tmp=NULL;

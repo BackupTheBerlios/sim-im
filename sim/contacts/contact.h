@@ -88,7 +88,6 @@ namespace SIM
         void join(SIM::IMContact *cData, Contact* c);
         unsigned size();
         Client *activeClient(void *&data, Client *client);
-        //QString property(const char *name);
         void freeData(SIM::IMContact*);
         void freeClientData(Client *client);
         // m_clientData accessors end

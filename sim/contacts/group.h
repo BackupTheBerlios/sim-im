@@ -10,11 +10,6 @@
 
 namespace SIM
 {
-
-    struct GroupData
-    {
-        Data        Name;       // Display name (UTF-8)
-    };
     class EXPORT Group
     {
     public:
@@ -26,13 +21,29 @@ namespace SIM
         void setName(const QString& name);
 
         PropertyHubPtr getUserData(const QString& id, bool bCreate = false);
-        ClientUserData clientData;
         PropertyHubPtr userdata() const { return m_userData->root(); }
         UserDataPtr getUserData() { return m_userData; }
 
+        ClientDataIterator clientDataIterator(Client* client = NULL);
+        QByteArray saveUserData() const;
+        void loadUserData(Client *client, Buffer *cfg);
+        IMContact* createData(Client* client);
+        IMContact* getData(Client *client);
+        IMContact* getData(const QString& clientName);
+        QStringList clientNames();
+        bool have(IMContact*);
+        void sort();
+        void join(Group* c);
+        void join(SIM::IMContact *cData, Group* c);
+        unsigned size();
+        Client *activeClient(void *&data, Client *client);
+        void freeData(SIM::IMContact*);
+        void freeClientData(Client *client);
+
     protected:
         unsigned long m_id;
-        GroupData data; friend class ContactList;
+        ClientUserData m_clientData;
+        friend class ContactList;
         friend class ContactListPrivate;
 
     private:

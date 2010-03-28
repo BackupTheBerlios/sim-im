@@ -787,6 +787,7 @@ void ContactList::load_old()
     PropertyHubPtr currenthub;
     IMContact* imcontact = 0;
     Contact* c = 0;
+    Group* gr = 0;
     UserDataPtr currentUserData = getUserData();
     while(!f.atEnd())
     {
@@ -796,14 +797,16 @@ void ContactList::load_old()
         if(line.startsWith("[Group="))
         {
             imcontact = 0;
+            c = 0;
             int id = line.mid(7, line.length() - 8).toInt();
-            Group* gr = group(id, id != 0);
+            gr = group(id, id != 0);
             currenthub = gr->userdata();
             currentUserData = gr->getUserData();
         }
         else if(line.startsWith("[Contact="))
         {
             imcontact = 0;
+            gr = 0;
             int id = line.mid(9, line.length() - 10).toInt();
             c = contact(id, true);
             //log(L_DEBUG, "Contact: %d", id);
@@ -814,14 +817,21 @@ void ContactList::load_old()
         {
             QString dataname = line.mid(1, line.length() - 2);
             int dotindex = line.indexOf(".");
-            if(dotindex > 0 && c != 0)
+            if(dotindex > 0 && (c != 0 || gr != 0))
             {
                 ClientPtr client = getClientManager()->client(dataname);
                 if(client)
                 {
-                    imcontact = c->getData(client.data());
-                    if(!imcontact)
-                        imcontact = c->createData(client.data());
+                    if(c) {
+                        imcontact = c->getData(client.data());
+                        if(!imcontact)
+                            imcontact = c->createData(client.data());
+                    }
+                    else if(gr) {
+                        imcontact = gr->getData(client.data());
+                        if(!imcontact)
+                            imcontact = gr->createData(client.data());
+                    }
                     currenthub.clear();
                 }
             }
@@ -1024,10 +1034,10 @@ void ContactListPrivate::flush(Contact *c, Group *g)
 //    if (c)
 //        data = &c->clientData;
     c->sort();
-    if (g)
-        data = &g->clientData;
-    if (data)
-        data->sort();
+//    if (g)
+//        data = &g->clientData;
+//    if (data)
+//        data->sort();
 }
 
 void ContactListPrivate::flush(Contact *c, Group *g, const QByteArray &section, Buffer *cfg)
@@ -1060,16 +1070,16 @@ void ContactListPrivate::flush(Contact *c, Group *g, const QByteArray &section, 
 //        return;
 //    }
     for (unsigned i = 0; i < getContacts()->nClients(); i++){
-        Client *client = getContacts()->getClient(i);
-        if (client->name() != section)
-            continue;
-        ClientUserData *data = NULL;
-        if (c && !g)
-            c->loadUserData(client, cfg);
-        if (g)
-            data = &g->clientData;
-        if (data)
-            data->load(client, cfg);
+//        Client *client = getContacts()->getClient(i);
+//        if (client->name() != section)
+//            continue;
+//        ClientUserData *data = NULL;
+//        if (c && !g)
+//            c->loadUserData(client, cfg);
+//        if (g)
+//            data = &g->clientData;
+//        if (data)
+//            data->load(client, cfg);
         return;
     }
 }
