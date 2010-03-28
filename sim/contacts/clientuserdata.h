@@ -25,6 +25,8 @@ namespace SIM
         void addData(IMContact* data);
         IMContact* createData(Client *client);
         IMContact* getData(Client *client);
+        IMContact* getData(const QString& clientName);
+        QStringList clientNames();
         bool have(IMContact*);
         void sort();
         void join(ClientUserData &data);
@@ -42,7 +44,6 @@ namespace SIM
     };
 
     class ClientDataIteratorPrivate;
-    typedef QSharedPointer<ClientDataIteratorPrivate> ClientDataIteratorPrivatePtr;
 
     class EXPORT ClientDataIterator
     {
@@ -54,9 +55,8 @@ namespace SIM
         Client *client();
         void reset();
     protected:
-        ClientDataIteratorPrivatePtr p;
+        ClientDataIteratorPrivate* p;
 
-        //COPY_RESTRICTED(ClientDataIterator)
     };
 }
 

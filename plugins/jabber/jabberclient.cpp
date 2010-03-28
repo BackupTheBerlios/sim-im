@@ -459,6 +459,23 @@ JabberClient::~JabberClient()
     freeData();
 }
 
+
+SIM::IMContact* JabberClient::getOwnerContact()
+{
+    return &data.owner;
+}
+
+void JabberClient::setOwnerContact(SIM::IMContact* contact)
+{
+    JabberUserData* d = 0;
+    if(contact->getSign() == JABBER_SIGN)
+        d = static_cast<JabberUserData*>(contact);
+
+    if(d)
+        data.owner = *d;
+}
+
+
 const DataDef *JabberProtocol::userDataDef()
 {
     return jabberUserData;

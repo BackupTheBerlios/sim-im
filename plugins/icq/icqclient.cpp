@@ -173,7 +173,7 @@ static DataDef _icqUserData[] =
     };
 
 ICQUserData::ICQUserData(const ClientPtr& cl) : IMContact(), m_uin(0),
-    m_status(0),
+    m_status(ICQ_STATUS_OFFLINE),
     m_class(0),
     m_statusTime(0),
     m_onlineTime(0),
@@ -645,6 +645,86 @@ void ICQUserData::serialize(QDomElement& element)
 
 void ICQUserData::deserialize(QDomElement& element)
 {
+    SIM::PropertyHubPtr hub = SIM::PropertyHub::create();
+    hub->deserialize(element);
+    setAlias(hub->value("Alias").toString());
+    setCellular(hub->value("Cellular").toString());
+    setStatusTime(hub->value("StatusTime").toUInt());
+    setWarningLevel(hub->value("WarningLevel").toUInt());
+    setIP(hub->value("IP").toUInt());
+    setRealIP(hub->value("RealIP").toUInt());
+    setPort(hub->value("Port").toUInt());
+    setCaps(hub->value("Caps").toUInt());
+    setCaps2(hub->value("Caps2").toUInt());
+    setUin(hub->value("Uin").toUInt());
+    setScreen(hub->value("Screen").toString());
+    setIcqID(hub->value("ID").toUInt());
+    setGrpID(hub->value("GroupID").toUInt());
+    setIgnoreId(hub->value("Ignore").toUInt());
+    setVisibleId(hub->value("Visible").toUInt());
+    setInvisibleId(hub->value("Invisible").toUInt());
+    setWaitAuth(hub->value("WaitAuth").toBool());
+    setWantAuth(hub->value("WantAuth").toBool());
+    setWebAware(hub->value("WebAware").toBool());
+    setInfoUpdateTime(hub->value("InfoUpdateTime").toUInt());
+    setPluginInfoTime(hub->value("PluginInfoTime").toUInt());
+    setPluginStatusTime(hub->value("PluginStatusTime").toUInt());
+    setInfoFetchTime(hub->value("InfoFetchTime").toUInt());
+    setPluginInfoFetchTime(hub->value("PluginInfoFetchTime").toUInt());
+    setPluginStatusFetchTime(hub->value("PluginStatusFetchTime").toUInt());
+    setMode(hub->value("Mode").toUInt());
+    setVersion(hub->value("Version").toUInt());
+    setBuild(hub->value("Build").toUInt());
+    setNick(hub->value("Nick").toString());
+    setFirstName(hub->value("FirstName").toString());
+    setLastName(hub->value("LastName").toString());
+    setMiddleName(hub->value("MiddleName").toString());
+    setMaiden(hub->value("Maiden").toString());
+    setEmail(hub->value("EMail").toString());
+    setHiddenEmail(hub->value("HiddenEMail").toBool());
+    setCity(hub->value("City").toString());
+    setState(hub->value("State").toString());
+    setHomePhone(hub->value("HomePhone").toString());
+    setHomeFax(hub->value("HomeFax").toString());
+    setAddress(hub->value("Address").toString());
+    setPrivateCellular(hub->value("PrivateCellular").toString());
+    setZip(hub->value("Zip").toString());
+    setCountry(hub->value("Country").toUInt());
+    setTimeZone(hub->value("TimeZone").toUInt());
+    setAge(hub->value("Age").toUInt());
+    setGender(hub->value("Gender").toUInt());
+    setHomepage(hub->value("Homepage").toString());
+    setBirthYear(hub->value("BirthYear").toUInt());
+    setBirthMonth(hub->value("BirthMonth").toUInt());
+    setBirthDay(hub->value("BirthDay").toUInt());
+    setLanguage(hub->value("Language").toUInt());
+    setWorkCity(hub->value("WorkCity").toString());
+    setWorkState(hub->value("WorkState").toString());
+    setWorkAddress(hub->value("WorkAddress").toString());
+    setWorkZip(hub->value("WorkZip").toString());
+    setWorkCountry(hub->value("WorkCountry").toUInt());
+    setWorkName(hub->value("WorkName").toString());
+    setWorkDepartment(hub->value("WorkDepartment").toString());
+    setWorkPosition(hub->value("WorkPosition").toString());
+    setOccupation(hub->value("WorkOccupation").toUInt());
+    setWorkHomepage(hub->value("WorkHomepage").toString());
+    setAbout(hub->value("About").toString());
+    setInterests(hub->value("Interests").toString());
+    setBackgrounds(hub->value("Backgrounds").toString());
+    setAffilations(hub->value("Affilations").toString());
+    setFollowMe(hub->value("FollowMe").toUInt());
+    setSharedFiles(hub->value("SharedFiles").toBool());
+    setICQPhone(hub->value("ICQPhone").toUInt());
+    setPicture(hub->value("Picture").toString());
+    setPictureWidth(hub->value("PictureWidth").toUInt());
+    setPictureHeight(hub->value("PictureHeight").toUInt());
+    setPhoneBook(hub->value("PhoneBook").toString());
+    setProfileFetch(hub->value("ProfileFetch").toBool());
+    setBuddyID(hub->value("buddyId").toUInt());
+    setBuddyHash(hub->value("buddyHash").toByteArray());
+    setUnknown(2, hub->value("unknown2").toByteArray());
+    setUnknown(4, hub->value("unknown4").toByteArray());
+    setUnknown(5, hub->value("unknown5").toByteArray());
 
 }
 
@@ -919,6 +999,21 @@ ICQClient::~ICQClient()
     while (!m_sockets.empty())
         delete m_sockets.front();
     m_processMsg.clear();
+}
+
+SIM::IMContact* ICQClient::getOwnerContact()
+{
+    return &data.owner;
+}
+
+void ICQClient::setOwnerContact(SIM::IMContact* contact)
+{
+    ICQUserData* d = 0;
+    if(contact->getSign() == ICQ_SIGN)
+        d = static_cast<ICQUserData*>(contact);
+
+    if(d)
+        data.owner = *d;
 }
 
 unsigned long ICQClient::getContactsTime() const

@@ -26,6 +26,8 @@ namespace testContactList
         virtual bool canSend(unsigned type, void *data);
         virtual QWidget* searchWindow(QWidget *parent);
         QStringList statuses() { return QStringList(); };
+        virtual SIM::IMContact*  getOwnerContact() {};
+        virtual void setOwnerContact(SIM::IMContact* contact) {};
     };
 
     class Test: public QObject, public SIM::EventReceiver

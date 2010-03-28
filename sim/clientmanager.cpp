@@ -122,6 +122,11 @@ namespace SIM
         return ClientPtr();
     }
 
+    QStringList ClientManager::clientList()
+    {
+        return m_clients.keys();
+    }
+
     static ClientManager* g_clientManager = 0;
 
     ClientManager* getClientManager()

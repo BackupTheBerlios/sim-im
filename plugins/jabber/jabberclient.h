@@ -585,6 +585,9 @@ public:
     virtual QImage userPicture(unsigned id);
     QImage userPicture(JabberUserData *d);
 
+    virtual SIM::IMContact*  getOwnerContact();
+    virtual void setOwnerContact(SIM::IMContact* contact);
+
     void setID(const QString &id);
     QString getID()
     {

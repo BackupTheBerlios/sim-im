@@ -451,6 +451,11 @@ namespace SIM
         return m_clientData.getData(client);
     }
 
+    IMContact* Contact::getData(const QString& clientName)
+    {
+        return m_clientData.getData(clientName);
+    }
+
     bool Contact::have(IMContact* d)
     {
         return m_clientData.have(d);
@@ -509,6 +514,11 @@ namespace SIM
     void Contact::loadUserData(Client *client, Buffer *cfg)
     {
         m_clientData.load(client, cfg);
+    }
+
+    QStringList Contact::clientNames()
+    {
+        return m_clientData.clientNames();
     }
 }
 

@@ -44,6 +44,9 @@ namespace SIM
         virtual void changeStatus(const IMStatusPtr& status);
         IMStatusPtr currentStatus();
 
+        virtual IMContact*  getOwnerContact() = 0;
+        virtual void setOwnerContact(IMContact* contact) = 0;
+
         virtual QByteArray getConfig();
         virtual QImage userPicture(unsigned) {return QImage();};
         virtual CommandDef *configWindows();

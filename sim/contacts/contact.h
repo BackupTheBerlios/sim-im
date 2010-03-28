@@ -80,6 +80,8 @@ namespace SIM
         void loadUserData(Client *client, Buffer *cfg);
         IMContact* createData(Client* client);
         IMContact* getData(Client *client);
+        IMContact* getData(const QString& clientName);
+        QStringList clientNames();
         bool have(IMContact*);
         void sort();
         void join(Contact* c);

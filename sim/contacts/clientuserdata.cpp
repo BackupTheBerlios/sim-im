@@ -32,7 +32,7 @@ namespace SIM
         // why do I have to delete something here which is created somehwere else??
         for (ClientUserDataPrivate::iterator it = begin(); it != end(); ++it){
             _ClientUserData &d = *it;
-            free_data(d.client->protocol()->userDataDef(), d.data);
+            //free_data(d.client->protocol()->userDataDef(), d.data);
             delete d.data;
         }
     }
@@ -172,6 +172,15 @@ namespace SIM
         return NULL;
     }
 
+    IMContact* ClientUserData::getData(const QString& clientName)
+    {
+        for (ClientUserDataPrivate::iterator it = p->begin(); it != p->end(); ++it){
+            if (it->client->name() == clientName)
+                return it->data;
+        }
+        return NULL;
+    }
+
     void ClientUserData::freeData(SIM::IMContact *data)
     {
         for (ClientUserDataPrivate::iterator it = p->begin(); it != p->end(); ++it){
@@ -216,10 +225,20 @@ namespace SIM
         sort();
     }
 
+    QStringList ClientUserData::clientNames()
+    {
+        QStringList list;
+        for (ClientUserDataPrivate::iterator it = p->begin(); it != p->end(); ++it){
+            list.append(it->client->name());
+        }
+        return list;
+    }
+
     class ClientDataIteratorPrivate
     {
     public:
         ClientDataIteratorPrivate(ClientUserDataPrivate *p, Client *client);
+        ~ClientDataIteratorPrivate();
         void *operator ++();
         void reset();
         Client *m_lastClient;
@@ -257,12 +276,11 @@ namespace SIM
 
     ClientDataIterator::ClientDataIterator() : p(0)
     {
-        p = ClientDataIteratorPrivatePtr();
     }
 
     ClientDataIterator::ClientDataIterator(ClientUserData &data, Client *client)
     {
-        p = ClientDataIteratorPrivatePtr(new ClientDataIteratorPrivate(data.p, client));
+        p = new ClientDataIteratorPrivate(data.p, client);
     }
 
     ClientDataIterator::~ClientDataIterator()

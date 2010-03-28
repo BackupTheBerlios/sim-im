@@ -919,6 +919,10 @@ public:
     virtual QWidget    *setupWnd();
     virtual QByteArray  getConfig();
     virtual void contactsLoaded();
+
+    virtual SIM::IMContact*  getOwnerContact();
+    virtual void setOwnerContact(SIM::IMContact* contact);
+
     void setUin(unsigned long);
     void setScreen(const QString &);
     unsigned long getUin();
