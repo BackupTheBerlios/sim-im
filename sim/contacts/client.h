@@ -60,13 +60,29 @@ namespace SIM
 
         void setManualStatus(const IMStatusPtr& status);
         IMStatusPtr manualStatus();
-        PROP_ULONG(ManualStatus)
-        PROP_BOOL(CommonStatus)
-        PROP_UTF8(Password)
-        PROP_BOOL(SavePassword)
-        PROP_UTF8(PreviousPassword)
-        PROP_STRLIST(LastSend)
-        VPROP_BOOL(Invisible)
+
+        unsigned long getManualStatus() const { return m_ulStatus; }
+        void setManualStatus(unsigned long status) { m_ulStatus = status; }
+
+        bool getCommonStatus() const { return m_commonStatus; }
+        void setCommonStatus(bool commonStatus) { m_commonStatus = commonStatus; }
+
+        QString getPassword() const { return m_password; }
+        void setPassword(const QString& password) { m_password = password; }
+
+        bool getSavePassword() const { return m_savePassword; }
+        void setSavePassword(bool sp) { m_savePassword = sp; }
+
+        QString getPreviousPassword() const { return m_previousPassword; }
+        void setPreviousPassword(const QString& password) { m_previousPassword = password; }
+
+        QString getLastSend(int i) const { return m_lastSend.at(i); }
+        void setLastSend(int i, const QString& ls) { return m_lastSend.replace(i, ls); }
+        void appendLastSend(const QString& ls) { m_lastSend.append(ls); }
+        void clearLastSend() { m_lastSend.clear(); }
+
+        virtual bool getInvisible() const { return m_invisible; }
+        virtual void setInvisible(bool b) { m_invisible = b; }
 
         // Deprecated interface
         SIM_DEPRECATED Client(Protocol*, Buffer *cfg);
@@ -91,6 +107,14 @@ namespace SIM
         unsigned m_status;
 
     private:
+        unsigned long m_ulStatus;
+        bool m_commonStatus;
+        QString m_password;
+        bool m_savePassword;
+        QString m_previousPassword;
+        QStringList m_lastSend;
+        bool m_invisible;
+
         State m_state;
         IMStatusPtr m_currentStatus;
         IMStatusPtr m_manualStatus;
