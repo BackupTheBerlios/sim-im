@@ -21,9 +21,11 @@
 #include <list>
 #include "simgui/listview.h"
 #include "contacts/contact.h"
+#include "contacts/group.h"
 #include <QMouseEvent>
 
 using namespace std;
+using namespace SIM;
 
 class UserListBase;
 class QTimer;
@@ -138,17 +140,21 @@ protected:
     virtual bool processEvent(SIM::Event*);
     unsigned getUserStatus(SIM::Contact *contact, unsigned &style, QString &icons);
     virtual unsigned getUnread(unsigned contact_id);
+    virtual unsigned getUnread(SIM::Contact *contact);
     GroupItem *findGroupItem(unsigned id, ListViewItem *p = NULL);
     ContactItem *findContactItem(unsigned id, ListViewItem *p = NULL);
+    ContactItem* getContactItem(Contact *contact);
+    GroupItem* getGrpItem(Group *g);
+    GroupItem* getGrpItem(Group *group, DivItem *divItem);
     void addSortItem(ListViewItem *item);
     void addUpdatedItem(ListViewItem *item);
     void addGroupForUpdate(unsigned long id);
     void addContactForUpdate(unsigned long id);
     virtual void deleteItem(ListViewItem *item);
-    std::list<ListViewItem*> sortItems;
-    std::list<ListViewItem*> updatedItems;
-    std::list<unsigned long>	updGroups;
-    std::list<unsigned long>	updContacts;
+    std::list<ListViewItem*>    sortItems;
+    std::list<ListViewItem*>    updatedItems;
+    std::list<unsigned long>    updGroups;
+    std::list<unsigned long>    updContacts;
     bool m_bDirty;
     bool m_bInit;
     QTimer *updTimer;
