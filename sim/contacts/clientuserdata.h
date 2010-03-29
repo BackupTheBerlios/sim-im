@@ -22,16 +22,18 @@ namespace SIM
         QByteArray save() const;
         void load(Client *client, Buffer *cfg);
 
-        void *createData(Client *client);
-        void *getData(Client *client);
-        bool have(void*);
+        void addData(IMContact* data);
+        IMContact* createData(Client *client);
+        IMContact* getData(Client *client);
+        IMContact* getData(const QString& clientName);
+        QStringList clientNames();
+        bool have(IMContact*);
         void sort();
         void join(ClientUserData &data);
         void join(IMContact *cData, ClientUserData &data);
         unsigned size();
         Client *activeClient(void *&data, Client *client);
-        QString property(const char *name);
-        void freeData(void*);
+        void freeData(SIM::IMContact*);
         void freeClientData(Client *client);
 
     protected:
@@ -42,7 +44,6 @@ namespace SIM
     };
 
     class ClientDataIteratorPrivate;
-    typedef QSharedPointer<ClientDataIteratorPrivate> ClientDataIteratorPrivatePtr;
 
     class EXPORT ClientDataIterator
     {
@@ -54,9 +55,8 @@ namespace SIM
         Client *client();
         void reset();
     protected:
-        ClientDataIteratorPrivatePtr p;
+        ClientDataIteratorPrivate* p;
 
-        //COPY_RESTRICTED(ClientDataIterator)
     };
 }
 

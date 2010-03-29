@@ -388,12 +388,12 @@ void DirectSocket::sendInit()
     m_socket->writeBuffer().pack((unsigned short)((m_version >= 7) ? 0x002b : 0x0027));
     m_socket->writeBuffer().pack(m_data->getUin());
     m_socket->writeBuffer().pack((unsigned short)0x0000);
-    m_socket->writeBuffer().pack(m_data->getPort());
+    m_socket->writeBuffer().pack((unsigned long)m_data->getPort());
     m_socket->writeBuffer().pack(m_client->data.owner.getUin());
     m_socket->writeBuffer().pack((m_client->data.owner.getIP()));
     m_socket->writeBuffer().pack((m_client->data.owner.getRealIP()));
     m_socket->writeBuffer().pack((char)0x04);
-    m_socket->writeBuffer().pack(m_data->getPort());
+    m_socket->writeBuffer().pack((unsigned long)m_data->getPort());
     m_socket->writeBuffer().pack(m_nSessionId);
     m_socket->writeBuffer().pack(0x00000050L);
     m_socket->writeBuffer().pack(0x00000003L);

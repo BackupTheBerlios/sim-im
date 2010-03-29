@@ -23,12 +23,13 @@
 #include "contacts/contact.h"
 #include "contacts/group.h"
 #include <QMouseEvent>
+#include <QTimer>
+#include <QSharedPointer>
 
 using namespace std;
 using namespace SIM;
 
 class UserListBase;
-class QTimer;
 class UserViewDelegate;
 
 const unsigned DIV_ITEM = 0;
@@ -73,6 +74,8 @@ protected:
     virtual QVariant data( int column, int role ) const;
 };
 
+typedef QSharedPointer<DivItem> DivItemPtr;
+
 class GroupItem : public UserViewItemBase
 {
 public:
@@ -92,6 +95,7 @@ protected:
     unsigned long m_id;
     bool m_bOffline;
 };
+typedef QSharedPointer<GroupItem> GroupItemPtr;
 
 class ContactItem : public UserViewItemBase
 {
@@ -115,7 +119,9 @@ protected:
     QIcon m_Icon;
     QString m_sExtraIcons;
     SIM::Contact *contact;
+    friend class UserViewDelegate;
 };
+typedef QSharedPointer<ContactItem> ContactItemPtr;
 
 class UserListBase : public ListView
 {
@@ -128,10 +134,15 @@ public:
 protected slots:
     void drawUpdates();
     bool updateGroups();
-    bool updateContacts(DivItem* itemOnline, DivItem* itemOffline);
-    bool updateContactNoGroups(SIM::Contact* contact, DivItem *itemOnline, DivItem *itemOffline);
-    bool updateContactGroupMode1(SIM::Contact* contact, DivItem *itemOnline, DivItem *itemOffline);
-    bool updateContactGroupMode2(SIM::Contact* contact, DivItem *itemOnline, DivItem *itemOffline);
+    bool updateContacts();
+    bool updateContactNoGroups(SIM::Contact* contact);
+    bool updateContactGroupMode1(SIM::Contact* contact);
+    bool updateContactGroupMode2(SIM::Contact* contact);
+
+    bool removeContactFromItem(unsigned long contactId, DivItem* item);
+    void refreshOnlineOfflineGroups();
+
+    void updateUnread();
 
 protected:
     unsigned m_groupMode;
@@ -151,16 +162,21 @@ protected:
     void addGroupForUpdate(unsigned long id);
     void addContactForUpdate(unsigned long id);
     virtual void deleteItem(ListViewItem *item);
-    std::list<ListViewItem*>    sortItems;
-    std::list<ListViewItem*>    updatedItems;
-    std::list<unsigned long>    updGroups;
-    std::list<unsigned long>    updContacts;
+    std::list<ListViewItem*> sortItems;
+    std::list<ListViewItem*> updatedItems;
+    std::list<ContactItem*> m_unreadItems;
+    std::list<unsigned long>	updGroups;
+    std::list<unsigned long>	updContacts;
+
     bool m_bDirty;
     bool m_bInit;
     QTimer *updTimer;
+    QTimer m_unreadTimer;
     friend class UserViewItemBase;
     bool m_bCheckable;
 	ContactItem *m_contactItem;
+    DivItem* m_itemOnline;
+    DivItem* m_itemOffline;
 };
 
 class UserList

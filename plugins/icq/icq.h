@@ -46,11 +46,12 @@ public:
     ICQProtocol(SIM::Plugin *plugin);
     ~ICQProtocol();
     SIM::ClientPtr createClient(Buffer *cfg);
+    SIM::ClientPtr createClient(const QString& name);
     const SIM::CommandDef *description();
     const SIM::CommandDef *statusList();
     static const SIM::CommandDef *_statusList();
     virtual const SIM::DataDef *userDataDef();
-    virtual SIM::IMContact* createIMContact();
+    virtual SIM::IMContact* createIMContact(const QSharedPointer<SIM::Client>& client);
     static const SIM::DataDef *icqUserData;
 	virtual QStringList statuses();
 	virtual SIM::IMStatusPtr status(const QString& id);
@@ -67,10 +68,11 @@ public:
     AIMProtocol(SIM::Plugin *plugin);
     ~AIMProtocol();
     SIM::ClientPtr createClient(Buffer *cfg);
+    SIM::ClientPtr createClient(const QString& name);
     const SIM::CommandDef *description();
     const SIM::CommandDef *statusList();
     virtual const SIM::DataDef *userDataDef();
-    virtual SIM::IMContact* createIMContact();
+    virtual SIM::IMContact* createIMContact(const QSharedPointer<SIM::Client>& client);
     static const SIM::DataDef *icqUserData;
 	virtual QStringList statuses();
 	virtual SIM::IMStatusPtr status(const QString& id);

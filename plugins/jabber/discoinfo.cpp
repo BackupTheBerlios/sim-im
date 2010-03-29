@@ -33,10 +33,11 @@
 
 using namespace SIM;
 
-extern DataDef jabberUserData[];
+//extern DataDef jabberUserData[];
 
 DiscoInfo::DiscoInfo(JabberBrowser *browser, const QString &features,
-                     const QString &name, const QString &type, const QString &category) : QDialog(browser)
+                     const QString &name, const QString &type, const QString &category) : QDialog(browser),
+    m_data(ClientPtr())
 {
     setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose,true);
@@ -55,7 +56,7 @@ DiscoInfo::DiscoInfo(JabberBrowser *browser, const QString &features,
     m_name	   = name;
     m_type	   = type;
     m_category = category;
-    load_data(jabberUserData, &m_data, NULL);
+    //load_data(jabberUserData, &m_data, NULL);
     disableWidget(edtJName);
     disableWidget(edtType);
     disableWidget(edtCategory);
@@ -76,7 +77,7 @@ DiscoInfo::DiscoInfo(JabberBrowser *browser, const QString &features,
 
 DiscoInfo::~DiscoInfo()
 {
-    free_data(jabberUserData, &m_data);
+    //free_data(jabberUserData, &m_data);
     m_browser->m_info = NULL;
 }
 
@@ -96,10 +97,10 @@ void DiscoInfo::reset()
         m_url  = m_browser->m_list->currentItem()->text(COL_JID);
         m_node = m_browser->m_list->currentItem()->text(COL_NODE);
     }
-    free_data(jabberUserData, &m_data);
-    load_data(jabberUserData, &m_data, NULL);
-    m_data.ID.str() = m_url;
-    m_data.Node.str() = m_node;
+    //free_data(jabberUserData, &m_data);
+    //load_data(jabberUserData, &m_data, NULL);
+    m_data.setId(m_url);
+    m_data.setNode(m_node);
     setTitle();
     edtJName->setText(m_name);
     edtType->setText(m_type);
@@ -191,14 +192,14 @@ bool DiscoInfo::processEvent(Event *e)
     if (e->type() == eEventVCard){
         EventVCard *evc = static_cast<EventVCard*>(e);
         JabberUserData *data = evc->data();
-        if (m_data.ID.str() == data->ID.str() && m_data.Node.str() == data->Node.str()){
-            edtFirstName->setText(data->FirstName.str());
-            edtNick->setText(data->Nick.str());
-            edtBirthday->setText(data->Bday.str());
-            edtUrl->setText(data->Url.str());
+        if (m_data.getId() == data->getId() && m_data.getNode() == data->getNode()){
+            edtFirstName->setText(data->getFirstName());
+            edtNick->setText(data->getNick());
+            edtBirthday->setText(data->getBirthday());
+            edtUrl->setText(data->getUrl());
             urlChanged(edtUrl->text());
-            edtEMail->setText(data->EMail.str());
-            edtPhone->setText(data->Phone.str());
+            edtEMail->setText(data->getEmail());
+            edtPhone->setText(data->getPhone());
         }
     } else
     if (e->type() == eEventDiscoItem){
@@ -219,7 +220,7 @@ bool DiscoInfo::processEvent(Event *e)
     if (e->type() == eEventClientVersion){
         EventClientVersion *ecv = static_cast<EventClientVersion*>(e);
         ClientVersionInfo* info = ecv->info();
-        if (m_data.ID.str() == info->jid && m_data.Node.str() == info->node){
+        if (m_data.getId() == info->jid && m_data.getNode() == info->node){
             edtName->setText(info->name);
             edtVersion->setText(info->version);
             edtSystem->setText(info->os);
@@ -228,7 +229,7 @@ bool DiscoInfo::processEvent(Event *e)
     if (e->type() == eEventClientLastInfo){
         EventClientLastInfo *ecli = static_cast<EventClientLastInfo*>(e);
         ClientLastInfo* info = ecli->info();
-        if (m_data.ID.str() == info->jid){
+        if (m_data.getId() == info->jid){
             unsigned ss = info->seconds;
             unsigned mm = ss / 60;
             ss -= mm * 60;
@@ -250,7 +251,7 @@ bool DiscoInfo::processEvent(Event *e)
     if (e->type() == eEventClientTimeInfo){
         EventClientTimeInfo *ecti = static_cast<EventClientTimeInfo*>(e);
         ClientTimeInfo* info = ecti->info();
-        if (m_data.ID.str() == info->jid){
+        if (m_data.getId() == info->jid){
           /*
             if (!info->display.isEmpty())
                 edtTime->setText(info->display);
@@ -278,12 +279,12 @@ void DiscoInfo::apply()
 {
     if (m_bVCard && m_about){
         m_about->apply(m_browser->m_client, &m_data);
-        m_data.FirstName.str()  = edtFirstName->text();
-        m_data.Nick.str()       = edtNick->text();
-        m_data.Bday.str()       = edtBirthday->text();
-        m_data.Url.str()        = edtUrl->text();
-        m_data.EMail.str()      = edtEMail->text();
-        m_data.Phone.str()      = edtPhone->text();
+        m_data.setFirstName(edtFirstName->text());
+        m_data.setNick(edtNick->text());
+        m_data.setBirthday(edtBirthday->text());
+        m_data.setUrl(edtUrl->text());
+        m_data.setEmail(edtEMail->text());
+        m_data.setPhone(edtPhone->text());
         m_browser->m_client->setClientInfo(&m_data);
     }
 }

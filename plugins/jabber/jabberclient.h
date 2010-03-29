@@ -48,89 +48,333 @@ const unsigned SUBSCRIBE_BOTH	= (SUBSCRIBE_FROM | SUBSCRIBE_TO);
 class JabberUserData : public SIM::IMContact
 {
 public:
+    JabberUserData(const SIM::ClientPtr& cl);
 
     virtual QByteArray serialize();
     virtual void deserialize(Buffer* cfg);
 
+    virtual void serialize(QDomElement& element);
+    virtual void deserialize(QDomElement& element);
+
+    virtual SIM::ClientPtr client() { return m_client.toStrongRef(); }
+
     virtual unsigned long getSign();
 
-    SIM::Data		ID;
-    SIM::Data		Node;
-    SIM::Data		Resource;
-    SIM::Data		Name;
-    SIM::Data		Status;
-    SIM::Data		FirstName;
-    SIM::Data		Nick;
-    SIM::Data		Desc;
-    SIM::Data		Bday;
-    SIM::Data		Url;
-    SIM::Data		OrgName;
-    SIM::Data		OrgUnit;
-    SIM::Data		Title;
-    SIM::Data		Role;
-    SIM::Data		Street;
-    SIM::Data		ExtAddr;
-    SIM::Data		City;
-    SIM::Data		Region;
-    SIM::Data		PCode;
-    SIM::Data		Country;
-    SIM::Data		EMail;
-    SIM::Data		Phone;
-    SIM::Data		StatusTime;
-    SIM::Data		OnlineTime;
-    SIM::Data		Subscribe;
-    SIM::Data		Group;
-    SIM::Data		bChecked;
-    SIM::Data		TypingId;
-    SIM::Data		SendTypingEvents;
-    SIM::Data		IsTyping;
-    SIM::Data		composeId;
-    SIM::Data		richText;
-    SIM::Data		invisible;
-    SIM::Data		PhotoWidth;
-    SIM::Data		PhotoHeight;
-    SIM::Data		LogoWidth;
-    SIM::Data		LogoHeight;
-    SIM::Data		nResources;
-    SIM::Data		Resources;
-    SIM::Data		ResourceStatus;
-    SIM::Data		ResourceReply;
-    SIM::Data		ResourceStatusTime;
-    SIM::Data		ResourceOnlineTime;
-    SIM::Data		AutoReply;
-    SIM::Data		ResourceClientName;
-    SIM::Data		ResourceClientVersion;
-    SIM::Data		ResourceClientOS;
+    QString getId() const { return m_id; }
+    void setId(const QString& id) { m_id = id; }
 
-private:
-	void dispatchDeserialization(const QString& key, const QString& value);
+    QString getNode() const { return m_node; }
+    void setNode(const QString& node) { m_node = node; }
+
+    QString getResource() const { return m_resource; }
+    void setResource(const QString& resource) { m_resource = resource; }
+
+    QString getName() const { return m_name; }
+    void setName(const QString& name) { m_name = name; }
+
+    unsigned long getStatus() const { return m_status; }
+    void setStatus(unsigned long status) { m_status = status; }
+
+    QString getFirstName() const { return m_firstName; }
+    void setFirstName(const QString& name) { m_firstName; }
+
+    QString getNick() const { return m_nick; }
+    void setNick(const QString& nick) { m_nick = nick; }
+
+    QString getDesc() const { return m_desc; }
+    void setDesc(const QString& desc) { m_desc = desc; }
+
+    QString getBirthday() const { return m_birthday; }
+    void setBirthday(const QString& birthday) { m_birthday = birthday; }
+
+    QString getUrl() const { return m_url; }
+    void setUrl(const QString& url) { m_url = url; }
+
+    QString getOrgName() const { return m_orgName; }
+    void setOrgName(const QString& orgname) { m_orgName = orgname; }
+
+    QString getOrgUnit() const { return m_orgUnit; }
+    void setOrgUnit(const QString& orgunit) { m_orgUnit = orgunit; }
+
+    QString getTitle() const { return m_title; }
+    void setTitle(const QString& title) { m_title = title; }
+
+    QString getRole() const { return m_role; }
+    void setRole(const QString& role) { m_role; }
+
+    QString getStreet() const { return m_street; }
+    void setStreet(const QString& street) { m_street = street; }
+
+    QString getExtAddr() const { return m_extAddr; }
+    void setExtAddr(const QString& addr) { m_extAddr = addr; }
+
+    QString getCity() const { return m_city; }
+    void setCity(const QString& city) { m_city = city; }
+
+    QString getRegion() const { return m_region; }
+    void setRegion(const QString& region) { m_region = region; }
+
+    QString getPCode() const { return m_pcode; }
+    void setPCode(const QString& pcode) { m_pcode = pcode; }
+
+    QString getCountry() const { return m_country; }
+    void setCountry(const QString& country) { m_country = country; }
+
+    QString getEmail() const { return m_email; }
+    void setEmail(const QString& email) { m_email = email; }
+
+    QString getPhone() const { return m_phone; }
+    void setPhone(const QString& phone) { m_phone = phone; }
+
+    unsigned long getStatusTime() const { return m_statusTime; }
+    void setStatusTime(unsigned long statustime) { m_statusTime = statustime; }
+
+    unsigned long getOnlineTime() const { return m_onlineTime; }
+    void setOnlineTime(unsigned long onlinetime) { m_onlineTime = onlinetime; }
+
+    unsigned long getSubscribe() const { return m_subscribe; }
+    void setSubscribe(unsigned long subscribe) { m_subscribe = subscribe; }
+
+    QString getGroup() const { return m_group; }
+    void setGroup(const QString& group) { m_group = group; }
+
+    bool isChecked() const { return m_checked; }
+    void setChecked(bool c) { m_checked = c; }
+
+    QString getTypingId() const { return m_typingId; }
+    void setTypingId(const QString& id) { m_typingId = id; }
+
+    bool getSendTypingEvents() const { return m_sendTypingEvents; }
+    void setSendTypingEvents(bool b) { m_sendTypingEvents = b; }
+
+    bool isTyping() const { return m_typing; }
+    void setTyping(bool t) { m_typing = t; }
+
+    unsigned long getComposeId() const { return m_composeId; }
+    void setComposeId(unsigned long id) { m_composeId = id; }
+
+    bool isRichText() const { return m_richText; }
+    void setRichText(bool rt) { m_richText = rt; }
+
+    bool isInvisible() const { return m_invisible; }
+    void setInvisible(bool i) { m_invisible = i; }
+
+    unsigned long getPhotoWidth() const { return m_photoSize.width(); }
+    void setPhotoWidth(unsigned long width) { m_photoSize.setWidth(width); }
+
+    unsigned long getPhotoHeight() const { return m_photoSize.height(); }
+    void setPhotoHeight(unsigned long height) { m_photoSize.setHeight(height); }
+
+    unsigned long getLogoWidth() const { return m_logoSize.width(); }
+    void setLogoWidth(unsigned long width) { m_logoSize.setWidth(width); }
+
+    unsigned long getLogoHeight() const { return m_logoSize.height(); }
+    void setLogoHeight(unsigned long height) { m_logoSize.setHeight(height); }
+
+    unsigned long getNResources() const { return m_nResources; }
+    void setNResources(unsigned long nResources) { m_nResources = nResources; }
+
+    QString getResource(int n) const { return m_resources.at(n); }
+    void setResource(int n, const QString& resource) { m_resources.replace(n, resource); }
+    void appendResource(const QString& resource) { m_resources.append(resource); }
+    void clearResources() { m_resources.clear(); }
+
+    QString getResourceStatus(int n) const { return m_resourceStatuses.at(n); }
+    void setResourceStatus(int n, const QString& resourcestatus) { m_resourceStatuses.replace(n, resourcestatus); }
+    void appendResourceStatus(const QString& resourcestatus) { m_resourceStatuses.append(resourcestatus); }
+    void clearResourceStatuses() { m_resourceStatuses.clear(); }
+
+    QString getResourceReply(int n) const { return m_resourceReplies.at(n); }
+    void setResourceReply(int n, const QString& resourcereply) { m_resourceReplies.replace(n, resourcereply); }
+    void appendResourceReply(const QString& resourcereply) { m_resourceReplies.append(resourcereply); }
+    void clearResourceReplies() { m_resourceReplies.clear(); }
+
+    QString getResourceStatusTime(int n) const { return m_resourceStatusTimes.at(n); }
+    void setResourceStatusTime(int n, const QString& resourcestatustimes) { m_resourceStatusTimes.replace(n, resourcestatustimes); }
+    void appendResourceStatusTime(const QString& resourcestatustimes) { m_resourceStatusTimes.append(resourcestatustimes); }
+    void clearResourceStatusTimes() { m_resourceStatusTimes.clear(); }
+
+    QString getResourceOnlineTime(int n) const { return m_resourceOnlineTimes.at(n); }
+    void setResourceOnlineTime(int n, const QString& resourceonlinetimes) { m_resourceOnlineTimes.replace(n, resourceonlinetimes); }
+    void appendResourceOnlineTime(const QString& resourceonlinetimes) { m_resourceOnlineTimes.append(resourceonlinetimes); }
+    void clearResourceOnlineTimes() { m_resourceOnlineTimes.clear(); }
+
+    QString getAutoReply() const { return m_autoReply; }
+    void setAutoReply(const QString& autoreply) { m_autoReply = autoreply; }
+
+    QString getResourceClientName(int n) const { return m_resourceClientNames.at(n); }
+    void setResourceClientName(int n, const QString& resourceclientname) { m_resourceClientNames.replace(n, resourceclientname); }
+    void appendResourceClientName(const QString& resourceclientname) { m_resourceClientNames.append(resourceclientname); }
+    void clearResourceClientNames() { m_resourceClientNames.clear(); }
+    
+    QString getResourceClientVersion(int n) const { return m_resourceClientVersions.at(n); }
+    void setResourceClientVersion(int n, const QString& resourceclientversion) { m_resourceClientVersions.replace(n, resourceclientversion); }
+    void appendResourceClientVersion(const QString& resourceclientversion) { m_resourceClientVersions.append(resourceclientversion); }
+    void clearResourceClientVersions() { m_resourceClientVersions.clear(); }
+
+    QString getResourceClientOS(int n) const { return m_resourceClientOSes.at(n); }
+    void setResourceClientOS(int n, const QString& resourceclientos) { m_resourceClientOSes.replace(n, resourceclientos); }
+    void appendResourceClientOS(const QString& resourceclientos) { m_resourceClientOSes.append(resourceclientos); }
+    void clearResourceClientOSes() { m_resourceClientOSes.clear(); }
+
+    virtual void deserializeLine(const QString& key, const QString& value);
+public:
+
+    QString m_id;
+    QString m_node;
+    QString m_resource;
+    QString m_name;
+    unsigned long m_status;
+    QString m_firstName;
+    QString m_nick;
+    QString m_desc;
+    QString m_birthday;
+    QString m_url;
+    QString m_orgName;
+    QString m_orgUnit;
+    QString m_title;
+    QString m_role;
+    QString m_street;
+    QString m_extAddr;
+    QString m_city;
+    QString m_region;
+    QString m_pcode;
+    QString m_country;
+    QString m_email;
+    QString m_phone;
+    unsigned long m_statusTime;
+    unsigned long m_onlineTime;
+    unsigned long m_subscribe;
+    QString m_group;
+    bool m_checked;
+    QString m_typingId;
+    bool m_sendTypingEvents;
+    bool m_typing;
+    unsigned long m_composeId;
+    bool m_richText;
+    bool m_invisible;
+    QSize m_photoSize;
+    QSize m_logoSize;
+    unsigned long m_nResources;
+    QStringList m_resources;
+    QStringList m_resourceStatuses;
+    QStringList m_resourceReplies;
+    QStringList m_resourceStatusTimes;
+    QStringList m_resourceOnlineTimes;
+    QString m_autoReply;
+    QStringList m_resourceClientNames;
+    QStringList m_resourceClientVersions;
+    QStringList m_resourceClientOSes;
+
+    QWeakPointer<SIM::Client> m_client;
 };
 
-struct JabberClientData
+struct JabberClientData : public SIM::IMContact
 {
-    SIM::Data		Server;
-    SIM::Data		Port;
-    SIM::Data		UseSSL;
-    SIM::Data		UsePlain;
-    SIM::Data		UseVHost;
-    SIM::Data		Register;
-    SIM::Data		Priority;
-    SIM::Data		ListRequest;
-    SIM::Data		VHost;
-    SIM::Data		Typing;
-    SIM::Data		RichText;
-    SIM::Data		UseVersion;
-    SIM::Data		ProtocolIcons;
-    SIM::Data		MinPort;
-    SIM::Data		MaxPort;
-    SIM::Data		Photo;
-    SIM::Data		Logo;
-    SIM::Data		AutoSubscribe;
-    SIM::Data		AutoAccept;
-    SIM::Data		UseHTTP;
-    SIM::Data		URL;
-    SIM::Data		InfoUpdated;
+public:
+    JabberClientData(const SIM::ClientPtr& client);
+    virtual QByteArray serialize();
+    virtual void deserialize(Buffer* cfg);
+    virtual void serialize(QDomElement& element) {};
+    virtual void deserialize(QDomElement& element) {};
+
+    virtual SIM::ClientPtr client() { Q_ASSERT_X(false, "ICQClientData::client", "Shouldn't be called"); return SIM::ClientPtr(); }
+
+    virtual unsigned long getSign();
+
+    QString getServer() const { return m_server;}
+    void setServer(const QString& server) { m_server = server; }
+
+    unsigned long getPort() const { return m_port; }
+    void setPort(unsigned long port) { m_port = port; }
+
+    bool getUseSSL() const { return m_useSSL; }
+    void setUseSSL(bool b) { m_useSSL = b; }
+
+    bool getUsePlain() const { return m_usePlain; }
+    void setUsePlain(bool b) { m_usePlain = b; }
+
+    bool getUseVHost() const { return m_useVHost; }
+    void setUseVHost(bool b) { m_useVHost = b; }
+
+    bool getRegister() const { return m_register; }
+    void setRegister(bool b) { m_register = b; }
+
+    unsigned long getPriority() const { return m_priority; }
+    void setPriority(unsigned long priority) { m_priority = priority; }
+
+    QString getListRequest() const { return m_listRequest; }
+    void setListRequest(const QString& list) { m_listRequest = list; }
+
+    QString getVHost() const { return m_vHost; }
+    void setVHost(const QString& vhost) { m_vHost = vhost; }
+
+    bool isTyping() const { return m_typing; }
+    void setTyping(bool t) { m_typing = t; }
+
+    bool isRichText() const { return m_richText; }
+    void setRichText(bool rt) { m_richText = rt; }
+
+    bool getUseVersion() const { return m_useVersion; }
+    void setUseVersion(bool b) { m_useVersion = b; }
+
+    bool getProtocolIcons() const { return m_protocolIcons; }
+    void setProtocolIcons(bool b) { m_protocolIcons = b; } 
+
+    unsigned long getMinPort() const { return m_minPort; }
+    void setMinPort(unsigned long port) { m_minPort = port; }
+
+    unsigned long getMaxPort() const { return m_maxPort; }
+    void setMaxPort(unsigned long port) { m_maxPort = port; }
+
+    QString getPhoto() const { return m_photo; }
+    void setPhoto(const QString& photo) { m_photo = photo; }
+
+    QString getLogo() const { return m_logo; }
+    void setLogo(const QString& logo) { m_logo = logo; }
+
+    bool getAutoSubscribe() const { return m_autoSubscribe; }
+    void setAutoSubscribe(bool b) { m_autoSubscribe = b; }
+
+    bool getAutoAccept() const { return m_autoAccept; }
+    void setAutoAccept(bool b) { m_autoAccept = b; }
+
+    bool getUseHttp() const { return m_useHttp; }
+    void setUseHttp(bool b) { m_useHttp = b; }
+
+    QString getUrl() const { return m_url; }
+    void setUrl(const QString& url) { m_url = url; }
+
+    bool getInfoUpdated() const { return m_infoUpdated; }
+    void setInfoUpdated(bool b) { m_infoUpdated = b; }
+
     JabberUserData	owner;
+
+    virtual void deserializeLine(const QString& key, const QString& value);
+public:
+
+    QString m_server;
+    unsigned long m_port;
+    bool m_useSSL;
+    bool m_usePlain;
+    bool m_useVHost;
+    bool m_register;
+    unsigned long m_priority;
+    QString m_listRequest;
+    QString m_vHost;
+    bool m_typing;
+    bool m_richText;
+    bool m_useVersion;
+    bool m_protocolIcons;
+    unsigned long m_minPort;
+    unsigned long m_maxPort;
+    QString m_photo;
+    QString m_logo;
+    bool m_autoSubscribe;
+    bool m_autoAccept;
+    bool m_useHttp;
+    QString m_url;
+    bool m_infoUpdated;
 };
 
 struct JabberAgentsInfo
@@ -333,6 +577,7 @@ public:
     };
 
     JabberClient(JabberProtocol*, Buffer *cfg);
+    JabberClient(JabberProtocol*, const QString& name);
     ~JabberClient();
     virtual QString name();
     virtual QString dataName(void*);
@@ -341,33 +586,102 @@ public:
     virtual QImage userPicture(unsigned id);
     QImage userPicture(JabberUserData *d);
 
+    virtual SIM::IMContact*  getOwnerContact();
+    virtual void setOwnerContact(SIM::IMContact* contact);
+
     void setID(const QString &id);
     QString getID()
     {
-        return data.owner.ID.str();
+        return data.owner.getId();
     }
-    PROP_STR(Server);
-    PROP_STR(VHost);
-    PROP_USHORT(Port);
-    PROP_BOOL(UseSSL);
-    PROP_BOOL(UsePlain);
-    PROP_BOOL(UseVHost);
-    PROP_BOOL(Register);
-    PROP_ULONG(Priority);
-    PROP_UTF8(ListRequest);
-    PROP_BOOL(Typing);
-    PROP_BOOL(RichText);
-    PROP_BOOL(UseVersion);
-    PROP_BOOL(ProtocolIcons);
-    PROP_USHORT(MinPort);
-    PROP_USHORT(MaxPort);
-    PROP_UTF8(Photo);
-    PROP_UTF8(Logo);
-    PROP_BOOL(AutoSubscribe);
-    PROP_BOOL(AutoAccept);
-    PROP_BOOL(UseHTTP);
-    PROP_STR(URL);
-    PROP_BOOL(InfoUpdated);
+
+    //PROP_STR(Server);
+    QString getServer() const;
+    void setServer(const QString& server);
+
+    //PROP_STR(VHost);
+    QString getVHost() const;
+    void setVHost(const QString& vhost);
+
+    //PROP_USHORT(Port);
+    unsigned short getPort() const;
+    void setPort(unsigned long port);
+    
+    //PROP_BOOL(UseSSL);
+    bool getUseSSL() const;
+    void setUseSSL(bool b);
+
+    //PROP_BOOL(UsePlain);
+    bool getUsePlain() const; 
+    void setUsePlain(bool b);
+
+    //PROP_BOOL(UseVHost);
+    bool getUseVHost() const;
+    void setUseVHost(bool b);
+
+    //PROP_BOOL(Register);
+    bool getRegister() const;
+    void setRegister(bool b);
+
+    //PROP_ULONG(Priority);
+    unsigned long getPriority() const;
+    void setPriority(unsigned long p);
+
+    //PROP_UTF8(ListRequest);
+    QString getListRequest() const;
+    void setListRequest(const QString& request);
+
+    //PROP_BOOL(Typing);
+    bool getTyping() const;
+    void setTyping(bool t);
+
+    //PROP_BOOL(RichText);
+    bool getRichText() const;
+    void setRichText(bool rt);
+
+    //PROP_BOOL(UseVersion);
+    bool getUseVersion();
+    void setUseVersion(bool b);
+
+    //PROP_BOOL(ProtocolIcons);
+    bool getProtocolIcons() const;
+    void setProtocolIcons(bool b);
+
+    //PROP_USHORT(MinPort);
+    unsigned long getMinPort() const;
+    void setMinPort(unsigned long port);
+
+    //PROP_USHORT(MaxPort);
+    unsigned long getMaxPort() const;
+    void setMaxPort(unsigned long port);
+
+    //PROP_UTF8(Photo);
+    QString getPhoto() const;
+    void setPhoto(const QString& photo);
+
+    //PROP_UTF8(Logo);
+    QString getLogo() const;
+    void setLogo(const QString& logo);
+
+    //PROP_BOOL(AutoSubscribe);
+    bool getAutoSubscribe() const;
+    void setAutoSubscribe(bool b);
+
+    //PROP_BOOL(AutoAccept);
+    bool getAutoAccept() const;
+    void setAutoAccept(bool b);
+    
+    //PROP_BOOL(UseHTTP);
+    bool getUseHTTP() const;
+    void setUseHTTP(bool b);
+
+    //PROP_STR(URL);
+    QString getURL() const;
+    void setURL(const QString& url);
+
+    //PROP_BOOL(InfoUpdated);
+    bool getInfoUpdated() const;
+    void setInfoUpdated(bool b);
 
     QString         buildId(JabberUserData *data);
     JabberUserData *findContact(const QString &jid, const QString &name, bool bCreate, SIM::Contact *&contact, QString &resource, bool bJoin=true);

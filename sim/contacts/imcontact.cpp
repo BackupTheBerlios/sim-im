@@ -2,7 +2,11 @@
 
 namespace SIM
 {
-    IMContact::IMContact()
+    IMContact::IMContact() : m_lastSend(0)
+    {
+    }
+
+    IMContact::~IMContact()
     {
     }
 }

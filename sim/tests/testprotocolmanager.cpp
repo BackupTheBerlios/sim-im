@@ -23,6 +23,11 @@ namespace testProtocolManager
             return ClientPtr();
         }
 
+        virtual ClientPtr createClient(const QString& name)
+        {
+            return ClientPtr();
+        }
+
         virtual const CommandDef *description()
         {
             return 0;
@@ -37,7 +42,7 @@ namespace testProtocolManager
         {
             return 0;
         }
-        virtual IMContact* createIMContact()
+        virtual IMContact* createIMContact(const QSharedPointer<Client>& client)
         {
             return 0;
         }

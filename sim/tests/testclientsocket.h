@@ -64,6 +64,9 @@ namespace testClientSocket
         virtual QString getServer() const;
         virtual unsigned short getPort() const;
 
+        virtual SIM::IMContact*  getOwnerContact() {};
+        virtual void setOwnerContact(SIM::IMContact* contact) {};
+
         QString name()
         {
             return QString("TestTCPClient");

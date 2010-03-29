@@ -15,12 +15,15 @@ namespace test
 
         virtual QByteArray serialize();
         virtual void deserialize(Buffer* cfg);
+
+        virtual ClientPtr client() { return ClientPtr(); }
+        virtual void serialize(QDomElement& element) {};
+        virtual void deserialize(QDomElement& element) {};
+
         virtual unsigned long getSign();
 
         SIM::Data Alpha;
-
-    private:
-        void dispatchDeserialization(const QString& key, const QString& value);
+        void deserializeLine(const QString& key, const QString& value);
     };
 
     class MockProtocol : public Protocol
@@ -28,13 +31,14 @@ namespace test
     public:
         MockProtocol();
         virtual QSharedPointer<Client> createClient(Buffer *cfg);
+        virtual QSharedPointer<Client> createClient(const QString& name);
         virtual QSharedPointer<Client> createClient(const QString& n, Buffer *cfg);
         virtual const CommandDef *description();
         virtual const CommandDef *statusList();
         virtual QStringList statuses();
         virtual IMStatusPtr status(const QString& id);
         virtual const DataDef *userDataDef();
-        virtual IMContact* createIMContact();
+        virtual IMContact* createIMContact(const QSharedPointer<SIM::Client>& client);
     };
 }
 

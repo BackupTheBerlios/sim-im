@@ -17,6 +17,7 @@ namespace SIM
 
         void addClient(ClientPtr client);
         ClientPtr client(const QString& name);
+        QStringList clientList();
 
         void load();
         void load_old();

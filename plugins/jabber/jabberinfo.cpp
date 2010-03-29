@@ -110,18 +110,18 @@ void JabberInfo::resourceActivated(int i)
     unsigned onlineTime;
     QString autoReply;
     QString clientName, clientVersion, clientOS;
-    if ((n == 0) || (n > data->nResources.toULong())){
-        status = m_data ? m_data->Status.toULong() : m_client->getStatus();
-        statusTime = data->StatusTime.toULong();
-        onlineTime = data->OnlineTime.toULong();
-    }else{
-        status = get_str(data->ResourceStatus, n).toUInt();
-        statusTime = get_str(data->ResourceStatusTime, n).toUInt();
-        onlineTime = get_str(data->ResourceOnlineTime, n).toUInt();
-        autoReply = get_str(data->ResourceReply, n);
-        clientName = get_str(data->ResourceClientName, n);
-        clientVersion = get_str(data->ResourceClientVersion, n);
-        clientOS = get_str(data->ResourceClientOS, n);
+    if ((n == 0) || (n > data->getNResources())) {
+        status = m_data ? m_data->getStatus() : m_client->getStatus();
+        statusTime = data->getStatusTime();
+        onlineTime = data->getOnlineTime();
+    } else {
+        status = data->getResourceStatus(n).toUInt();
+        statusTime = data->getResourceStatusTime(n).toUInt();
+        onlineTime = data->getResourceOnlineTime(n).toUInt();
+        autoReply = data->getResourceReply(n);
+        clientName = data->getResourceClientName(n);
+        clientVersion = data->getResourceClientVersion(n);
+        clientOS = data->getResourceClientOS(n);
     }
     int current = 0;
     const char *text = NULL;
@@ -207,20 +207,20 @@ void JabberInfo::fill()
 {
     JabberUserData *data = m_data;
     if (data == NULL) data = &m_client->data.owner;
-    edtID->setText(data->ID.str());
-    edtFirstName->setText(data->FirstName.str());
-    edtNick->setText(data->Nick.str());
-    edtDate->setDate(QDate::fromString(data->Bday.str(), Qt::ISODate));
-    edtUrl->setText(data->Url.str());
+    edtID->setText(data->getId());
+    edtFirstName->setText(data->getFirstName());
+    edtNick->setText(data->getNick());
+    edtDate->setDate(QDate::fromString(data->getBirthday(), Qt::ISODate));
+    edtUrl->setText(data->getUrl());
     urlChanged(edtUrl->text());
     cmbResource->clear();
-    if (data->nResources.toULong()){
-        for (unsigned i = 1; i <= data->nResources.toULong(); i++)
-            cmbResource->addItem(get_str(data->Resources, i));
-        cmbResource->setEnabled(data->nResources.toULong() > 1);
+    if (data->getNResources()){
+        for (unsigned i = 1; i <= data->getNResources(); i++)
+            cmbResource->addItem(data->getResource(i));
+        cmbResource->setEnabled(data->getNResources() > 1);
     }else{
-        if (!data->Resource.str().isEmpty())
-            cmbResource->addItem(data->Resource.str());
+        if (!data->getResource().isEmpty())
+            cmbResource->addItem(data->getResource());
         cmbResource->setEnabled(false);
     }
     resourceActivated(0);
@@ -233,10 +233,10 @@ void JabberInfo::apply(Client *client, void *_data)
     if (client != m_client)
         return;
     JabberUserData *data = m_client->toJabberUserData((SIM::IMContact*)_data); // FIXME unsafe type conversion
-    data->FirstName.str() = edtFirstName->text();
-    data->Nick.str()      = edtNick->text();
-    data->Bday.str()      = edtDate->getDate().toString(Qt::ISODate);
-    data->Url.str()       = edtUrl->text();
+    data->setFirstName(edtFirstName->text());
+    data->setNick(edtNick->text());
+    data->setBirthday(edtDate->getDate().toString(Qt::ISODate));
+    data->setUrl(edtUrl->text());
 }
 
 void JabberInfo::goUrl()
@@ -252,10 +252,3 @@ void JabberInfo::urlChanged(const QString &text)
 {
     btnUrl->setEnabled(!text.isEmpty());
 }
-
-/*
-#ifndef NO_MOC_INCLUDES
-#include "jabberinfo.moc"
-#endif
-*/
-

@@ -17,6 +17,7 @@ email                : vovan@shutoff.ru
 
 #include "contacts/client.h"
 #include "contacts/protocolmanager.h"
+#include "clientmanager.h"
 #include "core.h"
 #include "icons.h"
 #include "log.h"
@@ -598,24 +599,28 @@ void LoginDialog::newNameChanged( const QString &text ) {
 
 void LoginDialog::loadClients(const QString& profilename, SIM::ClientList& clients)
 {
-	QString cfgName = ProfileManager::instance()->rootPath() + QDir::separator() + profilename + QDir::separator() + "clients.conf";
-	QFile f(cfgName);
-	if (!f.open(QIODevice::ReadOnly))
-    {
-        log(L_ERROR, "[1]Can't open %s", qPrintable(cfgName));
-		return;
-	}
-	Buffer cfg = f.readAll();
-	for (;;)
-    {
-		QByteArray section = cfg.getSection();
-		if (section.isEmpty())
-			break;
-		QString s = section;	// ?
-		ClientPtr client = loadClient(s, &cfg);
-		if (client)
-			clients.push_back(client);
-	}
+    SIM::getClientManager()->load();
+    foreach(const QString& clname, SIM::getClientManager()->clientList()) {
+        clients.push_back(SIM::getClientManager()->client(clname));
+    }
+//	QString cfgName = ProfileManager::instance()->rootPath() + QDir::separator() + profilename + QDir::separator() + "clients.conf";
+//	QFile f(cfgName);
+//	if (!f.open(QIODevice::ReadOnly))
+//    {
+//        log(L_ERROR, "[1]Can't open %s", qPrintable(cfgName));
+//		return;
+//	}
+//	Buffer cfg = f.readAll();
+//	for (;;)
+//    {
+//		QByteArray section = cfg.getSection();
+//		if (section.isEmpty())
+//			break;
+//		QString s = section;	// ?
+//		ClientPtr client = loadClient(s, &cfg);
+//		if (client)
+//			clients.push_back(client);
+//	}
 }
 
 ClientPtr LoginDialog::loadClient(const QString &name, Buffer *cfg)

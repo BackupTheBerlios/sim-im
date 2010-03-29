@@ -787,9 +787,9 @@ static bool cmp_status(ClientStatus s1, ClientStatus s2)
         return true;
     if (s1.status < s2.status)
         return false;
-    if (s1.data->LastSend.toULong() > s2.data->LastSend.toULong())
+    if (s1.data->getLastSend() > s2.data->getLastSend())
         return true;
-    if (s1.data->LastSend.toULong() < s2.data->LastSend.toULong())
+    if (s1.data->getLastSend() < s2.data->getLastSend())
         return false;
     return s1.client < s2.client;
 }
@@ -926,7 +926,7 @@ bool MsgEdit::send()
     }
     if (bSent){
         if (data){
-            ((IMContact*)data)->LastSend.asULong() = QDateTime::currentDateTime().toTime_t();
+            ((IMContact*)data)->setLastSend(QDateTime::currentDateTime().toTime_t());
         }
     }else{
         if (m_msg){

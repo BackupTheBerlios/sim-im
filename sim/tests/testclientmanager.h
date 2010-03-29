@@ -24,6 +24,8 @@ namespace testClientManager
         virtual bool send(Message*, void *data);
         virtual bool canSend(unsigned type, void *data);
         virtual QWidget* searchWindow(QWidget *parent);
+        virtual SIM::IMContact*  getOwnerContact() {};
+        virtual void setOwnerContact(SIM::IMContact* contact) {};
     private:
         QString m_name;
     };

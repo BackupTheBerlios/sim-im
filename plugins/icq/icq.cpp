@@ -59,13 +59,18 @@ ICQProtocol::~ICQProtocol()
 ClientPtr ICQProtocol::createClient(Buffer *cfg)
 {
 	ClientPtr icq = ClientPtr(new ICQClient(this, cfg, false));
-	getClientManager()->addClient(icq);
+    //getClientManager()->addClient(icq);
     return icq;
 }
 
-IMContact* ICQProtocol::createIMContact()
+SIM::ClientPtr ICQProtocol::createClient(const QString& name)
 {
-    return new ICQUserData();
+
+}
+
+IMContact* ICQProtocol::createIMContact(const QSharedPointer<Client>& client)
+{
+    return new ICQUserData(client);
 }
 
 QStringList ICQProtocol::statuses()
@@ -268,9 +273,9 @@ SIM::IMStatusPtr AIMProtocol::status(const QString& /*id*/)
 	return SIM::IMStatusPtr();
 }
 
-IMContact* AIMProtocol::createIMContact()
+IMContact* AIMProtocol::createIMContact(const QSharedPointer<Client>& client)
 {
-    return new ICQUserData();
+    return new ICQUserData(client);
 }
 
 ClientPtr AIMProtocol::createClient(Buffer *cfg)
@@ -278,6 +283,13 @@ ClientPtr AIMProtocol::createClient(Buffer *cfg)
 	ClientPtr aim = ClientPtr(new ICQClient(this, cfg, true));
 	getClientManager()->addClient(aim);
 	return aim;
+}
+
+SIM::ClientPtr AIMProtocol::createClient(const QString& name)
+{
+    ClientPtr aim = ClientPtr(new ICQClient(this, 0, true));
+    getClientManager()->addClient(aim);
+    return aim;
 }
 
 static CommandDef aim_descr =

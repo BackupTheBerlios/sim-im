@@ -189,9 +189,11 @@ public:
 
 protected:
     void save_new();
-    bool save_groups( QDomElement element );
-    bool save_contacts( QDomElement element );
+    bool save_owner(QDomElement element);
+    bool save_groups(QDomElement element);
+    bool save_contacts(QDomElement element);
     bool load_new();
+    bool load_owner(const QDomElement& owner);
     bool load_groups(const QDomElement& groups);
     bool load_contacts(const QDomElement& contacts);
     void load_old();

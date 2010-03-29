@@ -45,8 +45,8 @@ JabberConfig::JabberConfig(QWidget *parent, JabberClient *client, bool bConfig) 
     edtServer->setText(m_client->getServer());
     edtPort->setValue(m_client->getPort());
     edtPriority->setValue(m_client->getPriority());
-    edtResource->setText(m_client->data.owner.Resource.str());
-    edtVHost->setText(m_client->data.VHost.str());
+    edtResource->setText(m_client->data.owner.getResource());
+    edtVHost->setText(m_client->data.getVHost());
     if (m_bConfig){
         tabCfg->removeTab(tabCfg->indexOf(tabJabber));
     }else{
@@ -99,7 +99,7 @@ void JabberConfig::apply()
     }
     m_client->setUseVHost(false);
     if (chkVHost->isChecked()){
-        m_client->data.VHost.str() = edtVHost->text();
+        m_client->data.getVHost() = edtVHost->text();
         if (!edtVHost->text().isEmpty())
             m_client->setUseVHost(true);
     }
@@ -107,7 +107,7 @@ void JabberConfig::apply()
     int n = jid.indexOf('@');
     if (n >= 0){
         QString host = jid.mid(n + 1);
-        m_client->data.VHost.str() = host;
+        m_client->data.setVHost(host);
         m_client->setUseVHost(true);
     } else if (chkVHost->isChecked()){
         jid += '@';
@@ -139,7 +139,7 @@ void JabberConfig::apply()
         EventRepaintView e;
         e.process();
     }
-    m_client->data.owner.Resource.str() = edtResource->text();
+    m_client->data.owner.getResource() = edtResource->text();
     m_client->setPriority(edtPriority->text().toLong());
     m_client->setUseHTTP(chkHTTP->isChecked());
     m_client->setURL(edtUrl->text());

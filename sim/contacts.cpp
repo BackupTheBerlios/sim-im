@@ -37,6 +37,7 @@ email                : vovan@shutoff.ru
 #include "contacts/contact.h"
 #include "contacts/group.h"
 #include "contacts/client.h"
+#include "clientmanager.h"
 
 #ifdef WIN32
 #include <windows.h>
@@ -784,42 +785,78 @@ void ContactList::load_old()
     }
 
     PropertyHubPtr currenthub;
+    IMContact* imcontact = 0;
+    Contact* c = 0;
+    Group* gr = 0;
     UserDataPtr currentUserData = getUserData();
     while(!f.atEnd())
     {
         QString line = QString::fromLocal8Bit( f.readLine() );
         line = line.trimmed();
+        //log(L_DEBUG, "Line: %s", qPrintable(line));
         if(line.startsWith("[Group="))
         {
+            imcontact = 0;
+            c = 0;
             int id = line.mid(7, line.length() - 8).toInt();
-            Group* gr = group(id, id != 0);
+            gr = group(id, id != 0);
             currenthub = gr->userdata();
             currentUserData = gr->getUserData();
         }
         else if(line.startsWith("[Contact="))
         {
+            imcontact = 0;
+            gr = 0;
             int id = line.mid(9, line.length() - 10).toInt();
-            Contact* c = contact(id, true);
+            c = contact(id, true);
+            //log(L_DEBUG, "Contact: %d", id);
             currenthub = c->getUserData()->root();
             currentUserData = c->getUserData();
         }
         else if(line.startsWith("["))
         {
-            QString clientName = line.mid(1, line.length() - 2);
-            if(!currentUserData.isNull())
-                currenthub = currentUserData->createUserData(clientName);
+            QString dataname = line.mid(1, line.length() - 2);
+            int dotindex = line.indexOf(".");
+            if(dotindex > 0 && (c != 0 || gr != 0))
+            {
+                ClientPtr client = getClientManager()->client(dataname);
+                if(client)
+                {
+                    if(c) {
+                        imcontact = c->getData(client.data());
+                        if(!imcontact)
+                            imcontact = c->createData(client.data());
+                    }
+                    else if(gr) {
+                        imcontact = gr->getData(client.data());
+                        if(!imcontact)
+                            imcontact = gr->createData(client.data());
+                    }
+                    currenthub.clear();
+                }
+            }
+            else
+            {
+                if(!currentUserData.isNull())
+                    currenthub = currentUserData->createUserData(dataname);
+                imcontact = 0;
+            }
         }
         else
         {
+            QStringList keyval = line.split("=");
+            QString val = keyval.at(1);
+            if(val.startsWith('"') && val.endsWith('"'))
+                val = val.mid(1, val.length() - 2);
             if(!currenthub.isNull())
             {
-                QStringList keyval = line.split("=");
-                QString val = keyval.at(1);
-                if(val.startsWith('"') && val.endsWith('"'))
-                    currenthub->setValue(keyval.at(0), val.mid(1, val.length() - 2));
-                else
-                    currenthub->setValue(keyval.at(0), val);
-
+                currenthub->setValue(keyval.at(0), val);
+                //log(L_DEBUG, "Userdata deserialization: %s=%s", qPrintable(keyval.at(0)), qPrintable(val));
+            }
+            if(imcontact)
+            {
+                imcontact->deserializeLine(keyval.at(0), val);
+                //log(L_DEBUG, "IMContact deserialization: %s=%s", qPrintable(keyval.at(0)), qPrintable(val));
             }
         }
     }
@@ -832,23 +869,44 @@ void ContactList::save_new()
         QString cfgName = ProfileManager::instance()->profilePath() + QDir::separator() + "contacts.xml";
         ProfileManager::instance()->sync();
         QDomDocument doc;
-        doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"utf-8\"" ) );
+        doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"utf-8\""));
         QDomElement root = doc.createElement("contactlist");
         QDomElement global = doc.createElement("global");
         getUserData()->serialize(global);
         root.appendChild(global);
-        QDomElement groups = doc.createElement( "groups" );
-        if( save_groups( groups ) )
-            root.appendChild( groups );
-        QDomElement contacts = doc.createElement( "contacts" );
-        if( save_contacts( contacts ) )
-            root.appendChild( contacts );
+
+        QDomElement owner = doc.createElement("owner");
+        save_owner(owner);
+        root.appendChild(owner);
+
+        QDomElement groups = doc.createElement("groups");
+        if(save_groups(groups))
+            root.appendChild(groups);
+        QDomElement contacts = doc.createElement("contacts");
+        if(save_contacts(contacts))
+            root.appendChild(contacts);
         doc.appendChild(root);
         QFile f(cfgName);
         f.open(QIODevice::WriteOnly | QIODevice::Truncate);
         f.write(doc.toByteArray());
         f.close();
     }
+}
+
+bool ContactList::save_owner(QDomElement element)
+{
+    QStringList clients = getClientManager()->clientList();
+    foreach(const QString& clname, clients) {
+        ClientPtr client = getClientManager()->client(clname);
+        IMContact* imc = client->getOwnerContact();
+        if(!imc)
+            return false;
+        QDomElement el = element.ownerDocument().createElement("clientdata");
+        el.setAttribute("clientname", client->name());
+        imc->serialize(el);
+        element.appendChild(el);
+    }
+    return true;
 }
 
 bool ContactList::save_groups( QDomElement element )
@@ -872,11 +930,19 @@ bool ContactList::save_contacts( QDomElement element ) {
         return false;
 
     map<unsigned long, Contact*>::iterator it;
-    for( it = p->contacts.begin(); it != p->contacts.end(); ++it ) {
-        QDomElement contact = element.ownerDocument().createElement( "contact" );
-        contact.setAttribute( "id", QString::number( it->first ) );
-        if( it->second->getUserData()->serialize( contact ) )
-            element.appendChild( contact );
+    for(it = p->contacts.begin(); it != p->contacts.end(); ++it) {
+        QDomElement contact = element.ownerDocument().createElement("contact");
+        contact.setAttribute("id", QString::number(it->first));
+        if(it->second->getUserData()->serialize(contact))
+            element.appendChild(contact);
+        QStringList clients = it->second->clientNames();
+        foreach(const QString& clname, clients) {
+            IMContact* imc = it->second->getData(clname);
+            QDomElement clientElement = element.ownerDocument().createElement("clientdata");
+            clientElement.setAttribute("clientname", imc->client()->name());
+            imc->serialize(clientElement);
+            contact.appendChild(clientElement);
+        }
     }
 
     return true;
@@ -893,22 +959,43 @@ bool ContactList::load_new()
     if(!getUserData()->deserialize(el))
         return false;
 
+    QDomElement owner = doc.elementsByTagName("owner").at(0).toElement();
+    load_owner(owner);
+
     QDomElement groups = doc.elementsByTagName("groups").at(0).toElement();
     if(!load_groups(groups))
         return false;
+
 
     QDomElement contacts = doc.elementsByTagName("contacts").at(0).toElement();
     if(!load_contacts(contacts))
         return false;
 
+
+    return true;
+}
+
+bool ContactList::load_owner(const QDomElement& owner)
+{
+    QDomNodeList list = owner.elementsByTagName("clientdata");
+    for(int i = 0; i < list.size(); i++) {
+        QDomElement el = list.at(i).toElement();
+        ClientPtr client = getClientManager()->client(el.attribute("clientname"));
+        if(!client)
+            continue;
+        IMContact* c = client->getOwnerContact();
+        if(!c) {
+            c = client->protocol()->createIMContact(client);
+        }
+        c->deserialize(el);
+    }
     return true;
 }
 
 bool ContactList::load_groups(const QDomElement& groups)
 {
     QDomNodeList list = groups.elementsByTagName("group");
-    for(int i = 0; i < list.size(); i++)
-    {
+    for(int i = 0; i < list.size(); i++) {
         QDomElement el = list.at(i).toElement();
         int id = el.attribute("id").toInt();
         Group* gr = group(id, id != 0);
@@ -920,14 +1007,23 @@ bool ContactList::load_groups(const QDomElement& groups)
 
 bool ContactList::load_contacts(const QDomElement& contacts)
 {
-    QDomNodeList list = contacts.elementsByTagName("contacts");
-    for(int i = 0; i < list.size(); i++)
-    {
+    QDomNodeList list = contacts.elementsByTagName("contact");
+    for(int i = 0; i < list.size(); i++) {
         QDomElement el = list.at(i).toElement();
         int id = el.attribute("id").toInt();
         Contact* c = contact(id, true);
-        if(!c->getUserData()->deserialize(el))
-            return false;
+        c->getUserData()->deserialize(el);
+
+        QDomNodeList cldatalist = el.elementsByTagName("clientdata");
+        for(int j = 0; j < cldatalist.size(); j++) {
+            QDomElement clientElement = cldatalist.at(j).toElement();
+            ClientPtr client = getClientManager()->client(clientElement.attribute("clientname"));
+            IMContact* imc = c->getData(client->name());
+            if(!imc)
+                imc = c->createData(client.data());
+            imc->deserialize(clientElement);
+        }
+
     }
     return true;
 }
@@ -938,10 +1034,10 @@ void ContactListPrivate::flush(Contact *c, Group *g)
 //    if (c)
 //        data = &c->clientData;
     c->sort();
-    if (g)
-        data = &g->clientData;
-    if (data)
-        data->sort();
+//    if (g)
+//        data = &g->clientData;
+//    if (data)
+//        data->sort();
 }
 
 void ContactListPrivate::flush(Contact *c, Group *g, const QByteArray &section, Buffer *cfg)
@@ -974,16 +1070,16 @@ void ContactListPrivate::flush(Contact *c, Group *g, const QByteArray &section, 
 //        return;
 //    }
     for (unsigned i = 0; i < getContacts()->nClients(); i++){
-        Client *client = getContacts()->getClient(i);
-        if (client->name() != section)
-            continue;
-        ClientUserData *data = NULL;
-        if (c && !g)
-            c->loadUserData(client, cfg);
-        if (g)
-            data = &g->clientData;
-        if (data)
-            data->load(client, cfg);
+//        Client *client = getContacts()->getClient(i);
+//        if (client->name() != section)
+//            continue;
+//        ClientUserData *data = NULL;
+//        if (c && !g)
+//            c->loadUserData(client, cfg);
+//        if (g)
+//            data = &g->clientData;
+//        if (data)
+//            data->load(client, cfg);
         return;
     }
 }
@@ -1362,9 +1458,10 @@ EXPORT QString g_i18n(const char *text, SIM::Contact *contact)
     QString female = i18n("female", text);
     if (male == female)
         return male;
-    QString gender = contact->property("Gender");
-    if (gender.toLong() == 1)
-        return female;
+    // FIXME
+    //QString gender = contact->property("Gender");
+    //if (gender.toLong() == 1)
+    //    return female;
     return male;
 }
 

@@ -93,9 +93,9 @@ SIM::IMStatusPtr JabberProtocol::status(const QString& id)
     return SIM::IMStatusPtr();
 }
 
-IMContact* JabberProtocol::createIMContact()
+IMContact* JabberProtocol::createIMContact(const QSharedPointer<SIM::Client>& client)
 {
-    return new JabberUserData();
+    return new JabberUserData(client);
 }
 
 ClientPtr JabberProtocol::createClient(Buffer *cfg)
@@ -103,6 +103,13 @@ ClientPtr JabberProtocol::createClient(Buffer *cfg)
 	ClientPtr jabber = ClientPtr(new JabberClient(this, cfg));
 	getClientManager()->addClient(jabber);
 	return jabber;
+}
+
+SIM::ClientPtr JabberProtocol::createClient(const QString& name)
+{
+    ClientPtr jabber = ClientPtr(new JabberClient(this, name));
+    getClientManager()->addClient(jabber);
+    return jabber;
 }
 
 static CommandDef jabber_descr =
