@@ -102,7 +102,7 @@ class EXPORT ContactList
 public:
     ContactList();
     virtual ~ContactList();
-    Contact *owner();
+    Contact* owner();
     void clear();
     void load();
     void save();

@@ -23,6 +23,9 @@ namespace SIM
         virtual ~Contact();
         unsigned long id() const { return m_id; }
 
+        bool serialize(QDomElement& element);
+        bool deserialize(const QDomElement& element);
+
         int getGroup();
         void setGroup(int g);
 
@@ -92,6 +95,9 @@ namespace SIM
         void freeClientData(Client *client);
         // m_clientData accessors end
     protected:
+        bool serializeMainInfo(QDomElement& element);
+        bool deserializeMainInfo(const QDomElement& element);
+
         unsigned long m_id;
         friend class ContactList;
         friend class ContactListPrivate;
@@ -99,6 +105,8 @@ namespace SIM
     private:
         UserDataPtr m_userData;
         ClientUserData m_clientData;
+
+        QString m_encoding;
     };
     typedef QSharedPointer<Contact> ContactPtr;
 
