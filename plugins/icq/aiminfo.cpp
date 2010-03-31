@@ -65,14 +65,11 @@ void AIMInfo::apply()
         data = &m_client->data.owner;
 }
 
-void AIMInfo::apply(Client *client, void *_data)
+void AIMInfo::updateData(ICQUserData* data)
 {
-    if (client != m_client)
-        return;
-    ICQUserData *data = m_client->toICQUserData((SIM::IMContact*)_data);  // FIXME unsafe type conversion
     data->setFirstName(edtFirst->text());
     data->setLastName(edtLast->text());
-	data->setMiddleName(edtMiddle->text());
+    data->setMiddleName(edtMiddle->text());
     data->setMaiden(edtMaiden->text());
     data->setNick(edtNick->text());
     data->setAddress(edtStreet->text());
@@ -80,6 +77,21 @@ void AIMInfo::apply(Client *client, void *_data)
     data->setState(edtState->text());
     data->setZip(edtZip->text());
     data->setCountry(getComboValue(cmbCountry, getCountries()));
+}
+
+void AIMInfo::applyContact(const SIM::ClientPtr& client, SIM::IMContact* contact)
+{
+    if(client.data() != m_client)
+        return;
+    updateData(m_client->toICQUserData(contact));
+}
+
+void AIMInfo::apply(Client *client, void *_data)
+{
+    if (client != m_client)
+        return;
+    ICQUserData *data = m_client->toICQUserData((SIM::IMContact*)_data);  // FIXME unsafe type conversion
+    updateData(data);
 }
 
 bool AIMInfo::processEvent(Event *e)

@@ -37,6 +37,14 @@ void AboutInfo::apply()
 {
 }
 
+void AboutInfo::applyContact(const SIM::ClientPtr& client, SIM::IMContact* contact)
+{
+    if(client.data() != m_client)
+        return;
+    ICQUserData *data = m_client->toICQUserData(contact);
+    data->setAbout(edtAbout->toPlainText());
+}
+
 void AboutInfo::apply(Client *client, void *_data)
 {
     if (client != m_client)

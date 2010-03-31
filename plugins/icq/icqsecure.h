@@ -19,6 +19,7 @@
 #define _ICQSECURE_H
 
 #include "cfg.h"
+#include "contacts/client.h"
 
 #include "simgui/listview.h"
 #include "ui_icqsecurebase.h"
@@ -34,10 +35,12 @@ public:
 public slots:
     void apply();
     void apply(SIM::Client*, void*);
+    void applyContact(const SIM::ClientPtr& client, SIM::IMContact* contact);
     void hideIpToggled(bool);
     void deleteVisibleItem(ListViewItem *item);
     void deleteInvisibleItem(ListViewItem *item);
 protected:
+    void updateData(ICQUserData* data);
     virtual bool processEvent(SIM::Event *e);
     void fill();
     void setListView(ListView*);

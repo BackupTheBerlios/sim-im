@@ -19,6 +19,7 @@
 #define _ICQPICTURE_H
 
 #include "event.h"
+#include "contacts/client.h"
 
 #include "ui_icqpicturebase.h"
 
@@ -35,10 +36,12 @@ public:
 public slots:
     void apply();
     void apply(SIM::Client*, void*);
+    void applyContact(const SIM::ClientPtr& client, SIM::IMContact* contact);
 protected slots:
     void clearPicture();
     void pictSelected(const QString&);
 protected:
+    void updateData(ICQUserData* data);
     virtual bool processEvent(SIM::Event *e);
     void fill();
     void setPict(const QImage &img);

@@ -31,6 +31,7 @@ signals:
 public slots:
     void apply();
     void apply(SIM::Client*, void*);
+    void applyContact(const SIM::ClientPtr& client, SIM::IMContact* contact);
 protected slots:
     void changed();
     void changed(const QString&);

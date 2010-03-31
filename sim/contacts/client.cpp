@@ -10,18 +10,6 @@ using namespace std;
 
 namespace SIM
 {
-    static DataDef _clientData[] =
-    {
-        { "ManualStatus", DATA_ULONG, 1, DATA(1) },
-        { "CommonStatus", DATA_BOOL, 1, DATA(1) },
-        { "Password", DATA_UTF, 1, 0 },
-        { "", DATA_BOOL, 1, DATA(1) },      // SavePassword
-        { "", DATA_UTF, 1, 0 },             // PreviousPassword
-        { "Invisible", DATA_BOOL, 1, 0 },
-        { "LastSend", DATA_STRLIST, 1, 0 },
-        { NULL, DATA_UNKNOWN, 0, 0 }
-    };
-
     Client::Client(Protocol* protocol) : m_ulStatus(1),
         m_commonStatus(true),
         m_invisible(false),
@@ -280,7 +268,7 @@ namespace SIM
         return true;
     }
 
-    void Client::setClientInfo(void*)
+    void Client::setClientInfo(IMContact*)
     {
     }
 

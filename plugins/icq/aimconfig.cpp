@@ -65,6 +65,11 @@ void AIMConfig::apply(Client*, void*)
 {
 }
 
+void AIMConfig::applyContact(const SIM::ClientPtr&, SIM::IMContact*)
+{
+
+}
+
 void AIMConfig::apply()
 {
     if (m_bConfig){

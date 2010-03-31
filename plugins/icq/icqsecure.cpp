@@ -89,13 +89,25 @@ void ICQSecure::apply()
     m_client->setUseMD5(chkUseMD5->isChecked());
 }
 
+void ICQSecure::updateData(ICQUserData* data)
+{
+    data->setWaitAuth(chkAuth->isChecked());
+    data->setWebAware(chkWeb->isChecked());
+}
+
+void ICQSecure::applyContact(const SIM::ClientPtr& client, SIM::IMContact* contact)
+{
+    if (client != m_client)
+        return;
+    updateData(m_client->toICQUserData(contact));
+}
+
 void ICQSecure::apply(Client *client, void *_data)
 {
     if (client != m_client)
         return;
     ICQUserData *data = m_client->toICQUserData((SIM::IMContact*)_data); // FIXME unsafe type conversion
-    data->setWaitAuth(chkAuth->isChecked());
-    data->setWebAware(chkWeb->isChecked());
+    updateData(data);
 }
 
 void ICQSecure::fill()

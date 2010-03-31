@@ -20,6 +20,7 @@
 
 #include "country.h"
 #include "event.h"
+#include "contacts/client.h"
 
 #include "ui_pastinfobase.h"
 
@@ -34,9 +35,11 @@ public:
 public slots:
     void apply();
     void apply(SIM::Client*, void*);
+    void applyContact(const SIM::ClientPtr& client, SIM::IMContact* contact);
     void cmbAfChanged(int);
     void cmbBgChanged(int);
 protected:
+    void updateData(ICQUserData* data);
     virtual bool processEvent(SIM::Event *e);
     QString getInfo(QComboBox *cmb, QLineEdit *edt, const SIM::ext_info*);
     void fill();

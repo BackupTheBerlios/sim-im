@@ -723,7 +723,7 @@ public:
     QString statInfo(const QString &jid, const QString &node);
     void addLang(ServerRequest *req);
     void info_request(JabberUserData *user_data, bool bVCard);
-    virtual void setClientInfo(void *data);
+    virtual void setClientInfo(SIM::IMContact *data);
     void changePassword(const QString &pass);
 
     // reimplement socket() to get correct Buffer

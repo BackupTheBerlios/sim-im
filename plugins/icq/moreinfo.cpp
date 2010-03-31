@@ -62,6 +62,14 @@ void MoreInfo::apply()
 {
 }
 
+
+void MoreInfo::applyContact(const SIM::ClientPtr& client, SIM::IMContact* contact)
+{
+    if (client != m_client)
+        return;
+    updateData(m_client->toICQUserData(contact));
+}
+
 bool MoreInfo::processEvent(Event *e)
 {
     if (e->type() == eEventContact){
@@ -235,11 +243,8 @@ void MoreInfo::setLang(int)
     cmbLang3->setEnabled(sl[1] != 0);
 }
 
-void MoreInfo::apply(Client *client, void *_data)
+void MoreInfo::updateData(ICQUserData* data)
 {
-    if (client != m_client)
-        return;
-    ICQUserData *data = m_client->toICQUserData((SIM::IMContact*)_data);  // FIXME unsafe type conversion
     data->setHomepage(edtHomePage->text());
     data->setGender(getComboValue(cmbGender, genders));
     data->setBirthMonth(edtDate->getDate().month());
@@ -249,6 +254,14 @@ void MoreInfo::apply(Client *client, void *_data)
     unsigned l2 = getComboValue(cmbLang2, languages);
     unsigned l3 = getComboValue(cmbLang3, languages);
     data->setLanguage((l3 << 16) | (l2 << 8) | l1);
+}
+
+void MoreInfo::apply(Client *client, void *_data)
+{
+    if (client != m_client)
+        return;
+    ICQUserData *data = m_client->toICQUserData((SIM::IMContact*)_data);  // FIXME unsafe type conversion
+    updateData(data);
 }
 
 void MoreInfo::urlChanged(const QString &text)

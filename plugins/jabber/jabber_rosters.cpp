@@ -624,10 +624,12 @@ void SetInfoRequest::element_start(const QString& el, const QXmlAttributes& attr
     }
 }
 
-void JabberClient::setClientInfo(void *_data)
+void JabberClient::setClientInfo(IMContact* _data)
 {
-    JabberUserData *data = toJabberUserData((SIM::IMContact*)_data);  // FIXME unsafe type conversion
-    if (data != &this->data.owner){
+    if(_data->getSign() != JABBER_SIGN)
+        return;
+    JabberUserData *data = static_cast<JabberUserData*>(_data);  // FIXME unsafe type conversion
+    if (data != &this->data.owner) {
         this->data.owner.setFirstName(data->getFirstName());
         this->data.owner.setNick(data->getNick());
         this->data.owner.setDesc(data->getDesc());

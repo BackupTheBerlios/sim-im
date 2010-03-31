@@ -19,8 +19,10 @@
 #define _MOREINFO_H
 
 #include "ui_moreinfobase.h"
+#include "contacts/client.h"
 
 #include "event.h"
+
 class ICQClient;
 class ICQUserData;
 
@@ -32,11 +34,13 @@ public:
 public slots:
     void apply();
     void apply(SIM::Client*, void*);
+    void applyContact(const SIM::ClientPtr& client, SIM::IMContact* contact);
     void goUrl();
     void urlChanged(const QString&);
     void setLang(int);
     void birthDayChanged();
 protected:
+    void updateData(ICQUserData* data);
     virtual bool processEvent(SIM::Event *e);
     void fill();
     ICQUserData *m_data;

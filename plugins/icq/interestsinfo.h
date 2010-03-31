@@ -19,6 +19,7 @@
 #define _INTERESTSINFO_H
 
 #include "event.h"
+#include "contacts/client.h"
 #include "ui_interestsinfobase.h"
 
 class ICQClient;
@@ -32,8 +33,10 @@ public:
 public slots:
     void apply();
     void apply(SIM::Client*, void*);
+    void applyContact(const SIM::ClientPtr& client, SIM::IMContact* contact);
     void cmbChanged(int);
 protected:
+    void updateData(ICQUserData* data);
     virtual bool processEvent(SIM::Event *e);
     void fill();
     QString getInfo(QComboBox *cmb, QLineEdit *edt);

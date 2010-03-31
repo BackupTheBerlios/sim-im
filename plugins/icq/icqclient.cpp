@@ -1183,6 +1183,7 @@ QString ICQClient::getPicture() const
 void ICQClient::setPicture(const QString& pic)
 {
     data.setPicture(pic);
+    data.owner.setPicture(pic);
 }
 
 unsigned long ICQClient::getRandomChatGroup() const
@@ -1727,6 +1728,7 @@ void ICQClient::setStatus(unsigned status)
 
 void ICQClient::setInvisible(bool bState)
 {
+    log(L_DEBUG, "ICQClient::setInvisible(): %d", bState);
     if (bState != getInvisible())
     {
         TCPClient::setInvisible(bState);

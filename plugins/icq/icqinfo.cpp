@@ -116,14 +116,26 @@ void ICQInfo::apply()
     }
 }
 
+void ICQInfo::updateData(ICQUserData* data)
+{
+    data->setFirstName(edtFirst->text());
+    data->setLastName(edtLast->text());
+    data->setNick(edtNick->text());
+}
+
+void ICQInfo::applyContact(const SIM::ClientPtr& client, SIM::IMContact* contact)
+{
+    if (client != m_client)
+        return;
+    updateData(m_client->toICQUserData(contact));
+}
+
 void ICQInfo::apply(Client *client, void *_data)
 {
     if (client != m_client)
         return;
     ICQUserData *data = m_client->toICQUserData((SIM::IMContact*)_data);  // FIXME unsafe type conversion
-    data->setFirstName(edtFirst->text());
-    data->setLastName(edtLast->text());
-    data->setNick(edtNick->text());
+    updateData(data);
 }
 
 bool ICQInfo::processEvent(Event *e)
