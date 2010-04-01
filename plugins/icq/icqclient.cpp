@@ -909,20 +909,21 @@ unsigned long ICQClientData::getSign()
     return 0;
 }
 
-ICQClient::ICQClient(SIM::Protocol* protocol, const QString& name, bool bAIM) : TCPClient(protocol, NULL, HighPriority - 1),
-        m_bVerifying			(false),
-        m_listener				(NULL),
-        m_listRequest			(NULL),
-        m_bRosters				(false),
-        m_bBirthday				(false),
-        m_bNoSend				(true),
-        m_bJoin                             (false),
-        m_bFirstTry				(false),
-        m_bReady				(false),
-        m_bconnectionLost                   (false),
-        m_ifChecker                         (NULL),
-        m_bBirthdayInfoDisplayed            (false),
-        m_name(name)
+ICQClient::ICQClient(SIM::Protocol* protocol, const QString& name, bool bAIM) 
+    : TCPClient             (protocol, NULL, HighPriority - 1),
+    m_bVerifying            (false),
+    m_listener              (NULL),
+    m_listRequest           (NULL),
+    m_bRosters              (false),
+    m_bBirthday             (false),
+    m_bNoSend               (true),
+    m_bJoin                 (false),
+    m_bFirstTry             (false),
+    m_bReady                (false),
+    m_bconnectionLost       (false),
+    m_ifChecker             (NULL),
+    m_bBirthdayInfoDisplayed(false),
+    m_name                  (name)
 {
 
     initialize(bAIM);

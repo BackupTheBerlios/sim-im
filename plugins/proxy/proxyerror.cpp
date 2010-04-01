@@ -40,7 +40,8 @@ ProxyError::ProxyError(ProxyPlugin *plugin, TCPClient *client, const QString& ms
     setWindowIcon(Icon("error"));
     setButtonsPict(this);
     lblMessage->setText(msg);
-    if (layout() && layout()->inherits("QBoxLayout")){
+    if (layout() && layout()->inherits("QBoxLayout"))
+    {
         QBoxLayout *lay = static_cast<QBoxLayout*>(layout());
         ProxyConfig *cfg = new ProxyConfig(this, m_plugin, NULL, static_cast <ClientPtr> (m_client));
         lay->insertWidget(1, cfg);
@@ -58,11 +59,11 @@ ProxyError::~ProxyError()
 
 bool ProxyError::processEvent(Event *e)
 {
-    if (e->type() == eEventClientsChanged){
-        for (unsigned i = 0; i < getContacts()->nClients(); i++){
+    if (e->type() == eEventClientsChanged)
+    {
+        for (unsigned i = 0; i < getContacts()->nClients(); i++)
             if (getContacts()->getClient(i) == m_client)
                 return false;
-        }
         m_client = NULL;
         close();
     }

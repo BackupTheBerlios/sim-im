@@ -37,6 +37,8 @@ protected:
     virtual void accept();
     ProxyPlugin *m_plugin;
     SIM::TCPClient	*m_client;
+
+    
 };
 
 #endif

@@ -76,7 +76,8 @@ IMContact* ICQProtocol::createIMContact(const QSharedPointer<Client>& client)
 QStringList ICQProtocol::statuses()
 {
     QStringList list;
-    foreach(const ICQStatusPtr& status, m_statuses) {
+    foreach(const ICQStatusPtr& status, m_statuses) 
+    {
         list.append(status->id());
     }
     return list;
@@ -101,10 +102,10 @@ void ICQProtocol::addStatus(ICQStatusPtr status)
 
 SIM::IMStatusPtr ICQProtocol::status(const QString& id)
 {
-    foreach(const ICQStatusPtr& status, m_statuses) {
-        if(status->id() == id) {
+    foreach(const ICQStatusPtr& status, m_statuses) 
+    {
+        if(status->id() == id) 
             return status;
-        }
     }
 
     return SIM::IMStatusPtr();

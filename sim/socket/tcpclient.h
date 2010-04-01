@@ -24,7 +24,7 @@ namespace SIM
         virtual unsigned short getPort() const = 0;
         unsigned long ip() const { return m_ip; }
         virtual ClientSocket *socket() { return m_clientSocket; }
-
+        SIM_DEPRECATED virtual void setStatus(unsigned status, bool bCommon);
         unsigned m_reconnect;
 
     protected slots:
@@ -32,7 +32,7 @@ namespace SIM
         void loginTimeout();
 
     protected:
-        SIM_DEPRECATED virtual void setStatus(unsigned status, bool bCommon);
+        
         virtual void setStatus(unsigned status) = 0;
         virtual void disconnected() = 0;
 
