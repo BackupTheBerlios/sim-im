@@ -265,12 +265,8 @@ void PastInfo::cmbAfChanged(int)
     }
 }
 
-
-void PastInfo::apply(Client *client, void *_data)
+void PastInfo::updateData(ICQUserData* data)
 {
-    if (client != m_client)
-        return;
-    ICQUserData *data = m_client->toICQUserData((SIM::IMContact*)_data);  // FIXME unsafe type conversion
     QString bg[3];
     bg[0] = getInfo(cmbBg1, edtBg1, pasts);
     bg[1] = getInfo(cmbBg2, edtBg2, pasts);
@@ -297,6 +293,21 @@ void PastInfo::apply(Client *client, void *_data)
         res += af[i];
     }
     data->setAffilations(res);
+}
+
+void PastInfo::applyContact(const SIM::ClientPtr& client, SIM::IMContact* contact)
+{
+    if (client != m_client)
+        return;
+    updateData(m_client->toICQUserData(contact));
+}
+
+void PastInfo::apply(Client *client, void *_data)
+{
+    if (client != m_client)
+        return;
+    ICQUserData *data = m_client->toICQUserData((SIM::IMContact*)_data);  // FIXME unsafe type conversion
+    updateData(data);
 }
 
 QString PastInfo::getInfo(QComboBox *cmb, QLineEdit *edt, const ext_info *info)

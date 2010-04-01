@@ -140,11 +140,8 @@ void WorkInfo::urlChanged(const QString &text)
     btnSite->setEnabled(!text.isEmpty());
 }
 
-void WorkInfo::apply(Client *client, void *_data)
+void WorkInfo::updateData(ICQUserData* data)
 {
-    if (client != m_client)
-        return;
-    ICQUserData *data = m_client->toICQUserData((SIM::IMContact*)_data);  // FIXME unsafe type conversion
     data->setWorkAddress(edtAddress->toPlainText());
     data->setWorkCity(edtCity->text());
     data->setWorkState(edtState->text());
@@ -155,5 +152,20 @@ void WorkInfo::apply(Client *client, void *_data)
     data->setWorkDepartment(edtDept->text());
     data->setWorkPosition(edtPosition->text());
     data->setWorkHomepage(edtSite->text());
+}
+
+void WorkInfo::applyContact(const SIM::ClientPtr& client, SIM::IMContact* contact)
+{
+    if (client != m_client)
+        return;
+    updateData(m_client->toICQUserData(contact));
+}
+
+void WorkInfo::apply(Client *client, void *_data)
+{
+    if (client != m_client)
+        return;
+    ICQUserData *data = m_client->toICQUserData((SIM::IMContact*)_data);  // FIXME unsafe type conversion
+    updateData(data);
 }
 

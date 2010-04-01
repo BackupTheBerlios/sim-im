@@ -610,11 +610,5 @@ void MainInfo::getEncoding(bool SendContactChangedEvent)
     EventHistoryConfig(contact->id()).process();
 }
 
-/*
-#ifndef NO_MOC_INCLUDES
-#include "maininfo.moc"
-#endif
-*/
-
 // vim: set expandtab:
 

@@ -52,11 +52,8 @@ void InterestsInfo::apply()
 {
 }
 
-void InterestsInfo::apply(Client *client, void *_data)
+void InterestsInfo::updateData(ICQUserData* data)
 {
-    if (client != m_client)
-        return;
-    ICQUserData *data = m_client->toICQUserData((SIM::IMContact*)_data);  // FIXME unsafe type conversion
     QString info[4];
     info[0] = getInfo(cmbBg1, edtBg1);
     info[1] = getInfo(cmbBg2, edtBg2);
@@ -71,6 +68,21 @@ void InterestsInfo::apply(Client *client, void *_data)
         res += info[i];
     }
     data->setInterests(res);
+}
+
+void InterestsInfo::applyContact(const SIM::ClientPtr& client, SIM::IMContact* contact)
+{
+    if (client != m_client)
+        return;
+    updateData(m_client->toICQUserData(contact));
+}
+
+void InterestsInfo::apply(Client *client, void *_data)
+{
+    if (client != m_client)
+        return;
+    ICQUserData *data = m_client->toICQUserData((SIM::IMContact*)_data);  // FIXME unsafe type conversion
+    updateData(data);
 }
 
 bool InterestsInfo::processEvent(Event *e)

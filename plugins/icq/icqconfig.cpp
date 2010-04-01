@@ -98,6 +98,11 @@ void ICQConfig::invisibleToggled(bool bState)
     edtInvisible->setEnabled(bState);
 }
 
+void ICQConfig::applyContact(const SIM::ClientPtr&, SIM::IMContact*)
+{
+
+}
+
 void ICQConfig::apply(Client*, void*)
 {
 }

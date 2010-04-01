@@ -221,7 +221,7 @@ public:
     void flush(Contact *c, Group *g, const QByteArray &section, Buffer *cfg);
     void flush(Contact *c, Group *g);
     std::map<unsigned long, UserDataDef> userDataDef;
-    Contact			*m_owner;
+    Contact *m_owner;
     std::map<unsigned long, Contact*>  contacts;
     std::vector<Group*>  groups;
     std::vector<Client*> clients;
@@ -895,6 +895,7 @@ void ContactList::save_new()
 
 bool ContactList::save_owner(QDomElement element)
 {
+    owner()->serialize(element);
     QStringList clients = getClientManager()->clientList();
     foreach(const QString& clname, clients) {
         ClientPtr client = getClientManager()->client(clname);
@@ -933,16 +934,17 @@ bool ContactList::save_contacts( QDomElement element ) {
     for(it = p->contacts.begin(); it != p->contacts.end(); ++it) {
         QDomElement contact = element.ownerDocument().createElement("contact");
         contact.setAttribute("id", QString::number(it->first));
-        if(it->second->getUserData()->serialize(contact))
-            element.appendChild(contact);
-        QStringList clients = it->second->clientNames();
-        foreach(const QString& clname, clients) {
-            IMContact* imc = it->second->getData(clname);
-            QDomElement clientElement = element.ownerDocument().createElement("clientdata");
-            clientElement.setAttribute("clientname", imc->client()->name());
-            imc->serialize(clientElement);
-            contact.appendChild(clientElement);
-        }
+        it->second->serialize(contact);
+//        it->second->getUserData()->serialize(contact);
+//        QStringList clients = it->second->clientNames();
+//        foreach(const QString& clname, clients) {
+//            IMContact* imc = it->second->getData(clname);
+//            QDomElement clientElement = element.ownerDocument().createElement("clientdata");
+//            clientElement.setAttribute("clientname", imc->client()->name());
+//            imc->serialize(clientElement);
+//            contact.appendChild(clientElement);
+//        }
+        element.appendChild(contact);
     }
 
     return true;
@@ -977,6 +979,7 @@ bool ContactList::load_new()
 
 bool ContactList::load_owner(const QDomElement& owner)
 {
+    this->owner()->deserialize(owner);
     QDomNodeList list = owner.elementsByTagName("clientdata");
     for(int i = 0; i < list.size(); i++) {
         QDomElement el = list.at(i).toElement();
@@ -1012,17 +1015,18 @@ bool ContactList::load_contacts(const QDomElement& contacts)
         QDomElement el = list.at(i).toElement();
         int id = el.attribute("id").toInt();
         Contact* c = contact(id, true);
-        c->getUserData()->deserialize(el);
 
-        QDomNodeList cldatalist = el.elementsByTagName("clientdata");
-        for(int j = 0; j < cldatalist.size(); j++) {
-            QDomElement clientElement = cldatalist.at(j).toElement();
-            ClientPtr client = getClientManager()->client(clientElement.attribute("clientname"));
-            IMContact* imc = c->getData(client->name());
-            if(!imc)
-                imc = c->createData(client.data());
-            imc->deserialize(clientElement);
-        }
+        c->deserialize(el);
+//        c->getUserData()->deserialize(el);
+//        QDomNodeList cldatalist = el.elementsByTagName("clientdata");
+//        for(int j = 0; j < cldatalist.size(); j++) {
+//            QDomElement clientElement = cldatalist.at(j).toElement();
+//            ClientPtr client = getClientManager()->client(clientElement.attribute("clientname"));
+//            IMContact* imc = c->getData(client->name());
+//            if(!imc)
+//                imc = c->createData(client.data());
+//            imc->deserialize(clientElement);
+//        }
 
     }
     return true;

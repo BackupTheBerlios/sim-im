@@ -1156,7 +1156,7 @@ protected:
     virtual QWidget *configWindow(QWidget *parent, unsigned id);
     virtual QWidget *searchWindow(QWidget *parent);
     virtual void updateInfo(SIM::Contact *contact, void *_data);
-    virtual void setClientInfo(void *data);
+    virtual void setClientInfo(SIM::IMContact* data);
     virtual SIM::Socket  *createSocket();
     virtual QString contactName(void *clientData);
     QString dataName(const QString &screen);

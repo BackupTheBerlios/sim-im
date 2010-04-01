@@ -21,6 +21,7 @@
 #include "ui_cfgdlgbase.h"
 #include <QCloseEvent>
 #include "event.h"
+#include "contacts/client.h"
 
 namespace ConfigDlg
 {
@@ -48,6 +49,7 @@ public:
 signals:
     void applyChanges();
     void applyChanges(SIM::Client*, void*);
+    void applyContactChanges(SIM::ClientPtr, SIM::IMContact*);
     void finished();
 protected slots:
     void apply();

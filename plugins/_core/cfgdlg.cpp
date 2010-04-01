@@ -23,6 +23,7 @@
 #include "buffer.h"
 #include "core.h"
 #include "contacts/client.h"
+#include "clientmanager.h"
 #include "profilemanager.h"
 #include "log.h"
 
@@ -36,15 +37,9 @@
 #include <QByteArray>
 #include <QCloseEvent>
 
-
-
-
-
-
 using namespace ConfigDlg;
 
-//unsigned ConfigItem::defId = 0x10000; //obsoleted?
-unsigned ConfigItem::curIndex;  
+unsigned ConfigItem::curIndex;
 
 ConfigItem::ConfigItem(QTreeWidget *view, unsigned id)
         : QTreeWidgetItem(view)
@@ -208,7 +203,10 @@ QWidget *ClientItem::getWidget(ConfigureDialog *dlg)
 {
     QWidget *res = m_client->configWindow(dlg, m_cmd->id);
     if (res)
+    {
         QObject::connect(dlg, SIGNAL(applyChanges(SIM::Client*, void*)), res, SLOT(apply(SIM::Client*, void*)));
+        QObject::connect(dlg, SIGNAL(applyContactChanges(SIM::ClientPtr, SIM::IMContact*)), res, SLOT(applyContact(SIM::ClientPtr, SIM::IMContact*)));
+    }
     return res;
 }
 
@@ -365,7 +363,6 @@ void ConfigureDialog::fill(unsigned id)
     QStringList plugins = getPluginManager()->enumPlugins();
     foreach(QString plugin, plugins)
     {
-        log(L_DEBUG, "plugin: %s", qPrintable(plugin));
         QString title = getPluginManager()->pluginTitle(plugin);
         if(title.isEmpty())
             continue;
@@ -447,30 +444,14 @@ void ConfigureDialog::apply()
     emit applyChanges();
     if (!m_bAccept)
         return;
-    for (unsigned i = 0; i < getContacts()->nClients(); i++){
-        Client *client = getContacts()->getClient(i);
-        const DataDef *def = client->protocol()->userDataDef();
-        if (def == NULL)
-            continue;
-        size_t size = 0;
-        for (const DataDef *d = def; d->name; ++d)
-            size += d->n_values;
-        Data *data = new Data[size];
-        QByteArray cfg = client->getConfig();
-        if (cfg.isEmpty()){
-            load_data(def, data, NULL);
-        }else{
-            Buffer config;
-            config = "[Title]\n" + cfg;
-            config.setWritePos(0);
-            config.getSection();
-            load_data(def, data, &config);
-        }
-        emit applyChanges(client, data);
-        client->setClientInfo(data);
-        free_data(def, data);
-        delete[] data;
+
+    foreach(const QString& clientname, getClientManager()->clientList())
+    {
+        ClientPtr client = getClientManager()->client(clientname);
+        IMContact* owner = client->getOwnerContact();
+        emit applyContactChanges(client, owner);
     }
+
     for(int i = 0; i < lstBox->topLevelItemCount(); i++)
     {
         QTreeWidgetItem *item = lstBox->topLevelItem(i);

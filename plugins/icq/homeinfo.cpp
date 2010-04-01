@@ -49,16 +49,28 @@ void HomeInfo::apply()
 {
 }
 
-void HomeInfo::apply(Client *client, void *_data)
+void HomeInfo::updateData(ICQUserData* data)
 {
-    if (client != m_client)
-        return;
-    ICQUserData *data = m_client->toICQUserData((SIM::IMContact*)_data);  // FIXME unsafe type conversion
     data->setAddress(edtAddress->toPlainText());
     data->setCity(edtCity->text());
     data->setState(edtState->text());
     data->setZip(edtZip->text());
     data->setCountry(getComboValue(cmbCountry, getCountries()));
+}
+
+void HomeInfo::applyContact(const SIM::ClientPtr& client, SIM::IMContact* contact)
+{
+    if (client != m_client)
+        return;
+    updateData(m_client->toICQUserData(contact));
+}
+
+void HomeInfo::apply(Client *client, void *_data)
+{
+    if (client != m_client)
+        return;
+    ICQUserData *data = m_client->toICQUserData((SIM::IMContact*)_data);  // FIXME unsafe type conversion
+    updateData(data);
 }
 
 bool HomeInfo::processEvent(Event *e)

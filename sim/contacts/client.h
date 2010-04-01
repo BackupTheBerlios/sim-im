@@ -6,22 +6,12 @@
 #include "cfg.h"
 #include "contacts/contact.h"
 #include "imstatus.h"
+#include "log.h"
 #include "simapi.h"
 
 namespace SIM
 {
     class Protocol;
-    struct ClientData
-    {
-        Data    ManualStatus;
-        Data    CommonStatus;
-        Data    Password;
-        Data    SavePassword;
-        Data    PreviousPassword;
-        Data    Invisible;
-        Data    LastSend;
-    };
-
     class EXPORT Client
     {
     public:
@@ -44,7 +34,7 @@ namespace SIM
         virtual void changeStatus(const IMStatusPtr& status);
         IMStatusPtr currentStatus();
 
-        virtual IMContact*  getOwnerContact() = 0;
+		virtual IMContact* getOwnerContact() = 0;
         virtual void setOwnerContact(IMContact* contact) = 0;
 
         virtual QByteArray getConfig();
@@ -89,6 +79,8 @@ namespace SIM
         virtual bool getInvisible() const { return m_invisible; }
         virtual void setInvisible(bool b) { m_invisible = b; }
 
+        virtual void setClientInfo(IMContact* data);
+
         // Deprecated interface
         SIM_DEPRECATED Client(Protocol*, Buffer *cfg);
         virtual bool compareData(void*, void*);
@@ -102,13 +94,11 @@ namespace SIM
         virtual CommandDef *infoWindows(Contact *contact, void *clientData);
         virtual QWidget *infoWindow(QWidget *parent, Contact *contact, void *clientData, unsigned id);
         virtual void updateInfo(Contact *contact, void *clientData);
-        virtual void setClientInfo(void *data);
         virtual QString resources(void *data);
         virtual QString contactName(void *clientData);
 
     protected:
         void  freeData();
-        //ClientData  data;
         unsigned m_status;
 
     private:

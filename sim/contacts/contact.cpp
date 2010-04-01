@@ -9,6 +9,7 @@
 #include "log.h"
 #include "unquot.h"
 #include "contacts/imcontact.h"
+#include "clientmanager.h"
 
 namespace SIM
 {
@@ -30,6 +31,79 @@ namespace SIM
         if(!getContacts())
             return;
         getContacts()->removeContact(m_id);
+    }
+
+    bool Contact::serializeMainInfo(QDomElement& element)
+    {
+        PropertyHubPtr hub = PropertyHub::create();
+        hub->setValue("Group", getGroup());
+        hub->setValue("Name", getName());
+        hub->setValue("Ignore", getIgnore());
+        hub->setValue("LastActive", getLastActive());
+        hub->setValue("EMails", getEMails());
+        hub->setValue("Phones", getPhones());
+        hub->setValue("FirstName", getFirstName());
+        hub->setValue("LastName", getLastName());
+        hub->setValue("Notes", getNotes());
+        hub->setValue("Flags", getFlags());
+        hub->setValue("Encoding", getEncoding());
+        return hub->serialize(element);
+    }
+
+    bool Contact::deserializeMainInfo(const QDomElement& element)
+    {
+        PropertyHubPtr hub = PropertyHub::create();
+        if(!hub->deserialize(element))
+            return false;
+        setGroup(hub->value("Group").toInt());
+        setName(hub->value("Name").toString());
+        setIgnore(hub->value("Ignore").toBool());
+        setLastActive(hub->value("LastActive").toUInt());
+        setEMails(hub->value("EMails").toString());
+        setPhones(hub->value("Phones").toString());
+        setFirstName(hub->value("FirstName").toString());
+        setLastName(hub->value("LastName").toString());
+        setNotes(hub->value("Notes").toString());
+        setFlags(hub->value("Flags").toInt());
+        setEncoding(hub->value("Encoding").toString());
+        return true;
+    }
+
+    bool Contact::serialize(QDomElement& element)
+    {
+        getUserData()->serialize(element);
+        QStringList clients = clientNames();
+        QDomElement maininfo = element.ownerDocument().createElement("main");
+        serializeMainInfo(maininfo);
+        element.appendChild(maininfo);
+        foreach(const QString& clname, clients) {
+            IMContact* imc = getData(clname);
+            QDomElement clientElement = element.ownerDocument().createElement("clientdata");
+            clientElement.setAttribute("clientname", imc->client()->name());
+            imc->serialize(clientElement);
+            element.appendChild(clientElement);
+        }
+        return true;
+    }
+
+    bool Contact::deserialize(const QDomElement& element)
+    {
+        !getUserData()->deserialize(element);
+        QDomElement main = element.elementsByTagName("main").at(0).toElement();
+        if(!main.isNull())
+        {
+            deserializeMainInfo(main);
+        }
+        QDomNodeList cldatalist = element.elementsByTagName("clientdata");
+        for(int j = 0; j < cldatalist.size(); j++) {
+            QDomElement clientElement = cldatalist.at(j).toElement();
+            ClientPtr client = getClientManager()->client(clientElement.attribute("clientname"));
+            IMContact* imc = getData(client->name());
+            if(!imc)
+                imc = createData(client.data());
+            imc->deserialize(clientElement);
+        }
+        return true;
     }
 
     const DataDef *Contact::dataDef()
@@ -433,12 +507,12 @@ namespace SIM
 
     QString Contact::getEncoding()
     {
-        return getUserData()->root()->value("Encoding").toString();
+        return m_encoding;
     }
 
     void Contact::setEncoding(const QString& enc)
     {
-        getUserData()->root()->setValue("Encoding", enc);
+        m_encoding = enc;
     }
 
     IMContact* Contact::createData(Client *client)
