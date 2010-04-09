@@ -36,7 +36,7 @@
 #include "core.h"
 #include "xml.h"
 #include "contacts/contact.h"
-#include "clientmanager.h".h"
+#include "clientmanager.h"
 
 using namespace std;
 using namespace SIM;
