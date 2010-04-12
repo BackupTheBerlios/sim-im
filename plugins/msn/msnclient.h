@@ -39,8 +39,8 @@ const unsigned MSN_FLAGS	= 0x000F;
 const unsigned MSN_CHECKED	= 0x1000;
 
 class SBSocket;
-
-struct MSNUserData : public SIM::clientData
+/*
+struct MSNUserData : public SIM::clientData //Fixme: clientData not a member of SIM
 {
     SIM::Data	EMail;
     SIM::Data	ScreenName;
@@ -60,7 +60,7 @@ struct MSNUserData : public SIM::clientData
     SIM::Data	Port;
     SIM::Data	sb;
 };
-
+*/
 struct MSNClientData
 {
     SIM::Data	Server;

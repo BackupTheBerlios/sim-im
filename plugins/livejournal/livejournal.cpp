@@ -34,7 +34,7 @@
 #include "core.h"
 
 
-#include "contacts/clientdataiterator.h"
+//#include "contacts/clientdataiterator.h"
 #include "contacts/contact.h"
 
 #include "livejournal.h"

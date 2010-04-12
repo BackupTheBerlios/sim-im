@@ -1090,9 +1090,8 @@ void JabberClient::changeStatus(const SIM::IMStatusPtr& status)
     QString show = jabberstatus->show();
     QString type = jabberstatus->type();
 
-    if (getInvisible()) {
+    if (getInvisible()) 
         type = "invisible";
-    }
     socket()->writeBuffer() << "<presence";
     if (!type.isEmpty())
         socket()->writeBuffer() << " type=\'" << type << "\'";

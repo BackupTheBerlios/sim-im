@@ -1064,7 +1064,8 @@ bool ICQClient::serialize(QDomElement& element)
 
 bool ICQClient::deserialize(QDomElement& element)
 {
-
+    //implement me
+    return true;
 }
 
 bool ICQClient::deserialize(Buffer* cfg)

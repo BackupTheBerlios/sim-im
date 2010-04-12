@@ -32,54 +32,59 @@
 using namespace SIM;
 
 MsgJournal::MsgJournal(MsgEdit *parent, Message *msg)
-        : QObject(parent)
+    : QObject(parent)
+    , m_client  (msg->client())
+    , m_edit    (parent)
+    , m_wnd     (new MsgJournalWnd(m_edit))
+    , m_ID      (m->getID())
+    , m_oldID   (m->id())
+    , m_time    (m->getTime())
+
 {
-    m_client = msg->client();
-    m_edit  = parent;
-    m_wnd   = new MsgJournalWnd(m_edit);
     connect(m_wnd, SIGNAL(finished()), this, SLOT(frameDestroyed()));
     m_edit->m_layout->insertWidget(0, m_wnd);
     m_wnd->show();
     JournalMessage	*m = static_cast<JournalMessage*>(msg);
-    m_ID	= m->getID();
-    m_oldID = m->id();
-    m_time  = m->getTime();
     m_wnd->edtSubj->setText(m->getSubject());
     m_wnd->cmbSecurity->setCurrentIndex(m->getPrivate());
     Contact *contact = getContacts()->contact(msg->contact());
-    if (contact){
+    if (contact)
+    {
         clientData *data;
         ClientDataIterator it(contact->clientData);
-        while ((data = ++it) != NULL){
-            if ((m_client.isEmpty() && (data->Sign.toULong() == LIVEJOURNAL_SIGN)) ||
-                (m_client == it.client()->dataName(data))){
-                LiveJournalClient *client = static_cast<LiveJournalClient*>(it.client());
-                for (unsigned i = 1; i < client->getMoods(); i++){
-                    const QString mood = client->getMood(i);
-                    if (mood.isEmpty())
-                        continue;
-                    QString s = mood;
-                    QString ts = i18n(mood);
-                    if (s != ts){
-                        s += " (";
-                        s += ts;
-                        s += ")";
+        while ((data = ++it) != NULL)
+            if (m_client.isEmpty() && data->Sign.toULong() == LIVEJOURNAL_SIGN || m_client == it.client()->dataName(data))
+            {
+                    LiveJournalClient *client = static_cast<LiveJournalClient*>(it.client());
+                    for (unsigned i = 1; i < client->getMoods(); i++)
+                    {
+                        const QString mood = client->getMood(i);
+                        if (mood.isEmpty())
+                            continue;
+                        QString s = mood;
+                        QString ts = i18n(mood);
+                        if (s != ts)
+                        {
+                            s += " (";
+                            s += ts;
+                            s += ")";
+                        }
+                        m_wnd->cmbMood->insertItem(INT_MAX,s);
                     }
-                    m_wnd->cmbMood->insertItem(INT_MAX,s);
-                }
-                m_wnd->cmbMood->setCurrentIndex(static_cast<JournalMessage*>(msg)->getMood());
-                m_wnd->cmbMood->setMinimumSize(m_wnd->cmbMood->sizeHint());
-                break;
+                    m_wnd->cmbMood->setCurrentIndex(static_cast<JournalMessage*>(msg)->getMood());
+                    m_wnd->cmbMood->setMinimumSize(m_wnd->cmbMood->sizeHint());
+                    break;
             }
-        }
     }
     m_wnd->cmbComment->setCurrentIndex(m->getComments());
     QString text = msg->getRichText();
-    if (!text.isEmpty()){
+    if (!text.isEmpty())
+    {
         m_edit->m_edit->setText(text);
         m_edit->m_edit->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
         CorePlugin *core = GET_CorePlugin();
-        if ((msg->getBackground() != msg->getForeground()) && !core->property("OwnColors").toBool()){
+        if ((msg->getBackground() != msg->getForeground()) && !core->property("OwnColors").toBool())
+        {
             m_edit->m_edit->setBackground(msg->getBackground());
             m_edit->m_edit->setForeground(msg->getForeground(), true);
         }

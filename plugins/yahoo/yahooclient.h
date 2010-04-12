@@ -105,8 +105,8 @@ const unsigned LR_CHANGE		= 0;
 const unsigned LR_DELETE		= 1;
 const unsigned LR_CHANGE_GROUP	= 2;
 const unsigned LR_DELETE_GROUP	= 3;
-
-struct YahooUserData : public SIM::clientData
+/*
+struct YahooUserData : public SIM::clientData //Fixme: clientData not a member of SIM
 {
     SIM::Data		Login;
     SIM::Data		Nick;
@@ -122,7 +122,7 @@ struct YahooUserData : public SIM::clientData
     SIM::Data		bChecked;
     SIM::Data		bTyping;
 };
-
+*/
 struct YahooClientData
 {
     SIM::Data	Server;

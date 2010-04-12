@@ -599,6 +599,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\jabberstatus.cpp"
+				>
+			</File>
+			<File
 				RelativePath="jabberworkinfo.cpp"
 				>
 				<FileConfiguration
@@ -1274,7 +1278,32 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputName).h ..."
 						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h&#x0D;&#x0A;"
+						Outputs="$(InputDir)moc_$(InputName).cpp"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\jabberstatus.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputName).h ..."
+						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h"
+						Outputs="$(InputDir)moc_$(InputName).cpp"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputName).h ..."
+						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h"
 						Outputs="$(InputDir)moc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
@@ -1433,200 +1462,46 @@
 			<File
 				RelativePath="discoinfobase.ui"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="infoproxybase.ui"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="jabberaboutinfobase.ui"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="jabberaddbase.ui"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="jabberconfigbase.ui"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="jabberhomeinfobase.ui"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="jabberinfobase.ui"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="jabberpicturebase.ui"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="jabberworkinfobase.ui"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="jidadvsearchbase.ui"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="jidsearchbase.ui"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 		</Filter>
 	</Files>

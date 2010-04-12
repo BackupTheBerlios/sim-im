@@ -775,6 +775,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\icqstatus.cpp"
+				>
+			</File>
+			<File
 				RelativePath="icqvarious.cpp"
 				>
 				<FileConfiguration
@@ -2014,6 +2018,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\icqstatus.h"
+				>
+			</File>
+			<File
 				RelativePath="interestsinfo.h"
 				>
 				<FileConfiguration
@@ -2323,344 +2331,78 @@
 			<File
 				RelativePath="aboutinfobase.ui"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="advsearchbase.ui"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="aimconfigbase.ui"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="aiminfobase.ui"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="aimsearchbase.ui"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="encodingdlgbase.ui"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="homeinfobase.ui"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="icqconfigbase.ui"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="icqinfobase.ui"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="icqpicturebase.ui"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="icqsearchbase.ui"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="icqsecurebase.ui"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="interestsinfobase.ui"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="moreinfobase.ui"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="pastinfobase.ui"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="securedlgbase.ui"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="verifydlgbase.ui"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="warndlgbase.ui"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="workinfobase.ui"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="Uic"
-					/>
-				</FileConfiguration>
 			</File>
 		</Filter>
 	</Files>

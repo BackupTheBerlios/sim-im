@@ -59,13 +59,15 @@ ICQProtocol::~ICQProtocol()
 ClientPtr ICQProtocol::createClient(Buffer *cfg)
 {
 	ClientPtr icq = ClientPtr(new ICQClient(this, cfg, false));
-    //getClientManager()->addClient(icq);
+    //getClientManager()->addClient(icq); //Fixme: remove slashes?!?
     return icq;
 }
 
 SIM::ClientPtr ICQProtocol::createClient(const QString& name)
 {
-
+    ClientPtr icq = ClientPtr(new ICQClient(this, name, false));
+    getClientManager()->addClient(icq);
+    return icq;
 }
 
 IMContact* ICQProtocol::createIMContact(const QSharedPointer<Client>& client)

@@ -39,13 +39,14 @@ const unsigned COMMENT_ENABLE	= 0;
 const unsigned COMMENT_NO_MAIL	= 1;
 const unsigned COMMENT_DISABLE	= 2;
 
-struct LiveJournalUserData : public SIM::clientData
+/*
+struct LiveJournalUserData : public SIM::clientData //Fixme: clientdata not a member of SIM
 {
     SIM::Data	User;
     SIM::Data	Shared;
     SIM::Data	bChecked;
 };
-
+*/
 struct JournalMessageData
 {
     SIM::Data	Subject;
