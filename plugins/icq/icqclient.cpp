@@ -2914,8 +2914,25 @@ QString ICQClient::clientName(ICQUserData *data)
     }
     if (hasCap(data, CAP_QIP)) 
     {
-        res += "QIP 2005a";
-        return res;
+        QString r;
+        r.sprintf("QIP 2005a %lu%lu%lu%lu",
+            (data->getInfoUpdateTime() >> 24) & 0xFF,
+            (data->getInfoUpdateTime() >> 16) & 0xFF,
+            (data->getInfoUpdateTime() >>  8) & 0xFF,
+            (data->getInfoUpdateTime() >>  0) & 0xFF);
+        return res + r;
+    }
+    if (hasCap(data, CAP_INFIUM)) 
+    {
+        QString r;
+        r.sprintf("QIP Infium %lu", data->getInfoUpdateTime());
+        return res + r;
+    }
+    if (hasCap(data, CAP_QIP2010)) 
+    {
+        QString r;
+        r.sprintf("QIP 2010 %lu", data->getInfoUpdateTime());
+        return res + r;
     }
     if (hasCap(data, CAP_JIMM)) 
     {
@@ -2929,28 +2946,32 @@ QString ICQClient::clientName(ICQUserData *data)
             r.sprintf("Jimm %d.%d", maj, min);
         return res + r;
     }
-    if (hasCap(data, CAP_ICQ51)) 
+    if (9 == data->getVersion()) 
     {
-        res += "ICQ 5.1";
-        return res;
-    }
-    if (hasCap(data, CAP_ICQ5_1) && hasCap(data, CAP_ICQ5_3) && hasCap(data, CAP_ICQ5_4)) 
-    {
-        res += "ICQ 5.0";
+        if (hasCap(data, CAP_ICQ51)) // CAP_TZERS
+        {	
+            if (hasCap(data, CAP_LITE_NEW) && hasCap(data, CAP_HOST_STATUS_TEXT_AWARE) &&
+                hasCap(data, CAP_AIM_LIVE_VIDEO) && hasCap(data, CAP_AIM_LIVE_AUDIO)) 
+                res += "ICQ 7";
+            else res += hasCap(data, CAP_HTMLMSGS) && hasCap(data, CAP_AIM_LIVE_VIDEO) && hasCap(data, CAP_AIM_LIVE_AUDIO) ? "ICQ 6" : "ICQ 5.1";
+        } 
+        else if (hasCap(data, CAP_ICQ5_1) && hasCap(data, CAP_ICQ5_3) && hasCap(data, CAP_ICQ5_4)) 
+            res += "ICQ 5.0";
+        if (hasCap(data, CAP_ABV))
+            res += " Abv";
+        else if (hasCap(data, CAP_NETVIGATOR))
+            res += " Netvigator";
+        else if (hasCap(data, CAP_RAMBLER))
+            res += " Rambler";
+
         return res;
     }
     if (hasCap(data, CAP_ICQ5_1)) 
-    {
         log( L_DEBUG, "CAP_ICQ5_1 without all others" );
-    }
     if (hasCap(data, CAP_ICQ5_3)) 
-    {
         log( L_DEBUG, "CAP_ICQ5_3 without all others" );
-    }
     if (hasCap(data, CAP_ICQ5_4)) 
-    {
         log( L_DEBUG, "CAP_ICQ5_4 without all others" );
-    }
     if (hasCap(data, CAP_TRIL_CRYPT) || hasCap(data, CAP_TRILLIAN)) 
     {
         res += "Trillian";

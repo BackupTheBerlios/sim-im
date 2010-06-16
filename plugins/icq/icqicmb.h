@@ -13,7 +13,7 @@ class DirectSocket;
 class TlvList;
 class QTimer;
 
-struct ICQUserData;
+class ICQUserData;
 
 
 struct MessageId
