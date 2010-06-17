@@ -53,13 +53,13 @@ public:
     virtual const SIM::DataDef *userDataDef();
     virtual SIM::IMContact* createIMContact(const QSharedPointer<SIM::Client>& client);
     static const SIM::DataDef *icqUserData;
-	virtual QStringList statuses();
+	virtual QStringList states();
 	virtual SIM::IMStatusPtr status(const QString& id);
 
 private:
 	void initStatuses();
 	void addStatus(ICQStatusPtr status);
-    QList<ICQStatusPtr> m_statuses;
+    QList<ICQStatusPtr> m_states;
 };
 
 class AIMProtocol : public SIM::Protocol
@@ -74,7 +74,7 @@ public:
     virtual const SIM::DataDef *userDataDef();
     virtual SIM::IMContact* createIMContact(const QSharedPointer<SIM::Client>& client);
     static const SIM::DataDef *icqUserData;
-	virtual QStringList statuses();
+	virtual QStringList states();
 	virtual SIM::IMStatusPtr status(const QString& id);
 };
 

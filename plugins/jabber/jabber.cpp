@@ -70,13 +70,13 @@ void JabberProtocol::initStatuses()
 
 void JabberProtocol::addStatus(JabberStatusPtr status)
 {
-    m_statuses.append(status);
+    m_states.append(status);
 }
 
-QStringList JabberProtocol::statuses()
+QStringList JabberProtocol::states()
 {
     QStringList list;
-    foreach(const JabberStatusPtr& status, m_statuses) {
+    foreach(const JabberStatusPtr& status, m_states) {
         list.append(status->id());
     }
     return list;
@@ -84,7 +84,7 @@ QStringList JabberProtocol::statuses()
 
 SIM::IMStatusPtr JabberProtocol::status(const QString& id)
 {
-    foreach(const JabberStatusPtr& status, m_statuses) {
+    foreach(const JabberStatusPtr& status, m_states) {
         if(status->id() == id) {
             return status;
         }

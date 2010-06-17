@@ -45,18 +45,19 @@ using namespace std;
 using namespace SIM;
 
 StatusLabel::StatusLabel(QWidget *parent, Client *client, unsigned id)
-        : QLabel(parent)
+    : QLabel(parent)
+    , m_client(client)
+    , m_bBlink(false)
+    , m_id(id)
+    , m_blinkTimer(NULL)
 {
-    m_client = client;
-    m_bBlink = false;
-    m_id = id;
-    m_blinkTimer = NULL;
     setPict();
 }
 
 void StatusLabel::startBlinkTimer()
 {
-    if (m_blinkTimer == NULL) {
+    if (m_blinkTimer == NULL)
+    {
         m_blinkTimer = new QTimer(this);
         connect(m_blinkTimer, SIGNAL(timeout()), this, SLOT(timeout()));
         m_blinkTimer->start(1000);
@@ -66,7 +67,8 @@ void StatusLabel::startBlinkTimer()
 
 void StatusLabel::stopBlinkTimer()
 {
-    if (m_blinkTimer) {
+    if (m_blinkTimer)
+    {
         delete m_blinkTimer;
         m_blinkTimer = NULL;
     }
@@ -81,17 +83,25 @@ void StatusLabel::setPict()
             IMStatusPtr status;
             startBlinkTimer();
             text = I18N_NOOP("Connecting");
-            if(m_client->protocol()) {
-                if (m_bBlink) {
+            if(m_client->protocol())
+            {
+                if (m_bBlink)
+                {
                     status = m_client->currentStatus();
-                } else {
+                } else
+                {
                     status = m_client->protocol()->status("offline");
                 }
-                icon = status->icon();
-            } else {
+                if (status) //Fixme: this if is only a quickfix...
+                    icon = status->icon();
+            }
+            else
+            {
                 icon = m_bBlink ? Icon("online") : Icon("offline");
             }
-        } else {
+        }
+        else
+        {
             stopBlinkTimer();
             // TODO retreive appropriate icon
             icon = Icon("inactive");
@@ -129,7 +139,7 @@ void StatusLabel::fillStatusMenu(QMenu& menu)
 {
     menu.clear();
     menu.setTitle(m_client->name());
-    QStringList statusNames = m_client->protocol()->statuses();
+    QStringList statusNames = m_client->protocol()->states();
     foreach(const QString& statusId, statusNames) {
         IMStatusPtr status = m_client->protocol()->status(statusId);
         QAction* action = menu.addAction(status->icon(), status->name());

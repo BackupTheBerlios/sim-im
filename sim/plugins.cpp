@@ -269,7 +269,10 @@ namespace SIM
 
     bool PluginManagerPrivate::isPluginProtocol(const QString& pluginname)
     {
-        return getInfo(pluginname)->protocolPlugin;
+        if (getInfo(pluginname))
+            return getInfo(pluginname)->protocolPlugin; 
+        else 
+            return false;
     }
 
     PluginInfo* PluginManagerPrivate::getPluginInfo(const QString &name)

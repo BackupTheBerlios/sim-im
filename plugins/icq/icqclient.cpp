@@ -2946,37 +2946,6 @@ QString ICQClient::clientName(ICQUserData *data)
             r.sprintf("Jimm %d.%d", maj, min);
         return res + r;
     }
-    if (9 == data->getVersion()) 
-    {
-        if (hasCap(data, CAP_ICQ51)) // CAP_TZERS
-        {	
-            if (hasCap(data, CAP_LITE_NEW) && hasCap(data, CAP_HOST_STATUS_TEXT_AWARE) &&
-                hasCap(data, CAP_AIM_LIVE_VIDEO) && hasCap(data, CAP_AIM_LIVE_AUDIO)) 
-                res += "ICQ 7";
-            else res += hasCap(data, CAP_HTMLMSGS) && hasCap(data, CAP_AIM_LIVE_VIDEO) && hasCap(data, CAP_AIM_LIVE_AUDIO) ? "ICQ 6" : "ICQ 5.1";
-        } 
-        else if (hasCap(data, CAP_ICQ5_1) && hasCap(data, CAP_ICQ5_3) && hasCap(data, CAP_ICQ5_4)) 
-            res += "ICQ 5.0";
-        if (hasCap(data, CAP_ABV))
-            res += " Abv";
-        else if (hasCap(data, CAP_NETVIGATOR))
-            res += " Netvigator";
-        else if (hasCap(data, CAP_RAMBLER))
-            res += " Rambler";
-
-        return res;
-    }
-    if (hasCap(data, CAP_ICQ5_1)) 
-        log( L_DEBUG, "CAP_ICQ5_1 without all others" );
-    if (hasCap(data, CAP_ICQ5_3)) 
-        log( L_DEBUG, "CAP_ICQ5_3 without all others" );
-    if (hasCap(data, CAP_ICQ5_4)) 
-        log( L_DEBUG, "CAP_ICQ5_4 without all others" );
-    if (hasCap(data, CAP_TRIL_CRYPT) || hasCap(data, CAP_TRILLIAN)) 
-    {
-        res += "Trillian";
-        return res;
-    }
 
     if (hasCap(data, CAP_SIMOLD)) 
     {
@@ -3008,6 +2977,61 @@ QString ICQClient::clientName(ICQUserData *data)
             res += "/MacOS X";
         return res;
     }
+
+    if (9 == data->getVersion()) 
+    {
+        if (hasCap(data, CAP_ICQ51)) // CAP_TZERS
+        {	
+            if (   hasCap(data, CAP_LITE_NEW)
+                && hasCap(data, CAP_HOST_STATUS_TEXT_AWARE) 
+                && hasCap(data, CAP_AIM_LIVE_VIDEO) 
+                && hasCap(data, CAP_AIM_LIVE_AUDIO) ) 
+            {
+                res += "ICQ 7";
+                return res;
+            }
+            else 
+            {
+                res += hasCap(data, CAP_HTMLMSGS) && hasCap(data, CAP_AIM_LIVE_VIDEO) && hasCap(data, CAP_AIM_LIVE_AUDIO) ? "ICQ 6" : "ICQ 5.1";
+                return res;
+            }
+        } 
+        else if (hasCap(data, CAP_ICQ5_1)
+              && hasCap(data, CAP_ICQ5_3)
+              && hasCap(data, CAP_ICQ5_4)) 
+        {
+            res += "ICQ 5.0";
+            return res;
+        }
+        if (hasCap(data, CAP_ABV))
+        {
+            res += " Abv";
+            return res;
+        }
+        else if (hasCap(data, CAP_NETVIGATOR))
+        {
+            res += " Netvigator";
+            return res;
+        }
+        else if (hasCap(data, CAP_RAMBLER))
+        {
+            res += " Rambler";
+            return res;
+        }
+    }
+    if (hasCap(data, CAP_ICQ5_1)) 
+        log( L_DEBUG, "CAP_ICQ5_1 without all others" );
+    if (hasCap(data, CAP_ICQ5_3)) 
+        log( L_DEBUG, "CAP_ICQ5_3 without all others" );
+    if (hasCap(data, CAP_ICQ5_4)) 
+        log( L_DEBUG, "CAP_ICQ5_4 without all others" );
+    if (hasCap(data, CAP_TRIL_CRYPT) || hasCap(data, CAP_TRILLIAN)) 
+    {
+        res += "Trillian";
+        return res;
+    }
+
+
 
     if (hasCap(data, CAP_LICQ)) 
     {
