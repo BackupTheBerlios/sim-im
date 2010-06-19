@@ -99,14 +99,17 @@ void UserViewConfig::apply()
     CorePlugin::instance()->setValue("SortMode", getSortMode());
     CorePlugin::instance()->setValue("SmallGroupFont", chkSmallFont->isChecked());
     CorePlugin::instance()->setValue("NoScroller", chkScroll->isChecked());
-    if (CorePlugin::instance()->value("UseSysColors").toBool()){
+    if (CorePlugin::instance()->value("UseSysColors").toBool())
+    {
         CorePlugin::instance()->setValue("ColorOnline", 0);
         CorePlugin::instance()->setValue("ColorOffline", 0);
         CorePlugin::instance()->setValue("ColorAway", 0);
         CorePlugin::instance()->setValue("ColorNA", 0);
         CorePlugin::instance()->setValue("ColorDND", 0);
         CorePlugin::instance()->setValue("ColorGroup", 0);
-    }else{
+    }
+    else
+    {
         CorePlugin::instance()->setValue("ColorOnline", btnOnline->color().rgb());
         CorePlugin::instance()->setValue("ColorOffline", btnOffline->color().rgb());
         CorePlugin::instance()->setValue("ColorAway", btnAway->color().rgb());
@@ -135,7 +138,8 @@ void UserViewConfig::apply()
 
 void UserViewConfig::colorsToggled(bool state)
 {
-    if (state){
+    if (state)
+    {
         QColor textColor = palette().color(QPalette::Active, QPalette::Text);
         QColor disabledColor = palette().color(QPalette::Disabled, QPalette::Text);
         btnOnline->setColor(textColor);
@@ -172,17 +176,20 @@ void UserViewConfig::setSortMode(unsigned mode)
 {
     QComboBox *cmb[3] = { cmbSort1, cmbSort2, cmbSort3 };
     unsigned i;
-    for (i = 0; i < 3; i++){
+    for (i = 0; i < 3; i++)
+    {
         cmb[i]->setEnabled(true);
         unsigned m = mode & 0xFF;
         mode = mode >> 8;
-        if (m == 0){
+        if (m == 0)
+        {
             cmb[i++]->setCurrentIndex(3);
             break;
         }
         cmb[i]->setCurrentIndex(m - 1);
     }
-    for (;i < 3; i++){
+    for (;i < 3; i++)
+    {
         cmb[i]->setCurrentIndex(3);
         cmb[i]->setEnabled(false);
     }
@@ -223,16 +230,15 @@ unsigned UserViewConfig::getSortMode()
     unsigned m3 = cmbSort3->currentIndex() + 1;
     if (m3 > 3)
         m3 = 0;
-    if (m1){
+    if (m1)
+    {
         if (m2 == m1)
             m2 = 0;
-        if (m2){
-            if ((m3 == m1) || (m3 == m2))
-                m3 = 0;
-        }else{
+        if (!m2 || m3 == m1 || m3 == m2)
             m3 = 0;
-        }
-    }else{
+    }
+    else
+    {
         m2 = 0;
         m3 = 0;
     }

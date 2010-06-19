@@ -1,19 +1,19 @@
 /***************************************************************************
-                          userview.cpp  -  description
-                             -------------------
-    begin                : Sun Mar 17 2002
-    copyright            : (C) 2002 by Vladimir Shutoff
-    email                : vovan@shutoff.ru
- ***************************************************************************/
+userview.cpp  -  description
+-------------------
+begin                : Sun Mar 17 2002
+copyright            : (C) 2002 by Vladimir Shutoff
+email                : vovan@shutoff.ru
+***************************************************************************/
 
 /***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+*                                                                         *
+***************************************************************************/
 
 #include "icons.h"
 #include "log.h"
@@ -66,23 +66,23 @@ struct JoinContacts
 static JoinContacts joinContactsData;
 
 UserView::UserView() 
-	: UserListBase(NULL)
-	, m_bBlink		(false)
-    , m_bUnreadBlink(false)
-	, m_blinkTimer	(new QTimer(this))
-	, m_unreadTimer (new QTimer(this))
-	, m_current		(NULL)
-	, mTipItem		(NULL) //Refactor: rename to m_TipItem
-	, m_dropContactId(0)
-    , m_dropItem	(NULL)
-    , m_searchItem	(NULL)
-	, m_edtGroup	(new IntLineEdit(viewport()))
-    , m_edtContact	(new IntLineEdit(viewport()))
-	, m_userWnd		(NULL)
+: UserListBase(NULL)
+, m_bBlink		(false)
+, m_bUnreadBlink(false)
+, m_blinkTimer	(new QTimer(this))
+, m_unreadTimer (new QTimer(this))
+, m_current		(NULL)
+, mTipItem		(NULL) //Refactor: rename to m_TipItem
+, m_dropContactId(0)
+, m_dropItem	(NULL)
+, m_searchItem	(NULL)
+, m_edtGroup	(new IntLineEdit(viewport()))
+, m_edtContact	(new IntLineEdit(viewport()))
+, m_userWnd		(NULL)
 {
-	m_bShowOnline	=CorePlugin::instance()->value("ShowOnLine").toBool();
+    m_bShowOnline	=CorePlugin::instance()->value("ShowOnLine").toBool();
     m_bShowEmpty	=CorePlugin::instance()->value("ShowEmptyGroup").toBool();
-	m_bShowOnline	=CorePlugin::instance()->value("ShowOnLine").toBool();
+    m_bShowOnline	=CorePlugin::instance()->value("ShowOnLine").toBool();
     m_bShowEmpty	=CorePlugin::instance()->value("ShowEmptyGroup").toBool();
 
 
@@ -93,7 +93,7 @@ UserView::UserView()
     setIndentation(0);
     setVerticalScrollBarPolicy(CorePlugin::instance()->value("NoScroller").toBool() ? Qt::ScrollBarAlwaysOff : Qt::ScrollBarAsNeeded);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    
+
     connect(m_blinkTimer, SIGNAL(timeout()), this, SLOT(blink()));
     connect(m_unreadTimer, SIGNAL(timeout()), this, SLOT(unreadBlink()));
 
@@ -112,11 +112,11 @@ UserView::UserView()
     QFont font;
     int size = font.pixelSize();
     if (size <= 0)
-	{
+    {
         size = font.pointSize();
         font.setPointSize(size * 3 / 4);
     }
-	else font.setPixelSize(size * 3 / 4);
+    else font.setPixelSize(size * 3 / 4);
     font.setBold(true);
     m_edtGroup->setFont(font);
     connect(m_edtGroup,		SIGNAL(escape()),			this, SLOT(editEscape()));
@@ -139,110 +139,120 @@ bool UserView::processEvent(Event *e)
     switch (e->type())
     {
     case eEventRepaintView:
-		setVerticalScrollBarPolicy(CorePlugin::instance()->value("NoScroller").toBool() ? Qt::ScrollBarAlwaysOff : Qt::ScrollBarAsNeeded);
+        setVerticalScrollBarPolicy(CorePlugin::instance()->value("NoScroller").toBool() ? Qt::ScrollBarAlwaysOff : Qt::ScrollBarAsNeeded);
         break;
     case eEventInit:
         m_bInit = true;
         fill();
         break;
     case eEventContact:
-    {
-        EventContact *ec = static_cast<EventContact*>(e);
-        if(ec->action() != EventContact::eOnline)
-            break;
-        Contact *contact = ec->contact();
-        if (m_bInit){
-            bool bStart = blinks.empty();
-            list<BlinkCount>::iterator it;
-            for (it = blinks.begin(); it != blinks.end(); ++it){
-                if (it->id == contact->id())
-                    break;
-            }
-            if (it != blinks.end()){
-                it->count = BLINK_COUNT;
+        {
+            EventContact *ec = static_cast<EventContact*>(e);
+            if(ec->action() != EventContact::eOnline)
+                break;
+            Contact *contact = ec->contact();
+            if (m_bInit)
+            {
+                bool bStart = blinks.empty();
+                list<BlinkCount>::iterator it;
+                for (it = blinks.begin(); it != blinks.end(); ++it)
+                {
+                    if (it->id == contact->id())
+                        break;
+                }
+                if (it != blinks.end())
+                {
+                    it->count = BLINK_COUNT;
+                    return false;
+                }
+                BlinkCount bc;
+                bc.id = contact->id();
+                bc.count = BLINK_COUNT;
+                blinks.push_back(bc);
+                if (bStart)
+                    m_blinkTimer->start(BLINK_TIMEOUT);
                 return false;
             }
-            BlinkCount bc;
-            bc.id = contact->id();
-            bc.count = BLINK_COUNT;
-            blinks.push_back(bc);
-            if (bStart)
-                m_blinkTimer->start(BLINK_TIMEOUT);
-            return false;
+            break;
         }
-        break;
-    }
     case eEventMessageReceived:
     case eEventMessageDeleted:
     case eEventMessageRead:
-    {
-        EventMessage *em = static_cast<EventMessage*>(e);
-        Message *msg = em->msg();
-        addContactForUpdate(msg->contact());
-        break;
-    }
+        {
+            EventMessage *em = static_cast<EventMessage*>(e);
+            Message *msg = em->msg();
+            addContactForUpdate(msg->contact());
+            break;
+        }
     case eEventCommandExec:
-    {
+        {
             EventCommandExec *ece = static_cast<EventCommandExec*>(e);
             CommandDef *cmd = ece->cmd();
             if (cmd->menu_id == MenuContact){
-                Contact *contact = getContacts()->contact((unsigned long)(cmd->param));
+            Contact *contact = getContacts()->contact((unsigned long)(cmd->param));
                 if (contact){
                     if (cmd->id == CmdContactDelete){
-                        ListViewItem *item = findContactItem(contact->id());
+            			ListViewItem *item = findContactItem(contact->id());
                         if (item){
-                            //scrollTo(model()->index(item->row(), item->column()));
-                            QRect rc = visualItemRect(item);
-                            QPoint p = viewport()->mapToGlobal(rc.topLeft());
-                            rc = QRect(p.x(), p.y(), rc.width(), rc.height());
-                            m_bRemoveHistory = CorePlugin::instance()->value("RemoveHistory").toBool();
-                            BalloonMsg::ask((void*)contact->id(),
-                                            i18n("Delete \"%1\"?") .arg(contact->getName()),
-                                            this, SLOT(deleteContact(void*)), NULL, &rc, NULL,
-                                            i18n("Remove history"), &m_bRemoveHistory);
+                        //scrollTo(model()->index(item->row(), item->column()));
+                        QRect rc = visualItemRect(item);
+                        QPoint p = viewport()->mapToGlobal(rc.topLeft());
+                        rc = QRect(p.x(), p.y(), rc.width(), rc.height());
+                        m_bRemoveHistory = CorePlugin::instance()->value("RemoveHistory").toBool();
+                        BalloonMsg::ask((void*)contact->id(),
+                            i18n("Delete \"%1\"?") .arg(contact->getName()),
+                            this, SLOT(deleteContact(void*)), NULL, &rc, NULL,
+                            i18n("Remove history"), &m_bRemoveHistory);
                         }
                         return true;
                     }
                     if (cmd->id == CmdContactRename){
                         ListViewItem *item = findContactItem(contact->id());
                         if (item){
-                            setCurrentItem(item);
-                            renameContact();
+                        setCurrentItem(item);
+                        renameContact();
                         }
                         return true;
                     }
-                    if (cmd->id == CmdShowAlways){
+                    if (cmd->id == CmdShowAlways)
+                    {
                         SIM::PropertyHubPtr data = contact->getUserData("list", true);
-                        if (!data.isNull()){
+                        if (!data.isNull())
+                        {
                             bool bShow = false;
                             if (cmd->flags & COMMAND_CHECKED)
                                 bShow = true;
-                            if (data->value("ShowAlways").toBool() != bShow){
+                            if (data->value("ShowAlways").toBool() != bShow)
+                            {
                                 data->setValue("ShowAlways", bShow);
                                 EventContact(contact, EventContact::eChanged).process();
                             }
                         }
                         return true;
                     }
-                    if (cmd->id == CmdClose){
+                    if (cmd->id == CmdClose)
+                    {
                         UserWnd *wnd = NULL;
                         QWidgetList list = QApplication::topLevelWidgets();
                         QWidget * w;
                         foreach(w,list)
-						{
-                            if (w->inherits("Container")){
+                        {
+                            if (w->inherits("Container"))
+                            {
                                 Container *c =  static_cast<Container*>(w);
                                 wnd = c->wnd((unsigned long)(cmd->param));
                                 if (wnd)
                                     break;
                             }
                         }
-                        if (wnd){
+                        if (wnd)
+                        {
                             delete wnd;
                             return true;
                         }
                     }
-                    if (cmd->id > CmdSendMessage){
+                    if (cmd->id > CmdSendMessage)
+                    {
                         Command c;
                         c->id	   = cmd->id - CmdSendMessage;
                         c->menu_id = MenuMessage;
@@ -254,11 +264,14 @@ bool UserView::processEvent(Event *e)
                     }
                 }
             }
-            if (cmd->menu_id == MenuContactGroup){
+            if (cmd->menu_id == MenuContactGroup)
+            {
                 Contact *contact = getContacts()->contact((unsigned long)(cmd->param));
-                if (contact){
+                if (contact)
+                {
                     Group *grp = getContacts()->group(cmd->id - CmdContactGroup);
-                    if (grp && ((int)grp->id() != contact->getGroup())){
+                    if (grp && ((int)grp->id() != contact->getGroup()))
+                    {
                         contact->setGroup(grp->id());
                         EventContact(contact, EventContact::eChanged).process();
                         return true;
@@ -266,32 +279,32 @@ bool UserView::processEvent(Event *e)
                 }
             }
             if (cmd->menu_id == MenuContainer)
-			{
+            {
                 Contact *contact = getContacts()->contact((unsigned long)(cmd->param));
-                if (contact){
+                if (contact)
+                {
                     Container *from = NULL;
                     Container *to = NULL;
                     QWidgetList list = QApplication::topLevelWidgets();
                     QWidget * w;
                     unsigned max_id = 0;
                     foreach(w,list)
-					{
-                        if (w->inherits("Container")){
+                    {
+                        if (w->inherits("Container"))
+                        {
                             Container *c = static_cast<Container*>(w);
                             if (c->getId() == cmd->id)
                                 to = c;
                             if (c->wnd(contact->id()))
                                 from = c;
-                            if (!(c->getId() & CONTAINER_GRP)){
-                                if (max_id < c->getId())
-                                    max_id = c->getId();
-                            }
+                            if (!(c->getId() & CONTAINER_GRP) && max_id < c->getId())
+                                max_id = c->getId();
                         }
                     }
-                    if (from && to && (from == to))
+                    if (from && to && from == to)
                         return true;
                     if (from)
-					{
+                    {
                         m_userWnd = from->wnd(contact->id());
                         from->removeUserWnd(m_userWnd);
                         delete m_userWnd;
@@ -309,10 +322,12 @@ bool UserView::processEvent(Event *e)
                 }
                 return true;
             }
-            if (cmd->id == CmdOnline){
+            if (cmd->id == CmdOnline)
+            {
                 CorePlugin::instance()->setValue("ShowOnLine", ((cmd->flags & COMMAND_CHECKED) != 0));
                 m_bShowOnline = (cmd->flags & COMMAND_CHECKED);
-                if (cmd->menu_id){
+                if (cmd->menu_id)
+                {
                     CommandDef c = *cmd;
                     c.bar_id	= ToolBarMain;
                     c.bar_grp   = 0x4000;
@@ -320,7 +335,8 @@ bool UserView::processEvent(Event *e)
                 }
                 fill();
             }
-            if (cmd->id == CmdEmptyGroup){
+            if (cmd->id == CmdEmptyGroup)
+            {
                 CorePlugin::instance()->setValue("ShowEmptyGroup", ((cmd->flags & COMMAND_CHECKED) != 0));
                 m_bShowEmpty = (cmd->flags & COMMAND_CHECKED);
                 fill();
@@ -331,8 +347,10 @@ bool UserView::processEvent(Event *e)
                 setGroupMode(1);
             if (cmd->id == CmdGrpMode2)
                 setGroupMode(2);
-            if (cmd->id == CmdGrpCreate){
-                if (CorePlugin::instance()->value("GroupMode").toUInt()){
+            if (cmd->id == CmdGrpCreate)
+            {
+                if (CorePlugin::instance()->value("GroupMode").toUInt())
+                {
                     /* Show empty groups because a new group is empty... */
                     CorePlugin::instance()->setValue("ShowEmptyGroup", true);
                     m_bShowEmpty = true;
@@ -340,68 +358,76 @@ bool UserView::processEvent(Event *e)
                     Group *g = getContacts()->group(0, true);
                     drawUpdates();
                     ListViewItem *item = findGroupItem(g->id());
-                    if (item){
+                    if (item)
+                    {
                         setCurrentItem(item);
                         QTimer::singleShot(0, this, SLOT(renameGroup()));
                     }
                 }
                 return true;
             }
-            if (cmd->id == CmdGrpRename){
+            if (cmd->id == CmdGrpRename)
+            {
                 ListViewItem *item = findGroupItem((unsigned long)(cmd->param));
-                if (item){
+                if (item)
+                {
                     setCurrentItem(item);
                     renameGroup();
                 }
                 return true;
             }
-            if (cmd->id == CmdGrpUp){
+            if (cmd->id == CmdGrpUp)
+            {
                 unsigned long grp_id = (unsigned long)(cmd->param);
                 getContacts()->moveGroup(grp_id, true);
                 ListViewItem *item = findGroupItem(grp_id);
-                if (item){
+                if (item)
                     //scrollTo(model()->index(item->row(), item->column()));
                     setCurrentItem(item);
-                }
                 return true;
             }
-            if (cmd->id == CmdGrpDown){
+            if (cmd->id == CmdGrpDown)
+            {
                 unsigned long grp_id = (unsigned long)(cmd->param);
                 getContacts()->moveGroup(grp_id, false);
                 ListViewItem *item = findGroupItem(grp_id);
-                if (item){
+                if (item)
                     //scrollTo(model()->index(item->row(), item->column()));
                     setCurrentItem(item);
-                }
                 return true;
             }
-            if (cmd->id == CmdGrpDelete){
+            if (cmd->id == CmdGrpDelete)
+            {
                 unsigned long grp_id = (unsigned long)(cmd->param);
                 ListViewItem *item = findGroupItem(grp_id);
                 Group *g = getContacts()->group(grp_id);
-                if (item && g){
+                if (item && g)
+                {
                     //scrollTo(model()->index(item->row(), item->column()));
                     QRect rc = visualItemRect(item);
                     QPoint p = viewport()->mapToGlobal(rc.topLeft());
                     rc = QRect(p.x(), p.y(), rc.width(), rc.height());
                     BalloonMsg::ask((void*)grp_id,
-                                    i18n("Delete \"%1\"?") .arg(g->getName()),
-                                    this, SLOT(deleteGroup(void*)), NULL, &rc);
+                        i18n("Delete \"%1\"?") .arg(g->getName()),
+                        this, SLOT(deleteGroup(void*)), NULL, &rc);
                 }
             }
             break;
         }
-    case eEventCheckCommandState:{
+    case eEventCheckCommandState:
+        {
             EventCheckCommandState *ecs = static_cast<EventCheckCommandState*>(e);
             CommandDef *cmd = ecs->cmd();
-            if (cmd->menu_id == MenuGroups){
+            if (cmd->menu_id == MenuGroups)
+            {
                 cmd->flags = cmd->flags & (~COMMAND_CHECKED);
-                if (((cmd->id == CmdGrpOff) && (CorePlugin::instance()->value("GroupMode").toUInt() == 0)) ||
-                        ((cmd->id == CmdGrpMode1) && (CorePlugin::instance()->value("GroupMode").toUInt() == 1)) ||
-                        ((cmd->id == CmdGrpMode2) && (CorePlugin::instance()->value("GroupMode").toUInt() == 2)) ||
-                        ((cmd->id == CmdOnline) && CorePlugin::instance()->value("ShowOnLine").toBool()))
+                if (((cmd->id == CmdGrpOff)   && (CorePlugin::instance()->value("GroupMode").toUInt() == 0)) ||
+                    ((cmd->id == CmdGrpMode1) && (CorePlugin::instance()->value("GroupMode").toUInt() == 1)) ||
+                    ((cmd->id == CmdGrpMode2) && (CorePlugin::instance()->value("GroupMode").toUInt() == 2)) ||
+                    ((cmd->id == CmdOnline)   &&  CorePlugin::instance()->value("ShowOnLine").toBool()    ))
                     cmd->flags |= COMMAND_CHECKED;
-                if (cmd->id == CmdEmptyGroup){
+                if (cmd->id == CmdEmptyGroup)
+                {
                     if (CorePlugin::instance()->value("GroupMode").toUInt() == 0)
                         return false;
                     if (CorePlugin::instance()->value("ShowEmptyGroup").toBool())
@@ -409,31 +435,31 @@ bool UserView::processEvent(Event *e)
                 }
                 return true;
             }
-            if (cmd->menu_id == MenuContact){
-                if (cmd->id == CmdContactTitle){
-                    Contact *contact = getContacts()->contact((unsigned long)(cmd->param));
-                    if (contact){
-                        cmd->text_wrk = contact->getName();
-                        return true;
-                    }
+            if (cmd->menu_id == MenuContact)
+            {
+                Contact *contact = getContacts()->contact((unsigned long)(cmd->param));
+                if (cmd->id == CmdContactTitle && contact)
+                {
+                    cmd->text_wrk = contact->getName();
+                    return true;
                 }
-                if (cmd->id == CmdShowAlways){
-                    Contact *contact = getContacts()->contact((unsigned long)(cmd->param));
-                    if (contact){
-                        SIM::PropertyHubPtr data = contact->getUserData("list", true);
-                        cmd->flags &= ~COMMAND_CHECKED;
-                        if (!data.isNull() && data->value("ShowAlways").toBool())
-                            cmd->flags |= COMMAND_CHECKED;
-                        return true;
-                    }
+                if (cmd->id == CmdShowAlways && contact)
+                {
+                    SIM::PropertyHubPtr data = contact->getUserData("list", true);
+                    cmd->flags &= ~COMMAND_CHECKED;
+                    if (!data.isNull() && data->value("ShowAlways").toBool())
+                        cmd->flags |= COMMAND_CHECKED;
+                    return true;
                 }
-                if (cmd->id == CmdClose){
+                if (cmd->id == CmdClose)
+                {
                     UserWnd *wnd = NULL;
                     QWidgetList list = QApplication::topLevelWidgets();
                     QWidget * w;
                     foreach(w,list)
-					{
-                        if (w->inherits("Container")){
+                    {
+                        if (w->inherits("Container"))
+                        {
                             wnd = static_cast<Container*>(w)->wnd((unsigned long)(cmd->param));
                             if (wnd)
                                 break;
@@ -442,7 +468,8 @@ bool UserView::processEvent(Event *e)
                     if (wnd)
                         return true;
                 }
-                if (cmd->id == CmdSendMessage){
+                if (cmd->id == CmdSendMessage)
+                {
                     EventMenuGetDef eMenu(MenuMessage);
                     eMenu.process();
                     CommandsDef *cmdsMsg = eMenu.defs();
@@ -458,7 +485,8 @@ bool UserView::processEvent(Event *e)
 
                     CommandsList it(*cmdsMsg, true);
                     CommandDef *c;
-                    while ((c = ++it) != NULL){
+                    while ((c = ++it) != NULL)
+                    {
                         cmds[nCmds] = *c;
                         cmds[nCmds].id = CmdSendMessage + c->id;
                         cmds[nCmds].menu_id = MenuContact;
@@ -468,24 +496,27 @@ bool UserView::processEvent(Event *e)
                     cmd->flags |= COMMAND_RECURSIVE;
                     return true;
                 }
-                if (cmd->id > CmdSendMessage){
+                if (cmd->id > CmdSendMessage)
+                {
                     Command c;
                     c->id	   = cmd->id - CmdSendMessage;
                     c->menu_id = MenuMessage;
                     c->param   = cmd->param;
                     bool res = EventCheckCommandState(c).process();
-                    if (res && (c->flags & COMMAND_RECURSIVE)){
+                    if (res && (c->flags & COMMAND_RECURSIVE))
+                    {
                         cmd->flags |= COMMAND_RECURSIVE;
                         cmd->param = c->param;
                     }
-                    if (res) {
+                    if (res) 
                         cmd->flags = c->flags;
-                    }
                     return res;
                 }
             }
-            if (cmd->menu_id == MenuContactGroup){
-                if (cmd->id == CmdContactGroup){
+            if (cmd->menu_id == MenuContactGroup)
+            {
+                if (cmd->id == CmdContactGroup)
+                {
                     unsigned grpId = 0;
                     Contact *contact = getContacts()->contact((unsigned long)(cmd->param));
                     if (contact)
@@ -498,13 +529,14 @@ bool UserView::processEvent(Event *e)
                     CommandDef *cmds = new CommandDef[nGroups + 1];
                     it.reset();
                     nGroups = 0;
-                    while ((grp = ++it) != NULL){
+                    while ((grp = ++it) != NULL)
+                    {
                         if (grp->id() == 0) continue;
                         CommandDef &c = cmds[nGroups++];
                         c = *cmd;
                         c.id = CmdContactGroup + grp->id();
                         c.flags = COMMAND_DEFAULT;
-                        if ((grp->id() == grpId) && contact->id())
+                        if (grp->id() == grpId && contact->id())
                             c.flags |= COMMAND_CHECKED;
                         c.text_wrk = grp->getName();
                     }
@@ -521,39 +553,45 @@ bool UserView::processEvent(Event *e)
                     return true;
                 }
             }
-            if (cmd->menu_id == MenuGroup){
+            if (cmd->menu_id == MenuGroup)
+            {
                 unsigned long grp_id = (unsigned long)(cmd->param);
-                if (grp_id){
-                    if (cmd->id == CmdGrpTitle){
-                        Group *g = getContacts()->group(grp_id);
-                        if (g)
-                            cmd->text_wrk = g->getName();
+                if (grp_id)
+                {
+                    Group *lgroup = getContacts()->group(grp_id);
+                    if (cmd->id == CmdGrpTitle && lgroup)
+                    {
+                        cmd->text_wrk = lgroup->getName();
                         return true;
                     }
-                    if ((cmd->id == CmdGrpDelete) || (cmd->id == CmdGrpRename)){
+                    if (cmd->id == CmdGrpDelete || cmd->id == CmdGrpRename)
+                    {
                         cmd->flags &= ~COMMAND_CHECKED;
                         return true;
                     }
-                    if (cmd->id == CmdGrpUp){
+                    if (cmd->id == CmdGrpUp)
+                    {
                         if (getContacts()->groupIndex(grp_id) <= 1)
                             cmd->flags |= COMMAND_DISABLED;
                         cmd->flags &= ~COMMAND_CHECKED;
                         return true;
                     }
-                    if (cmd->id == CmdGrpDown){
+                    if (cmd->id == CmdGrpDown)
+                    {
                         if (getContacts()->groupIndex(grp_id) >= getContacts()->groupCount() - 1)
                             cmd->flags |= COMMAND_DISABLED;
                         cmd->flags &= ~COMMAND_CHECKED;
                         return true;
                     }
-                }else{
-                    if (cmd->id == CmdGrpTitle){
-                        cmd->text = I18N_NOOP("Not in list");
-                        return true;
-                    }
+                }
+                else if (cmd->id == CmdGrpTitle)
+                {
+                    cmd->text = I18N_NOOP("Not in list");
+                    return true;
                 }
             }
-            if (cmd->id == CmdGrpCreate) {
+            if (cmd->id == CmdGrpCreate) 
+            {
                 cmd->flags &= ~COMMAND_CHECKED;
                 return CorePlugin::instance()->value("GroupMode").toUInt() ? true : false;
             }
@@ -562,7 +600,8 @@ bool UserView::processEvent(Event *e)
     case eEventIconChanged:
         viewport()->repaint();
         break;
-    case eEventRaiseWindow:{
+    case eEventRaiseWindow:
+        {
             EventRaiseWindow *w = static_cast<EventRaiseWindow*>(e);
             QWidget *o = w->widget();
             if (o && o->inherits("MainWindow"))
@@ -593,11 +632,13 @@ void UserView::deleteContact(void *p)
 
     // Looking for unread messages for this contact in order to delete them
     int no_more_messages_flag;
-    do{
+    do
+    {
       no_more_messages_flag = 1;
       // we should restart unread messages iteration after each message deletion
       // because deleting message will change "unread" list
-      for (list<msg_id>::iterator it = CorePlugin::instance()->unread.begin(); it != CorePlugin::instance()->unread.end(); ++it){
+      for (list<msg_id>::iterator it = CorePlugin::instance()->unread.begin(); it != CorePlugin::instance()->unread.end(); ++it)
+      {
           msg_id &message_id = *it;
           if ( message_id.contact == contact->id())
           {
@@ -610,7 +651,8 @@ void UserView::deleteContact(void *p)
             break;
           }
        }
-    } while (!no_more_messages_flag);
+    } 
+    while (!no_more_messages_flag);
 
     CorePlugin::instance()->setValue("RemoveHistory", m_bRemoveHistory);
     if (!m_bRemoveHistory)
@@ -627,13 +669,14 @@ void UserView::renameGroup()
     if (i->type() != GRP_ITEM)
         return;
     GroupItem *grpItem = static_cast<GroupItem*>(item);
-    Group *g = getContacts()->group(grpItem->id());
-    if (g){
+    Group *lgroup = getContacts()->group(grpItem->id());
+    if (lgroup)
+    {
         //scrollTo(model()->index(item->row(), item->column()));
-        QString name = g->getName();
+        QString name = lgroup->getName();
         QRect rc = visualItemRect(item);
         rc.setLeft(rc.left() + 18);
-        m_edtGroup->id = g->id();
+        m_edtGroup->id = lgroup->id();
         m_edtGroup->setGeometry(rc);
         m_edtGroup->setText(name.length() ? name : i18n("New group"));
         m_edtGroup->setSelection(0, m_edtGroup->text().length());
@@ -652,7 +695,8 @@ void UserView::renameContact()
         return;
     ContactItem *contactItem = static_cast<ContactItem*>(item);
     Contact *contact = getContacts()->contact(contactItem->id());
-    if (contact){
+    if (contact)
+    {
         //scrollTo(model()->index(item->row(), item->column()));
         QString name = contact->getName();
         QRect rc = visualItemRect(item);
@@ -668,7 +712,7 @@ void UserView::renameContact()
 
 void UserView::setGroupMode(unsigned mode, bool bFirst)
 {
-    if (!bFirst && (CorePlugin::instance()->value("GroupMode").toUInt() == mode))
+    if (!bFirst && CorePlugin::instance()->value("GroupMode").toUInt() == mode)
         return;
     CorePlugin::instance()->setValue("GroupMode", mode);
     m_groupMode = mode;
@@ -679,11 +723,9 @@ void UserView::setGroupMode(unsigned mode, bool bFirst)
 bool UserView::eventFilter(QObject *obj, QEvent *e)
 {
     bool res = ListView::eventFilter(obj, e);
-    if (obj->inherits("QMainWindow"))
-	{
-        if (e->type() == QEvent::Show)
-            QTimer::singleShot(0, this, SLOT(repaintView()));
-    }
+    if (obj->inherits("QMainWindow") && 
+        e->type() == QEvent::Show)
+        QTimer::singleShot(0, this, SLOT(repaintView()));
     return res;
 }
 
@@ -703,12 +745,11 @@ void UserView::mouseReleaseEvent(QMouseEvent *e)
 {
     ListViewItem *item = m_pressedItem;
     UserListBase::mouseReleaseEvent(e);
-    if (item){
-        if (!CorePlugin::instance()->value("UseDblClick").toBool()){
-            m_current = item;
-            QTimer::singleShot(0, this, SLOT(doClick()));
-        }
-    }
+    if (!item || CorePlugin::instance()->value("UseDblClick").toBool())
+        return;
+
+    m_current = item;
+    QTimer::singleShot(0, this, SLOT(doClick()));
 }
 
 void UserView::mouseDoubleClickEvent(QMouseEvent *e)
@@ -723,9 +764,7 @@ void UserView::doClick()
     if (m_current == NULL)
         return;
     if (m_current->isExpandable() && !CorePlugin::instance()->value("UseDblClick").toBool())
-    {
         m_current->setOpen(!m_current->isOpen());
-    }
     else if (static_cast<UserViewItemBase*>(m_current)->type() == USR_ITEM)
     {
         ContactItem *item = static_cast<ContactItem*>(m_current);
@@ -736,27 +775,31 @@ void UserView::doClick()
 
 void UserView::keyPressEvent(QKeyEvent *e)
 {
-    if (CorePlugin::instance()->value("UseDblClick").toBool() || m_searchItem){
-        if (m_searchItem) {
-	    int store = 0;
-	    list<ListViewItem*> items;
-	    list<ListViewItem*>::iterator it;
+    if (CorePlugin::instance()->value("UseDblClick").toBool() || m_searchItem)
+    {
+        if (m_searchItem) 
+        {
+            int store = 0;
+            list<ListViewItem*> items;
+            list<ListViewItem*>::iterator it;
             search(items);
-	    if (!items.empty()) {
-	        for (it = items.begin(); it != items.end(); ++it)
-  	            if (*it == m_searchItem) {
-		    store = 1;
-	        }
-	        if (!store) m_searchItem = items.front();
-	    } else {
-	        m_search = QString::null;
-	        m_searchItem = NULL;
+            if (!items.empty()) 
+            {
+                for (it = items.begin(); it != items.end(); ++it)
+                    if (*it == m_searchItem) 
+                        store = 1;
+                if (!store) m_searchItem = items.front();
             }
-	    setCurrentItem(m_searchItem);
-	}
-        switch (e->key()){
-        case Qt::Key_Return:
-        case Qt::Key_Enter:
+            else 
+            {
+                m_search = QString::null;
+                m_searchItem = NULL;
+            }
+            setCurrentItem(m_searchItem);
+        }
+        if (e->key() == Qt::Key_Return || 
+            e->key() == Qt::Key_Enter)
+        {
             m_current = currentItem();
             QTimer::singleShot(0, this, SLOT(doClick()));
             return;
@@ -767,42 +810,51 @@ void UserView::keyPressEvent(QKeyEvent *e)
         bTip = true;
     list<ListViewItem*> old_items;
     list<ListViewItem*> new_items;
-    switch (e->key()){
-        case Qt::Key_Backspace:
-        if (m_search.isEmpty()){
+    switch (e->key())
+    {
+    case Qt::Key_Backspace:
+        if (m_search.isEmpty())
+        {
             UserListBase::keyPressEvent(e);
             return;
         }
         search(old_items);
         m_search = m_search.left(m_search.length() - 1);
-        if (m_search.isEmpty()){
+        if (m_search.isEmpty())
+        {
             m_searchItem = NULL;
             list<ListViewItem*>::iterator it;
             for (it = closed_items.begin(); it != closed_items.end(); ++it)
-                 (*it)->setOpen(false);
-        }else{
+                (*it)->setOpen(false);
+        }
+        else
+        {
             search(new_items);
-            if (new_items.empty()){
+            if (new_items.empty())
+            {
                 m_search = QString::null;
                 m_searchItem = NULL;
-            }else{
-                m_searchItem = new_items.front();
             }
+            else
+                m_searchItem = new_items.front();
         }
         break;
-		case Qt::Key_Escape:
-        if (m_search.isEmpty()){
+    case Qt::Key_Escape:
+        if (m_search.isEmpty())
+        {
             UserListBase::keyPressEvent(e);
             return;
         }
         stopSearch();
         return;
-		case Qt::Key_Up:
-        if (m_search.isEmpty()){
+    case Qt::Key_Up:
+        if (m_search.isEmpty())
+        {
             UserListBase::keyPressEvent(e);
             return;
         }
-        if (m_searchItem){
+        if (m_searchItem)
+        {
             search(old_items);
             list<ListViewItem*>::iterator it_old;
             for (it_old = old_items.begin(); it_old != old_items.end(); ++it_old)
@@ -810,53 +862,61 @@ void UserView::keyPressEvent(QKeyEvent *e)
                     break;
             if (it_old != old_items.begin())
                 it_old--;
-            if (it_old == old_items.begin()){
+            if (it_old == old_items.begin())
+            {
                 QApplication::beep();
                 return;
             }
             m_searchItem = *it_old;
         }
         break;
-		case Qt::Key_Down:
-        if (m_search.isEmpty()){
+    case Qt::Key_Down:
+        if (m_search.isEmpty())
+        {
             UserListBase::keyPressEvent(e);
             return;
         }
-        if (m_searchItem){
+        if (m_searchItem)
+        {
             search(old_items);
             list<ListViewItem*>::iterator it_old;
             for (it_old = old_items.begin(); it_old != old_items.end(); ++it_old)
-                if ((*it_old) == m_searchItem)
+                if (*it_old == m_searchItem)
                     break;
             if (it_old != old_items.end())
                 it_old++;
-            if (it_old == old_items.end()){
+            if (it_old == old_items.end())
+            {
                 QApplication::beep();
                 return;
             }
             m_searchItem = *it_old;
         }
         break;
-		case Qt::Key_Plus:
-		case Qt::Key_Minus:
-        if (m_search.isEmpty()){
+    case Qt::Key_Plus:
+    case Qt::Key_Minus:
+        if (m_search.isEmpty())
+        {
             ListViewItem *item = currentItem();
-            if (item && item->isExpandable()){
+            if (item && item->isExpandable())
+            {
                 UserListBase::keyPressEvent(e);
                 return;
             }
         }
-		case Qt::Key_Delete:
+    case Qt::Key_Delete:
         // e->text() is not empty, but we don't need to specially handle Del
         UserListBase::keyPressEvent(e);
         return;
     default:
         QString t = e->text();
-        if (t.isEmpty()){
+        if (t.isEmpty())
+        {
             UserListBase::keyPressEvent(e);
             return;
         }
-        if (m_search.isEmpty()) {
+        if (m_search.isEmpty())
+        {
             closed_items.clear();
             for(int c = 0; c < topLevelItemCount(); c++)
             {
@@ -869,18 +929,20 @@ void UserView::keyPressEvent(QKeyEvent *e)
         search(old_items);
         m_search += t;
         search(new_items);
-        if (new_items.empty()){
+        if (new_items.empty())
+        {
             m_search = save_search;
             search(new_items);
             QApplication::beep();
             return;
-        }else{
-            m_searchItem = new_items.front();
         }
+        else
+            m_searchItem = new_items.front();
     }
     list<ListViewItem*>::iterator it_old;
     list<ListViewItem*>::iterator it_new;
-    for (it_old = old_items.begin(); it_old != old_items.end(); ++it_old){
+    for (it_old = old_items.begin(); it_old != old_items.end(); ++it_old)
+    {
         for (it_new = new_items.begin(); it_new != new_items.end(); ++it_new)
             if (*it_new == *it_old)
                 break;
@@ -890,17 +952,19 @@ void UserView::keyPressEvent(QKeyEvent *e)
     for (it_new = new_items.begin(); it_new != new_items.end(); ++it_new)
         (*it_new)->repaint();
     setCurrentItem(m_searchItem);
-    if (m_searchItem){
+    if (m_searchItem)
+    {
         //scrollTo(model()->index(m_searchItem->row(), m_searchItem->column()));
     }
-    if (m_search.isEmpty() || (m_searchItem == NULL)){
+    if (m_search.isEmpty() || (m_searchItem == NULL))
+    {
         QToolTip::hideText();
-    }else{
-        QString tip = i18n("Search: %1") .arg(m_search);
-        QRect tipRect = visualItemRect(m_searchItem);
-        QPoint p = viewport()->mapToGlobal(tipRect.topLeft());
-        QToolTip::showText( mapToGlobal( tipRect.topLeft() ), tip, this, tipRect );
+        return;
     }
+    QString tip = i18n("Search: %1") .arg(m_search);
+    QRect tipRect = visualItemRect(m_searchItem);
+    QPoint p = viewport()->mapToGlobal(tipRect.topLeft());
+    QToolTip::showText( mapToGlobal( tipRect.topLeft() ), tip, this, tipRect );
 }
 
 void UserView::stopSearch()
@@ -967,28 +1031,32 @@ void UserView::editContactEnter()
 
 unsigned UserView::getUnread(unsigned contact_id)
 {
-    for (list<msg_id>::iterator it = CorePlugin::instance()->unread.begin(); it != CorePlugin::instance()->unread.end(); ++it){
-        if (it->contact == contact_id){
-            if (!m_unreadTimer->isActive()){
+    for (list<msg_id>::iterator it = CorePlugin::instance()->unread.begin(); it != CorePlugin::instance()->unread.end(); ++it)
+        if (it->contact == contact_id)
+        {
+            if (!m_unreadTimer->isActive())
+            {
                 m_bUnreadBlink = true;
                 m_unreadTimer->start(BLINK_TIMEOUT);
             }
             return it->type;
         }
-    }
     return 0;
 }
 
 static void resetUnread(ListViewItem *item, list<ListViewItem*> &grp)
 {
-    if (static_cast<UserViewItemBase*>(item)->type() == GRP_ITEM){
+    if (static_cast<UserViewItemBase*>(item)->type() == GRP_ITEM)
+    {
         list<ListViewItem*>::iterator it;
         for (it = grp.begin(); it != grp.end(); ++it)
             if ((*it) == item)
                 break;
-        if (it == grp.end()){
+        if (it == grp.end())
+        {
             GroupItem *group = static_cast<GroupItem*>(item);
-            if (group->m_unread){
+            if (group->m_unread)
+            {
                 group->m_unread = 0;
                 if (!group->isOpen())
                     group->repaint();
@@ -1009,9 +1077,10 @@ void UserView::unreadBlink()
     m_bUnreadBlink = !m_bUnreadBlink;
     list<unsigned> blinks;
     list<unsigned>::iterator itb;
-    for (list<msg_id>::iterator it = CorePlugin::instance()->unread.begin(); it != CorePlugin::instance()->unread.end(); ++it){
+    for (list<msg_id>::iterator it = CorePlugin::instance()->unread.begin(); it != CorePlugin::instance()->unread.end(); ++it)
+    {
         for (itb = blinks.begin(); itb != blinks.end(); ++itb)
-            if ((*itb) == it->contact)
+            if (*itb == it->contact)
                 break;
         if (itb != blinks.end())
             continue;
@@ -1022,13 +1091,15 @@ void UserView::unreadBlink()
         m_unreadTimer->stop();
     else
 	{
-        for (itb = blinks.begin(); itb != blinks.end(); ++itb){
+        for (itb = blinks.begin(); itb != blinks.end(); ++itb)
+        {
             ContactItem *contact = findContactItem((*itb), NULL);
             if (contact == NULL)
                 return;
             update();
             //repaintItem(contact);
-            if (CorePlugin::instance()->value("GroupMode").toUInt() && !contact->parent()->isExpanded()){
+            if (CorePlugin::instance()->value("GroupMode").toUInt() && !contact->parent()->isExpanded())
+            {
                 GroupItem *group = static_cast<GroupItem*>(contact->parent());
                 group->m_unread = contact->m_unread;
                 update();
@@ -1036,7 +1107,8 @@ void UserView::unreadBlink()
             }
         }
     }
-    if (CorePlugin::instance()->value("GroupMode").toUInt()){
+    if (CorePlugin::instance()->value("GroupMode").toUInt())
+    {
         for(int c = 0; c < topLevelItemCount(); c++)
         {
             ListViewItem *i = static_cast<ListViewItem*>(topLevelItem(c));
@@ -1049,9 +1121,11 @@ void UserView::blink()
 {
     m_bBlink = !m_bBlink;
     list<BlinkCount>::iterator it;
-    for (it = blinks.begin(); it != blinks.end();){
+    for (it = blinks.begin(); it != blinks.end();)
+    {
         ContactItem *contact = findContactItem(it->id, NULL);
-        if (contact == NULL){
+        if (contact == NULL)
+        {
             blinks.erase(it);
             it = blinks.begin();
             break;
@@ -1065,8 +1139,10 @@ void UserView::blink()
         return;
     for (it = blinks.begin(); it != blinks.end(); ++it)
         it->count--;
-    for (it = blinks.begin(); it != blinks.end(); ){
-        if (it->count){
+    for (it = blinks.begin(); it != blinks.end(); )
+    {
+        if (it->count)
+        {
             ++it;
             continue;
         }
@@ -1126,14 +1202,12 @@ QMimeData *UserView::mimeData( const QList<QTreeWidgetItem *> items ) const
 
 QMimeData *UserView::dragObject()
 {
-    if (currentItem() == NULL)
-        return NULL;
     UserViewItemBase *base_item = static_cast<UserViewItemBase*>(currentItem());
-    if (base_item->type() != USR_ITEM)
-        return NULL;
     ContactItem *item = static_cast<ContactItem*>(currentItem());
     Contact *contact = getContacts()->contact(item->id());
-    if (contact == NULL)
+    if (currentItem() == NULL || 
+        contact == NULL ||
+        base_item->type() != USR_ITEM )
         return NULL;
     return new UserViewContactDragObject(this, contact);
 }
@@ -1156,15 +1230,19 @@ void UserView::dropEvent(QDropEvent *e)
 void UserView::dragEvent(QDropEvent *e, bool isDrop)
 {
     ListViewItem *list_item = itemAt(e->pos());
-    if (list_item == NULL){
+    if (list_item == NULL)
+    {
         e->ignore();
         return;
     }
     UserViewItemBase *item = static_cast<UserViewItemBase*>(list_item);
-    switch (item->type()){
+    switch (item->type())
+    {
     case GRP_ITEM:
-        if (ContactDragObject::canDecode(e)){
-            if (isDrop){
+        if (ContactDragObject::canDecode(e))
+        {
+            if (isDrop)
+            {
                 Contact *contact = ContactDragObject::decode(e);
                 m_dropItem = item;
                 m_dropContactId = contact->id();
@@ -1176,15 +1254,19 @@ void UserView::dragEvent(QDropEvent *e, bool isDrop)
             return;
         }
         break;
-    case USR_ITEM:{
-            if (ContactDragObject::canDecode(e)){
+    case USR_ITEM:
+        {
+            if (ContactDragObject::canDecode(e))
+            {
                 Contact *contact = ContactDragObject::decode(e);
-                if (static_cast<ContactItem*>(item)->id() == contact->id()){
+                if (static_cast<ContactItem*>(item)->id() == contact->id())
+                {
                     e->setDropAction( Qt::IgnoreAction );
                     e->accept();
                     return;
                 }
-                if (isDrop){
+                if (isDrop)
+                {
                     m_dropItem = item;
                     m_dropContactId = contact->id();
                     contact->setFlags(contact->getFlags() & ~CONTACT_DRAG);
@@ -1198,11 +1280,14 @@ void UserView::dragEvent(QDropEvent *e, bool isDrop)
             Message *msg = NULL;
             CommandDef *cmd;
             CommandsMapIterator it(CorePlugin::instance()->messageTypes);
-            while ((cmd = ++it) != NULL){
+            while ((cmd = ++it) != NULL)
+            {
                 MessageDef *def = (MessageDef*)(cmd->param);
-                if (def && def->drag){
+                if (def && def->drag)
+                {
                     msg = def->drag(e);
-                    if (msg){
+                    if (msg)
+                    {
                         unsigned type = cmd->id;
                         Command cmd;
                         cmd->id      = type;
@@ -1213,18 +1298,22 @@ void UserView::dragEvent(QDropEvent *e, bool isDrop)
                     }
                 }
             }
-            if (msg){
-                if (isDrop){
+            if (msg)
+            {
+                if (isDrop)
+                {
                     msg->setContact(static_cast<ContactItem*>(item)->id());
                     EventOpenMessage(msg).process();
                 }
                 delete msg;
                 return;
             }
-            if (!e->mimeData()->text().isEmpty()) {
+            if (!e->mimeData()->text().isEmpty()) 
+            {
                 QString str = e->mimeData()->text();
                 e->accept();
-                if (isDrop) {
+                if (isDrop) 
+                {
                     Message *msg = new Message(MessageGeneric);
                     msg->setText(str);
                     msg->setContact(static_cast<ContactItem*>(item)->id());
@@ -1247,7 +1336,8 @@ void UserView::doDrop()
     if (contact == NULL)
         return;
     switch (static_cast<UserViewItemBase*>(m_dropItem)->type()){
-    case GRP_ITEM:{
+    case GRP_ITEM:
+        {
             GroupItem *grp_item = static_cast<GroupItem*>(m_dropItem);
             contact->setGroup(grp_item->id());
             contact->setIgnore(false);
@@ -1255,7 +1345,8 @@ void UserView::doDrop()
             EventContact(contact, EventContact::eChanged).process();
             break;
         }
-    case USR_ITEM:{
+    case USR_ITEM:
+        {
             ContactItem *contact_item = static_cast<ContactItem*>(m_dropItem);
             Contact *contact1 = getContacts()->contact(contact_item->id());
             if (contact1 == NULL)
@@ -1284,17 +1375,19 @@ void UserView::joinContacts(void*)
 {
     Contact *contact1 = getContacts()->contact(joinContactsData.contact1);
     Contact *contact2 = getContacts()->contact(joinContactsData.contact2);
-    if ((contact1 == NULL) || (contact2 == NULL))
+    if (contact1 == NULL || contact2 == NULL)
         return;
     contact1->join(contact2);
-    if (!contact2->getPhones().isEmpty()){
+    if (!contact2->getPhones().isEmpty())
+    {
         QString phones = contact1->getPhones();
         if (!phones.isEmpty())
             phones += ';';
         phones += contact2->getPhones();
         contact1->setPhones(phones);
     }
-    if (!contact2->getEMails().isEmpty()){
+    if (!contact2->getEMails().isEmpty())
+    {
         QString mails = contact1->getEMails();
         if (!mails.isEmpty())
             mails += ';';
@@ -1349,7 +1442,8 @@ void UserView::search(list<ListViewItem*> &items)
 
 void UserView::search(ListViewItem *item, list<ListViewItem*> &items)
 {
-    if (item->isExpandable()){
+    if (item->isExpandable())
+    {
         for(int c = 0; c < item->childCount(); c++)
         {
             ListViewItem *ch = static_cast<ListViewItem*>(item->child(c));
@@ -1363,13 +1457,16 @@ void UserView::search(ListViewItem *item, list<ListViewItem*> &items)
     //Search from the beginning of contact name
     //if (name.left(m_search.length()).upper() == m_search.upper())
     //Search for substring in contact name
-    if (name.contains(m_search,Qt::CaseInsensitive)>0) {
+    if (name.contains(m_search,Qt::CaseInsensitive)>0) 
+    {
         //log(L_DEBUG, "Contact List search: Found name %s", (const char *)name.local8Bit());
         item->parent()->setExpanded(true);
         items.push_back(item);
-    } else {
-      void *data;
-      Contact *contact = getContacts()->contact(static_cast<ContactItem*>(item)->id());
+    } 
+    else 
+    {
+        void *data;
+        Contact *contact = getContacts()->contact(static_cast<ContactItem*>(item)->id());
         ClientDataIterator it = contact->clientDataIterator();
         while ((data = ++it) != NULL)
 		{
@@ -1393,7 +1490,7 @@ void UserView::dragScroll() //rewrite!?
 {
     QPoint pos = QCursor::pos();
     pos = viewport()->mapFromGlobal(pos);
-    if ((pos.x() < 0) || (pos.x() > viewport()->width()))
+    if (pos.x() < 0 || pos.x() > viewport()->width())
         return;
     ListViewItem *item = NULL;
     if (pos.y() < 0)

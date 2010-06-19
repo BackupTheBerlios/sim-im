@@ -32,7 +32,7 @@ void UserViewDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
 
     switch( base->type() )
     {
-        case GRP_ITEM:
+    case GRP_ITEM:
         {
             GroupItem *item = static_cast<GroupItem*>(base);
             QString text = index.data( Qt::DisplayRole ).toString();
@@ -40,11 +40,14 @@ void UserViewDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
             if (!img.isNull())
                 p->drawImage(2 + margin, (height - img.height()) / 2, img);
             int x = 24 + margin;
-            if (!( option.state & QStyle::State_Open ) && item->m_unread){
-                CommandDef *def = CorePlugin::instance()->messageTypes.find(item->m_unread);
-                if (def){
-                    img = Image(def->icon);
-                    if (!img.isNull()){
+            if (!( option.state & QStyle::State_Open ) && item->m_unread)
+            {
+                CommandDef *lcmdDefUnreadMessages = CorePlugin::instance()->messageTypes.find(item->m_unread);
+                if (lcmdDefUnreadMessages)
+                {
+                    img = Image(lcmdDefUnreadMessages->icon);
+                    if (!img.isNull())
+                    {
                         if (m_uv->m_bUnreadBlink)
                             p->drawImage(x, (height - img.height()) / 2, img);
                         x += img.width() + 2;
@@ -54,13 +57,15 @@ void UserViewDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
             if (!CorePlugin::instance()->value("UseSysColors").toBool())
                 p->setPen(CorePlugin::instance()->value("ColorGroup").toUInt());
             QFont f(option.font);
-            if (CorePlugin::instance()->value("SmallGroupFont").toBool()){
+            if (CorePlugin::instance()->value("SmallGroupFont").toBool())
+            {
                 int size = f.pixelSize();
-                if (size <= 0){
+                if (size > 0)
+                    f.setPixelSize(size * 3 / 4);
+                else
+                {
                     size = f.pointSize();
                     f.setPointSize(size * 3 / 4);
-                }else{
-                    f.setPixelSize(size * 3 / 4);
                 }
             }
             f.setBold(true);
@@ -70,11 +75,12 @@ void UserViewDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
                 drawSeparator(p, x, itemsize, m_uv->style());
             break;
         }
-        case USR_ITEM:
+    case USR_ITEM:
         {
             ContactItem *item = static_cast<ContactItem*>(base);
             QFont f(option.font);
-            if (item->style() & CONTACT_ITALIC){
+            if (item->style() & CONTACT_ITALIC)
+            {
                 if (CorePlugin::instance()->value("VisibleStyle").toUInt()  & STYLE_ITALIC)
                     f.setItalic(true);
                 if (CorePlugin::instance()->value("VisibleStyle").toUInt()  & STYLE_UNDER)
@@ -82,7 +88,8 @@ void UserViewDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
                 if (CorePlugin::instance()->value("VisibleStyle").toUInt()  & STYLE_STRIKE)
                     f.setStrikeOut(true);
             }
-            if (item->style() & CONTACT_UNDERLINE){
+            if (item->style() & CONTACT_UNDERLINE)
+            {
                 if (CorePlugin::instance()->value("AuthStyle").toUInt()  & STYLE_ITALIC)
                     f.setItalic(true);
                 if (CorePlugin::instance()->value("AuthStyle").toUInt()  & STYLE_UNDER)
@@ -90,7 +97,8 @@ void UserViewDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
                 if (CorePlugin::instance()->value("AuthStyle").toUInt()  & STYLE_STRIKE)
                     f.setStrikeOut(true);
             }
-            if (item->style() & CONTACT_STRIKEOUT){
+            if (item->style() & CONTACT_STRIKEOUT)
+            {
                 if (CorePlugin::instance()->value("InvisibleStyle").toUInt()  & STYLE_ITALIC)
                     f.setItalic(true);
                 if (CorePlugin::instance()->value("InvisibleStyle").toUInt()  & STYLE_UNDER)
@@ -100,7 +108,8 @@ void UserViewDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
             }
             int x = margin;
             QIcon mainIcon = index.data( Qt::DecorationRole ).value<QIcon>();
-            if (!mainIcon.isNull()){
+            if (!mainIcon.isNull())
+            {
                 QPixmap img = mainIcon.pixmap( 16 );
                 x += 2;
                 p->drawPixmap(x, ( height - img.height() ) / 2, img);
@@ -108,12 +117,12 @@ void UserViewDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
             }
             if (x < 24)
                 x = 24;
-            if (!item->isSelected() || !m_uv->hasFocus() || !CorePlugin::instance()->value("UseDblClick").toBool()){
-                if (CorePlugin::instance()->value("UseSysColors").toBool()){
-                    if (item->status() != STATUS_ONLINE && item->status() != STATUS_FFC)
-                        p->setPen(m_uv->palette().color(QPalette::Disabled,QPalette::Text));
-                }else{
-                    switch (item->status()){
+            if (!item->isSelected() || !m_uv->hasFocus() || !CorePlugin::instance()->value("UseDblClick").toBool())
+            {
+                if (!CorePlugin::instance()->value("UseSysColors").toBool())
+                {
+                    switch (item->status())
+                    {
                     case STATUS_ONLINE:
                         p->setPen(CorePlugin::instance()->value("ColorOnline").toUInt());
                         break;
@@ -134,6 +143,8 @@ void UserViewDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
                         break;
                     }
                 }
+                if (item->status() != STATUS_ONLINE && item->status() != STATUS_FFC)
+                    p->setPen(m_uv->palette().color(QPalette::Disabled,QPalette::Text));
             }
             if (item->m_bBlink)
                 f.setBold(true);
@@ -162,15 +173,19 @@ void UserViewDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
                 QPen oldPen = p->pen();
                 QColor oldBg = p->background().color();
                 p->setBackgroundMode(Qt::OpaqueMode);
-                if (item == m_uv->m_searchItem){
-                    if ((item == m_uv->currentItem()) && CorePlugin::instance()->value("UseDblClick").toBool()){
+                if (item == m_uv->m_searchItem)
+                    if (item == m_uv->currentItem() && CorePlugin::instance()->value("UseDblClick").toBool())
+                    {
                         p->setBackground(cg.color(QPalette::HighlightedText));
                         p->setPen(cg.color(QPalette::Highlight));
-                    }else{
+                    }
+                    else
+                    {
                         p->setBackground(cg.color(QPalette::Highlight));
                         p->setPen(cg.color(QPalette::HighlightedText));
                     }
-                }else{
+                else
+                {
                     p->setBackground(oldPen.color());
                     p->setPen(oldBg);
                 }
@@ -181,10 +196,12 @@ void UserViewDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
             }
             unsigned xIcon = width;
             QString icons = index.data( SIM::ExtraIconsRole ).toString();
-            while( !icons.isEmpty() ) {
+            while( !icons.isEmpty() ) 
+            {
                 QString icon = getToken(icons, ',');
                 QImage img = Image(icon);
-                if (!img.isNull()){
+                if (!img.isNull())
+                {
                     xIcon -= img.width() + 2;
                     if (xIcon < (unsigned)x)
                         break;
@@ -193,7 +210,7 @@ void UserViewDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
             }
             break;
         }
-        case DIV_ITEM:
+    case DIV_ITEM:
         {
             QString text = index.data( Qt::DisplayRole ).toString();
             QFont f(option.font);
@@ -204,9 +221,7 @@ void UserViewDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opti
                 f.setPointSize(size * 3 / 4);
             }
             else
-            {
                 f.setPixelSize(size * 3 / 4);
-            }
             p->setFont(f);
             int x = drawText(p, 24 + margin, itemsize, text);
             drawSeparator(p, x, itemsize, m_uv->style());
@@ -229,31 +244,40 @@ QSize UserViewDelegate::sizeHint(const QStyleOptionViewItem& option, const QMode
 
     QFont f(option.font);
     int h = 0;
-    if (base->type() == GRP_ITEM){
-        if (CorePlugin::instance()->value("SmallGroupFont").toBool()){
+    if (base->type() == GRP_ITEM)
+    {
+        if (CorePlugin::instance()->value("SmallGroupFont").toBool())
+        {
             int size = f.pixelSize();
-            if (size <= 0){
+            if (size > 0)
+            {
+                f.setPixelSize(size * 3 / 4);
+            }
+            else
+            {
                 size = f.pointSize();
                 f.setPointSize(size * 3 / 4);
-            }else{
-                f.setPixelSize(size * 3 / 4);
             }
         }
         h = 14;
     }
-    if (base->type() == USR_ITEM){
+    if (base->type() == USR_ITEM)
+    {
         ContactItem *item = static_cast<ContactItem*>(base);
         QString icons = item->text(CONTACT_ICONS);
-        while (!icons.isEmpty()){
+        while (!icons.isEmpty())
+        {
             QString icon = getToken(icons, ',');
             QImage img = Image(icon);
             if (img.height() > h)
                 h = img.height();
         }
-        if (item->m_unread){
-            CommandDef *def = CorePlugin::instance()->messageTypes.find(item->m_unread);
-            if (def){
-                QImage img = Image(def->icon);
+        if (item->m_unread)
+        {
+            CommandDef *lcmdDefUnreadMessages = CorePlugin::instance()->messageTypes.find(item->m_unread);
+            if (lcmdDefUnreadMessages)
+            {
+                QImage img = Image(lcmdDefUnreadMessages->icon);
                 if (img.height() > h)
                     h = img.height();
             }
