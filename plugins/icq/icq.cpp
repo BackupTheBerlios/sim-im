@@ -66,7 +66,7 @@ ClientPtr ICQProtocol::createClient(Buffer *cfg)
 SIM::ClientPtr ICQProtocol::createClient(const QString& name)
 {
     ClientPtr icq = ClientPtr(new ICQClient(this, name, false));
-    getClientManager()->addClient(icq);
+    //getClientManager()->addClient(icq);
     return icq;
 }
 

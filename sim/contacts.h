@@ -196,7 +196,7 @@ protected:
     bool load_owner(const QDomElement& owner);
     bool load_groups(const QDomElement& groups);
     bool load_contacts(const QDomElement& contacts);
-    void load_old();
+    bool load_old();
 
     class ContactListPrivate *p;
     friend class Contact;

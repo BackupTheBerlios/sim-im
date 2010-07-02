@@ -811,6 +811,7 @@ protected:
     friend class JabberBrowser;
 
 private:
+    QString m_name;
 };
 
 class JabberFileTransfer : public SIM::FileTransfer, public SIM::ClientSocketNotify, public SIM::ServerSocketNotify

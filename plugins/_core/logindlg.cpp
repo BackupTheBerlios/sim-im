@@ -368,6 +368,7 @@ void LoginDialog::makeInputs(unsigned &row, ClientPtr client)
     m_txt->setText(client->name());
     m_txt->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
     m_edt = new QLineEdit(groupBoxPasswords);
+    log(L_DEBUG, "cl: %s, pass: %s", qPrintable(client->name()), qPrintable(client->getPassword()));
 	m_edt->setText(client->getPassword());
 	m_edt->setEchoMode(QLineEdit::Password);
 	connect(m_edt, SIGNAL(textChanged(const QString&)), this, SLOT(pswdChanged(const QString&)));

@@ -203,7 +203,7 @@ namespace SIM
         PropertyHubPtr hub = PropertyHub::create();
         hub->setValue("ManualStatus", (unsigned int)getManualStatus());
         hub->setValue("CommonStatus", getCommonStatus());
-        hub->setValue("Password", getPassword());
+        hub->setValue("Password", cryptPassword(getPassword()));
         hub->setValue("SavePassword", getSavePassword());
         hub->setValue("PreviousPassword", getPreviousPassword());
         hub->setValue("LastSend", m_lastSend);
@@ -218,7 +218,7 @@ namespace SIM
             return false;
         setManualStatus(hub->value("ManualStatus").toUInt());
         setCommonStatus(hub->value("CommonStatus").toBool());
-        setPassword(uncryptPassword(hub->value("Password").toString()));
+        setPassword((hub->value("Password").toString()));
         setSavePassword(hub->value("SavePassword").toBool());
         setPreviousPassword(hub->value("PreviousPassword").toString());
         m_lastSend = (hub->value("LastSend").toStringList());
@@ -231,7 +231,7 @@ namespace SIM
         QString val = value;
         if(val.startsWith('\"') && val.endsWith('\"'))
             val = val.mid(1, val.length() - 2);
-		//log(L_DEBUG, "Client::deserializeLine(): %s=%s", qPrintable(key), qPrintable(val));
+        //log(L_DEBUG, "Client::deserializeLine(): %s=%s", qPrintable(key), qPrintable(val));
         if(key == "ManualStatus") {
             setManualStatus(val.toUInt());
         }

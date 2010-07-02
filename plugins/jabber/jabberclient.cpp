@@ -441,9 +441,8 @@ unsigned long JabberClientData::getSign()
 }
 
 JabberClient::JabberClient(JabberProtocol* protocol, const QString& name): TCPClient(protocol, NULL),
-    data(SIM::ClientPtr(0))
+    data(SIM::ClientPtr(0)), m_name(name)
 {
-    //load_data(jabberClientData, &data, cfg);
     QString jid = data.owner.getId();
     //log(L_DEBUG, "JID: %s", jid.toUtf8().data());
 
@@ -605,7 +604,32 @@ bool JabberClient::serialize(QDomElement& element)
 
 bool JabberClient::deserialize(QDomElement& element)
 {
-    return false;
+    SIM::PropertyHubPtr hub = SIM::PropertyHub::create();
+    if(!hub->deserialize(element))
+        return false;
+    setServer(hub->value("Server").toString());
+    setPort(hub->value("Port").toUInt());
+    setUseSSL(hub->value("UseSSL").toBool());
+    setUsePlain(hub->value("UsePlain").toBool());
+    setUseVHost(hub->value("UseVHost").toBool());
+    setPriority(hub->value("Priority").toUInt());
+    setListRequest(hub->value("ListRequest").toString());
+    setVHost(hub->value("VHost").toString());
+    setTyping(hub->value("Typing").toBool());
+    setRichText(hub->value("RichText").toBool());
+    setUseVersion(hub->value("UseVersion").toBool());
+    setProtocolIcons(hub->value("ProtocolIcons").toBool());
+    setMinPort(hub->value("MinPort").toUInt());
+    setMaxPort(hub->value("MaxPort").toUInt());
+    setPhoto(hub->value("Photo").toString());
+    setLogo(hub->value("Logo").toString());
+    setAutoSubscribe(hub->value("AutoSubscribe").toBool());
+    setAutoAccept(hub->value("AutoAccept").toBool());
+    setUseHTTP(hub->value("UseHTTP").toBool());
+    setURL(hub->value("URL").toString());
+    setInfoUpdated(hub->value("InfoUpdated").toBool());
+    Client::deserialize(element);
+    return true;
 }
 
 bool JabberClient::deserialize(Buffer* cfg)
@@ -861,9 +885,13 @@ QByteArray JabberClient::getConfig()
 
 QString JabberClient::name()
 {
-    QString res = "Jabber.";
-    res += data.owner.getId();
-    return res;
+    if(m_name.isEmpty())
+    {
+        QString res = "Jabber.";
+        res += data.owner.getId();
+        return res;
+    }
+    return m_name;
 }
 
 QWidget	*JabberClient::setupWnd()

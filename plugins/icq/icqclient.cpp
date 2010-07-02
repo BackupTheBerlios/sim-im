@@ -1064,7 +1064,35 @@ bool ICQClient::serialize(QDomElement& element)
 
 bool ICQClient::deserialize(QDomElement& element)
 {
-    //implement me
+    SIM::PropertyHubPtr hub = SIM::PropertyHub::create();
+    if(!hub->deserialize(element))
+        return false;
+    setServer(hub->value("Server").toString());
+    setPort(hub->value("ServerPort").toUInt());
+    setHideIP(hub->value("HideIP").toBool());
+    setIgnoreAuth(hub->value("IgnoreAuth").toBool());
+    setUseMD5(hub->value("UseMD5").toBool());
+    setDirectMode(hub->value("DirectMode").toUInt());
+    setIdleTime(hub->value("IdleTime").toUInt());
+    setListRequests(hub->value("ListRequests").toString());
+    setPicture(hub->value("Picture").toString());
+    setRandomChatGroup(hub->value("RandomChatGroup").toUInt());
+    setSendFormat(hub->value("SendFormat").toUInt());
+    setDisablePlugins(hub->value("DisablePlugins").toBool());
+    setDisableAutoUpdate(hub->value("DisableAutoUpdate").toBool());
+    setDisableAutoReplyUpdate(hub->value("DisableAutoReplyUpdate").toBool());
+    setDisableTypingNotification(hub->value("DisableTypingNotification").toBool());
+    setAcceptInDND(hub->value("AcceptInDND").toBool());
+    setAcceptInOccupied(hub->value("AcceptInOccupied").toBool());
+    setMinPort(hub->value("MinPort").toUInt());
+    setMaxPort(hub->value("MaxPort").toUInt());
+    setWarnAnonymously(hub->value("WarnAnonymously").toBool());
+    setAckMode(hub->value("ACKMode").toUInt());
+    setUseHTTP(hub->value("UseHTTP").toBool());
+    setAutoHTTP(hub->value("AutoHTTP").toBool());
+    setKeepAlive(hub->value("KeepAlive").toBool());
+    setMediaSense(hub->value("MediaSense").toBool());
+    Client::deserialize(element);
     return true;
 }
 

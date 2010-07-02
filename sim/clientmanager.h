@@ -19,9 +19,12 @@ namespace SIM
         ClientPtr client(const QString& name);
         QStringList clientList();
 
-        void load();
-        void load_old();
+        bool load();
         void save();
+
+    protected:
+        bool load_old();
+        bool load_new();
 
     private:
         ClientPtr createClient(const QString& name);
