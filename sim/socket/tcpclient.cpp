@@ -61,7 +61,7 @@ namespace SIM
 			return false;
 		}
 		if (!m_timer->isActive()){
-			unsigned reconnectTime = m_reconnect;
+            unsigned reconnectTime =60 ;//m_reconnect;
 			if (!getSocketFactory()->isActive()){
 				if (reconnectTime < RECONNECT_IFINACTIVE)
 					reconnectTime = RECONNECT_IFINACTIVE;

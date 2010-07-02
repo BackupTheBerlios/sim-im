@@ -110,7 +110,7 @@ void ConfigItem::show()
 
 QWidget *ConfigItem::getWidget(UserConfig *dlg)
 {
-    return 0; //Fixme
+    return 0;
 }
 
 class PrefItem : public ConfigItem

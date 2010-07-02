@@ -227,6 +227,8 @@ protected:
     void createMenuMsgView();		// in msgview_menu.cpp
     void createMenuTextEdit();		// in textedit_menu.cpp
 
+    void startLogin();
+
     void prepareConfig();
 
     bool                m_bInit;

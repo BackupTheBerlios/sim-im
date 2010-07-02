@@ -89,6 +89,7 @@ email                : vovan@shutoff.ru
 #include "declinedlg.h"
 #include "userhistorycfg.h"
 #include "profilemanager.h"
+#include "clientmanager.h"
 
 using namespace std;
 using namespace SIM;
@@ -3173,6 +3174,7 @@ bool CorePlugin::init(bool bInit)
 		profile = settings.value("Profile").toString();
 		ProfileManager::instance()->selectProfile(profile);
         changeProfile(profile);
+        startLogin();
 		//bLoaded = true;
 	}
 	if(newProfile)
@@ -3279,6 +3281,26 @@ bool CorePlugin::init(bool bInit)
 		return true;
 	}
 	return bRes || bNew;
+}
+
+void CorePlugin::startLogin()
+{
+    ClientList clients;
+    SIM::getClientManager()->load();
+    foreach(const QString& clname, SIM::getClientManager()->clientList()) {
+        clients.push_back(SIM::getClientManager()->client(clname));
+    }
+    clients.addToContacts();
+    getContacts()->load();
+
+    for (int i = 0; i < clients.size(); i++)
+    {
+        Client *client = getContacts()->getClient(i);
+        unsigned status = client->getStatus();
+        if (status == STATUS_OFFLINE)
+            status = STATUS_ONLINE;
+        client->setStatus(status, client->getCommonStatus());
+    }
 }
 
 void CorePlugin::destroy()

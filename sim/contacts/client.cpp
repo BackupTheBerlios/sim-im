@@ -23,9 +23,6 @@ namespace SIM
 
     SIM_DEPRECATED Client::Client(Protocol *protocol, Buffer *cfg)
     {
-//        if(cfg)
-//            load_data(_clientData, &data, cfg);
-        
         m_currentStatus = IMStatusPtr(/*new InvalidStatus()*/);
         m_data = PropertyHub::create();
 
@@ -218,7 +215,7 @@ namespace SIM
             return false;
         setManualStatus(hub->value("ManualStatus").toUInt());
         setCommonStatus(hub->value("CommonStatus").toBool());
-        setPassword((hub->value("Password").toString()));
+        setPassword(uncryptPassword(hub->value("Password").toString()));
         setSavePassword(hub->value("SavePassword").toBool());
         setPreviousPassword(hub->value("PreviousPassword").toString());
         m_lastSend = (hub->value("LastSend").toStringList());
