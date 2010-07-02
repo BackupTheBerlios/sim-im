@@ -577,7 +577,30 @@ bool JabberClient::compareData(void *d1, void *d2)
 
 bool JabberClient::serialize(QDomElement& element)
 {
-    return false;
+    SIM::PropertyHubPtr hub = SIM::PropertyHub::create();
+    hub->setValue("Server", getServer());
+    hub->setValue("Port", getPort());
+    hub->setValue("UseSSL", getUseSSL());
+    hub->setValue("UsePlain", getUsePlain());
+    hub->setValue("UseVHost", getUseVHost());
+    hub->setValue("Priority", (unsigned int)getPriority());
+    hub->setValue("ListRequest", getListRequest());
+    hub->setValue("VHost", getVHost());
+    hub->setValue("Typing", getTyping());
+    hub->setValue("RichText", getRichText());
+    hub->setValue("UseVersion", getUseVersion());
+    hub->setValue("ProtocolIcons", getProtocolIcons());
+    hub->setValue("MinPort", (unsigned int)getMinPort());
+    hub->setValue("MaxPort", (unsigned int)getMaxPort());
+    hub->setValue("Photo", getPhoto());
+    hub->setValue("Logo", getLogo());
+    hub->setValue("AutoSubscribe", getAutoSubscribe());
+    hub->setValue("AutoAccept", getAutoAccept());
+    hub->setValue("UseHTTP", getUseHTTP());
+    hub->setValue("URL", getURL());
+    hub->setValue("InfoUpdated", getInfoUpdated());
+    hub->serialize(element);
+    return Client::serialize(element);
 }
 
 bool JabberClient::deserialize(QDomElement& element)
