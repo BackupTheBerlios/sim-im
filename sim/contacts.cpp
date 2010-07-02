@@ -962,7 +962,7 @@ bool ContactList::load_new()
         return false;
 
     QDomElement owner = doc.elementsByTagName("owner").at(0).toElement();
-    load_owner(owner);
+    this->load_owner(owner);
 
     QDomElement groups = doc.elementsByTagName("groups").at(0).toElement();
     if(!load_groups(groups))
@@ -977,10 +977,10 @@ bool ContactList::load_new()
     return true;
 }
 
-bool ContactList::load_owner(const QDomElement& owner)
+bool ContactList::load_owner(const QDomElement& o)
 {
-    this->owner()->deserialize(owner);
-    QDomNodeList list = owner.elementsByTagName("clientdata");
+    this->owner()->deserialize(o);
+    QDomNodeList list = o.elementsByTagName("clientdata");
     for(int i = 0; i < list.size(); i++) {
         QDomElement el = list.at(i).toElement();
         ClientPtr client = getClientManager()->client(el.attribute("clientname"));

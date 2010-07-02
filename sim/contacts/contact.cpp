@@ -88,7 +88,7 @@ namespace SIM
 
     bool Contact::deserialize(const QDomElement& element)
     {
-        !getUserData()->deserialize(element);
+        getUserData()->deserialize(element);
         QDomElement main = element.elementsByTagName("main").at(0).toElement();
         if(!main.isNull())
         {
@@ -98,6 +98,8 @@ namespace SIM
         for(int j = 0; j < cldatalist.size(); j++) {
             QDomElement clientElement = cldatalist.at(j).toElement();
             ClientPtr client = getClientManager()->client(clientElement.attribute("clientname"));
+            if(!client)
+                continue;
             IMContact* imc = getData(client->name());
             if(!imc)
                 imc = createData(client.data());

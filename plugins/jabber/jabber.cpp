@@ -100,9 +100,9 @@ IMContact* JabberProtocol::createIMContact(const QSharedPointer<SIM::Client>& cl
 
 ClientPtr JabberProtocol::createClient(Buffer *cfg)
 {
-	ClientPtr jabber = ClientPtr(new JabberClient(this, cfg));
-	getClientManager()->addClient(jabber);
-	return jabber;
+    ClientPtr jabber = ClientPtr(new JabberClient(this, cfg));
+    //getClientManager()->addClient(jabber);
+    return jabber;
 }
 
 SIM::ClientPtr JabberProtocol::createClient(const QString& name)

@@ -18,6 +18,7 @@ namespace SIM
 
     void ClientManager::addClient(ClientPtr client)
     {
+        log(L_DEBUG, "Adding client: %s", qPrintable(client->name()));
         m_clients.insert(client->name(), client);
     }
     
@@ -32,6 +33,7 @@ namespace SIM
     void ClientManager::load()
     {
         log(L_DEBUG, "ClientManager::load()");
+        m_clients.clear();
         load_old();
         // TODO
     }
@@ -50,6 +52,7 @@ namespace SIM
         while(!f.atEnd()) {
             QByteArray l = f.readLine();
             QString line = l.trimmed();
+            log(L_DEBUG, "line: %s", qPrintable(line));
             if(line.startsWith("[")) {
                 if(client) {
                     cfg.setWritePos(cfg.size() - 1);
@@ -86,6 +89,7 @@ namespace SIM
             }
         }
         if(client) {
+            cfg.setReadPos(0);
             cfg.setWritePos(cfg.size() - 1);
             client->deserialize(&cfg);
             addClient(client);
@@ -97,6 +101,9 @@ namespace SIM
     {
         if(!ProfileManager::instance())
             return;
+        if(m_clients.isEmpty())
+            return;
+        log(L_DEBUG, "ClientManager::save(): %d", m_clients.count());
         QDomDocument doc;
         QDomElement root = doc.createElement("clients");
         doc.appendChild(root);
@@ -107,6 +114,9 @@ namespace SIM
             el.setAttribute("plugin", client->protocol()->plugin()->name());
             el.setAttribute("protocol", client->protocol()->description()->text);
             client->properties()->serialize(el);
+            QDomElement clientDataElement = doc.createElement("clientdata");
+            client->serialize(clientDataElement);
+            el.appendChild(clientDataElement);
             root.appendChild(el);
         }
         QString cfgName = ProfileManager::instance()->profilePath() + QDir::separator() + "clients.xml";

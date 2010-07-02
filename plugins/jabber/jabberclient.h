@@ -30,6 +30,7 @@
 #include "socket/tcpclient.h"
 #include "contacts/imcontact.h"
 #include "jabberstatus.h"
+#include "log.h"
 
 #include "jabberbuffer.h"
 
@@ -588,6 +589,10 @@ public:
 
     virtual SIM::IMContact*  getOwnerContact();
     virtual void setOwnerContact(SIM::IMContact* contact);
+
+    virtual bool serialize(QDomElement& element);
+    virtual bool deserialize(QDomElement& element);
+    virtual bool deserialize(Buffer* cfg);
 
     void setID(const QString &id);
     QString getID()

@@ -231,7 +231,7 @@ namespace SIM
         QString val = value;
         if(val.startsWith('\"') && val.endsWith('\"'))
             val = val.mid(1, val.length() - 2);
-        log(L_DEBUG, "Client::deserializeLine(): %s=%s", qPrintable(key), qPrintable(val));
+		//log(L_DEBUG, "Client::deserializeLine(): %s=%s", qPrintable(key), qPrintable(val));
         if(key == "ManualStatus") {
             setManualStatus(val.toUInt());
         }
