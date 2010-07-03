@@ -66,10 +66,13 @@ DiscoInfo::DiscoInfo(JabberBrowser *browser, const QString &features,
     disableWidget(edtSystem);
     disableWidget(edtTime);
     disableWidget(edtLast);
-    lstStat->addColumn(i18n("Name"));
-    lstStat->addColumn(i18n("Units"));
-    lstStat->addColumn(i18n("Value"));
-    lstStat->setExpandingColumn(2);
+    QStringList cols;
+    lstStat->setColumnCount(3);
+
+    cols.append(i18n("Name"));
+    cols.append(i18n("Units"));
+    cols.append(i18n("Value"));
+    lstStat->setHeaderLabels(cols);
     btnUrl->setIcon(Icon("home"));
     connect(btnUrl, SIGNAL(clicked()), this, SLOT(goUrl()));
     connect(edtUrl, SIGNAL(textChanged(const QString&)), this, SLOT(urlChanged(const QString&)));
@@ -210,7 +213,7 @@ bool DiscoInfo::processEvent(Event *e)
                 m_statId = QString::null;
                 return true;
             }
-            ListViewItem *i = new ListViewItem(lstStat);
+            QTreeWidgetItem *i = new QTreeWidgetItem(lstStat);
             i->setText(0, item->jid);
             i->setText(1, item->name);
             i->setText(2, item->node);
@@ -266,7 +269,8 @@ bool DiscoInfo::processEvent(Event *e)
 void DiscoInfo::resizeEvent(QResizeEvent *e)
 {
     QDialog::resizeEvent(e);
-    lstStat->adjustColumn();
+    for(int i = 0; i < lstStat->columnCount(); i++)
+        lstStat->resizeColumnToContents(i);
 }
 
 void DiscoInfo::accept()

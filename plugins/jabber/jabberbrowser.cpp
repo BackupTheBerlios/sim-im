@@ -121,12 +121,14 @@ JabberBrowser::JabberBrowser()
     m_client = NULL;
     m_info   = NULL;
 
-    m_list = new ListView(this);
-    m_list->addColumn(i18n("Name"));
-    m_list->addColumn(i18n("JID"));
-    m_list->addColumn(i18n("Node"));
-    m_list->setExpandingColumn(0);
-    m_list->setMenu(0);
+    m_list = new QTreeWidget(this);
+    m_list->setColumnCount(3);
+    QStringList cols;
+    cols.append(i18n("Name"));
+    cols.append(i18n("JID"));
+    cols.append(i18n("Node"));
+    //m_list->setExpandingColumn(0);
+    //m_list->setMenu(0);
     connect(m_list, SIGNAL(currentChanged(ListViewItem*)), this, SLOT(currentChanged(ListViewItem*)));
     connect(m_list, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
     connect(m_list, SIGNAL(dragStart()), this, SLOT(dragStart()));
@@ -158,7 +160,7 @@ JabberBrowser::JabberBrowser()
     m_config = NULL;
     m_search = NULL;
     m_bInProcess = false;
-    m_list->setMenu(MenuSearchItem);
+    //m_list->setMenu(MenuSearchItem);
 }
 
 JabberBrowser::~JabberBrowser()
@@ -228,7 +230,7 @@ void JabberBrowser::go(const QString &url, const QString &node)
     EventCommandDisabled(cmd).process();
 
     m_bInProcess = true;
-    ListViewItem *item = new ListViewItem(m_list);
+    QTreeWidgetItem *item = new QTreeWidgetItem(m_list);
     item->setText(COL_JID, url);
     item->setText(COL_NAME, url);
     item->setText(COL_NODE, node);
@@ -246,7 +248,7 @@ void JabberBrowser::go(const QString &url, const QString &node)
         }
     }
     item->setText(COL_MODE, QString::number(mode));
-    item->setPixmap(COL_NAME, Pict("empty"));
+    item->setIcon(COL_NAME, Pict("empty"));
     cmd->id		= CmdUrl;
     cmd->param	= this;
     EventCommandWidget eWidget(cmd);
@@ -449,7 +451,7 @@ bool JabberBrowser::processEvent(Event *e)
         }
         if (cmd->param != this)
             return false;
-        ListViewItem *item = m_list->currentItem();
+        QTreeWidgetItem *item = m_list->currentItem();
         if (cmd->menu_id == MenuBrowser){
             cmd->flags &= ~COMMAND_CHECKED;
             unsigned mode = JabberPlugin::plugin->getBrowseType();
@@ -562,7 +564,7 @@ bool JabberBrowser::processEvent(Event *e)
             return false;
         EventDiscoItem *edi = static_cast<EventDiscoItem*>(e);
         DiscoItem *item = edi->item();
-        ListViewItem *it = findItem(COL_ID_DISCO_ITEMS, item->id);
+        QTreeWidgetItem *it = findItem(COL_ID_DISCO_ITEMS, item->id);
         if (it){
             if (item->jid.isEmpty()){
                 it->setText(COL_ID_DISCO_ITEMS, QString::null);
@@ -588,19 +590,18 @@ bool JabberBrowser::processEvent(Event *e)
                 return true;
             }
             if (it->child(0) == NULL){
-                it->setExpandable(true);
                 if ((it == m_list->topLevelItem(0)) || (it == m_list->currentItem()))
-                    it->setOpen(true);
+                    it->setExpanded(true);
             }
-			ListViewItem *i;
+            QTreeWidgetItem *i;
 			for(int c = 0; c < m_list->topLevelItemCount(); c++)
 			{
-				ListViewItem *i= static_cast<ListViewItem*>(m_list->topLevelItem(c));
+                QTreeWidgetItem* i= static_cast<QTreeWidgetItem*>(m_list->topLevelItem(c));
 				if ((i->text(COL_JID) == item->jid) &&
 						(i->text(COL_NODE) == item->node))
 					return true;
 			}
-            i = new ListViewItem(it);
+            i = new QTreeWidgetItem(it);
             i->setText(COL_JID, item->jid);
             i->setText(COL_NAME, item->name.isEmpty() ? item->jid : item->name);
             i->setText(COL_NODE, item->node);
@@ -659,12 +660,12 @@ bool JabberBrowser::processEvent(Event *e)
                 adjustColumn(it);
                 return true;
             }
-            ListViewItem* i=NULL;
+            QTreeWidgetItem* i=NULL;
 			if (it->text(COL_JID) != item->jid){
 				
 				for(int c = 0; c < it->childCount(); c++)
 				{
-					i= static_cast<ListViewItem*>(it->child(0));
+                    i= static_cast<QTreeWidgetItem*>(it->child(0));
 					if ((i->text(COL_JID) == item->jid) &&
 							(i->text(COL_NODE) == item->node))
 						break;
@@ -674,11 +675,10 @@ bool JabberBrowser::processEvent(Event *e)
                     it = i;
                 }else{
                     if (it->child(0) == NULL){
-                        it->setExpandable(true);
                         if ((it == m_list->topLevelItem(0)) || (it == m_list->currentItem()))
-                            it->setOpen(true);
+                            it->setExpanded(true);
                     }
-                    it = new ListViewItem(it);
+                    it = new QTreeWidgetItem(it);
                     it->setText(COL_JID, item->jid);
                     it->setText(COL_MODE, "0");
                     if (JabberPlugin::plugin->getAllLevels())
@@ -724,7 +724,7 @@ void JabberBrowser::setNavigation()
     EventCommandDisabled(cmd).process();
 }
 
-void JabberBrowser::currentChanged(ListViewItem*)
+void JabberBrowser::currentChanged(QTreeWidgetItem*)
 {
     Command cmd;
     cmd->id		= CmdBrowseInfo;
@@ -744,13 +744,13 @@ void JabberBrowser::currentChanged(ListViewItem*)
     cmd->flags	= haveFeature("jabber:iq:data") ? 0 : COMMAND_DISABLED;
     EventCommandDisabled(cmd).process();
 
-    ListViewItem *item = m_list->currentItem();
+    QTreeWidgetItem *item = m_list->currentItem();
     if (item == NULL)
         return;
     loadItem(item);
 }
 
-void JabberBrowser::loadItem(ListViewItem *item)
+void JabberBrowser::loadItem(QTreeWidgetItem *item)
 {
     bool bProcess = false;
     unsigned mode = item->text(COL_MODE).toLong();
@@ -783,17 +783,17 @@ void JabberBrowser::loadItem(ListViewItem *item)
 void JabberBrowser::changeMode()
 {
     if (JabberPlugin::plugin->getAllLevels()){
-        if (m_list->firstChild())
-            changeMode(m_list->firstChild());
+        if (m_list->topLevelItemCount())
+            changeMode(m_list->topLevelItem(0));
     }else{
-        if (m_list->firstChild())
-            loadItem(m_list->firstChild());
+        if (m_list->topLevelItemCount())
+            loadItem(m_list->topLevelItem(0));
         if (m_list->currentItem())
             loadItem(m_list->currentItem());
     }
 }
 
-void JabberBrowser::changeMode(ListViewItem *item)
+void JabberBrowser::changeMode(QTreeWidgetItem *item)
 {
     loadItem(item);
     for(int c = 0; c < item->childCount(); c++)
@@ -913,21 +913,21 @@ void JabberBrowser::showConfig()
     }
 }
 
-ListViewItem *JabberBrowser::findItem(unsigned col, const QString &id)
+QTreeWidgetItem *JabberBrowser::findItem(unsigned col, const QString &id)
 {
-    if (m_list->firstChild() == NULL)
+    if (m_list->topLevelItemCount() == 0)
         return NULL;
-    return findItem(col, id, m_list->firstChild());
+    return findItem(col, id, m_list->topLevelItem(0));
 }
 
-ListViewItem *JabberBrowser::findItem(unsigned col, const QString &id, ListViewItem *item)
+QTreeWidgetItem *JabberBrowser::findItem(unsigned col, const QString &id, QTreeWidgetItem *item)
 {
 	if (item->text(col) == id)
 		return item;
 	for(int c = 0; c < item->childCount(); c++)
 	{
-		ListViewItem *i= static_cast<ListViewItem*>(item->child(c));
-		ListViewItem *res = findItem(col, id, i);
+        QTreeWidgetItem *i= static_cast<QTreeWidgetItem*>(item->child(c));
+        QTreeWidgetItem *res = findItem(col, id, i);
 		if (res)
 			return res;
 	}
@@ -936,11 +936,11 @@ ListViewItem *JabberBrowser::findItem(unsigned col, const QString &id, ListViewI
 
 void JabberBrowser::checkDone()
 {
-    if (m_list->firstChild() && checkDone(m_list->firstChild()))
+    if ((m_list->topLevelItemCount() > 0) && checkDone(m_list->topLevelItem(0)))
         stop(QString::null);
 }
 
-bool JabberBrowser::checkDone(ListViewItem *item)
+bool JabberBrowser::checkDone(QTreeWidgetItem *item)
 {
 	if (!item->text(COL_ID_DISCO_ITEMS).isEmpty() ||
 			!item->text(COL_ID_DISCO_INFO).isEmpty() ||
@@ -949,14 +949,14 @@ bool JabberBrowser::checkDone(ListViewItem *item)
 	}
 	for(int c = 0; c < item->childCount(); c++)
 	{
-		ListViewItem *i= static_cast<ListViewItem*>(item->child(c));
+        QTreeWidgetItem *i= static_cast<QTreeWidgetItem*>(item->child(c));
 		if (!checkDone(i))
 			return false;
 	}
 	return true;
 }
 
-void JabberBrowser::setItemPict(ListViewItem *item)
+void JabberBrowser::setItemPict(QTreeWidgetItem *item)
 {
     const char *name = "Jabber";
     QString category = item->text(COL_CATEGORY);
@@ -986,16 +986,17 @@ void JabberBrowser::setItemPict(ListViewItem *item)
     }else if ((type == "rss") || (type == "weather")){
         name = "info";
     }
-    item->setPixmap(COL_NAME, Pict(name));
+    item->setIcon(COL_NAME, Pict(name));
 }
 
-void JabberBrowser::adjustColumn(ListViewItem *item)
+void JabberBrowser::adjustColumn(QTreeWidgetItem *item)
 {
-    for (; item; item = static_cast<ListViewItem*>(item->parent())){
-        if (item->isExpandable() && !item->isOpen())
+    for (; item; item = static_cast<QTreeWidgetItem*>(item->parent())){
+        if ((item->childCount() > 0) && !item->isExpanded())
             return;
     }
-    m_list->adjustColumn();
+    for(int i = 0; i < m_list->columnCount(); i++)
+        m_list->resizeColumnToContents(i);
 }
 
 void JabberBrowser::search()

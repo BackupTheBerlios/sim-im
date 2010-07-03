@@ -35,11 +35,11 @@ ICQSecure::ICQSecure(QWidget *parent, ICQClient *client) : QWidget(parent)
     setListView(lstVisible);
     setListView(lstInvisible);
     fill();
-    connect(lstVisible, SIGNAL(deleteItem(ListViewItem*)), this, SLOT(deleteVisibleItem(ListViewItem*)));
-    connect(lstInvisible, SIGNAL(deleteItem(ListViewItem*)), this, SLOT(deleteInvisibleItem(ListViewItem*)));
+    connect(lstVisible, SIGNAL(deleteItem(QTreeWidgetItem*)), this, SLOT(deleteVisibleItem(QTreeWidgetItem*)));
+    connect(lstInvisible, SIGNAL(deleteItem(QTreeWidgetItem*)), this, SLOT(deleteInvisibleItem(QTreeWidgetItem*)));
 }
 
-void ICQSecure::deleteVisibleItem(ListViewItem *item)
+void ICQSecure::deleteVisibleItem(QTreeWidgetItem *item)
 {
     Contact *contact = getContacts()->contact(item->text(4).toUInt());
     if (contact) {
@@ -53,7 +53,7 @@ void ICQSecure::deleteVisibleItem(ListViewItem *item)
     }
 }
 
-void ICQSecure::deleteInvisibleItem(ListViewItem *item)
+void ICQSecure::deleteInvisibleItem(QTreeWidgetItem *item)
 {
     Contact *contact = getContacts()->contact(item->text(4).toUInt());
     if (contact) {
@@ -155,18 +155,19 @@ bool ICQSecure::processEvent(Event *e)
     return false;
 }
 
-void ICQSecure::setListView(ListView *lst)
+void ICQSecure::setListView(QTreeWidget *lst)
 {
-    //lst->setSorting(0);
-    lst->addColumn(i18n("UIN"));
-    lst->addColumn(i18n("Nick"));
-    lst->addColumn(i18n("Name"));
-    lst->addColumn(i18n("EMail"));
-    //lst->setColumnAlignment(0, Qt::AlignRight);
-    lst->setExpandingColumn(3);
+    lst->setColumnCount(4);
+    QStringList columns;
+
+    columns.append(i18n("UIN"));
+    columns.append(i18n("Nick"));
+    columns.append(i18n("Name"));
+    columns.append(i18n("EMail"));
+    lst->setHeaderLabels(columns);
 }
 
-void ICQSecure::fillListView(ListView *lst, SIM::Data ICQUserData::* field)
+void ICQSecure::fillListView(QTreeWidget *lst, SIM::Data ICQUserData::* field)
 {
     lst->clear();
     Contact *contact;
@@ -194,7 +195,7 @@ void ICQSecure::fillListView(ListView *lst, SIM::Data ICQUserData::* field)
                         mails += ", ";
                     mails += mailItem;
                 }
-                ListViewItem *item = new ListViewItem(lst);
+                QTreeWidgetItem *item = new QTreeWidgetItem(lst);
                 item->setText(0,QString::number(data->getUin()));
                 item->setText(1,contact->getName());
                 item->setText(2,firstName);
@@ -204,13 +205,13 @@ void ICQSecure::fillListView(ListView *lst, SIM::Data ICQUserData::* field)
                 unsigned style  = 0;
                 QString statusIcon;
                 ((Client*)m_client)->contactInfo(data, status, style, statusIcon);
-                item->setPixmap(0, Pict(statusIcon));
+                item->setIcon(0, Pict(statusIcon));
             }
         }
     }
 }
 
-void ICQSecure::fillListView(ListView *lst, int v)
+void ICQSecure::fillListView(QTreeWidget *lst, int v)
 {
     lst->clear();
     Contact *contact;
@@ -252,7 +253,7 @@ void ICQSecure::fillListView(ListView *lst, int v)
                         mails += ", ";
                     mails += mailItem;
                 }
-                ListViewItem *item = new ListViewItem(lst);
+                QTreeWidgetItem *item = new QTreeWidgetItem(lst);
                 item->setText(0,QString::number(data->getUin()));
                 item->setText(1,contact->getName());
                 item->setText(2,firstName);
@@ -262,7 +263,7 @@ void ICQSecure::fillListView(ListView *lst, int v)
                 unsigned style  = 0;
                 QString statusIcon;
                 ((Client*)m_client)->contactInfo(data, status, style, statusIcon);
-                item->setPixmap(0, Pict(statusIcon));
+                item->setIcon(0, Pict(statusIcon));
             }
         }
     }

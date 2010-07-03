@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>469</width>
-    <height>279</height>
+    <width>505</width>
+    <height>309</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,7 +23,7 @@
    <item>
     <widget class="QTabWidget" name="tabMain">
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -150,7 +150,13 @@
         </widget>
        </item>
        <item>
-        <widget class="ListView" name="lstMails" native="true"/>
+        <widget class="QTreeWidget" name="lstMails">
+         <column>
+          <property name="text">
+           <string notr="true">1</string>
+          </property>
+         </column>
+        </widget>
        </item>
        <item>
         <layout class="QHBoxLayout">
@@ -235,7 +241,13 @@ It is impossible to change addresses which were received from the user.</string>
         </widget>
        </item>
        <item>
-        <widget class="ListView" name="lstPhones" native="true"/>
+        <widget class="QTreeWidget" name="lstPhones">
+         <column>
+          <property name="text">
+           <string notr="true">1</string>
+          </property>
+         </column>
+        </widget>
        </item>
        <item>
         <layout class="QHBoxLayout">
@@ -370,13 +382,6 @@ It is impossible to change numbers which were received from the user.</string>
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>ListView</class>
-   <extends>QWidget</extends>
-   <header>simgui/listview.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

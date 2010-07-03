@@ -84,12 +84,10 @@ SearchDialog::SearchDialog()
     connect(m_search->wndResult, SIGNAL(aboutToShow(QWidget*)), this, SLOT(resultShow(QWidget*)));
     fillClients();
     connect(m_search->cmbClients, SIGNAL(activated(int)), this, SLOT(clientActivated(int)));
-    m_result = new ListView(m_search->wndResult);
-    m_result->addColumn(i18n("Results"));
-    //m_result->setShowSortIndicator(true);
-    m_result->setExpandingColumn(0);
-    m_result->setFrameShadow(QFrame::Sunken);
-    m_result->setLineWidth(1);
+
+    m_result = new QTreeWidget(m_search->wndResult);
+    m_result->setColumnCount(1);
+    m_result->setHeaderLabel(i18n("Results"));
     addResult(m_result);
     showResult(NULL);
     aboutToShow(m_search->wndCondition->currentWidget());
@@ -102,7 +100,7 @@ SearchDialog::SearchDialog()
     connect(m_result, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
     connect(m_result, SIGNAL(dragStart()), this, SLOT(dragStart()));
     connect(m_search->btnNew, SIGNAL(clicked()), this, SLOT(newSearch()));
-    m_result->setMenu(MenuSearchItem);
+    //m_result->setMenu(MenuSearchItem);
     resultShow(m_result);
 }
 
@@ -115,7 +113,7 @@ SearchDialog::~SearchDialog()
 void SearchDialog::resizeEvent(QResizeEvent *e)
 {
     QMainWindow::resizeEvent(e);
-    m_result->adjustColumn();
+    m_result->resizeColumnToContents(0);
 	/* Fixme Todin
     if (isVisible())
 		::saveGeometry(this, CorePlugin::instance()->data.SearchGeometry);
@@ -272,7 +270,7 @@ void SearchDialog::fillClients()
             if (widgets[n].widget == m_current)
                 m_current = NULL;
             for (int i = 0; i < m_result->topLevelItemCount(); i++){
-                ListViewItem *item = static_cast<ListViewItem*>(m_result->topLevelItem(i));
+                QTreeWidgetItem *item = static_cast<QTreeWidgetItem*>(m_result->topLevelItem(i));
                 if ((QWidget*)(item->text(COL_SEARCH_WND).toULong()) == widgets[n].widget)
                     delete item;
             }
@@ -635,7 +633,7 @@ void SearchDialog::setStatus()
     if (m_result == NULL)
         return;
     QString message = i18n("Search");
-    if (m_result->firstChild()){
+    if (m_result->topLevelItemCount()){
         message += ": ";
         message += i18n("%n contact found", "%n contacts found", m_result->columnCount());
     }
@@ -668,16 +666,19 @@ void SearchDialog::setColumns(const QStringList &columns, int n, QWidget*)
 			*/
         m_bColumns = true;
     }
+    QStringList columnHeaders;
     for (i = 0; i < columns.count() / 2; i++)
-        m_result->addColumn(columns[2 * i + 1]);
-    m_result->setExpandingColumn(n);
-    m_result->adjustColumn();
+    {
+        columnHeaders.append(columns[2 * i + 1]);
+    }
+    m_result->setColumnCount(columns.count() / 2);
+    m_result->setHeaderLabels(columnHeaders);
 }
 
-class SearchViewItem : public ListViewItem
+class SearchViewItem : public QTreeWidgetItem
 {
 public:
-SearchViewItem(ListView *view) : ListViewItem(view) {}
+SearchViewItem(QTreeWidget *view) : QTreeWidgetItem(view) {}
     QString key(int column, bool ascending) const;
 };
 
@@ -693,9 +694,9 @@ QString SearchViewItem::key(int column, bool ascending) const
 
 void SearchDialog::addItem(const QStringList &values, QWidget *wnd)
 {
-    ListViewItem *item = NULL;
+    QTreeWidgetItem *item = NULL;
     for (int i = 0; i < m_result->topLevelItemCount(); i++){
-        item = static_cast<ListViewItem*>(m_result->topLevelItem(i));
+        item = static_cast<QTreeWidgetItem*>(m_result->topLevelItem(i));
         if (item->text(COL_KEY) == values[1])
             break;
     }
@@ -717,7 +718,7 @@ void SearchDialog::addItem(const QStringList &values, QWidget *wnd)
         m_result->viewport()->setUpdatesEnabled(false);
     }
     item = new SearchViewItem(m_result);
-    item->setPixmap(0, Pict(values[0]));
+    item->setIcon(0, Pict(values[0]));
     item->setText(COL_KEY, values[1]);
     for (int i = 2; i < values.count(); i++)
         item->setText(i - 2, values[i]);
@@ -731,7 +732,8 @@ void SearchDialog::update()
     m_update->stop();
     m_result->viewport()->setUpdatesEnabled(true);
     m_result->viewport()->repaint();
-    m_result->adjustColumn();
+    for(int i = 0; i < m_result->columnCount(); i++)
+        m_result->resizeColumnToContents(i);
 }
 
 void SearchDialog::selectionChanged()
@@ -811,14 +813,10 @@ void SearchDialog::newSearch()
             cb->setCurrentIndex(0);
     }
     m_result->clear();
-	/*
-    for (int i = m_result->columnCount() - 1; i >= 0; i--)
-        m_result->removeColumn(i);
-		*/
-	m_result->setColumnCount(0);
-    m_result->addColumn(i18n("Results"));
-    m_result->setExpandingColumn(0);
-    m_result->adjustColumn();
+    m_result->setColumnCount(1);
+    m_result->setHeaderLabel(i18n("Results"));
+    for(int i = 0; i < m_result->columnCount(); i++)
+        m_result->resizeColumnToContents(i);
 }
 
 void SearchDialog::addSearch(QWidget *w, Client *client, const QString &name)

@@ -1189,7 +1189,6 @@ void JabberClient::changeStatus(const SIM::IMStatusPtr& status)
     data.owner.setStatusTime(now.toTime_t());
     if (currentStatus()->id() == "offline")
         data.owner.setOnlineTime(now.toTime_t());
-    TCPClient::changeStatus(status);
     QSharedPointer<JabberStatus> jabberstatus = status.dynamicCast<JabberStatus>();
     socket()->writeBuffer().packetStart();
     QString priority = QString::number(getPriority());
@@ -1244,6 +1243,7 @@ void JabberClient::changeStatus(const SIM::IMStatusPtr& status)
         }
         */
     }
+    TCPClient::changeStatus(status);
 }
 
 void JabberClient::setStatus(unsigned status)
