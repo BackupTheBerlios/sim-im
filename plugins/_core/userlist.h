@@ -60,7 +60,6 @@ public:
     ListView(QWidget *parent);
     virtual ~ListView();
 
-    void startDrag(QMimeData*);
     void acceptDrop(bool bAccept);
     void setMenu(unsigned long menuId);
     ListViewItem* currentItem();

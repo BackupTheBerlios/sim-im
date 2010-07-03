@@ -52,6 +52,8 @@ namespace SIM
 
     QString Group::getName()
     {
+        if(id() == 0)
+            return i18n("Not in list");
         return userdata()->value("Name").toString();
     }
 

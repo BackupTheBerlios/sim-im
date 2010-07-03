@@ -27,6 +27,7 @@
 #include "history.h"
 #include "contacts/contact.h"
 #include "contacts/client.h"
+#include "icons.h"
 
 #include <QToolBar>
 #include <QApplication>
@@ -60,7 +61,7 @@ UserWnd::UserWnd(unsigned long id, Buffer *cfg, bool bReceived, bool bAdjust)
         , m_bResize (false) 
         , m_bClosed (false) 
         , m_bTyping (false) 
-        , m_list (NULL)
+        , m_targetContactList(0)
         , m_view (NULL)
 {
     load_data(userWndData, &data, cfg);
@@ -278,36 +279,57 @@ void UserWnd::setStatus(const QString &status)
 
 void UserWnd::showListView(bool bShow)
 {
+    log(L_DEBUG, "bShoW: %d", bShow);
     if(bShow)
     {
-        if (m_list == NULL)
+        if(!m_targetContactList)
         {
-            m_list = new UserList(this);
-            setStretchFactor(indexOf(m_list), 1);
-            connect(m_list, SIGNAL(selectChanged()), this, SLOT(selectChanged()));
-
-            if(topLevelWidget()->inherits("Container"))
-            {
-                Container *c = qobject_cast<Container*>(topLevelWidget());
-                list<UserWnd*> wnd = c->windows();
-                for (list<UserWnd*>::iterator it = wnd.begin(); it != wnd.end(); ++it)
-                    m_list->select((*it)->id());
-            }
+            m_targetContactList = new QTreeWidget(this);
+            m_targetContactList->setHeaderHidden(true);
+            setStretchFactor(indexOf(m_targetContactList), 1);
+            connect(m_targetContactList, SIGNAL(itemSelectionChanged()), this, SLOT(selectChanged()));
+            fillContactList(m_targetContactList);
+            m_targetContactList->show();
         }
-        m_list->show();
-        emit multiplyChanged();
         return;
     }
-    if (m_list == NULL)
+    if(m_targetContactList == NULL)
         return;
-    delete m_list;
-    m_list = NULL;
-    emit multiplyChanged();
+    delete m_targetContactList;
+    m_targetContactList = NULL;
 }
 
 void UserWnd::selectChanged()
 {
     emit multiplyChanged();
+}
+
+void UserWnd::fillContactList(QTreeWidget* tree)
+{
+    QList<Group*> groups = getContacts()->allGroups();
+    QTreeWidgetItem* groupItem = 0;
+    foreach(Group* g, groups)
+    {
+        QList<Contact*> contacts = getContacts()->contactsInGroup(g);
+        if(contacts.size() == 0)
+            continue;
+        groupItem = new QTreeWidgetItem(m_targetContactList);
+        groupItem->setText(0, g->getName());
+        foreach(Contact* c, contacts)
+        {
+            QTreeWidgetItem* it = new QTreeWidgetItem(groupItem);
+            it->setText(0, c->getName());
+            QString statusIcon;
+            QSet<QString> wrkIcons;
+            unsigned style;
+            c->contactInfo(style, statusIcon, &wrkIcons);
+            it->setIcon(0, Icon(statusIcon));
+            it->setFlags(it->flags() | Qt::ItemIsUserCheckable);
+            it->setCheckState(0, c->id() == m_id ? Qt::Checked : Qt::Unchecked);
+            it->setData(0, ContactIdRole, (unsigned int)c->id());
+        }
+        groupItem->setExpanded(true);
+    }
 }
 
 void UserWnd::closeEvent(QCloseEvent *e)
@@ -339,3 +361,30 @@ void UserWnd::markAsRead()
     }
 }
 
+unsigned long UserWnd::id() const
+{
+    return m_id;
+}
+
+bool UserWnd::isMultisendActive() const
+{
+    return m_targetContactList != NULL;
+}
+
+QList<int> UserWnd::multisendContacts() const
+{
+    QList<int> list;
+    if(!m_targetContactList)
+        return list;
+    for(int i = 0; i < m_targetContactList->topLevelItemCount(); i++)
+    {
+        QTreeWidgetItem* groupitem = m_targetContactList->topLevelItem(i);
+        for(int j = 0; j < groupitem->childCount(); j++)
+        {
+            QTreeWidgetItem* contactitem = groupitem->child(j);
+            if(contactitem->checkState(0) == Qt::Checked)
+                list.append(contactitem->data(0, ContactIdRole).toInt());
+        }
+    }
+    return list;
+}

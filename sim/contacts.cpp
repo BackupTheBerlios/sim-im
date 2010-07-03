@@ -1320,6 +1320,27 @@ void ContactList::removeContact(unsigned long id)
     p->contacts.erase(id);
 }
 
+QList<Group*> ContactList::allGroups()
+{
+    QList<Group*> groupList;
+    for(std::vector<Group*>::iterator it = p->groups.begin(); it != p->groups.end(); ++it)
+    {
+        groupList.append(*it);
+    }
+    return groupList;
+}
+
+QList<Contact*> ContactList::contactsInGroup(Group* gr)
+{
+    QList<Contact*> contactList;
+    for(std::map<unsigned long, Contact*>::iterator it = p->contacts.begin(); it != p->contacts.end(); ++it)
+    {
+        if((*it).second->getGroup() == gr->id())
+            contactList.append((*it).second);
+    }
+    return contactList;
+}
+
 }   // namespace sim
 
 EXPORT QString g_i18n(const char *text, SIM::Contact *contact)

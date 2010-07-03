@@ -852,16 +852,16 @@ bool MsgEdit::sendMessage(Message *msg)
     msg->setFlags(msg->getFlags() | m_flags);
     m_flags = 0;
 
-    if (m_userWnd->m_list){
-        if( !m_userWnd->m_list->isHaveSelected() )
+    if (m_userWnd->isMultisendActive()) {
+        m_multiply = m_userWnd->multisendContacts();
+        if(m_multiply.size() == 0)
             return false;
-        multiply = m_userWnd->m_list->selected();
-        msg->setContact( multiply.first() );
-        multiply.pop_front();
+        msg->setContact(m_multiply.first());
+        m_multiply.pop_front();
         msg->setClient(NULL);
-        if( multiply.count() > 0 )
+        if( m_multiply.count() > 0 )
             msg->setFlags(msg->getFlags() | MESSAGE_MULTIPLY);
-    }else if (!m_resource.isEmpty()){
+    } else if (!m_resource.isEmpty()) {
         void *data = NULL;
         Client *c = client(data, true, false, msg->contact(), true);
         if (c){
@@ -950,7 +950,7 @@ bool MsgEdit::send()
 
 void MsgEdit::stopSend(bool bCheck)
 {
-    if (m_userWnd->m_list){
+    if (m_userWnd->isMultisendActive()){
         Command cmd;
         m_userWnd->showListView(false);
         cmd->id			= CmdMultiply;
@@ -961,7 +961,7 @@ void MsgEdit::stopSend(bool bCheck)
         cmd->param		= this;
         EventCommandChange(cmd).process();
     }
-    multiply.clear();
+    m_multiply.clear();
     Command cmd;
     cmd->id		    = CmdSend;
     cmd->text	    = I18N_NOOP("&Send");
@@ -1008,7 +1008,7 @@ bool MsgEdit::adjustType()
         return true;
     Command cmd;
     cmd->menu_id = MenuMessage;
-    cmd->param = (void*)(m_userWnd->m_id);
+    cmd->param = (void*)(m_userWnd->id());
     cmd->id = m_userWnd->getMessageType();
     if (m_userWnd->getMessageType() != m_type) {
         if(EventCheckCommandState(cmd).process()) {
@@ -1029,7 +1029,7 @@ bool MsgEdit::adjustType()
     while ((c = ++itc) != NULL){
         if (c->id == CmdContactClients)
             continue;
-        c->param = (void*)(m_userWnd->m_id);
+        c->param = (void*)(m_userWnd->id());
         if (!EventCheckCommandState(c).process())
             continue;
         if (setType(c->id)){
@@ -1046,7 +1046,7 @@ bool MsgEdit::processEvent(Event *e)
     switch (e->type()) {
     case eEventContact: {
         EventContact *ec = static_cast<EventContact*>(e);
-        if (ec->contact()->id() != m_userWnd->m_id)
+        if (ec->contact()->id() != m_userWnd->id())
             break;
         adjustType();
         break;
@@ -1259,7 +1259,7 @@ bool MsgEdit::processEvent(Event *e)
                     contact->setLastActive(QDateTime::currentDateTime().toTime_t());
                     EventContact(contact, EventContact::eStatus).process();
                 }
-                if (!multiply.empty() ){
+                if (!m_multiply.empty() ){
                     CommandDef *def = CorePlugin::instance()->messageTypes.find(m_msg->type());
                     if (def){
                         MessageDef *mdef = (MessageDef*)(def->param);
@@ -1269,11 +1269,11 @@ bool MsgEdit::processEvent(Event *e)
                         config.setWritePos(0);
                         config.getSection();
                         m_msg = (mdef->create)(&config);
-                        m_msg->setContact( multiply.first() );
-                        multiply.pop_front();
+                        m_msg->setContact( m_multiply.first() );
+                        m_multiply.pop_front();
                         m_msg->setClient(NULL);
                         m_msg->setFlags(m_msg->getFlags() | MESSAGE_MULTIPLY);
-                        if( multiply.empty() )
+                        if( m_multiply.empty() )
                             m_msg->setFlags(m_msg->getFlags() | MESSAGE_LAST);
                         send();
                         return false;
@@ -1320,7 +1320,7 @@ void MsgEdit::setEmptyMessage()
     CommandsList itc(*cmdsMsg, true);
     CommandDef *c;
     while ((c = ++itc) != NULL){
-        c->param = (void*)(m_userWnd->m_id);
+        c->param = (void*)(m_userWnd->id());
         if (EventCheckCommandState(c).process()){
             Message *msg;
             CommandDef *def = CorePlugin::instance()->messageTypes.find(c->id);
@@ -1330,7 +1330,7 @@ void MsgEdit::setEmptyMessage()
             if (mdef->create == NULL)
                 continue;
             msg = mdef->create(NULL);
-            msg->setContact(m_userWnd->m_id);
+            msg->setContact(m_userWnd->id());
             if (mdef->flags & MESSAGE_SILENT)
                 continue;
             msg->setFlags(MESSAGE_NORAISE);
@@ -1359,7 +1359,7 @@ void MsgEdit::typingStart()
 {
     typingStop();
     void *data = NULL;
-    Client *cl = client(data, false, false, m_userWnd->id(), m_userWnd->m_list == NULL);
+    Client *cl = client(data, false, false, m_userWnd->id(), !m_userWnd->isMultisendActive());
     if (cl == NULL)
         return;
     Message *msg = new Message(MessageTypingStart);
@@ -1374,7 +1374,7 @@ void MsgEdit::typingStop()
 {
     if (m_typingClient.isEmpty())
         return;
-    Contact *contact = getContacts()->contact(m_userWnd->m_id);
+    Contact *contact = getContacts()->contact(m_userWnd->id());
     if (contact == NULL)
         return;
     ClientDataIterator it = contact->clientDataIterator();

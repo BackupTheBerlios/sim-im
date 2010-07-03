@@ -285,15 +285,6 @@ ListViewItem* ListView::firstChild()
 void ListView::startDrag(Qt::DropActions)
 {
     emit dragStart();
-    startDrag(dragObject());
-}
-
-void ListView::startDrag(QMimeData * /*d*/)
-{
-    /*
-    if (d)
-        d->dragCopy();
-        */
 }
 
 QMimeData *ListView::dragObject()
