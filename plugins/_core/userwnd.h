@@ -54,7 +54,6 @@ public:
     void setStatus(const QString&);
     void showListView(bool bShow);
     QString status() { return m_status; }
-    UserList	*m_list;
     void markAsRead();
     bool isClosed() { return m_bClosed; }
     bool m_bTyping;
@@ -79,6 +78,7 @@ protected:
     bool		m_bClosed;
     bool		m_bBarChanged;
     unsigned long	m_id;
+    UserList	*m_list;
     UserWndData	data;
     friend class MsgEdit;
 };

@@ -341,6 +341,8 @@ private:
 
 #define GET_CorePlugin() ( static_cast<CorePlugin*>(SIM::getPluginManager()->plugin("_core").data()) )
 
+CorePlugin* getCorePlugin();
+
 #endif
 
 // vim: set expandtab:

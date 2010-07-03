@@ -123,8 +123,8 @@ MainInfo::MainInfo(QWidget *parent, Contact *contact) : QWidget(parent)
     fill();
     connect(lstMails, SIGNAL(itemSelectionChanged()), this, SLOT(mailSelectionChanged()));
     connect(lstPhones, SIGNAL(itemSelectionChanged()), this, SLOT(phoneSelectionChanged()));
-    connect(lstMails, SIGNAL(deleteItem(ListViewItem*)), this, SLOT(deleteMail(ListViewItem*)));
-    connect(lstPhones, SIGNAL(deleteItem(ListViewItem*)), this, SLOT(deletePhone(ListViewItem*)));
+//    connect(lstMails, SIGNAL(deleteItem(QTreeWidgetItem*)), this, SLOT(deleteMail(QTreeWidgetItem*)));
+//    connect(lstPhones, SIGNAL(deleteItem(QTreeWidgetItem*)), this, SLOT(deletePhone(QTreeWidgetItem*)));
     connect(btnMailAdd, SIGNAL(clicked()), this, SLOT(addMail()));
     connect(btnMailEdit, SIGNAL(clicked()), this, SLOT(editMail()));
     connect(btnMailDelete, SIGNAL(clicked()), this, SLOT(deleteMail()));

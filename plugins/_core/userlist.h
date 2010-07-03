@@ -46,32 +46,20 @@ public:
     virtual ~ListViewItem();
 
     ListView* listView() const;
-    void setPixmap(int col, QPixmap p);
-    QPixmap pixmap(int t);
 
     int height() const {return sizeHint(0).height();}
-    int width() const {return sizeHint(0).width();};
+    int width() const {return sizeHint(0).width();}
 
     void repaint();
-    bool isOpen();
-    void setOpen(bool o);
-    bool isExpandable();
-    void setExpandable(bool e);
-private:
-    bool m_open;
-    bool m_expandable;
 };
 
 class EXPORT ListView : public QTreeWidget, public SIM::EventReceiver
 {
     Q_OBJECT
-    Q_PROPERTY( int expandingColumn READ expandingColumn WRITE setExpandingColumn )
 public:
     ListView(QWidget *parent);
     virtual ~ListView();
-    int expandingColumn() const;
-    void setExpandingColumn(int);
-    ListViewItem *m_pressedItem;
+
     void startDrag(QMimeData*);
     void acceptDrop(bool bAccept);
     void setMenu(unsigned long menuId);
@@ -79,8 +67,7 @@ public:
     ListViewItem* itemAt(const QPoint& p);
     ListViewItem* firstChild();
     void addColumn(const QString& name);
-    void setOpen(bool o);
-    void setOpen(ListViewItem* item, bool o);
+
     void repaint(ListViewItem* item);
 
 signals:
@@ -91,9 +78,7 @@ signals:
     void drop(QMimeSource*);
 
 public slots:
-    void adjustColumn();
     virtual void startDrag(Qt::DropActions);
-    void sizeChange(int,int,int);
 
 protected:
     virtual bool getMenu(ListViewItem *item, unsigned long &id, void *&param);
@@ -112,11 +97,12 @@ protected:
     void keyPressEvent(QKeyEvent *e);
     void showPopup(ListViewItem *item, QPoint p);
     void contextMenuEvent(QContextMenuEvent* e);
-    int m_expandingColumn;
+
     unsigned long m_menuId;
     QTimer	 *m_resizeTimer;
     bool m_bAcceptDrop;
     static bool s_bInit;
+    ListViewItem *m_pressedItem;
 };
 
 class EXPORT ContactDragObject : public QMimeData

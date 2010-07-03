@@ -162,6 +162,11 @@ char *k_nl_find_msg (loaded_l10nfile *domain_file, const char *msgid);
 
 static CorePlugin* g_plugin = 0;
 
+CorePlugin* getCorePlugin()
+{
+    return g_plugin;
+}
+
 static QWidget *getInterfaceSetup(QWidget *parent, SIM::PropertyHubPtr data)
 {
 	return new MessageConfig(parent, data);
@@ -239,7 +244,7 @@ CorePlugin::CorePlugin(unsigned base, Buffer* /*config*/)
     , m_bIgnoreEvents   (false)
     , m_propertyHub     (SIM::PropertyHub::create("_core"))
 {
-	g_plugin= this;
+    g_plugin = this;
 	setValue("StatusTime", QDateTime::currentDateTime().toTime_t());
 
 	//loadDir();
