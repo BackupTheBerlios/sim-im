@@ -18,7 +18,7 @@ email                : vovan@shutoff.ru
 #include "userlist.h"
 #include "core.h"
 #include "icons.h"
-#include "userview.h"
+#include "roster/userview.h"
 
 #include <QScrollBar>
 #include <QTimer>
@@ -1542,19 +1542,6 @@ bool UserListBase::isHaveSelected()
 {
     QList< unsigned int > list = selected();
     return ( list.count() > 0 );
-}
-
-UserList::UserList(QWidget *parent)
-    : UserListBase(parent)
-{
-    m_bCheckable = true;
-    m_bInit  = true;
-    setMenu(0);
-    fill();
-}
-
-UserList::~UserList()
-{
 }
 
 // vim: set expandtab:

@@ -20,7 +20,7 @@
 #include "icons.h"
 #include "mainwin.h"
 #include "core.h"
-#include "userview.h"
+#include "roster/userview.h"
 #include "contacts/contact.h"
 #include "simgui/toolbtn.h"
 

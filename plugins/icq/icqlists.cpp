@@ -601,10 +601,12 @@ void ICQClient::snac_lists(unsigned short type, unsigned short seq)
                     bMy = true;
                 }
                 if ((int)newGroup != contact->getGroup()){
-                    if ((newGroup == 0) && bOther){
-                        if (bMy)
-                            addContactRequest(contact);
-                    }else{
+//                    if ((newGroup == 0) && bOther){
+//                        if (bMy)
+//                            addContactRequest(contact);
+//                    }
+//                    else
+                    {
                         contact->setGroup(newGroup);
                         EventContact e(contact, EventContact::eChanged);
                         e.process();

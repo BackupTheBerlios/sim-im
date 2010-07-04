@@ -63,7 +63,7 @@ email                : vovan@shutoff.ru
 #include "core.h"
 #include "cfgdlg.h"
 #include "mainwin.h"
-#include "userview.h"
+#include "roster/userview.h"
 #include "commands.h"
 #include "usercfg.h"
 #include "interfacecfg.h"

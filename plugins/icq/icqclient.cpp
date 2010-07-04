@@ -3830,8 +3830,8 @@ bool ICQClient::processEvent(Event *e)
                                  }
     case EventContact::eChanged: {
         if (getState() == Connected){
-            if (!m_bAIM)
-                m_snacBuddy->addBuddy(contact);
+//            if (!m_bAIM)
+//                m_snacBuddy->addBuddy(contact);
             if (contact == getContacts()->owner()){
                 QDateTime now(QDateTime::currentDateTime());
                 if (getContacts()->owner()->getPhones() != data.owner.getPhoneBook()){

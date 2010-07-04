@@ -33,7 +33,6 @@
 #include "simgui/listview.h"
 #include "msgfile.h"
 #include "msgauth.h"
-#include "userlist.h"
 #include "simgui/ballonmsg.h"
 #include "container.h"
 #include "icons.h"
@@ -499,18 +498,19 @@ static Message *createContacts(Buffer *cfg)
 
 static QObject *generateContacts(MsgEdit *p, Message *msg)
 {
-    return new MsgContacts(p, msg);
+    return new MsgContacts(p, msg, getContacts());
 }
 
 static Message *dropContacts(QMimeSource *src)
 {
-    if (ContactDragObject::canDecode(src)){
-        Contact *contact = ContactDragObject::decode(src);
-        ContactsMessage *msg = new ContactsMessage;
-        QString name = contact->getName();
-        msg->setContacts(QString("sim:") + QString::number(contact->id()) + ',' + getToken(name, '/'));
-        return msg;
-    }
+    // FIXME
+//    if (ContactDragObject::canDecode(src)){
+//        Contact *contact = ContactDragObject::decode(src);
+//        ContactsMessage *msg = new ContactsMessage;
+//        QString name = contact->getName();
+//        msg->setContacts(QString("sim:") + QString::number(contact->id()) + ',' + getToken(name, '/'));
+//        return msg;
+//    }
     return NULL;
 }
 

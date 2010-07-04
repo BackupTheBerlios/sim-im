@@ -21,11 +21,11 @@
 #include "msgedit.h"
 #include "msgview.h"
 #include "simgui/toolbtn.h"
-#include "userlist.h"
 #include "core.h"
 #include "container.h"
 #include "history.h"
 #include "contacts/contact.h"
+#include "contacts/group.h"
 #include "contacts/client.h"
 #include "icons.h"
 
@@ -279,7 +279,6 @@ void UserWnd::setStatus(const QString &status)
 
 void UserWnd::showListView(bool bShow)
 {
-    log(L_DEBUG, "bShoW: %d", bShow);
     if(bShow)
     {
         if(!m_targetContactList)

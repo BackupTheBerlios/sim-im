@@ -18,7 +18,6 @@
 #include "msgurl.h"
 #include "msgedit.h"
 #include "userwnd.h"
-#include "userlist.h"
 #include "core.h"
 
 #include "simgui/toolbtn.h"

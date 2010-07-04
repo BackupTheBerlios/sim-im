@@ -20,6 +20,7 @@
 
 #include "userlist.h"
 #include "userwnd.h"
+#include "../container.h"
 
 //#include <QEvent>
 //#include <QDragEnterEvent>

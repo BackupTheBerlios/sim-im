@@ -23,7 +23,6 @@ email                : vovan@shutoff.ru
 #include "simgui/intedit.h"
 #include "simgui/ballonmsg.h"
 #include "simgui/linklabel.h"
-#include "container.h"
 #include "userviewdelegate.h"
 #include "history.h"
 #include "contacts/contact.h"

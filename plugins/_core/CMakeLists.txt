@@ -61,10 +61,10 @@ SET(_core_SRCS
         usercfg.cpp
         userhistorycfg.cpp
         userlist.cpp
-        userview.cpp
         userviewcfg.cpp
-        userviewdelegate.cpp
         userwnd.cpp
+        roster/userview.cpp
+        roster/userviewdelegate.cpp
 )
 
 # is this really needed?
@@ -127,10 +127,10 @@ SET(_core_HDRS
         usercfg.h
         userhistorycfg.h
         userlist.h
-        userview.h
         userviewcfg.h
-        userviewdelegate.h
         userwnd.h
+        roster/userview.h
+        roster/userviewdelegate.h
 )
 
 SET(_core_UICS
@@ -195,6 +195,8 @@ IF(APPLE)
         CONFIGURE_FILE(${FILE} ${SIM_ICONS_DIR}/${NAME} COPYONLY)
     ENDFOREACH(FILE)
 ENDIF(APPLE)
+
+INCLUDE_DIRECTORIES(../${CMAKE_CURRENT_SOURCE_DIR})
 
 INSTALL(FILES ${_prebuilt} DESTINATION ${SIM_ICONS_DIR})
 

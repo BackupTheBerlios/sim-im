@@ -274,15 +274,6 @@ protected:
     DivItem* m_itemOffline;
 };
 
-class UserList : public UserListBase
-{
-    Q_OBJECT
-public:
-    UserList( QWidget *parent );
-    virtual ~UserList();
-
-};
-
 #endif
 
 // vim: set expandtab:

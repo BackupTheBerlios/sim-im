@@ -20,17 +20,22 @@
 
 #include <QObject>
 #include <QString>
+#include <QTreeWidget>
 
 #include "event.h"
 
 class MsgEdit;
 class UserList;
+namespace SIM
+{
+    class ContactList;
+}
 
 class MsgContacts : public QObject, public SIM::EventReceiver
 {
     Q_OBJECT
 public:
-    MsgContacts(MsgEdit *btn, SIM::Message *msg);
+    MsgContacts(MsgEdit *btn, SIM::Message *msg, SIM::ContactList* cl);
     ~MsgContacts();
 protected slots:
     void init();
@@ -39,9 +44,14 @@ protected slots:
     void listFinished();
 protected:
     virtual bool processEvent(SIM::Event*);
-    UserList   *m_list;
+    void fillContactList(QTreeWidget* tree);
+    void setCheckedState(QTreeWidget* tree, int contact_id, bool checked);
+    QList<unsigned int> checkedContacts(QTreeWidget* tree);
+    QTreeWidget* m_list;
     MsgEdit    *m_edit;
     QString     m_client;
+    static const int ContactIdRole = Qt::UserRole + 1;
+    SIM::ContactList* m_contactList;
 };
 
 #endif
