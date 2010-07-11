@@ -191,7 +191,7 @@ bool UserView::processEvent(Event *e)
             Contact *contact = getContacts()->contact((unsigned long)(cmd->param));
                 if (contact){
                     if (cmd->id == CmdContactDelete){
-            			ListViewItem *item = findContactItem(contact->id());
+                        QTreeWidgetItem *item = findContactItem(contact->id());
                         if (item){
                         //scrollTo(model()->index(item->row(), item->column()));
                         QRect rc = visualItemRect(item);
@@ -206,7 +206,7 @@ bool UserView::processEvent(Event *e)
                         return true;
                     }
                     if (cmd->id == CmdContactRename){
-                        ListViewItem *item = findContactItem(contact->id());
+                        QTreeWidgetItem *item = findContactItem(contact->id());
                         if (item){
                         setCurrentItem(item);
                         renameContact();
@@ -356,7 +356,7 @@ bool UserView::processEvent(Event *e)
                     fill();
                     Group *g = getContacts()->group(0, true);
                     drawUpdates();
-                    ListViewItem *item = findGroupItem(g->id());
+                    QTreeWidgetItem *item = findGroupItem(g->id());
                     if (item)
                     {
                         setCurrentItem(item);
@@ -367,7 +367,7 @@ bool UserView::processEvent(Event *e)
             }
             if (cmd->id == CmdGrpRename)
             {
-                ListViewItem *item = findGroupItem((unsigned long)(cmd->param));
+                QTreeWidgetItem *item = findGroupItem((unsigned long)(cmd->param));
                 if (item)
                 {
                     setCurrentItem(item);
@@ -379,7 +379,7 @@ bool UserView::processEvent(Event *e)
             {
                 unsigned long grp_id = (unsigned long)(cmd->param);
                 getContacts()->moveGroup(grp_id, true);
-                ListViewItem *item = findGroupItem(grp_id);
+                QTreeWidgetItem *item = findGroupItem(grp_id);
                 if (item)
                     //scrollTo(model()->index(item->row(), item->column()));
                     setCurrentItem(item);
@@ -389,7 +389,7 @@ bool UserView::processEvent(Event *e)
             {
                 unsigned long grp_id = (unsigned long)(cmd->param);
                 getContacts()->moveGroup(grp_id, false);
-                ListViewItem *item = findGroupItem(grp_id);
+                QTreeWidgetItem *item = findGroupItem(grp_id);
                 if (item)
                     //scrollTo(model()->index(item->row(), item->column()));
                     setCurrentItem(item);
@@ -398,7 +398,7 @@ bool UserView::processEvent(Event *e)
             if (cmd->id == CmdGrpDelete)
             {
                 unsigned long grp_id = (unsigned long)(cmd->param);
-                ListViewItem *item = findGroupItem(grp_id);
+                QTreeWidgetItem *item = findGroupItem(grp_id);
                 Group *g = getContacts()->group(grp_id);
                 if (item && g)
                 {
@@ -661,7 +661,7 @@ void UserView::deleteContact(void *p)
 
 void UserView::renameGroup()
 {
-    ListViewItem *item = currentItem();
+    QTreeWidgetItem *item = currentItem();
     if (item == NULL)
         return;
     UserViewItemBase *i = static_cast<UserViewItemBase*>(item);
@@ -686,7 +686,7 @@ void UserView::renameGroup()
 
 void UserView::renameContact()
 {
-    ListViewItem *item = currentItem();
+    QTreeWidgetItem *item = currentItem();
     if (item == NULL)
         return;
     UserViewItemBase *i = static_cast<UserViewItemBase*>(item);
@@ -742,7 +742,7 @@ void UserView::focusOutEvent(QFocusEvent *e)
 
 void UserView::mouseReleaseEvent(QMouseEvent *e)
 {
-    ListViewItem *item = m_pressedItem;
+    QTreeWidgetItem *item = m_pressedItem;
     UserListBase::mouseReleaseEvent(e);
     if (!item || CorePlugin::instance()->value("UseDblClick").toBool())
         return;
@@ -779,8 +779,8 @@ void UserView::keyPressEvent(QKeyEvent *e)
         if (m_searchItem) 
         {
             int store = 0;
-            list<ListViewItem*> items;
-            list<ListViewItem*>::iterator it;
+            list<QTreeWidgetItem*> items;
+            list<QTreeWidgetItem*>::iterator it;
             search(items);
             if (!items.empty()) 
             {
@@ -807,8 +807,8 @@ void UserView::keyPressEvent(QKeyEvent *e)
     bool bTip = false;
     if (m_searchItem && (m_searchItem == mTipItem))
         bTip = true;
-    list<ListViewItem*> old_items;
-    list<ListViewItem*> new_items;
+    list<QTreeWidgetItem*> old_items;
+    list<QTreeWidgetItem*> new_items;
     switch (e->key())
     {
     case Qt::Key_Backspace:
@@ -822,7 +822,7 @@ void UserView::keyPressEvent(QKeyEvent *e)
         if (m_search.isEmpty())
         {
             m_searchItem = NULL;
-            list<ListViewItem*>::iterator it;
+            list<QTreeWidgetItem*>::iterator it;
             for (it = closed_items.begin(); it != closed_items.end(); ++it)
                 (*it)->setExpanded(false);
         }
@@ -855,7 +855,7 @@ void UserView::keyPressEvent(QKeyEvent *e)
         if (m_searchItem)
         {
             search(old_items);
-            list<ListViewItem*>::iterator it_old;
+            list<QTreeWidgetItem*>::iterator it_old;
             for (it_old = old_items.begin(); it_old != old_items.end(); ++it_old)
                 if ((*it_old) == m_searchItem)
                     break;
@@ -878,7 +878,7 @@ void UserView::keyPressEvent(QKeyEvent *e)
         if (m_searchItem)
         {
             search(old_items);
-            list<ListViewItem*>::iterator it_old;
+            list<QTreeWidgetItem*>::iterator it_old;
             for (it_old = old_items.begin(); it_old != old_items.end(); ++it_old)
                 if (*it_old == m_searchItem)
                     break;
@@ -896,7 +896,7 @@ void UserView::keyPressEvent(QKeyEvent *e)
     case Qt::Key_Minus:
         if (m_search.isEmpty())
         {
-            ListViewItem *item = currentItem();
+            QTreeWidgetItem *item = currentItem();
             if (item)
             {
                 UserListBase::keyPressEvent(e);
@@ -919,7 +919,7 @@ void UserView::keyPressEvent(QKeyEvent *e)
             closed_items.clear();
             for(int c = 0; c < topLevelItemCount(); c++)
             {
-                ListViewItem *item = static_cast<ListViewItem*>(topLevelItem(c));
+                QTreeWidgetItem *item = topLevelItem(c);
                 if (!(item->isExpanded()))
                     closed_items.push_back(item);
             }
@@ -938,8 +938,8 @@ void UserView::keyPressEvent(QKeyEvent *e)
         else
             m_searchItem = new_items.front();
     }
-    list<ListViewItem*>::iterator it_old;
-    list<ListViewItem*>::iterator it_new;
+    list<QTreeWidgetItem*>::iterator it_old;
+    list<QTreeWidgetItem*>::iterator it_new;
     for (it_old = old_items.begin(); it_old != old_items.end(); ++it_old)
     {
         for (it_new = new_items.begin(); it_new != new_items.end(); ++it_new)
@@ -949,7 +949,7 @@ void UserView::keyPressEvent(QKeyEvent *e)
             new_items.push_back(*it_old);
     }
     for (it_new = new_items.begin(); it_new != new_items.end(); ++it_new)
-        (*it_new)->repaint();
+        update(indexFromItem((*it_new)));
     setCurrentItem(m_searchItem);
     if (m_searchItem)
     {
@@ -970,17 +970,17 @@ void UserView::stopSearch()
 {
     if (m_search.isEmpty())
         return;
-    list<ListViewItem*> old_items;
+    list<QTreeWidgetItem*> old_items;
     search(old_items);
     m_search = QString::null;
     m_searchItem = NULL;
-    list<ListViewItem*>::iterator it_old;
+    list<QTreeWidgetItem*>::iterator it_old;
     for (it_old = old_items.begin(); it_old != old_items.end(); ++it_old)
-        (*it_old)->repaint();
+        update(indexFromItem((*it_old)));
     QToolTip::hideText();
 }
 
-bool UserView::getMenu(ListViewItem *list_item, unsigned long &id, void* &param)
+bool UserView::getMenu(QTreeWidgetItem *list_item, unsigned long &id, void* &param)
 {
     if (list_item == NULL)
         return false;
@@ -1043,11 +1043,11 @@ unsigned UserView::getUnread(unsigned contact_id)
     return 0;
 }
 
-static void resetUnread(ListViewItem *item, list<ListViewItem*> &grp)
+static void resetUnread(QTreeWidgetItem *item, list<QTreeWidgetItem*> &grp)
 {
     if (static_cast<UserViewItemBase*>(item)->type() == GRP_ITEM)
     {
-        list<ListViewItem*>::iterator it;
+        list<QTreeWidgetItem*>::iterator it;
         for (it = grp.begin(); it != grp.end(); ++it)
             if ((*it) == item)
                 break;
@@ -1058,13 +1058,13 @@ static void resetUnread(ListViewItem *item, list<ListViewItem*> &grp)
             {
                 group->m_unread = 0;
                 if (!group->isExpanded())
-                    group->repaint();
+                    group->treeWidget()->repaint();
             }
         }
     }
     for(int c = 0; c < item->childCount(); c++)
     {
-        ListViewItem *i= static_cast<ListViewItem*>(item->child(c));
+        QTreeWidgetItem *i = item->child(c);
         resetUnread(i, grp);
     }
 }
@@ -1083,7 +1083,7 @@ void UserView::unreadBlink()
             continue;
         blinks.push_back(it->contact);
     }
-    list<ListViewItem*> grps;
+    list<QTreeWidgetItem*> grps;
     if (blinks.empty())
         m_unreadTimer->stop();
     else
@@ -1108,7 +1108,7 @@ void UserView::unreadBlink()
     {
         for(int c = 0; c < topLevelItemCount(); c++)
         {
-            ListViewItem *i = static_cast<ListViewItem*>(topLevelItem(c));
+            QTreeWidgetItem *i = topLevelItem(c);
             resetUnread(i, grps);
         }
     }
@@ -1150,7 +1150,7 @@ void UserView::blink()
         m_blinkTimer->stop();
 }
 
-void UserView::deleteItem(ListViewItem *item)
+void UserView::deleteItem(QTreeWidgetItem *item)
 {
     if (item == NULL)
         return;
@@ -1226,7 +1226,7 @@ void UserView::dropEvent(QDropEvent *e)
 
 void UserView::dragEvent(QDropEvent *e, bool isDrop)
 {
-    ListViewItem *list_item = itemAt(e->pos());
+    QTreeWidgetItem *list_item = itemAt(e->pos());
     if (list_item == NULL)
     {
         e->ignore();
@@ -1405,43 +1405,35 @@ void UserView::cancelJoinContacts(void*)
 
 void UserView::sortAll()
 {
-    //sort();
     for(int c = 0; c < topLevelItemCount(); c++)
-    {
-        ListViewItem *item = static_cast<ListViewItem*>(topLevelItem(c));
-        sortAll(item);
-    }
+        sortAll(topLevelItem(c));
 }
 
-void UserView::sortAll(ListViewItem *item)
+void UserView::sortAll(QTreeWidgetItem *item)
 {
-    //item->sort();
-    for(int c = 0; c < topLevelItemCount(); c++)
-    {
-        ListViewItem *item = static_cast<ListViewItem*>(topLevelItem(c));
-        sortAll(item);
-    }
+    for(int c = 0; c < item->childCount(); c++)
+        sortAll(item->child(c));
 }
 
-void UserView::search(list<ListViewItem*> &items)
+void UserView::search(list<QTreeWidgetItem*> &items)
 {
     if (m_search.isEmpty())
         return;
-    list<ListViewItem*>::iterator it;
+    list<QTreeWidgetItem*>::iterator it;
     for (it = closed_items.begin(); it != closed_items.end(); ++it)
         (*it)->setExpanded(false);
     for(int c = 0; c < topLevelItemCount(); c++)
     {
-        ListViewItem *item = static_cast<ListViewItem*>(topLevelItem(c));
+        QTreeWidgetItem *item = topLevelItem(c);
         search(item, items);
     }
 }
 
-void UserView::search(ListViewItem *item, list<ListViewItem*> &items)
+void UserView::search(QTreeWidgetItem *item, list<QTreeWidgetItem*> &items)
 {
     for(int c = 0; c < item->childCount(); c++)
     {
-        ListViewItem *ch = static_cast<ListViewItem*>(item->child(c));
+        QTreeWidgetItem *ch = item->child(c);
         search(ch, items);
     }
     if (static_cast<UserViewItemBase*>(item)->type() != USR_ITEM)
@@ -1486,7 +1478,7 @@ void UserView::dragScroll() //rewrite!?
     pos = viewport()->mapFromGlobal(pos);
     if (pos.x() < 0 || pos.x() > viewport()->width())
         return;
-    ListViewItem *item = NULL;
+    QTreeWidgetItem *item = NULL;
     if (pos.y() < 0)
 	{
         pos = QPoint(pos.x(), -1);
@@ -1498,7 +1490,7 @@ void UserView::dragScroll() //rewrite!?
         item = itemAt(pos); //<== FIXME: crash, it does not return item, sometimes in QGList append() no mem allocation is possible :-/ ???
         if (item)
 		{
-            pos = QPoint(pos.x(), viewport()->height() - 1 + item->height());
+            pos = QPoint(pos.x(), viewport()->height() - 1 + item->sizeHint(0).height());
             item = itemAt(pos);
         }
     }

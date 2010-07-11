@@ -40,40 +40,6 @@ using namespace SIM;
 
 bool ListView::s_bInit = false;
 
-ListViewItem::ListViewItem() : QTreeWidgetItem()
-{
-    setExpanded(true);
-}
-
-ListViewItem::ListViewItem(const QString& /* name */) : QTreeWidgetItem()
-{
-    setExpanded(true);
-}
-
-ListViewItem::ListViewItem(ListView* parent) : QTreeWidgetItem(parent)
-{
-    setExpanded(true);
-}
-
-ListViewItem::ListViewItem(ListViewItem* parent) : QTreeWidgetItem(parent)
-{
-    setExpanded(true);
-}
-
-ListViewItem::~ListViewItem()
-{
-}
-
-ListView* ListViewItem::listView() const
-{
-    return static_cast<ListView*>(treeWidget());
-}
-
-void ListViewItem::repaint()
-{
-    emitDataChanged();
-}
-
 ListView::ListView(QWidget *parent) : QTreeWidget(parent)
 {
     m_menuId = MenuListView;
@@ -104,12 +70,12 @@ ListView::~ListView()
 {
 }
 
-void ListView::repaint(ListViewItem* item)
+void ListView::repaint(QTreeWidgetItem* item)
 {
     update(indexFromItem(item));
 }
 
-bool ListView::getMenu(ListViewItem *item, unsigned long &id, void *&param)
+bool ListView::getMenu(QTreeWidgetItem *item, unsigned long &id, void *&param)
 {
     if (m_menuId == 0)
         return false;
@@ -129,8 +95,8 @@ bool ListView::processEvent(Event *e)
         EventCommandExec *ece = static_cast<EventCommandExec*>(e);
         CommandDef *cmd = ece->cmd();
         if ((cmd->id == CmdListDelete) && (cmd->menu_id == MenuListView)){
-            ListViewItem *item = (ListViewItem*)(cmd->param);
-            if (item->listView() == this){
+            QTreeWidgetItem *item = (QTreeWidgetItem*)(cmd->param);
+            if (item->treeWidget() == this){
                 emit deleteItem(item);
                 return true;
             }
@@ -149,7 +115,7 @@ void ListView::keyPressEvent(QKeyEvent *e)
             key |= Qt::CTRL;
         if (e->modifiers() & Qt::AltModifier)
             key |= Qt::ALT;
-        ListViewItem *item = currentItem();
+        QTreeWidgetItem *item = currentItem();
         if (item){
             unsigned long id;
             void *param;
@@ -167,9 +133,9 @@ void ListView::keyPressEvent(QKeyEvent *e)
     QTreeWidget::keyPressEvent(e);
 }
 
-ListViewItem* ListView::currentItem()
+QTreeWidgetItem* ListView::currentItem()
 {
-    return static_cast<ListViewItem*>(QTreeWidget::currentItem());
+    return QTreeWidget::currentItem();
 }
 
 void ListView::viewportMousePressEvent(QMouseEvent * /*e*/)
@@ -195,20 +161,20 @@ void ListView::mouseMoveEvent(QMouseEvent *e)
     QTreeWidget::mouseMoveEvent(e);
 }
 
-ListViewItem* ListView::itemAt(const QPoint& p)
+QTreeWidgetItem* ListView::itemAt(const QPoint& p)
 {
-    return static_cast<ListViewItem*>(QTreeWidget::itemAt(p));
+    return QTreeWidget::itemAt(p);
 }
 
 void ListView::mouseReleaseEvent(QMouseEvent *e)
 {
     QTreeWidget::mouseReleaseEvent(e);
     if (m_pressedItem){
-        ListViewItem *item = m_pressedItem;
+        QTreeWidgetItem *item = m_pressedItem;
         m_pressedItem = NULL;
         //update(model()->index(item->row(), 0));
         update();
-        ListViewItem *citem = itemAt(e->pos());
+        QTreeWidgetItem *citem = itemAt(e->pos());
         if (item == citem)
             emit clickItem(item);
     }
@@ -217,11 +183,11 @@ void ListView::mouseReleaseEvent(QMouseEvent *e)
 void ListView::viewportContextMenuEvent( QContextMenuEvent *e)
 {
     QPoint p = e->globalPos();
-    ListViewItem *list_item = itemAt(viewport()->mapFromGlobal(p));
+    QTreeWidgetItem *list_item = itemAt(viewport()->mapFromGlobal(p));
     showPopup(list_item, p);
 }
 
-void ListView::showPopup(ListViewItem *item, QPoint p)
+void ListView::showPopup(QTreeWidgetItem *item, QPoint p)
 {
     unsigned long id;
     void *param;
@@ -250,7 +216,7 @@ void ListView::contextMenuEvent(QContextMenuEvent* e)
     unsigned long id;
     void *param;
 
-    ListViewItem* item = itemAt(e->pos());
+    QTreeWidgetItem* item = itemAt(e->pos());
     if (item == NULL)
         return;
 
@@ -277,29 +243,29 @@ void ListView::resizeEvent(QResizeEvent *e)
     QTreeWidget::resizeEvent(e);
 }
 
-ListViewItem* ListView::firstChild()
+QTreeWidgetItem* ListView::firstChild()
 {
-    return static_cast<ListViewItem*>(topLevelItem(0));
+    return topLevelItem(0);
 }
 
-void ListView::startDrag(Qt::DropActions)
-{
-    emit dragStart();
-}
+//void ListView::startDrag(Qt::DropActions)
+//{
+//    emit dragStart();
+//}
 
 QMimeData *ListView::dragObject()
 {
     return NULL;
 }
 
-void ListView::acceptDrop(bool bAccept)
+void ListView::setAcceptDrop(bool bAccept)
 {
     m_bAcceptDrop = bAccept;
 }
 
 void ListView::dragEnterEvent(QDragEnterEvent *e)
 {
-    emit dragEnter(e);
+    //emit dragEnter(e);
     if (m_bAcceptDrop){
         e->accept();
         return;
@@ -320,7 +286,7 @@ void ListView::dropEvent(QDropEvent *e)
 {
     if (m_bAcceptDrop){
         e->accept();
-        emit drop(e);
+        //emit drop(e);
         return;
     }
     e->ignore();
@@ -375,12 +341,12 @@ Contact *ContactDragObject::decode( QMimeSource *s )
 }
 
 UserViewItemBase::UserViewItemBase(UserListBase *parent)
-: ListViewItem(parent)
+: QTreeWidgetItem(parent)
 {
 }
 
 UserViewItemBase::UserViewItemBase(UserViewItemBase *parent)
-: ListViewItem(parent)
+: QTreeWidgetItem(parent)
 {
 }
 
@@ -473,7 +439,7 @@ void GroupItem::update(Group *grp, bool bInit)
     setText(0, s);
     if (bInit)
         return;
-    ListViewItem *p = static_cast<ListViewItem*>(parent());
+    QTreeWidgetItem *p = parent();
     if (p)
         //p->sort();
         return;
@@ -661,7 +627,7 @@ UserListBase::~UserListBase()
 
 bool UserListBase::updateGroups()
 {
-    ListViewItem *item = 0;
+    QTreeWidgetItem *item = 0;
     bool changed = false;
     list<unsigned long>::iterator it;
     for (it = updGroups.begin(); it != updGroups.end(); ++it)
@@ -693,7 +659,7 @@ bool UserListBase::updateGroups()
         case 2:
             for(int c = 0; c < topLevelItemCount(); c++)
             {
-                item = static_cast<ListViewItem*>(topLevelItem(c));
+                item = topLevelItem(c);
                 UserViewItemBase *i = static_cast<UserViewItemBase*>(item);
                 if (i->type() != DIV_ITEM) 
                     continue;
@@ -1020,14 +986,14 @@ bool UserListBase::updateContacts()
 
 void UserListBase::refreshOnlineOfflineGroups()
 {
-    ListViewItem *item;
+    QTreeWidgetItem* item = 0;
     m_itemOnline = 0;
     m_itemOffline = 0;
     if (updContacts.size() && m_groupMode != 1)
     {
         for(int c = 0; c < topLevelItemCount(); c++)
         {
-            item = static_cast<ListViewItem*>(topLevelItem(c));
+            item = topLevelItem(c);
             UserViewItemBase *i = static_cast<UserViewItemBase*>(item);
             if (i->type() != DIV_ITEM) continue;
             DivItem *divItem = static_cast<DivItem*>(i);
@@ -1053,7 +1019,7 @@ void UserListBase::drawUpdates()
     if(updateContacts())
         bChanged = true;
     updContacts.clear();
-    for (list<ListViewItem*>::iterator it_sort = sortItems.begin(); it_sort != sortItems.end(); ++it_sort)
+    for (list<QTreeWidgetItem*>::iterator it_sort = sortItems.begin(); it_sort != sortItems.end(); ++it_sort)
     {
         if ((*it_sort)->child(0) == NULL)
             continue;
@@ -1063,7 +1029,7 @@ void UserListBase::drawUpdates()
     viewport()->setUpdatesEnabled(true);
 
     viewport()->repaint();
-    for (list<ListViewItem*>::iterator it = updatedItems.begin(); it != updatedItems.end(); ++it)
+    for (list<QTreeWidgetItem*>::iterator it = updatedItems.begin(); it != updatedItems.end(); ++it)
         repaint(*it);
     updatedItems.clear();
 }
@@ -1102,18 +1068,18 @@ void UserListBase::addContactForUpdate(unsigned long id)
     }
 }
 
-void UserListBase::addSortItem(ListViewItem *item)
+void UserListBase::addSortItem(QTreeWidgetItem *item)
 {
-    for (list<ListViewItem*>::iterator it = sortItems.begin(); it != sortItems.end(); ++it)
+    for (list<QTreeWidgetItem*>::iterator it = sortItems.begin(); it != sortItems.end(); ++it)
         if ((*it) == item)
             return;
     sortItems.push_back(item);
 
 }
 
-void UserListBase::addUpdatedItem(ListViewItem *item)
+void UserListBase::addUpdatedItem(QTreeWidgetItem *item)
 {
-    for (list<ListViewItem*>::iterator it = updatedItems.begin(); it != updatedItems.end(); ++it)
+    for (list<QTreeWidgetItem*>::iterator it = updatedItems.begin(); it != updatedItems.end(); ++it)
     {
         if ((*it) == item)
             return;
@@ -1301,7 +1267,7 @@ void UserListBase::fill()
     }
 }
 
-static void resort(ListViewItem *item)
+static void resort(QTreeWidgetItem *item)
 {
     /*
     if (!item->isExpandable())
@@ -1334,7 +1300,7 @@ bool UserListBase::processEvent(Event *e)
         //sort();
         for(int c = 0; c < topLevelItemCount(); c++)
         {
-            ListViewItem *item = static_cast<ListViewItem*>(topLevelItem(c));
+            QTreeWidgetItem *item = topLevelItem(c);
             resort(item);
         }
         viewport()->repaint();
@@ -1363,7 +1329,7 @@ bool UserListBase::processEvent(Event *e)
                 else if (m_groupMode == 2)
                     for (int c = 0; c < topLevelItemCount(); c++)
                     {
-                        ListViewItem *item = static_cast<ListViewItem*>(topLevelItem(c));
+                        QTreeWidgetItem *item = topLevelItem(c);
                         UserViewItemBase *i = static_cast<UserViewItemBase*>(item);
                         if (i->type() != DIV_ITEM)
                             continue;
@@ -1388,7 +1354,7 @@ bool UserListBase::processEvent(Event *e)
                     if (getContactItem(contact))
                         if (!m_groupMode)
                         {
-                            ListViewItem *p = static_cast<ListViewItem*>(getContactItem(contact)->parent());
+                            QTreeWidgetItem *p = getContactItem(contact)->parent();
                             deleteItem(getContactItem(contact));
                             if (p->child(0) == NULL)
                                 deleteItem(p);
@@ -1436,11 +1402,11 @@ bool UserListBase::processEvent(Event *e)
     return ListView::processEvent(e);
 }
 
-GroupItem *UserListBase::findGroupItem(unsigned id, ListViewItem *p)
+GroupItem *UserListBase::findGroupItem(unsigned id, QTreeWidgetItem *p)
 {
     for(int c = 0; c < (p ? p->childCount() : topLevelItemCount()); c++)
     {
-        ListViewItem *item = static_cast<ListViewItem*>(!p ? topLevelItem(c) : p->child(c));
+        QTreeWidgetItem *item = (!p ? topLevelItem(c) : p->child(c));
         UserViewItemBase *i = static_cast<UserViewItemBase*>(item);
         if (i->type() == GRP_ITEM)
         {
@@ -1458,11 +1424,11 @@ GroupItem *UserListBase::findGroupItem(unsigned id, ListViewItem *p)
     return NULL;
 }
 
-ContactItem *UserListBase::findContactItem(unsigned id, ListViewItem *p)
+ContactItem *UserListBase::findContactItem(unsigned id, QTreeWidgetItem *p)
 {
     for(int c = 0; c < (p ? p->childCount() : topLevelItemCount()); c++)
     {
-        ListViewItem *item = static_cast<ListViewItem*>(p ? p->child(c) : topLevelItem(c));
+        QTreeWidgetItem *item = (p ? p->child(c) : topLevelItem(c));
         UserViewItemBase *i = static_cast<UserViewItemBase*>(item);
         if (i->type() == USR_ITEM)
         {
@@ -1470,12 +1436,9 @@ ContactItem *UserListBase::findContactItem(unsigned id, ListViewItem *p)
             if (contactItem->id() == id)
                 return contactItem;
         }
-        //if (item->isExpandable())
-        {
-            ContactItem *res = findContactItem(id, item);
-            if (res)
-                return res;
-        }
+        ContactItem *res = findContactItem(id, item);
+        if (res)
+            return res;
     }
     return NULL;
 }
@@ -1493,7 +1456,7 @@ unsigned UserListBase::getUserStatus(Contact *contact, unsigned &style, QString 
     return status;
 }
 
-void UserListBase::deleteItem(ListViewItem *item)
+void UserListBase::deleteItem(QTreeWidgetItem *item)
 {
     if (item == NULL)
         return;

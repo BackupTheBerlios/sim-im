@@ -22,14 +22,6 @@
 #include "userwnd.h"
 #include "../container.h"
 
-//#include <QEvent>
-//#include <QDragEnterEvent>
-//#include <QDropEvent>
-//#include <QMouseEvent>
-//#include <QDragMoveEvent>
-//#include <QKeyEvent>
-//#include <QFocusEvent>
-
 class CorePlugin;
 class IntLineEdit;
 class QTimer;
@@ -49,7 +41,7 @@ public:
     CorePlugin *m_plugin;
     IntLineEdit *m_edtGroup;
     IntLineEdit *m_edtContact;
-    ListViewItem *mTipItem;
+    QTreeWidgetItem *mTipItem;
     bool	 m_bUnreadBlink;
 public slots:
     void editGroupEnter();
@@ -68,7 +60,7 @@ public slots:
     void dragScroll();
 protected:
     virtual unsigned getUnread(unsigned contact_id);
-    virtual bool getMenu(ListViewItem *item, unsigned long &id, void* &param);
+    virtual bool getMenu(QTreeWidgetItem *item, unsigned long &id, void* &param);
     virtual bool processEvent(SIM::Event*);
     bool eventFilter(QObject *obj, QEvent *e);
     void setGroupMode(unsigned mode, bool bFirst=false);
@@ -81,25 +73,25 @@ protected:
     void dropEvent(QDropEvent *e);
     void focusOutEvent(QFocusEvent*);
     void sortAll();
-    void sortAll(ListViewItem*);
+    void sortAll(QTreeWidgetItem*);
     void dragEvent(QDropEvent *e, bool isDrop);
-    void search(std::list<ListViewItem*> &items);
-    void search(ListViewItem*, std::list<ListViewItem*> &items);
+    void search(std::list<QTreeWidgetItem*> &items);
+    void search(QTreeWidgetItem*, std::list<QTreeWidgetItem*> &items);
     void stopSearch();
     virtual QMimeData *mimeData( const QList<QTreeWidgetItem *> items ) const;
     QMimeData *dragObject();
-    virtual void deleteItem(ListViewItem *item);
+    virtual void deleteItem(QTreeWidgetItem *item);
     std::list<BlinkCount> blinks;
-    std::list<ListViewItem*> closed_items;
+    std::list<QTreeWidgetItem*> closed_items;
     unsigned long m_dropContactId;
-    ListViewItem *m_dropItem;
-    ListViewItem *m_current;
+    QTreeWidgetItem *m_dropItem;
+    QTreeWidgetItem *m_current;
     bool	 m_bBlink;
     QTimer	 *m_blinkTimer;
     QTimer	 *m_unreadTimer;
     QString	 m_search;
     bool	 m_bRemoveHistory;
-    ListViewItem *m_searchItem;
+    QTreeWidgetItem *m_searchItem;
     friend class UserViewDelegate;
 	UserWnd *m_userWnd;
 };
