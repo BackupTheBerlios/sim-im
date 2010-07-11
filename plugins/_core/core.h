@@ -35,6 +35,7 @@
 #include "core_consts.h"
 #include "clientlist.h"
 #include "simapi.h"
+#include "containermanager.h"
 
 using namespace std;
 
@@ -174,6 +175,8 @@ public:
 
     void changeClientStatus(SIM::Client* client, const SIM::IMStatusPtr& status);
 
+    ContainerManager* containerManager() const;
+
 signals:
     void modeChanged(int);
 protected slots:
@@ -255,6 +258,7 @@ protected:
 private:
     bool m_bIgnoreEvents;
     SIM::PropertyHubPtr m_propertyHub;
+    ContainerManager* m_containerManager;
 
     // Event handlers:
     bool processEventIconChanged();

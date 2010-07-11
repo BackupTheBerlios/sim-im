@@ -246,6 +246,7 @@ CorePlugin::CorePlugin(unsigned base, Buffer* /*config*/)
 {
     g_plugin = this;
 	setValue("StatusTime", QDateTime::currentDateTime().toTime_t());
+    m_containerManager = new ContainerManager(this);
 
 	//loadDir();
 	boundTypes();
@@ -295,6 +296,11 @@ void CorePlugin::createCommand(int id, const QString& text, const QString& icon,
     cmd->flags = flags;
     cmd->accel = accel;
     EventCommandCreate(cmd).process();
+}
+
+ContainerManager* CorePlugin::containerManager() const
+{
+    return m_containerManager;
 }
 
 void CorePlugin::createEventCmds()
@@ -1393,101 +1399,61 @@ bool CorePlugin::processEventOpenMessage(SIM::Event* e)
     if (contact == NULL)
         return false;
     UserWnd		*userWnd	= NULL;
-    Container	*container	= NULL;
-    QWidgetList list = QApplication::topLevelWidgets();
-    QWidget * w;
+    ContainerPtr container;
     bool bNew = false;
-    log(L_DEBUG, "contactID: %ld", contact->id());
-    foreach (w,list)
+    for(int i = 0; i < containerManager()->containerCount(); i++)
     {
-        if (w->inherits("Container"))
+        container = containerManager()->container(i);
+        if(containerManager()->containerMode() == ContainerManager::cmSimpleMode)
         {
-            log(L_DEBUG, "ContainerFound");
-            container =  static_cast<Container*>(w);
-            if(getContainerMode() == 0)
+            if(container->isReceived() != ((msg->getFlags() & MESSAGE_RECEIVED) != 0))
             {
-                log(L_DEBUG, "Mode0");
-                if(container->isReceived() != ((msg->getFlags() & MESSAGE_RECEIVED) != 0))
-                {
-                    container = NULL;
-                    continue;
-                }
+                container.clear();
+                continue;
             }
-            userWnd = container->wnd(contact->id());
-            if (userWnd)
-            {
-                log(L_DEBUG, "found");
-                break;
-            }
-            container = NULL;
         }
+        userWnd = container->wnd(contact->id());
+        if (userWnd)
+            break;
+        container.clear();
     }
+
     if(userWnd == NULL)
     {
-        log(L_DEBUG, "notfound");
         if (contact->getFlags() & CONTACT_TEMP)
         {
             contact->setFlags(contact->getFlags() & ~CONTACT_TEMP);
             EventContact(contact, EventContact::eChanged).process();
         }
         userWnd = new UserWnd(contact->id(), NULL, msg->getFlags() & MESSAGE_RECEIVED, msg->getFlags() & MESSAGE_RECEIVED);
-        if(getContainerMode() == 3)
+        if(containerManager()->containerMode() == ContainerManager::cmOneContainer)
         {
-            QWidgetList list = QApplication::topLevelWidgets();
-            QWidget * w;
-            foreach (w,list)
+            if(containerManager()->containerCount() == 0)
             {
-                if (w->inherits("Container")){
-                    container =  static_cast<Container*>(w);
-                    break;
-                }
-            }
-            if (container == NULL){
-                container = new Container(1);
+                container = containerManager()->makeContainer(1);
+                containerManager()->addContainer(container);
                 bNew = true;
             }
+            else
+                container = containerManager()->container(0);
         }
-        else if (getContainerMode() == 2)
+        else if (containerManager()->containerMode() == ContainerManager::cmGroupContainers)
         {
             unsigned id = contact->getGroup() + CONTAINER_GRP;
-            QWidgetList list = QApplication::topLevelWidgets();
-            QWidget * w;
-            foreach (w,list)
+            container = containerManager()->containerById(id);
+            if(!container)
             {
-                if(w->inherits("Container"))
-                {
-                    container =  static_cast<Container*>(w);
-                    if (container->getId() == id)
-                        break;
-                    container = NULL;
-                }
-            }
-            if(container == NULL)
-            {
-                container = new Container(id);
+                container = containerManager()->makeContainer(id);
+                containerManager()->addContainer(container);
                 bNew = true;
             }
         }
         else
         {
-            unsigned max_id = 0;
-            QWidgetList list = QApplication::topLevelWidgets();
-            QWidget * w;
-            foreach (w,list)
-            {
-                if (w->inherits("Container"))
-                {
-                    container =  static_cast<Container*>(w);
-                    if(!(container->getId() & CONTAINER_GRP))
-                    {
-                        if(max_id < container->getId())
-                            max_id = container->getId();
-                    }
-                }
-            }
-            container = new Container(max_id + 1);
+            container = containerManager()->makeContainer(contact->id());
+            containerManager()->addContainer(container);
             bNew = true;
-            if (getContainerMode() == 0)
+            if (containerManager()->containerMode() == ContainerManager::cmSimpleMode)
                 container->setReceived(msg->getFlags() & MESSAGE_RECEIVED);
         }
         container->addUserWnd(userWnd, (msg->getFlags() & MESSAGE_NORAISE) == 0);
@@ -1514,7 +1480,7 @@ bool CorePlugin::processEventOpenMessage(SIM::Event* e)
     }else{
         container->init();
         container->show();
-        raiseWindow(container);
+        raiseWindow(container.data());
     }
     container->setNoSwitch(false);
     if (m_focus)
@@ -3255,6 +3221,7 @@ bool CorePlugin::init(bool bInit)
         m_main = new MainWindow(/*data.geometry*/);
 
 	loadUnread();
+    containerManager()->init();
 
     log(L_DEBUG, "geometry: %s", value("geometry").toByteArray().toHex().data());
     m_main->restoreGeometry(value("geometry").toByteArray());
@@ -3263,16 +3230,16 @@ bool CorePlugin::init(bool bInit)
     EventLoginStart e;
     e.process();
 
-	if (!bNew)
+    if (!bNew)
     {
-		QString containers = value("Containers").toString();
-		QVariantMap containerMap = value("Container").toMap();
-		while (!containers.isEmpty())
+        QString containers = value("Containers").toString();
+        QVariantMap containerMap = value("Container").toMap();
+        while (!containers.isEmpty())
         {
-			Container *c = new Container(0, containerMap.value(getToken(containers, ',')).toString().toUtf8().constData());
-			c->init();
-		}
-	}
+            Container *c = new Container(0, containerMap.value(getToken(containers, ',')).toString().toUtf8().constData());
+            c->init();
+        }
+    }
 	//clearContainer();
 	setValue("Containers", QString());
 	setValue("Container", QVariantMap());
@@ -3310,54 +3277,59 @@ void CorePlugin::startLogin()
 
 void CorePlugin::destroy()
 {
-	QWidgetList l = QApplication::topLevelWidgets();
+    QWidgetList l = QApplication::topLevelWidgets();
     QWidget *w;
-	list<QWidget*> forRemove;
+    list<QWidget*> forRemove;
     foreach(w,l)
-	{
-		if (w->inherits("Container") ||
-				w->inherits("HistoryWindow") ||
-				w->inherits("UserConfig"))
-			forRemove.push_back(w);
-	}
-	for(list<QWidget*>::iterator itr = forRemove.begin(); itr != forRemove.end(); ++itr)
-		delete *itr;
+    {
+        if (w->inherits("Container") ||
+            w->inherits("HistoryWindow") ||
+            w->inherits("UserConfig"))
+            forRemove.push_back(w);
+    }
+    for(list<QWidget*>::iterator itr = forRemove.begin(); itr != forRemove.end(); ++itr)
+        delete *itr;
 
-	if (m_statusWnd)
+    if (m_statusWnd)
     {
-		delete m_statusWnd;
-		m_statusWnd = NULL;
-	}
-	if (m_view)
+        delete m_statusWnd;
+        m_statusWnd = NULL;
+    }
+    if (m_view)
     {
-		delete m_view;
-		m_view = NULL;
-	}
-	if (m_cfg)
+        delete m_view;
+        m_view = NULL;
+    }
+    if (m_cfg)
     {
-		delete m_cfg;
-		m_cfg = NULL;
-	}
-	if (m_main)
+        delete m_cfg;
+        m_cfg = NULL;
+    }
+    if (m_main)
     {
-		delete m_main;
-		m_main = NULL;
-	}
-	if (m_view)
+        delete m_main;
+        m_main = NULL;
+    }
+    if (m_view)
     {
-		delete m_view;
-		m_view = NULL;
-	}
-	if (m_search)
+        delete m_view;
+        m_view = NULL;
+    }
+    if (m_search)
     {
-		delete m_search;
-		m_search = NULL;
-	}
-	if (m_manager)
-{
-		delete m_manager;
-		m_manager = NULL;
-	}
+        delete m_search;
+        m_search = NULL;
+    }
+    if (m_manager)
+    {
+        delete m_manager;
+        m_manager = NULL;
+    }
+    if (m_containerManager)
+    {
+        delete m_containerManager;
+        m_containerManager = NULL;
+    }
 }
 
 static char CLIENTS_CONF[] = "clients.conf";
@@ -3919,12 +3891,12 @@ void CorePlugin::showPanel()
 
 unsigned CorePlugin::getContainerMode()
 {
-    return value("ContainerMode").toUInt(); //data.ContainerMode.toULong();
+    return m_containerManager->containerMode();
 }
 
 void CorePlugin::setContainerMode(unsigned value)
 {
-    setValue("ContainerMode", value);
+    m_containerManager->setContainerMode((ContainerManager::ContainerMode)value);
     emit modeChanged(value);
 }
 

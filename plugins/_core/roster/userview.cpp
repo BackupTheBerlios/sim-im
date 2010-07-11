@@ -187,6 +187,7 @@ bool UserView::processEvent(Event *e)
         {
             EventCommandExec *ece = static_cast<EventCommandExec*>(e);
             CommandDef *cmd = ece->cmd();
+            log(L_DEBUG, "EventCommandExec: %d", cmd->menu_id);
             if (cmd->menu_id == MenuContact){
             Contact *contact = getContacts()->contact((unsigned long)(cmd->param));
                 if (contact){

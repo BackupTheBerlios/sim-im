@@ -117,8 +117,8 @@ namespace SIM {
 class UserViewItemBase : public QTreeWidgetItem //ListViewItem
 {
 public:
-    UserViewItemBase(UserListBase *view);
-    UserViewItemBase(UserViewItemBase *parent);
+    UserViewItemBase(UserListBase *view, int type);
+    UserViewItemBase(UserViewItemBase *parent, int type);
     virtual void setup();
 protected:
     void setCheckable( bool bCheckable );

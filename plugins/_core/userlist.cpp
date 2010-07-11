@@ -148,7 +148,7 @@ void ListView::mousePressEvent(QMouseEvent *e)
     if (e->button() == Qt::LeftButton)
     {
         m_pressedItem = itemAt(e->pos());
-        if (m_pressedItem)
+        if(m_pressedItem)
         {
             update();
         }
@@ -340,13 +340,13 @@ Contact *ContactDragObject::decode( QMimeSource *s )
     return getContacts()->contact(id);
 }
 
-UserViewItemBase::UserViewItemBase(UserListBase *parent)
-: QTreeWidgetItem(parent)
+UserViewItemBase::UserViewItemBase(UserListBase *parent, int type)
+: QTreeWidgetItem(parent, type)
 {
 }
 
-UserViewItemBase::UserViewItemBase(UserViewItemBase *parent)
-: QTreeWidgetItem(parent)
+UserViewItemBase::UserViewItemBase(UserViewItemBase *parent, int type)
+: QTreeWidgetItem(parent, type)
 {
 }
 
@@ -368,7 +368,7 @@ void UserViewItemBase::setCheckable( bool bCheckable )
 }
 
 DivItem::DivItem(UserListBase *view, unsigned type)
-: UserViewItemBase(view)
+: UserViewItemBase(view, DIV_ITEM)
 {
     m_type = type;
     setText(0, QString::number(m_type));
@@ -392,7 +392,7 @@ QVariant DivItem::data( int column, int role ) const
 }
 
 GroupItem::GroupItem(UserListBase *view, Group *grp, bool bOffline, bool bCheckable )
-: UserViewItemBase(view)
+: UserViewItemBase(view, GRP_ITEM)
 , m_id (grp->id() )
 , m_bOffline (bOffline) 
 {
@@ -401,7 +401,7 @@ GroupItem::GroupItem(UserListBase *view, Group *grp, bool bOffline, bool bChecka
 }
 
 GroupItem::GroupItem( UserViewItemBase *view, Group *grp, bool bOffline, bool bCheckable )
-: UserViewItemBase(view)
+: UserViewItemBase(view, GRP_ITEM)
 , m_id (grp->id() )
 , m_bOffline (bOffline) 
 {
@@ -505,7 +505,7 @@ void GroupItem::setData( int column, int role, const QVariant &value )
 }
 
 ContactItem::ContactItem( UserViewItemBase *view, Contact *contact, unsigned status, unsigned style, const QString &icons, unsigned unread, bool bCheckable )
-: UserViewItemBase(view)
+: UserViewItemBase(view, USR_ITEM)
 , m_id (contact->id()) 
 {
 

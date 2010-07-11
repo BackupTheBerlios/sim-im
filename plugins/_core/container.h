@@ -38,6 +38,7 @@
 #include <QVBoxLayout>
 #include <QList>
 #include <QShortcut>
+#include <QSharedPointer>
 #include <list>
 
 const unsigned NEW_CONTAINER	= (unsigned)(-1);
@@ -116,7 +117,9 @@ public:
     void setNoSwitch(bool bState);
     void setMessageType(unsigned id);
     void contactChanged(SIM::Contact *contact);
-    PROP_ULONG(Id);
+    void setId(int id);
+    int getId() const;
+    //PROP_ULONG(Id);
     PROP_STR(Windows);
     PROP_ULONG(ActiveWindow);
     PROP_ULONG(StatusSize);
@@ -142,6 +145,7 @@ protected:
     virtual void moveEvent(QMoveEvent*);
     virtual bool event(QEvent*);
     virtual bool processEvent(SIM::Event*);
+    virtual void closeEvent(QCloseEvent* e);
     void showBar();
     void setupAccel();
     QShortcut* makeShortcut(unsigned int key, unsigned int id);
@@ -165,7 +169,10 @@ protected:
     std::list<UserWnd*> m_childs;
     QFrame *frm;
     QVBoxLayout *lay;
+    int m_id;
 };
+
+typedef QSharedPointer<Container> ContainerPtr;
 
 #endif
 

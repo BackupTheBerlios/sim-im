@@ -82,7 +82,7 @@ void ContainerStatus::resizeEvent(QResizeEvent *e)
 
 static DataDef containerData[] =
     {
-        { "Id"          , DATA_ULONG,   1, 0 },
+//        { "Id"          , DATA_ULONG,   1, 0 },
         { "Windows"     , DATA_STRING,  1, 0 },
         { "ActiveWindow", DATA_ULONG,   1, 0 },
         { "Geometry"    , DATA_LONG,    5, 0 },
@@ -212,6 +212,11 @@ Container::~Container()
     free_data(containerData, &data);
 }
 
+void Container::closeEvent(QCloseEvent* e)
+{
+    CorePlugin::instance()->containerManager()->removeContainerById(getId());
+}
+
 void Container::init()
 {
     if (m_bInit)
@@ -327,6 +332,16 @@ void Container::setNoSwitch(bool bState)
 list<UserWnd*> Container::windows()
 {
     return m_tabBar->windows();
+}
+
+void Container::setId(int id)
+{
+    m_id = id;
+}
+
+int Container::getId() const
+{
+    return m_id;
 }
 
 QByteArray Container::getState()

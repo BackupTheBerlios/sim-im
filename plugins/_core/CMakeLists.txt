@@ -12,6 +12,7 @@ SET(_core_SRCS
         commands.cpp
         connectionsettings.cpp
         connectwnd.cpp
+        containermanager.cpp
         container.cpp
         core.cpp
         declinedlg.cpp
@@ -83,6 +84,7 @@ SET(_core_HDRS
         commands.h
         connectionsettings.h
         connectwnd.h
+        containermanager.h
         container.h
         core.h
         core_consts.h
