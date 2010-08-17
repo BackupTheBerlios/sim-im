@@ -367,19 +367,19 @@ bool SnacIcqICBM::sendThruServer(Message *msg, void *_data)
             processSendQueue();
             return true;
         }
-        if ((data->getStatus() != ICQ_STATUS_OFFLINE) &&
-                (client()->getSendFormat() <= 1) &&
-                client()->hasCap(data, CAP_UTF) &&
-                ((msg->getFlags() & MESSAGE_SECURE) == 0) &&
-                (data->getVersion() >= 8) && !data->getBadClient()){
-            s.flags  = SEND_UTF;
-            s.msg    = msg;
-            s.text   = client()->addCRLF(msg->getPlainText());
-            s.screen = client()->screen(data);
-            sendFgQueue.push_back(s);
-            processSendQueue();
-            return true;
-        }
+        //if ((data->getstatus() != icq_status_offline) &&
+        //        (client()->getsendformat() <= 1) &&
+        //        client()->hascap(data, cap_utf) &&
+        //        ((msg->getflags() & message_secure) == 0) &&
+        //        (data->getversion() >= 8) && !data->getbadclient()){
+        //    s.flags  = send_utf;
+        //    s.msg    = msg;
+        //    s.text   = client()->addcrlf(msg->getplaintext());
+        //    s.screen = client()->screen(data);
+        //    sendfgqueue.push_back(s);
+        //    processsendqueue();
+        //    return true;
+        //}
         if ((data->getStatus() != ICQ_STATUS_OFFLINE) &&
                 (data->getVersion() >= 8) &&
                 !data->getBadClient() &&
