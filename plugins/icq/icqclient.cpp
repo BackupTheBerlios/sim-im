@@ -3642,7 +3642,8 @@ void ICQClient::fetchAwayMessage(ICQUserData *data)
 bool ICQClient::processEvent(Event *e)
 {
     TCPClient::processEvent(e);
-    switch (e->type()) {
+    switch (e->type()) 
+    {
     case eEventAddContact: {
         EventAddContact *ec = static_cast<EventAddContact*>(e);
         EventAddContact::AddContact *ac = ec->addContact();
@@ -3728,11 +3729,10 @@ bool ICQClient::processEvent(Event *e)
         EventMessageRetry *emr = static_cast<EventMessageRetry*>(e);
         EventMessageRetry::MsgSend *m = emr->msgRetry();
         QStringList btns;
-        if (m->msg->getRetryCode() == static_cast<ICQPlugin*>(protocol()->plugin())->RetrySendOccupied){
+        if (m->msg->getRetryCode() == static_cast<ICQPlugin*>(protocol()->plugin())->RetrySendOccupied)
             btns.append(i18n("Send &urgent"));
-        }else if (m->msg->getRetryCode() != static_cast<ICQPlugin*>(protocol()->plugin())->RetrySendDND){
+        else if (m->msg->getRetryCode() != static_cast<ICQPlugin*>(protocol()->plugin())->RetrySendDND)
             return false;
-        }
         btns.append(i18n("Send to &list"));
         btns.append(i18n("&Cancel"));
         QString err = i18n(m->msg->getError());
@@ -3758,36 +3758,42 @@ bool ICQClient::processEvent(Event *e)
                 break;
         if (it == arRequests.end())
             return false;
-        if (m_bAIM){
-            if ((getState() == Connected) && (m_status == STATUS_AWAY)){
-                if (it->bDirect){
-                    setAwayMessage(t->tmpl);
-                }else{
-                    sendCapability(t->tmpl);
-                    m_snacICBM->sendICMB(1, 11);
-                    m_snacICBM->sendICMB(2,  3);
-                    m_snacICBM->sendICMB(4,  3);
-                    snacICBM()->processSendQueue();
-                    fetchProfiles();
-                }
+        if (m_bAIM)
+        {
+            if (getState() != Connected || m_status != STATUS_AWAY)
+                return true;
+
+            if (it->bDirect)
+                setAwayMessage(t->tmpl);
+            else
+            {
+                sendCapability(t->tmpl);
+                m_snacICBM->sendICMB(1, 11);
+                m_snacICBM->sendICMB(2,  3);
+                m_snacICBM->sendICMB(4,  3);
+                snacICBM()->processSendQueue();
+                fetchProfiles();
             }
             return true;
         }
         ar_request ar = (*it);
-        if (ar.bDirect){
+        if (ar.bDirect)
+        {
             Contact *contact;
             ICQUserData *data = findContact(ar.screen, NULL, false, contact);
             DirectClient *dc = dynamic_cast<DirectClient*>(data ? data->getDirect() : 0);
-            if (dc){
+            if (dc)
+            {
                 QByteArray answer;
-                if (data->getVersion() >= 10){
+                if (data->getVersion() >= 10)
                     answer = t->tmpl.toUtf8();
-                }else{
+                else
                     answer = getContacts()->fromUnicode(contact, t->tmpl);
-                }
                 dc->sendAck((unsigned short)(ar.id.id_l), ar.type, ar.flags, answer);
             }
-        }else{
+        }
+        else
+        {
             ICQBuffer copy;
             snacICBM()->sendAutoReply(ar.screen, ar.id, plugins[PLUGIN_NULL],
                 ar.id1, ar.id2, ar.type, (char)(ar.ack), 0, t->tmpl, 0, copy);
@@ -3795,46 +3801,50 @@ bool ICQClient::processEvent(Event *e)
         arRequests.erase(it);
         return true;
                                  }
-    case eEventContact: {
+    case eEventContact: 
+    {
         EventContact *ec = static_cast<EventContact*>(e);
         Contact *contact = ec->contact();
-        switch(ec->action()) {
-    case EventContact::eDeleted: {
-        ICQUserData *data;
-        ClientDataIterator it = contact->clientDataIterator(this);
-        while ((data = toICQUserData(++it)) != NULL){
-            if (data->getIcqID() == 0)
-                continue;
-            list<ListRequest>::iterator it;
-            for (it = listRequests.begin(); it != listRequests.end(); it++){
-                if (it->type != LIST_USER_CHANGED)
+        if (ec->action() == EventContact::eDeleted)
+        {
+            ICQUserData *data;
+            ClientDataIterator it = contact->clientDataIterator(this);
+            while ((data = toICQUserData(++it)) != NULL)
+            {
+                if (data->getIcqID() == 0)
                     continue;
-                if (it->screen == screen(data))
-                    break;
+                list<ListRequest>::iterator it;
+                for (it = listRequests.begin(); it != listRequests.end(); it++)
+                {
+                    if (it->type != LIST_USER_CHANGED)
+                        continue;
+                    if (it->screen == screen(data))
+                        break;
+                }
+                if (it != listRequests.end())
+                    listRequests.erase(it);
+                ListRequest lr;
+                lr.type = LIST_USER_DELETED;
+                lr.screen = screen(data);
+                lr.icq_id = (unsigned short)(data->getIcqID());
+                lr.grp_id = (unsigned short)(data->getGrpID());
+                lr.visible_id = (unsigned short)(data->getContactVisibleId());
+                lr.invisible_id = (unsigned short)(data->getContactInvisibleId());
+                lr.ignore_id = (unsigned short)(data->getIgnoreId());
+                listRequests.push_back(lr);
+                snacICBM()->processSendQueue();
             }
-            if (it != listRequests.end())
-                listRequests.erase(it);
-            ListRequest lr;
-            lr.type = LIST_USER_DELETED;
-            lr.screen = screen(data);
-            lr.icq_id = (unsigned short)(data->getIcqID());
-            lr.grp_id = (unsigned short)(data->getGrpID());
-            lr.visible_id   = (unsigned short)(data->getContactVisibleId());
-            lr.invisible_id = (unsigned short)(data->getContactInvisibleId());
-            lr.ignore_id    = (unsigned short)(data->getIgnoreId());
-            listRequests.push_back(lr);
-            snacICBM()->processSendQueue();
+            //m_snacBuddy->removeBuddy(contact);
         }
-        //m_snacBuddy->removeBuddy(contact);
-        break;
-                                 }
-    case EventContact::eChanged: {
-        if (getState() == Connected){
-            if (!m_bAIM)
+        else if (ec->action() == EventContact::eChanged)
+        {
+            if (getState() != Connected && !m_bAIM)
                 m_snacBuddy->addBuddy(contact);
-            if (contact == getContacts()->owner()){
+            if (contact == getContacts()->owner())
+            {
                 QDateTime now(QDateTime::currentDateTime());
-                if (getContacts()->owner()->getPhones() != data.owner.getPhoneBook()){
+                if (getContacts()->owner()->getPhones() != data.owner.getPhoneBook())
+                {
                     data.owner.setPhoneBook(getContacts()->owner()->getPhones());
                     data.owner.setPluginInfoTime(now.toTime_t());
                     snacService()->sendPluginInfoUpdate(PLUGIN_PHONEBOOK);
@@ -3846,68 +3856,63 @@ bool ICQClient::processEvent(Event *e)
                 snacService()->sendPluginInfoUpdate(PLUGIN_PICTURE);
                 }
                 */
-                if (getContacts()->owner()->getPhoneStatus() != (int)data.owner.getFollowMe()){
-                    data.owner.setFollowMe(getContacts()->owner()->getPhoneStatus());
-                    data.owner.setPluginStatusTime(now.toTime_t());
-                    snacService()->sendPluginStatusUpdate(PLUGIN_FOLLOWME, data.owner.getFollowMe());
-                }
+                if (getContacts()->owner()->getPhoneStatus() == (int)data.owner.getFollowMe())
+                    return false;
+
+                data.owner.setFollowMe(getContacts()->owner()->getPhoneStatus());
+                data.owner.setPluginStatusTime(now.toTime_t());
+                snacService()->sendPluginStatusUpdate(PLUGIN_FOLLOWME, data.owner.getFollowMe());
                 return false;
             }
             ICQUserData *data;
             ClientDataIterator it = contact->clientDataIterator(this);
-            while ((data = toICQUserData(++it)) != NULL){
+            while ((data = toICQUserData(++it)) != NULL)
+            {
                 if (data->getUin() || data->getProfileFetch())
                     continue;
                 fetchProfile(data);
             }
-        }
-        addContactRequest(contact);
-        break;
-                                 }
-    default:
-        break;
+            addContactRequest(contact);
         }
         break;
-                        }
-    case eEventGroup: {
+    }
+    case eEventGroup: 
+    {
         EventGroup *ev = static_cast<EventGroup*>(e);
         Group *group = ev->group();
         if(!group->id())
             return false;
-        switch(ev->action()) {
-    case EventGroup::eChanged: 
-        addGroupRequest(group);
-        break;
-    case EventGroup::eDeleted: {
-        ICQUserData *data = toICQUserData((SIM::IMContact*)group->getData(this));
-        if (data){
-            ListRequest lr;
-            lr.type   = LIST_GROUP_DELETED;
-            lr.icq_id = (unsigned short)(data->getIcqID());
-            listRequests.push_back(lr);
-            snacICBM()->processSendQueue();
+        if (ev->action() == EventGroup::eChanged)
+            addGroupRequest(group);
+        else if (ev->action() == EventGroup::eDeleted)
+        {
+            ICQUserData *data = toICQUserData((SIM::IMContact*)group->getData(this));
+            if (data)
+            {
+                ListRequest lr;
+                lr.type = LIST_GROUP_DELETED;
+                lr.icq_id = (unsigned short)(data->getIcqID());
+                listRequests.push_back(lr);
+                snacICBM()->processSendQueue();
+            }
         }
+        else if (ev->action() == EventGroup::eAdded)
+            return false;
         break;
-                               }
-    case EventGroup::eAdded:
-        return false;
-        }
-        break;
-                      }
-    case eEventMessageCancel: {
+    }
+    case eEventMessageCancel: 
+        {
         EventMessage *em = static_cast<EventMessage*>(e);
         Message *msg = em->msg();
         return snacICBM()->cancelMessage(msg);
         break;
-                              }
-    case eEventCheckCommandState: {
+    }
+    case eEventCheckCommandState: 
+    {
         EventCheckCommandState *ecs = static_cast<EventCheckCommandState*>(e);
         CommandDef *cmd = ecs->cmd();
-        if (cmd->id == CmdPhones){
-            if (!m_bAIM)
-                return true;
-            return false;
-        }
+        if (cmd->id == CmdPhones)
+            return !m_bAIM;
         if(cmd->id == CmdFetchAway) {
             Contact *contact = getContacts()->contact((unsigned long)(cmd->param));
             if (!contact) 
@@ -3919,14 +3924,15 @@ bool ICQClient::processEvent(Event *e)
                 unsigned style  = 0;
                 QString statusIcon;
                 contactInfo(data, status, style, statusIcon);
-                if(status != STATUS_ONLINE && status != STATUS_OFFLINE) {
+                if(status != STATUS_ONLINE && status != STATUS_OFFLINE) 
+                {
                     cmd->flags &= ~BTN_HIDE;
                     return true;
                 }
             }
             return false;
         }
-        if ((cmd->bar_id == ToolBarContainer) || (cmd->bar_id == ToolBarHistory)){
+        if (cmd->bar_id == ToolBarContainer || cmd->bar_id == ToolBarHistory){
             if (cmd->id == CmdChangeEncoding)
             {
                 Contact *contact = getContacts()->contact((unsigned long)(cmd->param));
@@ -3947,7 +3953,8 @@ bool ICQClient::processEvent(Event *e)
                         break;
                 }
                 ClientDataIterator it = contact->clientDataIterator(this);
-                if ((++it) != NULL){
+                if ((++it) != NULL)
+                {
                     cmd->flags &= ~BTN_HIDE;
                     return true;
                 }
@@ -4053,7 +4060,8 @@ bool ICQClient::processEvent(Event *e)
                 }
                 return true;
             }
-            if (cmd->id == CmdInvisibleList){
+            if (cmd->id == CmdInvisibleList)
+            {
                 Contact *contact = getContacts()->contact((unsigned long)(cmd->param));
                 if (contact == NULL)
                     return false;
@@ -4117,14 +4125,15 @@ bool ICQClient::processEvent(Event *e)
             }
             break;
         }
-    case eEventOpenMessage: {
+    case eEventOpenMessage: 
+    {
         if (getState() != Connected)
             return false;
         EventMessage *em = static_cast<EventMessage*>(e);
         Message *msg = em->msg();
-        if ((msg->type() != MessageOpenSecure) &&
-            (msg->type() != MessageCloseSecure) &&
-            (msg->type() != MessageWarning))
+        if (msg->type() != MessageOpenSecure && 
+            msg->type() != MessageCloseSecure && 
+            msg->type() != MessageWarning)
             return false;
         QString client = msg->client();
         Contact *contact = getContacts()->contact(msg->contact());
@@ -4158,28 +4167,29 @@ bool ICQClient::processEvent(Event *e)
                 dlg = new SecureDlg(this, contact->id(), data);
             raiseWindow(dlg);
             return true;
-        } else
-            if (msg->type() == MessageWarning){
-                if (!(data && (m_bAIM || data->getUin() == 0)))
-                    return false;
+        }
+        else if (msg->type() == MessageWarning)
+        {
+            if (!(data && (m_bAIM || data->getUin() == 0)))
+                return false;
 
-                WarnDlg *dlg = new WarnDlg(NULL, data, this);
-                raiseWindow(dlg);
-                return true;
-            }
-            DirectClient *dc = dynamic_cast<DirectClient*>(data->getDirect());
-            if (dc && dc->isSecure())
-            {
-                Message *m = new Message(MessageCloseSecure);
-                m->setContact(msg->contact());
-                m->setClient(msg->client());
-                m->setFlags(MESSAGE_NOHISTORY);
-                if (!dc->sendMessage(m))
-                    delete m;
-                return true;
-            }
-            break;
-                            }
+            WarnDlg *dlg = new WarnDlg(NULL, data, this);
+            raiseWindow(dlg);
+            return true;
+        }
+        DirectClient *dc = dynamic_cast<DirectClient*>(data->getDirect());
+        if (dc && dc->isSecure())
+        {
+            Message *m = new Message(MessageCloseSecure);
+            m->setContact(msg->contact());
+            m->setClient(msg->client());
+            m->setFlags(MESSAGE_NOHISTORY);
+            if (!dc->sendMessage(m))
+                delete m;
+            return true;
+        }
+        break;
+    }
     default:
         break;
     }
