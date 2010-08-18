@@ -2425,12 +2425,12 @@ bool SnacIcqICBM::processMsg()
         msgBuf.pack(flags);
         msgBuf.pack(size);
         msgBuf.pack(text.data(), size);
-        if (m_send.msg->getBackground() == m_send.msg->getForeground()){
+        if (m_send.msg->getBackground() == m_send.msg->getForeground())
             msgBuf << 0x00000000L << 0xFFFFFF00L;
-        }else{
+        else
             msgBuf << (m_send.msg->getForeground() << 8) << (m_send.msg->getBackground() << 8);
-        }
-        if ((m_send.flags & SEND_MASK) != SEND_TYPE2){
+        if ((m_send.flags & SEND_MASK) != SEND_TYPE2)
+        {
             msgBuf << 0x26000000L;
             packCap(msgBuf, m_client->capabilities[((m_send.flags & SEND_MASK) == SEND_RTF) ? CAP_RTF : CAP_UTF]);
         }
@@ -2474,24 +2474,23 @@ bool SnacIcqICBM::processMsg()
                            .arg(m_client->removeImages(m_send.msg->getRichText(), false));
             bool bWide = false;
             int i;
-            for (i = 0; i < (int)(text.length()); i++){
-                if (text[i].unicode() > 0x7F){
+            for (i = 0; i < (int)(text.length()); i++)
+                if (text[i].unicode() > 0x7F)
+                {
                     bWide = true;
                     break;
                 }
-            }
             QString charset = bWide ? "unicode-2-0" : "us-ascii";
             tlvs += new Tlv(0x0D, charset.length(), charset.toLatin1());
             QByteArray st;
-            if (bWide){
-                for (i = 0; i < (int)(text.length()); i++){
+            if (bWide)
+                for (i = 0; i < (int)(text.length()); i++)
+                {
                     unsigned short s = text[i].unicode();
                     st += (char)((s >> 8) & 0xFF);
                     st += (char)(s & 0xFF);
                 }
-            }else{
-                st = text.toUtf8();
-            }
+            else st = text.toUtf8();
             tlvs += new Tlv(0x0C, st.length(), st.data());
             FileMessage *msg = static_cast<FileMessage*>(m_send.msg);
             FileMessage::Iterator it(*msg);
@@ -2500,23 +2499,26 @@ bool SnacIcqICBM::processMsg()
             << (unsigned short)(it.count())
             << (unsigned long)(it.size());
             QString fname;
-            if (it.count() == 1){
+            if (it.count() == 1)
+            {
                 fname = *(it[0]);
                 fname = fname.replace('\\', '/');
                 int n = fname.lastIndexOf('/');
                 if (n >= 0)
                     fname = fname.mid(n + 1);
-            }else{
+            }
+            else
+            {
                 fname = QString::number(it.count());
                 fname += " files";
             }
             bWide = false;
-            for (i = 0; i < (int)(fname.length()); i++){
-                if (fname[i].unicode() > 0x7F){
+            for (i = 0; i < (int)(fname.length()); i++)
+                if (fname[i].unicode() > 0x7F)
+                {
                     bWide = true;
                     break;
                 }
-            }
             charset = bWide ? "utf8" : "us-ascii";
             tlvs += new Tlv(0x2712, charset.length(), charset.toUtf8());
             msgBuf << (const char*)(fname.toUtf8()) << (char)0;
@@ -2537,23 +2539,23 @@ bool SnacIcqICBM::processMsg()
         sendType2(m_send.screen, msgBuf, m_send.id, CAP_DIRECT, false, 0);
         return true;
     }
-    if (m_send.flags == PLUGIN_AR){
+    if (m_send.flags == PLUGIN_AR)
+    {
         log(L_DEBUG, "Request auto response %s", qPrintable(m_send.screen));
 
         unsigned long status = data->getStatus();
-        if ((status == ICQ_STATUS_ONLINE) || (status == ICQ_STATUS_OFFLINE))
+        if (status == ICQ_STATUS_ONLINE || status == ICQ_STATUS_OFFLINE)
             return false;
 
         unsigned short type = ICQ_MSGxAR_AWAY; //Fixme: Local declaration of 'type' hides declaration of the same name in outer scope. For additional information, see previous declaration at line '1771'
-        if (status & ICQ_STATUS_DND){
+        if (status & ICQ_STATUS_DND)
             type = ICQ_MSGxAR_DND;
-        }else if (status & ICQ_STATUS_OCCUPIED){
+        else if (status & ICQ_STATUS_OCCUPIED)
             type = ICQ_MSGxAR_OCCUPIED;
-        }else if (status & ICQ_STATUS_NA){
+        else if (status & ICQ_STATUS_NA)
             type = ICQ_MSGxAR_NA;
-        }else if (status & ICQ_STATUS_FFC){
+        else if (status & ICQ_STATUS_FFC)
             type = ICQ_MSGxAR_FFC;
-        }
 
         ICQBuffer msg;
         msg.pack(type);
@@ -2564,19 +2566,23 @@ bool SnacIcqICBM::processMsg()
         m_send.id.id_h = rand();
         sendAdvMessage(m_client->screen(data), msg, PLUGIN_NULL, m_send.id, false, false);
         return true;
-    }else if (m_send.flags == PLUGIN_RANDOMxCHAT){
+    }
+    else if (m_send.flags == PLUGIN_RANDOMxCHAT){
         m_send.id.id_l = rand();
         m_send.id.id_h = rand();
         ICQBuffer b;
         b << (char)1 << 0x00000000L << 0x00010000L;
         sendAdvMessage(m_send.screen, b, PLUGIN_RANDOMxCHAT, m_send.id, false, false);
-    }else{
+    }
+    else
+    {
         unsigned plugin_index = m_send.flags;
         log(L_DEBUG, "Plugin info request %s (%u)", qPrintable(m_send.screen), plugin_index);
 
         ICQBuffer b;
         unsigned short type = 0; //Fixme: Local declaration of 'type' hides declaration of the same name in outer scope. For additional information, see previous declaration at line '1771'
-        switch (plugin_index){
+        switch (plugin_index)
+        {
         case PLUGIN_QUERYxINFO:
         case PLUGIN_PHONEBOOK:
         case PLUGIN_PICTURE:
@@ -2663,7 +2669,7 @@ plugin const *ICQClient::plugins = arrPlugins;
 
 bool operator == (const MessageId &m1, const MessageId &m2)
 {
-    return ((m1.id_l == m2.id_l) && (m1.id_h == m2.id_h));
+    return m1.id_l == m2.id_l && m1.id_h == m2.id_h;
 }
 /*
 #ifndef NO_MOC_INCLUDES
