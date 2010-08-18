@@ -186,8 +186,7 @@ public:
     static QTextCodec *getCodecByCodePage(const int iCP);
     static const ENCODING *getEncodings();
     const ENCODING *getEncoding(Contact *contact);
-    PropertyHubPtr userdata() { return m_userData->root(); };
-    UserDataPtr getUserData() { return m_userData; }
+    PropertyHubPtr userdata() { return m_userData->root(); }
 
 protected:
     void save_new();
@@ -221,6 +220,7 @@ protected:
     COPY_RESTRICTED(ContactList)
 
 private:
+    UserDataPtr getUserData() { return m_userData; }
     UserDataPtr m_userData;
 };
 
