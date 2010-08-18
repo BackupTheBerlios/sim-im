@@ -371,20 +371,20 @@ void ContactList::addContact(Contact *contact)
 Group *ContactList::group(unsigned long id, bool isNew)
 {
     vector<Group*>::iterator it;
-    if (id || !isNew){
-        for (it = p->groups.begin(); it != p->groups.end(); ++it){
+    if (id || !isNew)
+    {
+        for (it = p->groups.begin(); it != p->groups.end(); ++it) //Search group with given id and return group obj
+        {
             if ((*it)->id() == id)
                 return (*it);
         }
     }
-    if (!isNew)
+    if (!isNew) 
         return NULL;
-    if (id == 0){
-        for (it = p->groups.begin(); it != p->groups.end(); ++it){
+    if (id == 0) //calculate new group id and create a new group
+        for (it = p->groups.begin(); it != p->groups.end(); ++it)
             if (id <= (*it)->id())
                 id = (*it)->id() + 1;
-        }
-    }
     Group *res = new Group(id);
     p->groups.push_back(res);
     EventGroup e(res, EventGroup::eAdded);
@@ -394,10 +394,9 @@ Group *ContactList::group(unsigned long id, bool isNew)
 
 int ContactList::groupIndex(unsigned long id)
 {
-    for (unsigned i = 0; i < p->groups.size(); i++){
+    for (unsigned i = 0; i < p->groups.size(); i++)
         if (p->groups[i]->id() == id)
             return i;
-    }
     return -1;
 }
 
@@ -410,9 +409,10 @@ bool ContactList::moveGroup(unsigned long id, bool bUp)
 {
     if (id == 0)
         return false;
-    for (unsigned i = 1; i < p->groups.size(); i++){
-        if (p->groups[i]->id() == id){
-            if (!bUp && (i == p->groups.size() - 1))
+    for (unsigned i = 1; i < p->groups.size(); i++)
+        if (p->groups[i]->id() == id)
+        {
+            if (!bUp && i == p->groups.size() - 1)
                 return false;
             if (bUp) i--;
             if (i == 0)
@@ -426,7 +426,6 @@ bool ContactList::moveGroup(unsigned long id, bool bUp)
             e2.process();
             return true;
         }
-    }
     return false;
 }
 
@@ -445,7 +444,8 @@ GroupIteratorPrivate::GroupIteratorPrivate()
 
 Group *GroupIteratorPrivate::operator++()
 {
-    if (it != getContacts()->p->groups.end()){
+    if (it != getContacts()->p->groups.end())
+    {
         Group *res = (*it);
         ++it;
         return res;
