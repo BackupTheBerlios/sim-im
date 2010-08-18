@@ -24,7 +24,7 @@ namespace SIM
         virtual QString text() const = 0;
         virtual QIcon icon() const = 0;
 
-        virtual QStringList substatuses() = 0;
+        virtual QStringList substates() = 0;
         virtual IMStatusPtr substatus(const QString& id) = 0;
         virtual IMStatusPtr clone() = 0;
     };

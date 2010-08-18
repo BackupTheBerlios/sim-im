@@ -23,7 +23,7 @@ namespace SIM
         virtual QSharedPointer<Client> createClient(const QString& name) = 0;
         virtual const CommandDef *description() = 0;
         virtual const CommandDef *statusList() = 0;
-        virtual QStringList statuses() = 0;
+        virtual QStringList states() = 0;
         virtual IMStatusPtr status(const QString& id) = 0;
         virtual const DataDef *userDataDef() = 0;
         virtual IMContact* createIMContact(const QSharedPointer<Client>& client) = 0;

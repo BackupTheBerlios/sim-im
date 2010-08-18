@@ -39,7 +39,7 @@ QIcon ICQStatus::icon() const
     return m_icon;
 }
 
-QStringList ICQStatus::substatuses()
+QStringList ICQStatus::substates()
 {
     return QStringList();
 }
