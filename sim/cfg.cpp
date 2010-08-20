@@ -84,10 +84,10 @@ PropertyHubPtr Config::propertyHub(const QString& hubNamespace)
 	return it.value();
 }
 
-int Config::propertyHubCount()
-{
-	return m_hubs.size();
-}
+//int Config::propertyHubCount()
+//{
+//	return m_hubs.size();
+//}
 
 void Config::clearPropertyHubs()
 {

@@ -46,7 +46,7 @@ public:
 
     bool addPropertyHub(PropertyHubPtr hub);
     PropertyHubPtr propertyHub(const QString& hubNamespace);
-    int propertyHubCount();
+    //int propertyHubCount();
     void clearPropertyHubs();
     PropertyHubPtr rootPropertyHub();
 

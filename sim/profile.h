@@ -10,15 +10,15 @@
 
 namespace SIM
 {
-	class EXPORT Profile
-	{
-	public:
-		Profile(const QString& name = "");
-		Profile(const ConfigPtr& conf, const QString& name = "");
-		virtual ~Profile();
+    class EXPORT Profile
+    {
+    public:
+        Profile(const QString& name = "");
+        Profile(const ConfigPtr& conf, const QString& name = "");
+        virtual ~Profile();
 
-		ConfigPtr config();
-		void setConfig(const ConfigPtr& conf);
+        ConfigPtr config();
+        void setConfig(const ConfigPtr& conf);
 
         QString name();
 
@@ -31,13 +31,13 @@ namespace SIM
         void addPlugin(const QString& name);
         void removePlugin(const QString& name);
 
-	private:
+    private:
         QString m_name;
-		ConfigPtr m_config;
+        ConfigPtr m_config;
         QList<PluginPtr> m_plugins;
 	};
 
-	typedef QSharedPointer<Profile> ProfilePtr;
+    typedef QSharedPointer<Profile> ProfilePtr;
 }
 
 

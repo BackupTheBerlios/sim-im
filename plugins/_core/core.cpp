@@ -269,7 +269,7 @@ CorePlugin::CorePlugin(unsigned base, Buffer* /*config*/)
 	createMenuTextEdit();
 
 	MsgEdit::setupMessages(); // Make sure this function is called after createContainerToolbar and createMsgEditToolbar
-	// because setupMessages() adds items to MenuMessage and to ToolBatMsgEdit, witch are
+    // because setupMessages() adds items to MenuMessage and to ToolBatMsgEdit, which are
 	// created by createContainerToolbar and createMsgEditToolbar
 	// If menu or toolbar were not created, items can't be added, and will be just missing
 	Command cmd;

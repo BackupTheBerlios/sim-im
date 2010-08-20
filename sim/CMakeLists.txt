@@ -17,10 +17,15 @@ SET(sim_LIB_SRCS
 		cmddef.cpp
 		contacts.cpp
 		country.cpp
-		event.cpp
+        event.cpp
+        events/eventdata.cpp
+        events/eventhub.cpp
+        events/nulleventdata.cpp
+        events/standardevent.cpp
 		exec.cpp
 		fetch.cpp
 		icons.cpp
+        events/ievent.cpp
 		log.cpp
 		message.cpp
 		misc.cpp
@@ -88,9 +93,14 @@ SET(sim_LIB_HDRS
 		contacts.h
 		country.h
 		event.h
+        events/eventdata.h
+        events/eventhub.h
+        events/nulleventdata.h
+        events/standardevent.h
 		exec.h
 		fetch.h
 		icons.h
+        events/ievent.h
 		log.h
 		message.h
 		misc.h

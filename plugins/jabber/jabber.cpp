@@ -73,7 +73,7 @@ void JabberProtocol::addStatus(JabberStatusPtr status)
     m_states.append(status);
 }
 
-QStringList JabberProtocol::states()
+QStringList JabberProtocol::statuses()
 {
     QStringList list;
     foreach(const JabberStatusPtr& status, m_states) {

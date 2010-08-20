@@ -11,22 +11,22 @@ namespace SIM
 
     }
 
-	Profile::Profile(const ConfigPtr& conf, const QString& name) 
+    Profile::Profile(const ConfigPtr& conf, const QString& name)
         : m_name(name)
         , m_config(conf)
     {
     }
 
-	Profile::~Profile()
+    Profile::~Profile()
     {
     }
 
-	ConfigPtr Profile::config()
+    ConfigPtr Profile::config()
     {
         return m_config;
     }
 
-	void Profile::setConfig(const ConfigPtr& conf)
+    void Profile::setConfig(const ConfigPtr& conf)
     {
         m_config = conf;
     }

@@ -219,7 +219,7 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 						{
 							if (!memcmp(m_client->capabilities[i],"\x00\x00\x00\x00", 4)) {
                                     log(L_DEBUG, "%lu unknown cap %s", data->getUin(),
-                                        makeCapStr(shortcap, sizeof(shortcap)).toLatin1());
+                                        makeCapStr(shortcap, sizeof(shortcap)).toLatin1().data());
 								break;
 							}
 							// we don't go through all caps, only the starting with 0x09

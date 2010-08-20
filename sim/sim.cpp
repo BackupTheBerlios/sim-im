@@ -25,6 +25,7 @@
 #include "paths.h"
 #include "socket/socketfactory.h"
 #include "contacts/protocolmanager.h"
+#include "events/eventhub.h"
 
 #include <QDir>
 
@@ -104,6 +105,8 @@ int main(int argc, char *argv[])
     QString sPluginPath = app.applicationDirPath() + "/plugins";
 #endif
     QApplication::addLibraryPath(sPluginPath);
+
+    SIM::createEventHub();
     SIM::createSocketFactory();
     SIM::createContactList();
     SIM::createProtocolManager();
@@ -121,6 +124,7 @@ int main(int argc, char *argv[])
     SIM::destroyProtocolManager();
     SIM::destroyContactList();
     SIM::destroySocketFactory();
+    SIM::destroyEventHub();
     return res;
 }
 

@@ -57,7 +57,6 @@ namespace testConfig
 		ConfigPtr config = ConfigPtr(new Config("nonexistant"));
 		bool success = config->deserialize(m_config);
 		QVERIFY(success);
-		QCOMPARE(config->propertyHubCount(), 3);
 		PropertyHubPtr alpha = config->propertyHub("alpha");
 		PropertyHubPtr beta = config->propertyHub("beta");
 		PropertyHubPtr gamma = config->propertyHub("gamma");

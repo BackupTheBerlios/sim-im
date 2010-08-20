@@ -139,7 +139,7 @@ void StatusLabel::fillStatusMenu(QMenu& menu)
 {
     menu.clear();
     menu.setTitle(m_client->name());
-    QStringList statusNames = m_client->protocol()->states();
+    QStringList statusNames = m_client->protocol()->statuses();
     foreach(const QString& statusId, statusNames) {
         IMStatusPtr status = m_client->protocol()->status(statusId);
         QAction* action = menu.addAction(status->icon(), status->name());
