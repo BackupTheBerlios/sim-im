@@ -3,10 +3,11 @@
 
 #include <QString>
 #include <QSharedPointer>
+#include "simapi.h"
 
 namespace SIM {
 
-class EventData
+class EXPORT EventData
 {
 public:
     EventData();

@@ -81,8 +81,9 @@ namespace SIM
         COPY_RESTRICTED(PluginManager)
     };
 
-	/* Plugin prototype */
-	typedef Plugin* createPlugin(unsigned base, bool bStart, Buffer *cfg);
+    /* Plugin prototype */
+    typedef Plugin* createPlugin(unsigned base, bool bStart, Buffer *cfg);
+    typedef Plugin* (*createPluginObject)();
 
 	const unsigned PLUGIN_KDE_COMPILE    = 0x0001;
 #ifdef USE_KDE
@@ -97,14 +98,15 @@ namespace SIM
 	const unsigned PLUGIN_NODISABLE      = 0x0010;
 	const unsigned PLUGIN_RELOAD         = 0x0020;
 
-	struct PluginInfo           // Information in plugin
-	{
-		const char      *title;         // User title
-		const char      *description;   // Description
-		const char      *version;       // Version
-		createPlugin    *create;        // create proc
-		unsigned        flags;          // plugin flags
-	};
+    struct PluginInfo           // Information in plugin
+    {
+        const char      *title;         // User title
+        const char      *description;   // Description
+        const char      *version;       // Version
+        createPlugin    *create;        // create proc
+        unsigned        flags;          // plugin flags
+        createPluginObject createObject;
+    };
 
 	SIM_EXPORT PluginInfo *GetPluginInfo();
 

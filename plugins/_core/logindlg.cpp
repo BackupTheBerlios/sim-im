@@ -604,34 +604,3 @@ void LoginDialog::loadClients(const QString& profilename, SIM::ClientList& clien
         clients.push_back(SIM::getClientManager()->client(clname));
     }
 }
-
-//ClientPtr LoginDialog::loadClient(const QString &name, Buffer *cfg)
-//{
-//	if (name.isEmpty())
-//		return ClientPtr();
-//	QString clientName = name;
-//	QString pluginName = getToken(clientName, '/');
-//    if (pluginName.isEmpty() || clientName.length() == 0)
-//		return ClientPtr();
-//	if(!getPluginManager()->isPluginProtocol(pluginName))
-//    {
-//        log(L_DEBUG, "Plugin %s is not a protocol plugin", qPrintable(pluginName));
-//		return ClientPtr();
-//	}
-//	PluginPtr plugin = getPluginManager()->plugin(pluginName);
-//	if(plugin.isNull())
-//    {
-//        log(L_WARN, "Plugin %s not found", qPrintable(pluginName));
-//		return ClientPtr();
-//	}
-//	m_protocolPlugins.append(plugin);
-//	ProfileManager::instance()->currentProfile()->enablePlugin(pluginName);
-//	ProtocolPtr protocol;
-//	ProtocolIterator it;
-//    while ((protocol = ++it) != NULL)
-//        if (protocol->description()->text == clientName)
-//            return protocol->createClient(cfg);
-//    log(L_DEBUG, "Protocol %s not found", qPrintable(clientName));
-//	return ClientPtr();
-//}
-

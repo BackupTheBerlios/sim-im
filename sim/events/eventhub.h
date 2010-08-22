@@ -11,7 +11,7 @@
 namespace SIM
 {
 
-class EventHub : public QObject
+class EXPORT EventHub : public QObject
 {
     Q_OBJECT
 public:
@@ -19,8 +19,8 @@ public:
     bool registerEvent(const IEventPtr& event);
     bool unregisterEvent(const QString& id);
 
-    void triggerEvent(const QString& id, const EventDataPtr& data);
-    IEventPtr event(const QString& id);
+    void triggerEvent(const QString& id, const EventDataPtr& data = EventDataPtr());
+    IEventPtr getEvent(const QString& id);
 signals:
 
 public slots:
@@ -30,9 +30,10 @@ private:
 
 };
 
-void createEventHub();
-void destroyEventHub();
-EventHub* EXPORT getEventHub();
+void EXPORT createEventHub();
+void EXPORT destroyEventHub();
+EXPORT EventHub* getEventHub();
+
 }
 
 #endif // EVENTHUB_H

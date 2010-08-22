@@ -17,10 +17,15 @@ bool StandardEvent::connectTo(QObject* receiver, const char* receiverSlot)
     return QObject::connect(this, SIGNAL(eventTriggered()), receiver, receiverSlot);
 }
 
-void StandardEvent::triggered(const EventData& data)
+void StandardEvent::triggered(const EventDataPtr& data)
 {
     Q_UNUSED(data);
     emit eventTriggered();
+}
+
+IEventPtr StandardEvent::create(const QString& eventId)
+{
+    return IEventPtr(new StandardEvent(eventId));
 }
 
 } // namespace SIM

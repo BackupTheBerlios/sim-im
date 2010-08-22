@@ -19,7 +19,7 @@ bool EventHub::registerEvent(const IEventPtr& event)
 
 bool EventHub::unregisterEvent(const QString& id)
 {
-    QMap<QString, IEventPtr>::iterator it = m_events.find(event->id());
+    QMap<QString, IEventPtr>::iterator it = m_events.find(id);
     if(it != m_events.end())
         return false;
     m_events.erase(it);
@@ -28,28 +28,28 @@ bool EventHub::unregisterEvent(const QString& id)
 
 void EventHub::triggerEvent(const QString& id, const EventDataPtr& data)
 {
-    IEventPtr ev = event(id);
+    IEventPtr ev = getEvent(id);
     if(!ev)
         return;
     ev->triggered(data);
 }
 
-IEventPtr EventHub::event(const QString& id)
+IEventPtr EventHub::getEvent(const QString& id)
 {
-    QMap<QString, IEventPtr>::iterator it = m_events.find(event->id());
+    QMap<QString, IEventPtr>::iterator it = m_events.find(id);
     if(it != m_events.end())
         return IEventPtr();
     return it.value();
 }
 
-void createEventHub()
+void EXPORT createEventHub()
 {
     if(g_eventHub)
         return;
     g_eventHub = new EventHub();
 }
 
-void destroyEventHub()
+void EXPORT destroyEventHub()
 {
     if(!g_eventHub)
         return;
@@ -57,7 +57,7 @@ void destroyEventHub()
     g_eventHub = 0;
 }
 
-EventHub* EXPORT getEventHub()
+EXPORT EventHub* getEventHub()
 {
     return g_eventHub;
 }

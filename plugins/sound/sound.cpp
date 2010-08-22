@@ -41,13 +41,19 @@ Plugin *createSoundPlugin(unsigned base, bool bFirst, Buffer *config)
     return new SoundPlugin(base, bFirst, config);
 }
 
+Plugin *createSoundPluginObject()
+{
+    return new SoundPlugin(0, 0, 0);
+}
+
 static PluginInfo info =
     {
         I18N_NOOP("Sound"),
         I18N_NOOP("Plugin provides sounds on any events"),
         VERSION,
         createSoundPlugin,
-        PLUGIN_DEFAULT
+        PLUGIN_DEFAULT,
+        createSoundPluginObject
     };
 
 EXPORT_PROC PluginInfo* GetPluginInfo()

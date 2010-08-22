@@ -33,13 +33,20 @@ Plugin *createJabberPlugin(unsigned base, bool, Buffer *cfg)
     return plugin;
 }
 
+Plugin *createJabberPluginObject()
+{
+    Plugin *plugin = new JabberPlugin(0, 0);
+    return plugin;
+}
+
 static PluginInfo info =
     {
         NULL,
         NULL,
         VERSION,
         createJabberPlugin,
-        PLUGIN_PROTOCOL
+        PLUGIN_PROTOCOL,
+        createJabberPluginObject
     };
 
 EXPORT_PROC PluginInfo* GetPluginInfo()

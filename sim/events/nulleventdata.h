@@ -5,7 +5,7 @@
 
 namespace SIM {
 
-class NullEventData : public EventData
+class EXPORT NullEventData : public EventData
 {
 public:
     NullEventData();

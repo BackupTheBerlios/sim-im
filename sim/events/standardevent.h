@@ -7,22 +7,25 @@
 
 namespace SIM {
 
-class StandardEvent : public IEvent
+class EXPORT StandardEvent : public IEvent
 {
     Q_OBJECT
 public:
-    StandardEvent(const QString& eventId);
 
     QString id();
     bool connectTo(QObject* receiver, const char* receiverSlot);
+
+    static IEventPtr create(const QString& eventId);
 
 signals:
     void eventTriggered();
 
 public slots:
-    virtual void triggered(const EventData& data);
+    virtual void triggered(const EventDataPtr& data);
 
 private:
+    StandardEvent(const QString& eventId);
+    Q_DISABLE_COPY(StandardEvent);
     QString m_id;
 };
 

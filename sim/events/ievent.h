@@ -4,12 +4,13 @@
 #include <QObject>
 #include <QSharedPointer>
 #include <QString>
+#include "simapi.h"
 
 #include "eventdata.h"
 
 namespace SIM {
 
-class IEvent : public QObject
+class EXPORT IEvent : public QObject
 {
     Q_OBJECT
 public:
@@ -19,7 +20,7 @@ public:
     virtual bool connectTo(QObject* receiver, const char* receiverSlot) = 0;
 
 public slots:
-    virtual void triggered(const EventData& data) = 0;
+    virtual void triggered(const EventDataPtr& data) = 0;
 
 };
 

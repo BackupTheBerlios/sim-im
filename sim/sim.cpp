@@ -26,6 +26,7 @@
 #include "socket/socketfactory.h"
 #include "contacts/protocolmanager.h"
 #include "events/eventhub.h"
+#include "events/standardevent.h"
 
 #include <QDir>
 
@@ -77,6 +78,11 @@ void simMessageOutput(QtMsgType, const char *msg)
 #define _VERSION	VERSION
 #endif
 
+void registerEvents()
+{
+    SIM::getEventHub()->registerEvent(SIM::StandardEvent::create("init"));
+}
+
 int main(int argc, char *argv[])
 {
     SimFileEngineHandler simfs;
@@ -115,6 +121,7 @@ int main(int argc, char *argv[])
 
     if(!getPluginManager()->initialize())
         return 1;
+    registerEvents();
     app.setQuitOnLastWindowClosed(false);
     if (SIM::getPluginManager()->isLoaded())
         res = app.exec();

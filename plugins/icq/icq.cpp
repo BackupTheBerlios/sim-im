@@ -32,13 +32,20 @@ Plugin *createICQPlugin(unsigned base, bool, Buffer*)
     return plugin;
 }
 
+Plugin *createICQPluginObject()
+{
+    Plugin *plugin = new ICQPlugin(0);
+    return plugin;
+}
+
 static PluginInfo info =
     {
         NULL,
         NULL,
         VERSION,
         createICQPlugin,
-        PLUGIN_PROTOCOL
+        PLUGIN_PROTOCOL,
+        createICQPluginObject
     };
 
 EXPORT_PROC PluginInfo* GetPluginInfo()
@@ -58,15 +65,13 @@ ICQProtocol::~ICQProtocol()
 
 ClientPtr ICQProtocol::createClient(Buffer *cfg)
 {
-	ClientPtr icq = ClientPtr(new ICQClient(this, cfg, false));
-    //getClientManager()->addClient(icq); //Fixme: remove slashes?!?
+    ClientPtr icq = ClientPtr(new ICQClient(this, cfg, false));
     return icq;
 }
 
 SIM::ClientPtr ICQProtocol::createClient(const QString& name)
 {
     ClientPtr icq = ClientPtr(new ICQClient(this, name, false));
-    //getClientManager()->addClient(icq);
     return icq;
 }
 

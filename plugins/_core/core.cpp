@@ -127,13 +127,21 @@ Plugin *createCorePlugin(unsigned base, bool, Buffer *config)
 	return plugin;
 }
 
+Plugin *createCorePluginObject()
+{
+    Plugin *plugin = new CorePlugin(0, 0);
+    return plugin;
+}
+
+
 static PluginInfo info =
 {
 	I18N_NOOP("Interface"),
 	I18N_NOOP("System interface"),
 	VERSION,
 	createCorePlugin,
-	PLUGIN_DEFAULT | PLUGIN_NODISABLE | PLUGIN_RELOAD
+    PLUGIN_DEFAULT | PLUGIN_NODISABLE | PLUGIN_RELOAD,
+    createCorePluginObject
 };
 
 EXPORT_PROC PluginInfo* GetPluginInfo()
