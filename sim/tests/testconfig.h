@@ -15,6 +15,9 @@ namespace testConfig
         void initTestCase();
         void cleanupTestCase();
 
+        void init();
+        void cleanup();
+
         void testSerialization();
         void testDeserialization();
     private:

@@ -23,6 +23,7 @@
 #include "roster/userview.h"
 #include "contacts/contact.h"
 #include "simgui/toolbtn.h"
+#include "events/eventhub.h"
 
 #include <QApplication>
 #include <QPixmap>
@@ -105,6 +106,8 @@ MainWindow::MainWindow(Geometry &geometry)
         geometry[TOP].asLong() = 5;
     }
     ::restoreGeometry(this, geometry, true, true);
+
+    getEventHub()->getEvent("init")->connectTo(this, SLOT(eventInit()));
 }
 
 MainWindow::~MainWindow()
@@ -143,6 +146,17 @@ bool MainWindow::eventFilter(QObject *o, QEvent *e)
     return QMainWindow::eventFilter(o, e);
 }
 
+void MainWindow::eventInit()
+{
+    setTitle();
+    EventToolbar e(ToolBarMain, this);
+    e.process();
+    m_bar = e.toolBar();
+    m_bar->setObjectName("MainToolbar");
+    this->addToolBar(m_bar);
+    raiseWindow(this);
+}
+
 bool MainWindow::processEvent(Event *e)
 {
 	switch(e->type()){
@@ -151,20 +165,6 @@ bool MainWindow::processEvent(Event *e)
 				EventSetMainIcon *smi = static_cast<EventSetMainIcon*>(e);
 				m_icon = smi->icon();
 				setWindowIcon(Icon(m_icon));
-				break;
-			}
-		case eEventInit:
-			{
-				setTitle();
-				EventToolbar e(ToolBarMain, this);
-				e.process();
-				m_bar = e.toolBar();
-                m_bar->setObjectName("MainToolbar");
-				this->addToolBar(m_bar);
-//				m_bar->setMaximumHeight(30);
-//				m_bar->setMinimumHeight(30); // FIXME
-				//restoreToolbar(m_bar, CorePlugin::instance()->data.toolBarState);
-				raiseWindow(this);
 				break;
 			}
 		case eEventCommandExec:

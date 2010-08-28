@@ -133,16 +133,19 @@ UserView::~UserView()
 {
 }
 
+bool UserView::init()
+{
+    m_bInit = true;
+    fill();
+    return true;
+}
+
 bool UserView::processEvent(Event *e)
 {
     switch (e->type())
     {
     case eEventRepaintView:
         setVerticalScrollBarPolicy(CorePlugin::instance()->value("NoScroller").toBool() ? Qt::ScrollBarAlwaysOff : Qt::ScrollBarAsNeeded);
-        break;
-    case eEventInit:
-        m_bInit = true;
-        fill();
         break;
     case eEventContact:
         {

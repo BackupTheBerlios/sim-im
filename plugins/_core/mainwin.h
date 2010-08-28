@@ -65,6 +65,9 @@ protected:
     QString	m_icon;
     friend class CorePlugin;
     static MainWindow *s_mainWindow;
+
+private slots:
+    void eventInit();
 };
 
 #endif

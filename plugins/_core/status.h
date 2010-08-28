@@ -62,6 +62,9 @@ protected:
     bool m_bConnected;
     BalloonMsg		  *m_balloon;
     list<BalloonItem> m_queue;
+
+private slots:
+    void eventInit();
 };
 
 #endif

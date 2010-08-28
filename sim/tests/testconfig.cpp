@@ -82,6 +82,16 @@ namespace testConfig
 		QCOMPARE(config->rootPropertyHub()->value("test1").toBool(), true);
 		QCOMPARE(config->rootPropertyHub()->value("test2").toInt(), 444);
 	}
+
+    void Test::init()
+    {
+
+    }
+
+    void Test::cleanup()
+    {
+
+    }
 }
 
 // vim: set expandtab:

@@ -38,6 +38,9 @@
 #include "xsl.h"
 #include "builtinlogger.h"
 #include "profilemanager.h"
+#include "events/eventhub.h"
+#include "events/ievent.h"
+#include "log.h"
 
 #include <ctype.h>
 #include <errno.h>
@@ -167,7 +170,6 @@ namespace SIM
             PluginManagerPrivate(int argc, char **argv);
             ~PluginManagerPrivate();
 
-
             bool initialize();
             QStringList enumPluginPaths();
             QStringList enumPluginNames();
@@ -176,6 +178,8 @@ namespace SIM
             QString pluginDescription(const QString& pluginname);
             bool isPluginAlwaysEnabled(const QString& pluginname);
             bool isPluginProtocol(const QString& pluginname);
+
+            void abortInit();
 
         protected:
             virtual bool processEvent(Event *e);
@@ -289,6 +293,11 @@ namespace SIM
                 release(plugins[i]);
             }
         }
+    }
+
+    void PluginManagerPrivate::abortInit()
+    {
+        m_bAbort = true;
     }
     
     QStringList PluginManagerPrivate::enumPluginPaths()
@@ -450,9 +459,8 @@ namespace SIM
 
         m_homedir = plugin("__homedir");
 
-        EventInit eStart;
-        eStart.process();
-        if( eStart.abortLoading() ) {
+        getEventHub()->triggerEvent("init");
+        if(m_bAbort) {
             log(L_ERROR,"EventInit failed - aborting!");
             m_bAbort = true;
             return false;
@@ -827,6 +835,7 @@ namespace SIM
     PluginManager::PluginManager(int argc, char **argv)
     {
         EventReceiver::initList();
+        getEventHub()->getEvent("init_abort")->connectTo(this, SLOT(eventInitAbort()));
         p = new PluginManagerPrivate(argc, argv);
     }
 
@@ -839,7 +848,7 @@ namespace SIM
 
     PluginManager::~PluginManager()
     {
-        EventQuit().process();
+        getEventHub()->triggerEvent("quit");
         delete p;
         EventReceiver::destroyList();
         deleteResolver();
@@ -884,6 +893,11 @@ namespace SIM
     PluginInfo* PluginManager::getPluginInfo(const QString& pluginname)
     {
         return p->getPluginInfo(pluginname);
+    }
+
+    void PluginManager::eventInitAbort()
+    {
+        p->abortInit();
     }
 
     static PluginManager* g_pluginManager = 0;

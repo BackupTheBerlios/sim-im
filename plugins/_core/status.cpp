@@ -28,6 +28,7 @@
 #include "statuswnd.h"
 #include "logindlg.h"
 #include "autoreply.h"
+#include "events/eventhub.h"
 
 #include "contacts/client.h"
 #include "socket/socket.h"
@@ -62,6 +63,8 @@ CommonStatus::CommonStatus()
     m_bInitialized = false;
     rebuildStatus();
     QTimer::singleShot(500, this, SLOT(setBarStatus()));
+
+    getEventHub()->getEvent("init")->connectTo(this, SLOT(eventInit()));
 }
 
 CommonStatus::~CommonStatus()
@@ -316,6 +319,11 @@ void CommonStatus::checkInvisible()
         CorePlugin::instance()->setValue("Invisible", false);
 }
 
+void CommonStatus::eventInit()
+{
+    setBarStatus();
+}
+
 bool CommonStatus::processEvent(Event *e)
 {
     switch (e->type())
@@ -386,8 +394,6 @@ bool CommonStatus::processEvent(Event *e)
         }
     case eEventClientStatus:
     case eEventSocketActive:
-    case eEventInit:
-        setBarStatus();
         break;
     case eEventClientsChanged:
 		{

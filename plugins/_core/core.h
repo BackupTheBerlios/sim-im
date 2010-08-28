@@ -192,6 +192,8 @@ protected slots:
     void postInit();
     void ignoreEvents(bool i);
 protected:
+
+    void subscribeToEvents();
     
     virtual bool processEvent(SIM::Event*);
     virtual QByteArray getConfig();
@@ -255,6 +257,10 @@ protected:
     Commands            *m_cmds;
     HistoryThread      *m_HistoryThread;
 
+private slots:
+    void eventInit();
+    void eventQuit();
+
 private:
     bool m_bIgnoreEvents;
     SIM::PropertyHubPtr m_propertyHub;
@@ -271,7 +277,6 @@ private:
     bool processEventARRequest(SIM::Event* e);
     bool processEventSaveState(SIM::Event* e);
     bool processEventPluginChanged(SIM::Event* e);
-    bool processEventInit(SIM::Event* e);
     bool processEventHomeDir(SIM::Event* e);
     bool processEventGetProfile(SIM::Event* e);
     bool processEventAddPreferences(SIM::Event* e);

@@ -38,6 +38,9 @@ class UserView : public UserListBase
 public:
     UserView();
     ~UserView();
+
+    bool init();
+
     CorePlugin *m_plugin;
     IntLineEdit *m_edtGroup;
     IntLineEdit *m_edtContact;

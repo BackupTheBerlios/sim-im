@@ -11,6 +11,7 @@
 #include "testcontactlist.h"
 #include "testpropertyhub.h"
 #include "testuserdata.h"
+#include "testeventhub.h"
 
 int main(int argc, char** argv)
 {
@@ -22,8 +23,9 @@ int main(int argc, char** argv)
     QTest::qExec(new testContactList::Test());
     QTest::qExec(new testUserData::Test());
     QTest::qExec(new testConfig::Test());
-    QTest::qExec(new testClientManager::Test());
-    QTest::qExec(new testContact::Test());
+    //QTest::qExec(new testClientManager::Test());
+    //QTest::qExec(new testContact::Test());
+    QTest::qExec(new testEventHub::Test());
     return 0;
 }
 

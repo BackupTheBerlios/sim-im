@@ -789,9 +789,6 @@ bool Container::processEvent(Event *e)
 				contactChanged(ecc->contact());
 				break;
 			}
-		case eEventInit:
-			init();
-			break;
 		case eEventCommandExec:
 			{
 				EventCommandExec *ece = static_cast<EventCommandExec*>(e);

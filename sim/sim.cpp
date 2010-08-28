@@ -81,6 +81,8 @@ void simMessageOutput(QtMsgType, const char *msg)
 void registerEvents()
 {
     SIM::getEventHub()->registerEvent(SIM::StandardEvent::create("init"));
+    SIM::getEventHub()->registerEvent(SIM::StandardEvent::create("init_abort"));
+    SIM::getEventHub()->registerEvent(SIM::StandardEvent::create("quit"));
 }
 
 int main(int argc, char *argv[])
@@ -113,15 +115,16 @@ int main(int argc, char *argv[])
     QApplication::addLibraryPath(sPluginPath);
 
     SIM::createEventHub();
+    registerEvents();
     SIM::createSocketFactory();
     SIM::createContactList();
     SIM::createProtocolManager();
     SIM::createPluginManager(argc, argv);
     SIM::createClientManager();
 
+
     if(!getPluginManager()->initialize())
         return 1;
-    registerEvents();
     app.setQuitOnLastWindowClosed(false);
     if (SIM::getPluginManager()->isLoaded())
         res = app.exec();

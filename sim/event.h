@@ -77,8 +77,8 @@ protected:
 enum SIMEvent
 {
     eEventLog               = 0x0001,	// Log Output
-    eEventInit              = 0x0101,	// application init after all plugins are loaded
-    eEventQuit              = 0x0102,	// last event until plugins are unloaded
+//    eEventInit              = 0x0101,	// application init after all plugins are loaded
+//    eEventQuit              = 0x0102,	// last event until plugins are unloaded
     eEventExec              = 0x0110,	// execute an external program
     eEventSocketActive      = 0x0112,	// change socket activity state
     eEventInterfaceDown     = 0x0113,	// emmited when socket detects eth down
@@ -260,21 +260,11 @@ protected:
     Buffer m_Buffer;
 };
 
-class EXPORT EventInit : public Event
-{
-public:
-	EventInit() : Event(eEventInit), m_bAbortLoading(false) {}
-    void setAbortLoading() { m_bAbortLoading = true; }
-    bool abortLoading() const { return m_bAbortLoading; }
-protected:
-    bool    m_bAbortLoading;
-};
-
-class EXPORT EventQuit : public Event
-{
-public:
-	EventQuit() : Event(eEventQuit) {}
-};
+//class EXPORT EventQuit : public Event
+//{
+//public:
+//	EventQuit() : Event(eEventQuit) {}
+//};
 
 class EXPORT EventExec : public Event
 {

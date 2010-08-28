@@ -56,8 +56,9 @@ namespace SIM
 
     typedef QSharedPointer<Plugin> PluginPtr;
 
-    class EXPORT PluginManager
+    class EXPORT PluginManager : public QObject
     {
+        Q_OBJECT
     public:
         PluginManager(int argc, char **argv);
         ~PluginManager();
@@ -74,6 +75,9 @@ namespace SIM
         bool isPluginProtocol(const QString& pluginname);
 
         PluginInfo* getPluginInfo(const QString& pluginname);
+
+    private slots:
+        void eventInitAbort();
 
     private:
         class PluginManagerPrivate *p;

@@ -59,6 +59,7 @@ email                : vovan@shutoff.ru
 #include "contacts/client.h"
 #include "contacts/protocolmanager.h"
 #include "contacts/imcontact.h"
+#include "events/eventhub.h"
 // _core
 #include "core.h"
 #include "cfgdlg.h"
@@ -256,7 +257,6 @@ CorePlugin::CorePlugin(unsigned base, Buffer* /*config*/)
 	setValue("StatusTime", QDateTime::currentDateTime().toTime_t());
     m_containerManager = new ContainerManager(this);
 
-	//loadDir();
 	boundTypes();
 
 	EventMenu(MenuFileDecline,      EventMenu::eAdd).process();
@@ -288,6 +288,19 @@ CorePlugin::CorePlugin(unsigned base, Buffer* /*config*/)
 	EventMenu(MenuMsgCommand, EventMenu::eAdd).process();
 
 	createEventCmds();
+    subscribeToEvents();
+}
+
+void CorePlugin::subscribeToEvents()
+{
+    getEventHub()->getEvent("init")->connectTo(this, SLOT(eventInit()));
+    getEventHub()->getEvent("quit")->connectTo(this, SLOT(eventQuit()));
+}
+
+void CorePlugin::eventQuit()
+{
+    destroy();
+    m_cmds->clear();
 }
 
 void CorePlugin::createCommand(int id, const QString& text, const QString& icon, int menu_id,
@@ -1059,16 +1072,14 @@ bool CorePlugin::processEventPluginChanged(SIM::Event* e)
     return false;
 }
 
-bool CorePlugin::processEventInit(SIM::Event* e)
+void CorePlugin::eventInit()
 {
-    EventInit *i = static_cast<EventInit*>(e);
     if (!m_bInit && !init(true)) {
-        i->setAbortLoading();
-        return true;
+        getEventHub()->triggerEvent("init_abort");
+        return;
     }
     QTimer::singleShot(0, this, SLOT(checkHistory()));
     QTimer::singleShot(0, this, SLOT(postInit()));
-    return false;
 }
 
 bool CorePlugin::processEventHomeDir(SIM::Event* e)
@@ -2906,14 +2917,6 @@ bool CorePlugin::processEvent(Event *e)
 		case eEventPluginChanged:
                 return processEventPluginChanged(e);
 
-		case eEventInit:
-                return processEventInit(e);
-
-		case eEventQuit:
-			destroy();
-			m_cmds->clear();
-			return false;
-
 		case eEventHomeDir:
             return processEventHomeDir(e);
 
@@ -3083,10 +3086,10 @@ void CorePlugin::selectProfile()
 	EventSaveState e;
 	e.process();
 	bool changed = init(false);
-	if (changed){
-		EventInit e2;
-		e2.process();
-	}
+//	if (changed){
+//		EventInit e2;
+//		e2.process();
+//	}
 }
 
 bool CorePlugin::init(bool bInit)
@@ -3234,6 +3237,7 @@ bool CorePlugin::init(bool bInit)
     log(L_DEBUG, "geometry: %s", value("geometry").toByteArray().toHex().data());
     m_main->restoreGeometry(value("geometry").toByteArray());
     m_view = new UserView;
+    m_view->init();
 
     EventLoginStart e;
     e.process();
