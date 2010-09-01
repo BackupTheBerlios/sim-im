@@ -368,7 +368,6 @@ void LoginDialog::makeInputs(unsigned &row, ClientPtr client)
     m_txt->setText(client->name());
     m_txt->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
     m_edt = new QLineEdit(groupBoxPasswords);
-    log(L_DEBUG, "cl: %s, pass: %s", qPrintable(client->name()), qPrintable(client->getPassword()));
 	m_edt->setText(client->getPassword());
 	m_edt->setEchoMode(QLineEdit::Password);
 	connect(m_edt, SIGNAL(textChanged(const QString&)), this, SLOT(pswdChanged(const QString&)));
@@ -604,53 +603,35 @@ void LoginDialog::loadClients(const QString& profilename, SIM::ClientList& clien
     foreach(const QString& clname, SIM::getClientManager()->clientList()) {
         clients.push_back(SIM::getClientManager()->client(clname));
     }
-//	QString cfgName = ProfileManager::instance()->rootPath() + QDir::separator() + profilename + QDir::separator() + "clients.conf";
-//	QFile f(cfgName);
-//	if (!f.open(QIODevice::ReadOnly))
-//    {
-//        log(L_ERROR, "[1]Can't open %s", qPrintable(cfgName));
-//		return;
-//	}
-//	Buffer cfg = f.readAll();
-//	for (;;)
-//    {
-//		QByteArray section = cfg.getSection();
-//		if (section.isEmpty())
-//			break;
-//		QString s = section;	// ?
-//		ClientPtr client = loadClient(s, &cfg);
-//		if (client)
-//			clients.push_back(client);
-//	}
 }
 
-ClientPtr LoginDialog::loadClient(const QString &name, Buffer *cfg)
-{
-	if (name.isEmpty())
-		return ClientPtr();
-	QString clientName = name;
-	QString pluginName = getToken(clientName, '/');
-    if (pluginName.isEmpty() || clientName.length() == 0)
-		return ClientPtr();
-	if(!getPluginManager()->isPluginProtocol(pluginName))
-    {
-        log(L_DEBUG, "Plugin %s is not a protocol plugin", qPrintable(pluginName));
-		return ClientPtr();
-	}
-	PluginPtr plugin = getPluginManager()->plugin(pluginName);
-	if(plugin.isNull())
-    {
-        log(L_WARN, "Plugin %s not found", qPrintable(pluginName));
-		return ClientPtr();
-	}
-	m_protocolPlugins.append(plugin);
-	ProfileManager::instance()->currentProfile()->enablePlugin(pluginName);
-	ProtocolPtr protocol;
-	ProtocolIterator it;
-    while ((protocol = ++it) != NULL)
-        if (protocol->description()->text == clientName)
-            return protocol->createClient(cfg);
-    log(L_DEBUG, "Protocol %s not found", qPrintable(clientName));
-	return ClientPtr();
-}
+//ClientPtr LoginDialog::loadClient(const QString &name, Buffer *cfg)
+//{
+//	if (name.isEmpty())
+//		return ClientPtr();
+//	QString clientName = name;
+//	QString pluginName = getToken(clientName, '/');
+//    if (pluginName.isEmpty() || clientName.length() == 0)
+//		return ClientPtr();
+//	if(!getPluginManager()->isPluginProtocol(pluginName))
+//    {
+//        log(L_DEBUG, "Plugin %s is not a protocol plugin", qPrintable(pluginName));
+//		return ClientPtr();
+//	}
+//	PluginPtr plugin = getPluginManager()->plugin(pluginName);
+//	if(plugin.isNull())
+//    {
+//        log(L_WARN, "Plugin %s not found", qPrintable(pluginName));
+//		return ClientPtr();
+//	}
+//	m_protocolPlugins.append(plugin);
+//	ProfileManager::instance()->currentProfile()->enablePlugin(pluginName);
+//	ProtocolPtr protocol;
+//	ProtocolIterator it;
+//    while ((protocol = ++it) != NULL)
+//        if (protocol->description()->text == clientName)
+//            return protocol->createClient(cfg);
+//    log(L_DEBUG, "Protocol %s not found", qPrintable(clientName));
+//	return ClientPtr();
+//}
 

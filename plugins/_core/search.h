@@ -26,9 +26,9 @@
 #include <QResizeEvent>
 #include <QMoveEvent>
 #include <QCloseEvent>
+#include <QTreeWidget>
 
 class CorePlugin;
-class ListView;
 class SearchBase;
 class QStatusBar;
 class QTimer;
@@ -87,7 +87,7 @@ protected:
     std::vector<ClientWidget>	m_widgets;
     void		setStatus();
     void		setAddButton();
-    ListView	*m_result;
+    QTreeWidget	*m_result;
     QWidget		*m_current;
     QWidget		*m_currentResult;
     QWidget		*m_active;

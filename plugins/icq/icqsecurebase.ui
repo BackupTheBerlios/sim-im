@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>441</width>
-    <height>324</height>
+    <width>483</width>
+    <height>329</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,7 +23,7 @@
    <item>
     <widget class="QTabWidget" name="TabWidget3">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -134,7 +134,13 @@
         <number>11</number>
        </property>
        <item>
-        <widget class="ListView" name="lstVisible" native="true"/>
+        <widget class="QTreeWidget" name="lstVisible">
+         <column>
+          <property name="text">
+           <string notr="true">1</string>
+          </property>
+         </column>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -150,7 +156,13 @@
         <number>11</number>
        </property>
        <item>
-        <widget class="ListView" name="lstInvisible" native="true"/>
+        <widget class="QTreeWidget" name="lstInvisible">
+         <column>
+          <property name="text">
+           <string notr="true">1</string>
+          </property>
+         </column>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -158,13 +170,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>ListView</class>
-   <extends>QWidget</extends>
-   <header>simgui/listview.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

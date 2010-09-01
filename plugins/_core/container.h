@@ -145,6 +145,8 @@ protected:
     void showBar();
     void setupAccel();
     QShortcut* makeShortcut(unsigned int key, unsigned int id);
+    void loadState();
+
     ContainerData       data;
     bool                m_bInit;
     bool                m_bInSize;

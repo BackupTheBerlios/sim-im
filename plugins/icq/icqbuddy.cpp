@@ -85,6 +85,7 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 		{
 			Contact *contact;
 			QString screen = buf->unpackScreen();
+            log(L_DEBUG, "Buddy offline: %s", qPrintable(screen));
 			ICQUserData *data = m_client->findContact(screen, NULL, false, contact);
 			if(!data)
 				break;
@@ -110,8 +111,9 @@ bool SnacIcqBuddy::process(unsigned short subtype, ICQBuffer* buf, unsigned shor
 		}
     case ICQ_SNACxBDY_USERONLINE:
 		{
-			Contact *contact;
-			QString screen = buf->unpackScreen();
+            Contact *contact;
+            QString screen = buf->unpackScreen();
+            log(L_DEBUG, "Buddy online: %s", qPrintable(screen));
 			ICQUserData *data = m_client->findContact(screen, NULL, false, contact);
 			if(data)
 			{

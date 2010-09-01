@@ -55,15 +55,6 @@ using namespace SIM;
 
 const unsigned ACCEL_MESSAGE = 0x1000;
 
-
-class Splitter : public QSplitter
-{
-public:
-    Splitter(QWidget *p) : QSplitter(Qt::Vertical, p) {}
-protected:
-    virtual QSizePolicy sizePolicy() const;
-};
-
 //FIXME: Obsolete?
 //static void copyData(SIM::Data *dest, const SIM::Data *src, unsigned count)
 //{
@@ -87,11 +78,6 @@ void ContainerStatus::resizeEvent(QResizeEvent *e)
 {
     QStatusBar::resizeEvent(e);
     emit sizeChanged(width());
-}
-
-QSizePolicy Splitter::sizePolicy() const
-{
-    return QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 }
 
 static DataDef containerData[] =
@@ -241,7 +227,7 @@ void Container::init()
     m_wnds->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     lay->addWidget(m_wnds);
 
-    m_tabSplitter = new Splitter(frm);
+    m_tabSplitter = new QSplitter(Qt::Vertical, frm);
     m_tabSplitter->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
     m_tabBar = new UserTabBar(m_tabSplitter);
     m_tabBar->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding));
@@ -263,23 +249,7 @@ void Container::init()
 
     m_childs.clear();
 
-    QStringList windows = getWindows().split(',');
-    Q_FOREACH(const QString &win, windows) 
-	{
-        unsigned long id = win.toULong();
-        Contact *contact = getContacts()->contact(id);
-        if (contact == NULL)
-            continue;
-        Buffer config;
-        QString cfg = getWndConfig(id);
-        if (!cfg.isEmpty())
-		{
-            config << "[Title]\n" << (const char*)cfg.toLocal8Bit();
-            config.setWritePos(0);
-            config.getSection();
-        }
-        addUserWnd(new UserWnd(id, &config, false, true), true);
-    }
+    loadState();
 
     if (m_tabBar->count() == 0)
         QTimer::singleShot(0, this, SLOT(close()));
@@ -325,6 +295,27 @@ void Container::setupAccel()
         if (c->accel.isEmpty())
             continue;
         m_shortcuts.append(makeShortcut(QKeySequence::fromString(c->accel), ACCEL_MESSAGE + c->id));
+    }
+}
+
+void Container::loadState()
+{
+    QStringList windows = getWindows().split(',');
+    Q_FOREACH(const QString &win, windows)
+    {
+        unsigned long id = win.toULong();
+        Contact *contact = getContacts()->contact(id);
+        if (contact == NULL)
+            continue;
+        Buffer config;
+        QString cfg = getWndConfig(id);
+        if (!cfg.isEmpty())
+        {
+            config << "[Title]\n" << (const char*)cfg.toLocal8Bit();
+            config.setWritePos(0);
+            config.getSection();
+        }
+        addUserWnd(new UserWnd(id, &config, false, true), true);
     }
 }
 

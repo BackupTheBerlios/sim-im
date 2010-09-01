@@ -763,9 +763,9 @@ void UserView::doClick()
 {
     if (m_current == NULL)
         return;
-    if (m_current->isExpandable() && !CorePlugin::instance()->value("UseDblClick").toBool())
-        m_current->setOpen(!m_current->isOpen());
-    else if (static_cast<UserViewItemBase*>(m_current)->type() == USR_ITEM)
+    if (!CorePlugin::instance()->value("UseDblClick").toBool())
+        m_current->setExpanded(!m_current->isExpanded());
+    if (static_cast<UserViewItemBase*>(m_current)->type() == USR_ITEM)
     {
         ContactItem *item = static_cast<ContactItem*>(m_current);
         EventDefaultAction(item->id()).process();
@@ -825,7 +825,7 @@ void UserView::keyPressEvent(QKeyEvent *e)
             m_searchItem = NULL;
             list<ListViewItem*>::iterator it;
             for (it = closed_items.begin(); it != closed_items.end(); ++it)
-                (*it)->setOpen(false);
+                (*it)->setExpanded(false);
         }
         else
         {
@@ -898,7 +898,7 @@ void UserView::keyPressEvent(QKeyEvent *e)
         if (m_search.isEmpty())
         {
             ListViewItem *item = currentItem();
-            if (item && item->isExpandable())
+            if (item)
             {
                 UserListBase::keyPressEvent(e);
                 return;
@@ -921,7 +921,7 @@ void UserView::keyPressEvent(QKeyEvent *e)
             for(int c = 0; c < topLevelItemCount(); c++)
             {
                 ListViewItem *item = static_cast<ListViewItem*>(topLevelItem(c));
-                if (item->isExpandable() && !(item->isOpen()))
+                if (!(item->isExpanded()))
                     closed_items.push_back(item);
             }
         }
@@ -1058,13 +1058,11 @@ static void resetUnread(ListViewItem *item, list<ListViewItem*> &grp)
             if (group->m_unread)
             {
                 group->m_unread = 0;
-                if (!group->isOpen())
+                if (!group->isExpanded())
                     group->repaint();
             }
         }
     }
-    if (!item->isExpandable())
-        return;
     for(int c = 0; c < item->childCount(); c++)
     {
         ListViewItem *i= static_cast<ListViewItem*>(item->child(c));
@@ -1432,7 +1430,7 @@ void UserView::search(list<ListViewItem*> &items)
         return;
     list<ListViewItem*>::iterator it;
     for (it = closed_items.begin(); it != closed_items.end(); ++it)
-        (*it)->setOpen(false);
+        (*it)->setExpanded(false);
     for(int c = 0; c < topLevelItemCount(); c++)
     {
         ListViewItem *item = static_cast<ListViewItem*>(topLevelItem(c));
@@ -1442,13 +1440,10 @@ void UserView::search(list<ListViewItem*> &items)
 
 void UserView::search(ListViewItem *item, list<ListViewItem*> &items)
 {
-    if (item->isExpandable())
+    for(int c = 0; c < item->childCount(); c++)
     {
-        for(int c = 0; c < item->childCount(); c++)
-        {
-            ListViewItem *ch = static_cast<ListViewItem*>(item->child(c));
-            search(ch, items);
-        }
+        ListViewItem *ch = static_cast<ListViewItem*>(item->child(c));
+        search(ch, items);
     }
     if (static_cast<UserViewItemBase*>(item)->type() != USR_ITEM)
         return;

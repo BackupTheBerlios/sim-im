@@ -24,10 +24,9 @@
 #include <QWizard>
 #include <QHBoxLayout>
 #include <QShowEvent>
+#include <QTreeWidget>
 #include <QLabel>
 
-class ListView;
-class ListViewItem;
 class QStatusBar;
 class CToolBar;
 class DiscoInfo;
@@ -79,13 +78,13 @@ public:
     void save();
     void setClient(JabberClient *client);
     DiscoInfo *m_info;
-    ListView  *m_list;
+    QTreeWidget *m_list;
 signals:
     void enableOptions(bool);
     void addSearch(QWidget*, SIM::Client*, const QString&);
 protected slots:
     void selectionChanged();
-    void currentChanged(ListViewItem*);
+    void currentChanged(QTreeWidgetItem*);
     void dragStart();
     void showReg();
     void showConfig();
@@ -101,16 +100,16 @@ protected:
     void addHistory(const QString &str);
     bool haveFeature(const char*);
     bool haveFeature(const char*, const QString&);
-    ListViewItem *findItem(unsigned col, const QString &id);
-    ListViewItem *findItem(unsigned col, const QString &id, ListViewItem *item);
-    void setItemPict(ListViewItem *item);
-    void adjustColumn(ListViewItem *item);
-    void loadItem(ListViewItem *item);
+    QTreeWidgetItem *findItem(unsigned col, const QString &id);
+    QTreeWidgetItem *findItem(unsigned col, const QString &id, QTreeWidgetItem *item);
+    void setItemPict(QTreeWidgetItem *item);
+    void adjustColumn(QTreeWidgetItem *item);
+    void loadItem(QTreeWidgetItem *item);
     void checkDone();
-    bool checkDone(ListViewItem*);
+    bool checkDone(QTreeWidgetItem*);
     void startProcess();
     void changeMode();
-    void changeMode(ListViewItem *item);
+    void changeMode(QTreeWidgetItem *item);
     void showEvent(QShowEvent*);
     bool		 m_bInProcess;
     JabberClient *m_client;

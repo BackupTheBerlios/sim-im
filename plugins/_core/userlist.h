@@ -29,6 +29,94 @@
 using namespace std;
 using namespace SIM;
 
+
+const unsigned long MenuListView		= 0x100;
+const unsigned long CmdListDelete	= 0x100;
+
+class QTimer;
+
+class ListView;
+class EXPORT ListViewItem : public QTreeWidgetItem
+{
+public:
+    ListViewItem();
+    ListViewItem(const QString& name);
+    ListViewItem(ListView* parent);
+    ListViewItem(ListViewItem* parent);
+    virtual ~ListViewItem();
+
+    ListView* listView() const;
+
+    int height() const {return sizeHint(0).height();}
+    int width() const {return sizeHint(0).width();}
+
+    void repaint();
+};
+
+class EXPORT ListView : public QTreeWidget, public SIM::EventReceiver
+{
+    Q_OBJECT
+public:
+    ListView(QWidget *parent);
+    virtual ~ListView();
+
+    void acceptDrop(bool bAccept);
+    void setMenu(unsigned long menuId);
+    ListViewItem* currentItem();
+    ListViewItem* itemAt(const QPoint& p);
+    ListViewItem* firstChild();
+    void addColumn(const QString& name);
+
+    void repaint(ListViewItem* item);
+
+signals:
+    void clickItem(ListViewItem*);
+    void deleteItem(ListViewItem*);
+    void dragStart();
+    void dragEnter(QMimeSource*);
+    void drop(QMimeSource*);
+
+public slots:
+    virtual void startDrag(Qt::DropActions);
+
+protected:
+    virtual bool getMenu(ListViewItem *item, unsigned long &id, void *&param);
+    virtual bool processEvent(SIM::Event *e);
+    virtual bool eventFilter(QObject*, QEvent*);
+    virtual void resizeEvent(QResizeEvent*);
+    virtual QMimeData *dragObject();
+    void viewportContextMenuEvent( QContextMenuEvent *e);
+    void viewportMousePressEvent(QMouseEvent *e);
+    void mousePressEvent(QMouseEvent *e);
+    void mouseMoveEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
+    void dragEnterEvent(QDragEnterEvent *e);
+    void dragMoveEvent(QDragMoveEvent *e);
+    void dropEvent(QDropEvent *e);
+    void keyPressEvent(QKeyEvent *e);
+    void showPopup(ListViewItem *item, QPoint p);
+    void contextMenuEvent(QContextMenuEvent* e);
+
+    unsigned long m_menuId;
+    QTimer	 *m_resizeTimer;
+    bool m_bAcceptDrop;
+    static bool s_bInit;
+    ListViewItem *m_pressedItem;
+};
+
+class EXPORT ContactDragObject : public QMimeData
+{
+    Q_OBJECT
+public:
+    ContactDragObject( SIM::Contact *contact );
+    ~ContactDragObject();
+    static bool canDecode(QMimeSource*);
+    static SIM::Contact *decode(QMimeSource*);
+protected:
+    unsigned long m_id;
+};
+
+
 class UserListBase;
 class UserViewDelegate;
 
@@ -130,6 +218,9 @@ public:
     UserListBase(QWidget *parent);
     ~UserListBase();
     virtual void fill();
+    void select(unsigned int id);
+    QList<unsigned int> selected();
+    bool isHaveSelected();
 
 protected slots:
     void drawUpdates();
@@ -148,6 +239,7 @@ protected:
     unsigned m_groupMode;
     unsigned m_bShowOnline;
     unsigned m_bShowEmpty;
+
     virtual bool processEvent(SIM::Event*);
     unsigned getUserStatus(SIM::Contact *contact, unsigned &style, QString &icons);
     virtual unsigned getUnread(unsigned contact_id);
@@ -162,6 +254,9 @@ protected:
     void addGroupForUpdate(unsigned long id);
     void addContactForUpdate(unsigned long id);
     virtual void deleteItem(ListViewItem *item);
+
+    QList< unsigned int > selected( QTreeWidgetItem *pItem );
+
     std::list<ListViewItem*> sortItems;
     std::list<ListViewItem*> updatedItems;
     std::list<ContactItem*> m_unreadItems;
@@ -179,23 +274,13 @@ protected:
     DivItem* m_itemOffline;
 };
 
-class UserList
-    : public UserListBase
+class UserList : public UserListBase
 {
     Q_OBJECT
 public:
     UserList( QWidget *parent );
     virtual ~UserList();
 
-    void select( unsigned int id );
-    bool isHaveSelected();
-    QList< unsigned int > selected();
-
-signals:
-    void selectChanged();
-
-protected:
-    QList< unsigned int > selected( QTreeWidgetItem *pItem );
 };
 
 #endif

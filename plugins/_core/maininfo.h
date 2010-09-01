@@ -19,7 +19,7 @@
 #define _MAININFO_H
 
 #include "ui_maininfobase.h"
-
+#include "event.h"
 class ListViewItem;
 
 // Lets do this later whole in one, because at the moment it only breaks linking of all other plugins...
@@ -40,10 +40,10 @@ protected slots:
     void apply();
     void mailSelectionChanged();
     void phoneSelectionChanged();
-    void deleteMail(ListViewItem *item);
-    void deletePhone(ListViewItem *item);
-    void editMail(ListViewItem *item);
-    void editPhone(ListViewItem *item);
+    void deleteMail(QTreeWidgetItem *item);
+    void deletePhone(QTreeWidgetItem *item);
+    void editMail(QTreeWidgetItem *item);
+    void editPhone(QTreeWidgetItem *item);
     void addMail();
     void editMail();
     void deleteMail();
@@ -53,7 +53,7 @@ protected slots:
 protected:
     void fill();
     virtual bool processEvent(SIM::Event*);
-    void fillPhoneItem(ListViewItem *item, const QString &number, const QString &type, unsigned icon, const QString &proto);
+    void fillPhoneItem(QTreeWidgetItem *item, const QString &number, const QString &type, unsigned icon, const QString &proto);
     void fillCurrentCombo();
     void fillEncoding();
     void getEncoding(bool SendContactChangedEvent = true);

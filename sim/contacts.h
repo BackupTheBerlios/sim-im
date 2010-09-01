@@ -112,6 +112,7 @@ public:
     Contact* contact(unsigned long id = 0, bool isNew = false);
     bool contactExists(unsigned long id);
     void removeContact(unsigned long id);
+    QList<Contact*> contactsInGroup(Group* gr);
 
     bool groupExists(unsigned long id);
     Group* group(unsigned long id = 0, bool isNew = false);
@@ -120,6 +121,7 @@ public:
     int  groupIndex(unsigned long id);
     int  groupCount();
     bool moveGroup(unsigned long id, bool bUp);
+    QList<Group*> allGroups();
 
     bool moveClient(Client* client, bool bUp);
     class EXPORT GroupIterator

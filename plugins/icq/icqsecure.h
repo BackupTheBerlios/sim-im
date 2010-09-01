@@ -37,15 +37,15 @@ public slots:
     void apply(SIM::Client*, void*);
     void applyContact(const SIM::ClientPtr& client, SIM::IMContact* contact);
     void hideIpToggled(bool);
-    void deleteVisibleItem(ListViewItem *item);
-    void deleteInvisibleItem(ListViewItem *item);
+    void deleteVisibleItem(QTreeWidgetItem *item);
+    void deleteInvisibleItem(QTreeWidgetItem *item);
 protected:
     void updateData(ICQUserData* data);
     virtual bool processEvent(SIM::Event *e);
     void fill();
-    void setListView(ListView*);
-    void fillListView(ListView *lst, SIM::Data ICQUserData::* field);
-    void fillListView(ListView *lst, int v);
+    void setListView(QTreeWidget*);
+    void fillListView(QTreeWidget *lst, SIM::Data ICQUserData::* field);
+    void fillListView(QTreeWidget *lst, int v);
     ICQClient	*m_client;
 };
 

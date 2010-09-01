@@ -69,7 +69,7 @@ protected:
     void startLogin();
     void stopLogin();
     void loadClients(const QString& profilename, SIM::ClientList&);
-    SIM::ClientPtr loadClient(const QString &name, Buffer *cfg);
+    //SIM::ClientPtr loadClient(const QString &name, Buffer *cfg);
 
 private:
     QString m_profile;

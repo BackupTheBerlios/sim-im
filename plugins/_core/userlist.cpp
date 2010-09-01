@@ -30,12 +30,349 @@ email                : vovan@shutoff.ru
 #include <QMouseEvent>
 #include <QAbstractButton>
 #include <QScrollBar>
+#include <QMenu>
 
 #include "log.h"
 
 
 using namespace std;
 using namespace SIM;
+
+bool ListView::s_bInit = false;
+
+ListViewItem::ListViewItem() : QTreeWidgetItem()
+{
+    setExpanded(true);
+}
+
+ListViewItem::ListViewItem(const QString& /* name */) : QTreeWidgetItem()
+{
+    setExpanded(true);
+}
+
+ListViewItem::ListViewItem(ListView* parent) : QTreeWidgetItem(parent)
+{
+    setExpanded(true);
+}
+
+ListViewItem::ListViewItem(ListViewItem* parent) : QTreeWidgetItem(parent)
+{
+    setExpanded(true);
+}
+
+ListViewItem::~ListViewItem()
+{
+}
+
+ListView* ListViewItem::listView() const
+{
+    return static_cast<ListView*>(treeWidget());
+}
+
+void ListViewItem::repaint()
+{
+    emitDataChanged();
+}
+
+ListView::ListView(QWidget *parent) : QTreeWidget(parent)
+{
+    m_menuId = MenuListView;
+    if (!s_bInit){
+        s_bInit = true;
+        EventMenu(MenuListView, EventMenu::eAdd).process();
+
+        Command cmd;
+        cmd->id			= CmdListDelete;
+        cmd->text		= I18N_NOOP("&Delete");
+        cmd->icon		= "remove";
+        cmd->accel		= "Del";
+        cmd->menu_id	= MenuListView;
+        cmd->menu_grp	= 0x1000;
+        cmd->flags		= COMMAND_DEFAULT;
+
+        EventCommandCreate(cmd).process();
+    }
+    setColumnCount(0);
+    m_bAcceptDrop = false;
+    viewport()->setAcceptDrops(true);
+    m_pressedItem = NULL;
+    verticalScrollBar()->installEventFilter(this);
+    m_resizeTimer = new QTimer(this);
+}
+
+ListView::~ListView()
+{
+}
+
+void ListView::repaint(ListViewItem* item)
+{
+    update(indexFromItem(item));
+}
+
+bool ListView::getMenu(ListViewItem *item, unsigned long &id, void *&param)
+{
+    if (m_menuId == 0)
+        return false;
+    id = m_menuId;
+    param = item;
+    return true;
+}
+
+void ListView::setMenu(unsigned long menuId)
+{
+    m_menuId = menuId;
+}
+
+bool ListView::processEvent(Event *e)
+{
+    if (e->type() == eEventCommandExec){
+        EventCommandExec *ece = static_cast<EventCommandExec*>(e);
+        CommandDef *cmd = ece->cmd();
+        if ((cmd->id == CmdListDelete) && (cmd->menu_id == MenuListView)){
+            ListViewItem *item = (ListViewItem*)(cmd->param);
+            if (item->listView() == this){
+                emit deleteItem(item);
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+void ListView::keyPressEvent(QKeyEvent *e)
+{
+    if (e->key()){
+        int key = e->key();
+        if (e->modifiers() & Qt::ShiftModifier)
+            key |= Qt::SHIFT;
+        if (e->modifiers() & Qt::ControlModifier)
+            key |= Qt::CTRL;
+        if (e->modifiers() & Qt::AltModifier)
+            key |= Qt::ALT;
+        ListViewItem *item = currentItem();
+        if (item){
+            unsigned long id;
+            void *param;
+            if (getMenu(item, id, param)){
+                EventMenuProcess e(id, param, key);
+                if (e.process() && e.menu())
+                    return;
+            }
+        }
+    }
+    if (e->key() == Qt::Key_F10){
+        showPopup(currentItem(), QPoint());
+        return;
+    }
+    QTreeWidget::keyPressEvent(e);
+}
+
+ListViewItem* ListView::currentItem()
+{
+    return static_cast<ListViewItem*>(QTreeWidget::currentItem());
+}
+
+void ListView::viewportMousePressEvent(QMouseEvent * /*e*/)
+{
+    //QTreeWidget::viewportMousePressEvent(e);
+}
+
+void ListView::mousePressEvent(QMouseEvent *e)
+{
+    if (e->button() == Qt::LeftButton)
+    {
+        m_pressedItem = itemAt(e->pos());
+        if (m_pressedItem)
+        {
+            update();
+        }
+    }
+    QTreeWidget::mousePressEvent(e);
+}
+
+void ListView::mouseMoveEvent(QMouseEvent *e)
+{
+    QTreeWidget::mouseMoveEvent(e);
+}
+
+ListViewItem* ListView::itemAt(const QPoint& p)
+{
+    return static_cast<ListViewItem*>(QTreeWidget::itemAt(p));
+}
+
+void ListView::mouseReleaseEvent(QMouseEvent *e)
+{
+    QTreeWidget::mouseReleaseEvent(e);
+    if (m_pressedItem){
+        ListViewItem *item = m_pressedItem;
+        m_pressedItem = NULL;
+        //update(model()->index(item->row(), 0));
+        update();
+        ListViewItem *citem = itemAt(e->pos());
+        if (item == citem)
+            emit clickItem(item);
+    }
+}
+
+void ListView::viewportContextMenuEvent( QContextMenuEvent *e)
+{
+    QPoint p = e->globalPos();
+    ListViewItem *list_item = itemAt(viewport()->mapFromGlobal(p));
+    showPopup(list_item, p);
+}
+
+void ListView::showPopup(ListViewItem *item, QPoint p)
+{
+    unsigned long id;
+    void *param;
+
+    if (item == NULL)
+        return;
+
+    if (!getMenu(item, id, param))
+        return;
+    if (p.isNull()){
+        QRect rc = visualItemRect(item);
+        p = QPoint(rc.x() + rc.width() / 2, rc.y() + rc.height() / 2);
+        p = viewport()->mapToGlobal(p);
+    }
+    EventMenuProcess eMenu(id, param);
+    eMenu.process();
+    QMenu *menu = eMenu.menu();
+    if (menu){
+        setCurrentItem(item);
+        menu->popup(p);
+    }
+}
+
+void ListView::contextMenuEvent(QContextMenuEvent* e)
+{
+    unsigned long id;
+    void *param;
+
+    ListViewItem* item = itemAt(e->pos());
+    if (item == NULL)
+        return;
+
+    if (!getMenu(item, id, param))
+        return;
+    EventMenuProcess eMenu(id, param);
+    eMenu.process();
+    QMenu *menu = eMenu.menu();
+    if (menu)
+    {
+        setCurrentItem(item);
+        menu->popup(e->globalPos());
+    }
+}
+
+bool ListView::eventFilter(QObject *o, QEvent *e)
+{
+    return QTreeWidget::eventFilter(o, e);
+}
+
+
+void ListView::resizeEvent(QResizeEvent *e)
+{
+    QTreeWidget::resizeEvent(e);
+}
+
+ListViewItem* ListView::firstChild()
+{
+    return static_cast<ListViewItem*>(topLevelItem(0));
+}
+
+void ListView::startDrag(Qt::DropActions)
+{
+    emit dragStart();
+}
+
+QMimeData *ListView::dragObject()
+{
+    return NULL;
+}
+
+void ListView::acceptDrop(bool bAccept)
+{
+    m_bAcceptDrop = bAccept;
+}
+
+void ListView::dragEnterEvent(QDragEnterEvent *e)
+{
+    emit dragEnter(e);
+    if (m_bAcceptDrop){
+        e->accept();
+        return;
+    }
+    e->ignore();
+}
+
+void ListView::dragMoveEvent(QDragMoveEvent *e)
+{
+    if (m_bAcceptDrop){
+        e->accept();
+        return;
+    }
+    e->ignore();
+}
+
+void ListView::dropEvent(QDropEvent *e)
+{
+    if (m_bAcceptDrop){
+        e->accept();
+        emit drop(e);
+        return;
+    }
+    e->ignore();
+}
+
+void ListView::addColumn(const QString& name)
+{
+    setColumnCount(columnCount() + 1);
+    headerItem()->setText(columnCount() - 1, name);
+}
+
+static char CONTACT_MIME[] = "application/x-contact";
+
+ContactDragObject::ContactDragObject( Contact *contact ) : QMimeData()
+{
+    QByteArray data;
+    m_id = contact->id();
+    data.resize(sizeof(m_id));
+    memcpy(data.data(), &m_id, sizeof(m_id));
+    setData(CONTACT_MIME, data);
+}
+
+ContactDragObject::~ContactDragObject()
+{
+    ListView *view = static_cast<ListView*>(parent());
+//    if (view && view->m_pressedItem){
+//        //ListViewItem *item = view->m_pressedItem;
+//        view->m_pressedItem = NULL;
+//        //view->update(view->model()->index(item->row(), item->column()));
+//        view->update();
+//    }
+    Contact *contact = getContacts()->contact(m_id);
+    if (contact && (contact->getFlags() & CONTACT_DRAG))
+        delete contact;
+}
+
+bool ContactDragObject::canDecode(QMimeSource *s)
+{
+    return (decode(s) != NULL);
+}
+
+Contact *ContactDragObject::decode( QMimeSource *s )
+{
+    if (!s->provides(CONTACT_MIME))
+        return NULL;
+    QByteArray data = s->encodedData(CONTACT_MIME);
+    unsigned long id;
+    if( data.size() != sizeof( id ) )
+        return NULL;
+    memcpy( &id, data.data(), sizeof(id));
+    return getContacts()->contact(id);
+}
 
 UserViewItemBase::UserViewItemBase(UserListBase *parent)
 : ListViewItem(parent)
@@ -69,8 +406,7 @@ DivItem::DivItem(UserListBase *view, unsigned type)
 {
     m_type = type;
     setText(0, QString::number(m_type));
-    setExpandable(true);
-    //setSelectable(false);
+    setFlags(Qt::ItemIsEnabled);
 }
 
 QVariant DivItem::data( int column, int role ) const
@@ -112,8 +448,6 @@ void GroupItem::init(Group *grp)
     m_unread = 0;
     m_nContacts = 0;
     m_nContactsOnline = 0;
-    setExpandable(true);
-    //setSelectable(true);
     SIM::PropertyHubPtr data = grp->getUserData("list");
     if (data.isNull())
         setOpen(true);
@@ -210,9 +544,8 @@ ContactItem::ContactItem( UserViewItemBase *view, Contact *contact, unsigned sta
 {
 
     init(contact, status, style, icons, unread);
-    setExpandable(false);
-    setCheckable( bCheckable );
-    setFlags( flags() | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | Qt::ItemIsSelectable );
+    setCheckable(bCheckable);
+    setFlags( flags() | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | Qt::ItemIsSelectable | (bCheckable ? Qt::ItemIsUserCheckable : Qt::NoItemFlags));
 }
 
 void ContactItem::init(Contact *contact, unsigned status, unsigned style, const QString &icons, unsigned unread)
@@ -319,8 +652,6 @@ UserListBase::UserListBase(QWidget *parent)
     m_unreadTimer.setInterval(400);
     connect(&m_unreadTimer, SIGNAL(timeout()), this, SLOT(updateUnread()));
     m_unreadTimer.start();
-
-    setExpandingColumn(0);
 }
 
 UserListBase::~UserListBase()
@@ -445,7 +776,7 @@ bool UserListBase::updateContactNoGroups(SIM::Contact* contact)
         if (m_itemOffline == NULL)
         {
             m_itemOffline = new DivItem(this, DIV_OFFLINE);
-            setOpen(m_itemOffline, true);
+            m_itemOffline->setExpanded(true);
             changed = true;
         }
         m_contactItem = findContactItem(contact->id(), m_itemOffline);
@@ -467,7 +798,7 @@ bool UserListBase::updateContactNoGroups(SIM::Contact* contact)
         if (m_itemOnline == NULL) 
         {
             m_itemOnline = new DivItem(this, DIV_ONLINE);
-            setOpen(m_itemOnline, true);
+            m_itemOnline->setExpanded(true);
             changed = true;
         }
         m_contactItem = findContactItem(contact->id(), m_itemOnline);
@@ -633,7 +964,7 @@ bool UserListBase::updateContactGroupMode2(SIM::Contact* contact)
     {
         changed = true;
         m_itemOffline = new DivItem(this, DIV_OFFLINE);
-        setOpen(m_itemOffline, true);
+        m_itemOffline->setExpanded(true);
         divItem = m_itemOffline;
     }
 
@@ -845,13 +1176,13 @@ void UserListBase::fill()
                 if (status <= STATUS_OFFLINE)
                 {
                     divItemOffline = new DivItem(this, DIV_OFFLINE);
-                    setOpen(divItemOffline, true);
+                    divItemOffline->setExpanded(true);
                     divItem = divItemOffline;
                 }
                 else
                 {
                     divItemOnline = new DivItem(this, DIV_ONLINE);
-                    setOpen(divItemOnline, true);
+                    divItemOnline->setExpanded(true);
                     divItem = divItemOnline;
                 }
             }
@@ -903,7 +1234,7 @@ void UserListBase::fill()
         break;
     case 2:
         divItemOnline = new DivItem(this, DIV_ONLINE);
-        setOpen(divItemOnline, true);
+        divItemOnline->setExpanded(true);
         if (m_bShowEmpty)
         {
             while ((grp = ++grp_it) != NULL)
@@ -917,7 +1248,7 @@ void UserListBase::fill()
         if (!m_bShowOnline)
         {
             divItemOffline = new DivItem(this, DIV_OFFLINE);
-            setOpen(divItemOffline, true);
+            divItemOffline->setExpanded(true);
             grp_it.reset();
             if (m_bShowEmpty)
             {
@@ -951,7 +1282,7 @@ void UserListBase::fill()
                 if (divItemOffline == NULL)
                 {
                     divItemOffline = new DivItem(this, DIV_OFFLINE);
-                    setOpen(divItemOffline, true);
+                    divItemOffline->setExpanded(true);
                 }
                 divItem = divItemOffline;
             }
@@ -968,7 +1299,6 @@ void UserListBase::fill()
         }
         break;
     }
-    adjustColumn();
 }
 
 static void resort(ListViewItem *item)
@@ -1170,6 +1500,50 @@ void UserListBase::deleteItem(ListViewItem *item)
     delete item;
 }
 
+void UserListBase::select(unsigned int id)
+{
+    ContactItem *pItem = this->findContactItem( id, NULL );
+    if( NULL != pItem )
+        pItem->setCheckState( 0, Qt::Checked );
+}
+
+QList<unsigned int> UserListBase::selected(QTreeWidgetItem* pItem)
+{
+    QList< unsigned int > list;
+    QList< QTreeWidgetItem* > listSubItems;
+
+    if( NULL == pItem )
+        for( int i = 0 ; i < topLevelItemCount() ; i++ )
+            listSubItems.push_back( topLevelItem( i ) );
+    else for( int i = 0 ; i < pItem->childCount() ; i++ )
+            listSubItems.push_back( pItem->child( i ) );
+
+    foreach( QTreeWidgetItem* pSubItem, listSubItems )
+    {
+        UserViewItemBase *pBaseItem = static_cast<UserViewItemBase*>( pSubItem );
+        if( GRP_ITEM == pBaseItem->type() )
+            list.append( selected( pSubItem ) );
+        else if( USR_ITEM == pBaseItem->type() && Qt::Checked == pSubItem->checkState(0) )
+        {
+            ContactItem *pContactItem = static_cast<ContactItem*>( pSubItem );
+            list.push_back( pContactItem->id() );
+        }
+    }
+
+    return list;
+}
+
+
+QList<unsigned int> UserListBase::selected() {
+    return selected( NULL );
+}
+
+bool UserListBase::isHaveSelected()
+{
+    QList< unsigned int > list = selected();
+    return ( list.count() > 0 );
+}
+
 UserList::UserList(QWidget *parent)
     : UserListBase(parent)
 {
@@ -1181,49 +1555,6 @@ UserList::UserList(QWidget *parent)
 
 UserList::~UserList()
 {
-}
-
-void UserList::select( unsigned int id ) 
-{
-    ContactItem *pItem = this->findContactItem( id, NULL );
-    if( NULL != pItem )
-        pItem->setCheckState( 0, Qt::Checked );
-}
-
-bool UserList::isHaveSelected() 
-{
-    QList< unsigned int > list = selected();
-    return ( list.count() > 0 );
-}
-
-QList< unsigned int > UserList::selected( QTreeWidgetItem *pItem ) 
-{
-    QList< unsigned int > list;
-    QList< QTreeWidgetItem* > listSubItems;
-
-    if( NULL == pItem ) 
-        for( int i = 0 ; i < topLevelItemCount() ; i++ ) 
-            listSubItems.push_back( topLevelItem( i ) );
-    else for( int i = 0 ; i < pItem->childCount() ; i++ ) 
-            listSubItems.push_back( pItem->child( i ) );
-
-    foreach( QTreeWidgetItem* pSubItem, listSubItems ) 
-    {
-        UserViewItemBase *pBaseItem = static_cast<UserViewItemBase*>( pSubItem );
-        if( GRP_ITEM == pBaseItem->type() ) 
-            list.append( selected( pSubItem ) );
-        else if( USR_ITEM == pBaseItem->type() && Qt::Checked == pSubItem->checkState(0) ) 
-        {
-            ContactItem *pContactItem = static_cast<ContactItem*>( pSubItem );
-            list.push_back( pContactItem->id() );
-        }
-    }
-
-    return list;
-}
-
-QList< unsigned int > UserList::selected() {
-    return selected( NULL );
 }
 
 // vim: set expandtab:

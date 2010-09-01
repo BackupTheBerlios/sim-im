@@ -24,12 +24,12 @@
 #include <QSplitter>
 #include <QByteArray>
 #include <QCloseEvent>
+#include <QTreeWidget>
 
 class MsgEdit;
 class MsgView;
 class CorePlugin;
 class QToolBar;
-class UserList;
 
 struct UserWndData
 {
@@ -45,7 +45,7 @@ public:
     UserWnd(unsigned long id, Buffer *cfg, bool bReceived, bool bAdjust);
     ~UserWnd();
     QByteArray getConfig();
-    unsigned long id() const { return m_id; }
+    unsigned long id() const;
     QString getName();
     QString getLongName();
     QString getIcon();
@@ -54,11 +54,13 @@ public:
     void setStatus(const QString&);
     void showListView(bool bShow);
     QString status() { return m_status; }
-    UserList	*m_list;
     void markAsRead();
     bool isClosed() { return m_bClosed; }
     bool m_bTyping;
     PROP_ULONG(MessageType);
+
+    bool isMultisendActive() const;
+    QList<int> multisendContacts() const;
 signals:
     void closed(UserWnd*);
     void statusChanged(UserWnd*);
@@ -71,6 +73,8 @@ protected slots:
 protected:
     PROP_ULONG(EditHeight);
     void closeEvent(QCloseEvent*);
+    void fillContactList(QTreeWidget* tree);
+
     MsgView		*m_view;
     MsgEdit		*m_edit;
     QSplitter           *m_splitter;
@@ -79,8 +83,9 @@ protected:
     bool		m_bClosed;
     bool		m_bBarChanged;
     unsigned long	m_id;
+    QTreeWidget* m_targetContactList;
+    static const int ContactIdRole = Qt::UserRole + 1;
     UserWndData	data;
-    friend class MsgEdit;
 };
 
 #endif

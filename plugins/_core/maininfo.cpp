@@ -75,14 +75,28 @@ MainInfo::MainInfo(QWidget *parent, Contact *contact) : QWidget(parent)
     m_contact = contact;
     m_bInit   = false;
     cmbDisplay->setEditable(true);
-    lstMails->addColumn(i18n("EMail"));
-    lstPhones->addColumn(i18n("Type"));
-    lstPhones->addColumn(i18n("Phone"));
-    lstMails->setMenu(MenuMailList);
-    lstPhones->setMenu(MenuPhoneList);
+
+    QStringList phoneColumns;
+    phoneColumns.append(i18n("Type"));
+    phoneColumns.append(i18n("Phone"));
+
+    QStringList mailColumns;
+    mailColumns.append(i18n("EMail"));
+    if(m_contact == NULL)
+    {
+        phoneColumns.append(i18n("Publish"));
+        mailColumns.append(i18n("Publish"));
+    }
+    lstPhones->setColumnCount(phoneColumns.size());
+    lstPhones->setHeaderLabels(phoneColumns);
+
+    lstMails->setColumnCount(mailColumns.size());
+    lstMails->setHeaderLabels(mailColumns);
+
+    //lstPhones->setMenu(MenuPhoneList);
+    //lstMails->setMenu(MenuMailList);
+
     if (m_contact == NULL){
-        lstMails->addColumn(i18n("Publish"));
-        lstPhones->addColumn(i18n("Publish"));
         lblCurrent->setText(i18n("I'm currently available at:"));
         cmbStatus->addItem(i18n("Don't show"));
         cmbStatus->addItem(Icon("phone"), i18n("Available"));
@@ -102,15 +116,15 @@ MainInfo::MainInfo(QWidget *parent, Contact *contact) : QWidget(parent)
         lblStatus->hide();
         cmbStatus->hide();
     }
-    lstMails->setExpandingColumn(0);
-    lstPhones->setExpandingColumn(PHONE_NUMBER);
+    //lstMails->setExpandingColumn(0);
+    //lstPhones->setExpandingColumn(PHONE_NUMBER);
     if (m_contact == NULL)
         tabMain->removeTab(tabMain->indexOf(tabNotes));
     fill();
     connect(lstMails, SIGNAL(itemSelectionChanged()), this, SLOT(mailSelectionChanged()));
     connect(lstPhones, SIGNAL(itemSelectionChanged()), this, SLOT(phoneSelectionChanged()));
-    connect(lstMails, SIGNAL(deleteItem(ListViewItem*)), this, SLOT(deleteMail(ListViewItem*)));
-    connect(lstPhones, SIGNAL(deleteItem(ListViewItem*)), this, SLOT(deletePhone(ListViewItem*)));
+//    connect(lstMails, SIGNAL(deleteItem(QTreeWidgetItem*)), this, SLOT(deleteMail(QTreeWidgetItem*)));
+//    connect(lstPhones, SIGNAL(deleteItem(QTreeWidgetItem*)), this, SLOT(deletePhone(QTreeWidgetItem*)));
     connect(btnMailAdd, SIGNAL(clicked()), this, SLOT(addMail()));
     connect(btnMailEdit, SIGNAL(clicked()), this, SLOT(editMail()));
     connect(btnMailDelete, SIGNAL(clicked()), this, SLOT(deleteMail()));
@@ -137,8 +151,8 @@ bool MainInfo::processEvent(Event *e)
         if (cmd->menu_id == MenuMailList){
             if ((cmd->id != CmdEditList) && (cmd->id != CmdRemoveList))
                 return false;
-            ListViewItem *item = (ListViewItem*)(cmd->param);
-            if (item->listView() != lstMails)
+            QTreeWidgetItem *item = (QTreeWidgetItem*)(cmd->param);
+            if (item->treeWidget() != lstMails)
                 return false;
             cmd->flags &= ~(COMMAND_CHECKED | COMMAND_DISABLED);
             bool bEnable = ((item != NULL) && (item->text(MAIL_PROTO).isEmpty() || (item->text(MAIL_PROTO) == "-")));
@@ -149,8 +163,8 @@ bool MainInfo::processEvent(Event *e)
         if (cmd->menu_id == MenuPhoneList){
             if ((cmd->id != CmdEditList) && (cmd->id != CmdRemoveList))
                 return false;
-            ListViewItem *item = (ListViewItem*)(cmd->param);
-            if (item->listView() != lstPhones)
+            QTreeWidgetItem *item = (QTreeWidgetItem*)(cmd->param);
+            if (item->treeWidget() != lstPhones)
                 return false;
             cmd->flags &= ~(COMMAND_CHECKED | COMMAND_DISABLED);
             bool bEnable = ((item != NULL) && (item->text(PHONE_PROTO).isEmpty() || (item->text(PHONE_PROTO) == "-")));
@@ -164,8 +178,8 @@ bool MainInfo::processEvent(Event *e)
         EventCommandExec *ece = static_cast<EventCommandExec*>(e);
         CommandDef *cmd = ece->cmd();
         if (cmd->menu_id == MenuMailList){
-            ListViewItem *item = (ListViewItem*)(cmd->param);
-            if (item->listView() != lstMails)
+            QTreeWidgetItem *item = (QTreeWidgetItem*)(cmd->param);
+            if (item->treeWidget() != lstMails)
                 return false;
             bool bEnable = ((item != NULL) && (item->text(MAIL_PROTO).isEmpty() || (item->text(MAIL_PROTO) == "-")));
             if (!bEnable)
@@ -180,8 +194,8 @@ bool MainInfo::processEvent(Event *e)
             }
         }
         if (cmd->menu_id == MenuPhoneList){
-            ListViewItem *item = (ListViewItem*)(cmd->param);
-            if (item->listView() != lstPhones)
+            QTreeWidgetItem *item = (QTreeWidgetItem*)(cmd->param);
+            if (item->treeWidget() != lstPhones)
                 return false;
             bool bEnable = ((item != NULL) && (item->text(PHONE_PROTO).isEmpty() || (item->text(PHONE_PROTO) == "-")));
             if (!bEnable)
@@ -236,10 +250,10 @@ void MainInfo::fill()
     while (mails.length()){
         QString mailItem = getToken(mails, ';', false);
         QString mail = getToken(mailItem, '/');
-        ListViewItem *item = new ListViewItem(lstMails);
+        QTreeWidgetItem *item = new QTreeWidgetItem(lstMails);
         item->setText(MAIL_ADDRESS, mail);
         item->setText(MAIL_PROTO, mailItem);
-        item->setPixmap(MAIL_ADDRESS, Pict("mail_generic"));
+        item->setIcon(MAIL_ADDRESS, Pict("mail_generic"));
         if ((m_contact == NULL) && mailItem.isEmpty())
             item->setText(MAIL_PUBLISH, i18n("Yes"));
     }
@@ -259,7 +273,7 @@ void MainInfo::fill()
 
         if (!phoneItem.isEmpty())
             icon = getToken(phoneItem, ',').toULong();
-        ListViewItem *item = new ListViewItem(lstPhones);
+        QTreeWidgetItem *item = new QTreeWidgetItem(lstPhones);
         fillPhoneItem(item, number, type, icon, proto);
         cmbCurrent->insertItem(INT_MAX,number);
         if (!phoneItem.isEmpty()){
@@ -284,11 +298,11 @@ void MainInfo::apply()
         contact->setPhoneStatus(cmbStatus->currentIndex());
     }
     contact->setNotes(edtNotes->toPlainText());
-    ListViewItem *item;
+    QTreeWidgetItem *item;
     QString mails;
     for (int i = 0; i <lstMails->topLevelItemCount(); i++)
 	{
-		item = static_cast<ListViewItem*>(lstMails->topLevelItem(i));
+        item = static_cast<QTreeWidgetItem*>(lstMails->topLevelItem(i));
         if (mails.length())
             mails += ';';
         mails += quoteChars(item->text(MAIL_ADDRESS), ";/");
@@ -299,7 +313,7 @@ void MainInfo::apply()
     QString phones;
     for (int i = 0; i < lstPhones->topLevelItemCount(); i++)
     {
-        item = static_cast<ListViewItem*>(lstPhones->topLevelItem(i));
+        item = static_cast<QTreeWidgetItem*>(lstPhones->topLevelItem(i));
         if (phones.length())
             phones += ';';
         phones += quoteChars(item->text(PHONE_NUMBER), ";/,");
@@ -340,7 +354,7 @@ void MainInfo::apply()
 
 void MainInfo::mailSelectionChanged()
 {
-    ListViewItem *item = lstMails->currentItem();
+    QTreeWidgetItem *item = lstMails->currentItem();
     bool bEnable = ((item != NULL) && (item->text(MAIL_PROTO).isEmpty() || (item->text(MAIL_PROTO) == "-")));
     btnMailEdit->setEnabled(bEnable);
     btnMailDelete->setEnabled(bEnable);
@@ -348,7 +362,7 @@ void MainInfo::mailSelectionChanged()
 
 void MainInfo::phoneSelectionChanged()
 {
-    ListViewItem *item = lstPhones->currentItem();
+    QTreeWidgetItem *item = lstPhones->currentItem();
     bool bEnable = ((item != NULL) && (item->text(PHONE_PROTO).isEmpty() || (item->text(PHONE_PROTO) == "-")));
     btnPhoneEdit->setEnabled(bEnable);
     btnPhoneDelete->setEnabled(bEnable);
@@ -358,7 +372,7 @@ void MainInfo::addMail()
 {
     EditMail dlg(this, "", false, m_contact == NULL);
     if (dlg.exec() && !dlg.res.isEmpty()){
-        ListViewItem *item = new ListViewItem(lstMails);
+        QTreeWidgetItem *item = new QTreeWidgetItem(lstMails);
         QString proto = "-";
         if ((m_contact == NULL) && dlg.publish){
             item->setText(MAIL_PUBLISH, i18n("Yes"));
@@ -366,18 +380,18 @@ void MainInfo::addMail()
         }
         item->setText(MAIL_ADDRESS, dlg.res);
         item->setText(MAIL_PROTO, proto);
-        item->setPixmap(MAIL_ADDRESS, Pict("mail_generic"));
+        item->setIcon(MAIL_ADDRESS, Pict("mail_generic"));
         lstMails->setCurrentItem(item);
     }
 }
 
 void MainInfo::editMail()
 {
-    ListViewItem *item = lstMails->currentItem();
+    QTreeWidgetItem *item = lstMails->currentItem();
     editMail(item);
 }
 
-void MainInfo::editMail(ListViewItem *item)
+void MainInfo::editMail(QTreeWidgetItem *item)
 {
     if ((item == NULL) || (!item->text(MAIL_PROTO).isEmpty() && (item->text(MAIL_PROTO) != "-")))
         return;
@@ -390,7 +404,7 @@ void MainInfo::editMail(ListViewItem *item)
         }
         item->setText(MAIL_ADDRESS, dlg.res);
         item->setText(MAIL_PROTO, proto);
-        item->setPixmap(MAIL_ADDRESS, Pict("mail_generic"));
+        item->setIcon(MAIL_ADDRESS, Pict("mail_generic"));
         lstMails->setCurrentItem(item);
     }
 }
@@ -400,7 +414,7 @@ void MainInfo::deleteMail()
     deleteMail(lstMails->currentItem());
 }
 
-void MainInfo::deleteMail(ListViewItem *item)
+void MainInfo::deleteMail(QTreeWidgetItem *item)
 {
     if ((item == NULL) || (!item->text(MAIL_PROTO).isEmpty() && (item->text(MAIL_PROTO) != "-")))
         return;
@@ -414,18 +428,18 @@ void MainInfo::addPhone()
         QString proto = "-";
         if ((m_contact == NULL) && dlg.publish)
             proto = QString::null;
-        fillPhoneItem(new ListViewItem(lstPhones), dlg.number, dlg.type, dlg.icon, proto);
+        fillPhoneItem(new QTreeWidgetItem(lstPhones), dlg.number, dlg.type, dlg.icon, proto);
         fillCurrentCombo();
     }
 }
 
 void MainInfo::editPhone()
 {
-    ListViewItem *item = lstPhones->currentItem();
+    QTreeWidgetItem *item = lstPhones->currentItem();
     editPhone(item);
 }
 
-void MainInfo::editPhone(ListViewItem *item)
+void MainInfo::editPhone(QTreeWidgetItem *item)
 {
     if (item == NULL)
         return;
@@ -447,7 +461,7 @@ void MainInfo::deletePhone()
     deletePhone(lstPhones->currentItem());
 }
 
-void MainInfo::deletePhone(ListViewItem *item)
+void MainInfo::deletePhone(QTreeWidgetItem *item)
 {
     if (item == NULL)
         return;
@@ -458,7 +472,7 @@ void MainInfo::deletePhone(ListViewItem *item)
     fillCurrentCombo();
 }
 
-void MainInfo::fillPhoneItem(ListViewItem *item, const QString &number, const QString &type, unsigned icon, const QString &proto)
+void MainInfo::fillPhoneItem(QTreeWidgetItem *item, const QString &number, const QString &type, unsigned icon, const QString &proto)
 {
     item->setText(PHONE_PROTO, proto);
     item->setText(PHONE_NUMBER, number);
@@ -479,13 +493,14 @@ void MainInfo::fillPhoneItem(ListViewItem *item, const QString &number, const QS
     item->setText(PHONE_ICON, QString::number(icon));
     for (const ext_info *info = phoneIcons; info->szName; info++){
         if (info->nCode == icon){
-            item->setPixmap(PHONE_TYPE, Pict(info->szName));
+            item->setIcon(PHONE_TYPE, Pict(info->szName));
             break;
         }
     }
     if (m_contact == NULL)
         item->setText(PHONE_PUBLISH, proto.isEmpty() ? i18n("Yes") : QString(""));
-    lstPhones->adjustColumn();
+    //lstPhones->adjustColumn();
+    lstPhones->resizeColumnToContents(0);
 }
 
 void MainInfo::fillCurrentCombo()
@@ -498,7 +513,7 @@ void MainInfo::fillCurrentCombo()
     int n = 1;
     int cur = 0;
     for (n = 1; n < lstPhones->topLevelItemCount(); n++){
-        ListViewItem* item = static_cast<ListViewItem*>(lstPhones->topLevelItem(n));
+        QTreeWidgetItem* item = static_cast<QTreeWidgetItem*>(lstPhones->topLevelItem(n));
         QString phone = item->text(PHONE_NUMBER);
         if (phone == current)
             cur = n;
