@@ -22,7 +22,6 @@
 #include "profile.h"
 #include "profilemanager.h"
 
-#include "contacts/clientdataiterator.h"
 #include "contacts/contact.h"
 #include "contacts/group.h"
 #include "contacts/client.h"

@@ -75,10 +75,10 @@ IMContact* ICQProtocol::createIMContact(const QSharedPointer<Client>& client)
     return new ICQUserData(client);
 }
 
-QStringList ICQProtocol::statuses()
+QStringList ICQProtocol::states()
 {
     QStringList list;
-    foreach(const ICQStatusPtr& status, m_statuses) 
+    foreach(const ICQStatusPtr& status, m_states) 
     {
         list.append(status->id());
     }
@@ -87,7 +87,7 @@ QStringList ICQProtocol::statuses()
 
 void ICQProtocol::initStatuses()
 {
-    m_statuses.clear();
+    m_states.clear();
     addStatus(ICQStatusPtr(new ICQStatus("online", "Online", true, "", Icon("ICQ_online"))));
     addStatus(ICQStatusPtr(new ICQStatus("away", "Away", true, "", Icon("ICQ_away"))));
     addStatus(ICQStatusPtr(new ICQStatus("n/a", "N/A", true, "", Icon("ICQ_na"))));
@@ -99,12 +99,12 @@ void ICQProtocol::initStatuses()
 
 void ICQProtocol::addStatus(ICQStatusPtr status)
 {
-    m_statuses.append(status);
+    m_states.append(status);
 }
 
 SIM::IMStatusPtr ICQProtocol::status(const QString& id)
 {
-    foreach(const ICQStatusPtr& status, m_statuses) 
+    foreach(const ICQStatusPtr& status, m_states) 
     {
         if(status->id() == id) 
             return status;
@@ -264,7 +264,7 @@ AIMProtocol::~AIMProtocol()
 {
 }
 
-QStringList AIMProtocol::statuses()
+QStringList AIMProtocol::states()
 {
 	// TODO
 	return QStringList();

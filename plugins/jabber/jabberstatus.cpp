@@ -44,7 +44,7 @@ QIcon JabberStatus::icon() const
     return m_icon;
 }
 
-QStringList JabberStatus::substatuses()
+QStringList JabberStatus::substates()
 {
     return QStringList();
 }
