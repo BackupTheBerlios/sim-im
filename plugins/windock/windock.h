@@ -51,6 +51,7 @@ public:
 protected slots:
     void slotSetState();
     void slotAutoHide();
+    void init();
 protected:
     virtual bool processEvent(SIM::Event *e);
     virtual bool eventFilter(QObject*, QEvent*);
@@ -58,7 +59,6 @@ protected:
     QWidget *getMainWindow();
     unsigned CmdAutoHide;
     bool m_bInit;
-    void init();
     void uninit();
     QTimer *m_autoHide;
     WinDockData data;

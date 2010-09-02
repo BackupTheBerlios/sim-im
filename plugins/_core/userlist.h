@@ -36,7 +36,7 @@ const unsigned long CmdListDelete	= 0x100;
 class QTimer;
 
 class ListView;
-class EXPORT ListViewItem : public QTreeWidgetItem
+class CORE_EXPORT ListViewItem : public QTreeWidgetItem
 {
 public:
     ListViewItem();
@@ -53,7 +53,7 @@ public:
     void repaint();
 };
 
-class EXPORT ListView : public QTreeWidget, public SIM::EventReceiver
+class CORE_EXPORT ListView : public QTreeWidget, public SIM::EventReceiver
 {
     Q_OBJECT
 public:
@@ -104,7 +104,7 @@ protected:
     ListViewItem *m_pressedItem;
 };
 
-class EXPORT ContactDragObject : public QMimeData
+class CORE_EXPORT ContactDragObject : public QMimeData
 {
     Q_OBJECT
 public:
