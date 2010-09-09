@@ -240,7 +240,6 @@ protected:
     QStringList         m_profiles;
     QWidget             *m_cfg;
     QWidget             *m_focus;
-    UserView            *m_view;
     SearchDialog        *m_search;
     QTranslator         *m_translator;
     ConnectionManager   *m_manager;

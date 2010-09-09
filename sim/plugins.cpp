@@ -459,6 +459,7 @@ namespace SIM
 
         m_homedir = plugin("__homedir");
 
+        log(L_DEBUG, "PluginManagerPrivate::initialize()");
         getEventHub()->triggerEvent("init");
         if(m_bAbort) {
             log(L_ERROR,"EventInit failed - aborting!");

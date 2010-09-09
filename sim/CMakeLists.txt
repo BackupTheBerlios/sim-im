@@ -15,6 +15,8 @@ SET(sim_LIB_SRCS
 		clientlist.cpp
 		clientmanager.cpp
 		cmddef.cpp
+        commands/commandhub.cpp
+        commands/uicommand.cpp
 		contacts.cpp
 		country.cpp
         event.cpp
@@ -22,10 +24,13 @@ SET(sim_LIB_SRCS
         events/eventhub.cpp
         events/nulleventdata.cpp
         events/standardevent.cpp
+        events/ievent.cpp
 		exec.cpp
 		fetch.cpp
 		icons.cpp
-        events/ievent.cpp
+        imagestorage/imagestorage.cpp
+        imagestorage/iconset.cpp
+        imagestorage/jispiconset.cpp
 		log.cpp
 		message.cpp
 		misc.cpp
@@ -90,6 +95,8 @@ SET(sim_LIB_HDRS
 		clientlist.h
 		clientmanager.h
 		cmddef.h
+        commands/commandhub.h
+        commands/uicommand.h
 		contacts.h
 		country.h
 		event.h
@@ -97,10 +104,13 @@ SET(sim_LIB_HDRS
         events/eventhub.h
         events/nulleventdata.h
         events/standardevent.h
+        events/ievent.h
 		exec.h
 		fetch.h
 		icons.h
-        events/ievent.h
+        imagestorage/imagestorage.h
+        imagestorage/iconset.h
+        imagestorage/jispiconset.h
 		log.h
 		message.h
 		misc.h

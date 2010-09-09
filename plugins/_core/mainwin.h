@@ -38,6 +38,8 @@ class QResizeEvent;
 class QSizeGrip;
 class QVBoxLayout;
 
+class UserView;
+
 class MainWindow : public QMainWindow, public SIM::EventReceiver
 {
     Q_OBJECT
@@ -45,7 +47,6 @@ public:
     MainWindow();
     MainWindow(SIM::Geometry&);
     ~MainWindow();
-    static MainWindow *mainWindow();
     bool m_bNoResize;
     void closeEvent(QCloseEvent *e);
 protected:
@@ -64,7 +65,9 @@ protected:
     list<QWidget*> statusWidgets;
     QString	m_icon;
     friend class CorePlugin;
-    static MainWindow *s_mainWindow;
+
+private:
+	UserView* m_view;
 
 private slots:
     void eventInit();

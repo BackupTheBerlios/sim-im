@@ -30,7 +30,7 @@
 namespace SIM
 {
 
-class IconSet;
+class IconSetOld;
 
 struct PictDef
 {
@@ -55,8 +55,8 @@ public:
     void getSmiles(QStringList &smiles);
     QString getSmileName(const QString &name);
     static unsigned nSmile;
-    IconSet *addIconSet(const QString &name, bool bDefault);
-    void removeIconSet(IconSet*);
+    IconSetOld *addIconSet(const QString &name, bool bDefault);
+    void removeIconSet(IconSetOld*);
 	void setPixmap(const QString& name, const QPixmap& pict);
 protected slots:
     void iconChanged(int);

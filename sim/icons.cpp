@@ -44,6 +44,8 @@
 #include "unquot.h"
 #include "contacts/client.h"
 
+#include "imagestorage/imagestorage.h"
+
 const unsigned ICON_COLOR_MASK  = 0x000000FF;
 
 namespace SIM
@@ -61,11 +63,11 @@ struct smileDef
 /*********************
  * base IconSet class
 **********************/
-class IconSet
+class IconSetOld
 {
 public:
-    IconSet() {};
-    virtual ~IconSet() {};
+    IconSetOld() {}
+    virtual ~IconSetOld() {}
     virtual PictDef *getPict(const QString &name) = 0;
     virtual void clear() = 0;
     void parseSmiles(const QString&, unsigned &start, unsigned &size, QString &name);
@@ -77,17 +79,17 @@ protected:
     QList<smileDef>    m_smiles;
 };
 
-class WrkIconSet : public IconSet
+class WrkIconSet : public IconSetOld
 {
 public:
-    WrkIconSet() {};
+    WrkIconSet() {}
     PictDef *getPict(const QString &name);
     void clear();
     PictDef *add(const QString &name, const QImage &pict, unsigned flags);
 protected:
 };
 
-class FileIconSet : public IconSet
+class FileIconSet : public IconSetOld
 {
 public:
     FileIconSet(const QString &file);
@@ -110,8 +112,8 @@ protected:
 class IconsPrivate
 {
 public:
-    QList<IconSet*>    defSets;
-    QList<IconSet*>    customSets;
+    QList<IconSetOld*>    defSets;
+    QList<IconSetOld*>    customSets;
 	WrkIconSet* m_workset;
 
     static Icons *instance;
@@ -166,9 +168,9 @@ QPixmap Pict(const QString &name)
 }
 
 /*********************
- * IconSet
+ * IconSetOld
 **********************/
-void IconSet::parseSmiles(const QString &text, unsigned &start, unsigned &size, QString &name)
+void IconSetOld::parseSmiles(const QString &text, unsigned &start, unsigned &size, QString &name)
 {
     QList<smileDef>::iterator it;
     for (it = m_smiles.begin(); it != m_smiles.end(); ++it){
@@ -184,7 +186,7 @@ void IconSet::parseSmiles(const QString &text, unsigned &start, unsigned &size, 
     }
 }
 
-void IconSet::getSmiles(QStringList &smiles, QStringList &used)
+void IconSetOld::getSmiles(QStringList &smiles, QStringList &used)
 {
     QString name;
     bool bOK = false;
@@ -206,7 +208,7 @@ void IconSet::getSmiles(QStringList &smiles, QStringList &used)
         smiles.append(name);
 }
 
-QStringList IconSet::getSmile(const QString &name)
+QStringList IconSetOld::getSmile(const QString &name)
 {
     QStringList res;
     PIXMAP_MAP::iterator it = m_icons.find(name);
@@ -221,7 +223,7 @@ QStringList IconSet::getSmile(const QString &name)
     return res;
 }
 
-QString IconSet::getSmileName(const QString &name)
+QString IconSetOld::getSmileName(const QString &name)
 {
     PIXMAP_MAP::iterator it = m_icons.find(name);
     if (it == m_icons.end())
@@ -559,7 +561,7 @@ Icons::Icons()
 
 Icons::~Icons()
 {
-    QList<IconSet*>::iterator it;
+    QList<IconSetOld*>::iterator it;
     for (it = d->customSets.begin(); it != d->customSets.end(); ++it)
         delete *it;
     for (it = d->defSets.begin(); it != d->defSets.end(); ++it)
@@ -575,7 +577,7 @@ void Icons::setPixmap(const QString& name, const QPixmap& pict)
 bool Icons::processEvent(Event *e)
 {
     if (e->type() == eEventIconChanged){
-        QList<IconSet*>::iterator it;
+        QList<IconSetOld*>::iterator it;
         for (it = d->customSets.begin(); it != d->customSets.end(); ++it)
             (*it)->clear();
         for (it = d->defSets.begin(); it != d->defSets.end(); ++it)
@@ -591,7 +593,7 @@ void Icons::iconChanged(int)
 
 PictDef *Icons::getPict(const QString &name)
 {
-    QList<IconSet*>::iterator it;
+    QList<IconSetOld*>::iterator it;
     for (it = d->customSets.begin(); it != d->customSets.end(); ++it){
         PictDef *res = (*it)->getPict(name);
         if (res)
@@ -607,7 +609,7 @@ PictDef *Icons::getPict(const QString &name)
 
 QStringList Icons::getSmile(const QString &name)
 {
-    QList<IconSet*>::iterator it;
+    QList<IconSetOld*>::iterator it;
     for (it = d->customSets.begin(); it != d->customSets.end(); ++it){
         QStringList res = (*it)->getSmile(name);
         if (!res.empty())
@@ -618,7 +620,7 @@ QStringList Icons::getSmile(const QString &name)
 
 QString Icons::getSmileName(const QString &name)
 {
-    QList<IconSet*>::iterator it;
+    QList<IconSetOld*>::iterator it;
     for (it = d->customSets.begin(); it != d->customSets.end(); ++it){
         QString res = (*it)->getSmileName(name);
         if (!res.isEmpty())
@@ -630,7 +632,7 @@ QString Icons::getSmileName(const QString &name)
 void Icons::getSmiles(QStringList &smiles)
 {
     QStringList used;
-    foreach( IconSet* iconSet, d->customSets ) {
+    foreach( IconSetOld* iconSet, d->customSets ) {
         iconSet->getSmiles(smiles, used);
     }
 }
@@ -643,7 +645,7 @@ QString Icons::parseSmiles(const QString &str)
 		unsigned start = (unsigned)(-1);
 		unsigned size  = 0;
 		QString smile;
-		QList<IconSet*>::iterator it;
+        QList<IconSetOld*>::iterator it;
 		for (it = d->customSets.begin(); it != d->customSets.end(); ++it){
 			unsigned pos    = ~0U;
 			unsigned length = 0;
@@ -673,7 +675,7 @@ QString Icons::parseSmiles(const QString &str)
 	return res;
 }
 
-IconSet *Icons::addIconSet(const QString &name, bool bDefault)
+IconSetOld *Icons::addIconSet(const QString &name, bool bDefault)
 {
 	FileIconSet *is = new FileIconSet(name);
 	if (bDefault)
@@ -687,11 +689,11 @@ IconSet *Icons::addIconSet(const QString &name, bool bDefault)
 	return is;
 }
 
-void Icons::removeIconSet(IconSet *is)
+void Icons::removeIconSet(IconSetOld *is)
 {
     if(!is) {
-        for (QList<IconSet*>::iterator it = d->customSets.begin(); it != d->customSets.end(); ){
-            IconSet *set = *it;
+        for (QList<IconSetOld*>::iterator it = d->customSets.begin(); it != d->customSets.end(); ){
+            IconSetOld *set = *it;
             it++;
             delete set;
         }

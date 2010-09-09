@@ -35,24 +35,18 @@
 
 using namespace SIM;
 
-MainWindow *MainWindow::s_mainWindow = NULL;
-
 MainWindow::MainWindow()
     : QMainWindow(NULL, Qt::Window)
     , EventReceiver(LowestPriority)
 {
     setObjectName("mainwnd");
     setAttribute(Qt::WA_AlwaysShowToolTips);
-    Q_ASSERT(s_mainWindow == NULL);
-    s_mainWindow = this;
     h_lay	 = NULL;
     m_bNoResize = false;
 
     m_icon = "SIM";
     setWindowIcon(Icon(m_icon));
     setTitle();
-
-//    setIconSize(QSize(16,16));
 
     m_bar = NULL;
 
@@ -65,6 +59,11 @@ MainWindow::MainWindow()
     QStatusBar *status = statusBar();
     status->show();
     status->installEventFilter(this);
+
+	m_view = new UserView;
+	m_view->init();
+
+	getEventHub()->getEvent("init")->connectTo(this, SLOT(eventInit()));
 }
 
 MainWindow::MainWindow(Geometry &geometry)
@@ -73,16 +72,12 @@ MainWindow::MainWindow(Geometry &geometry)
 {
     setObjectName("mainwnd");
     setAttribute(Qt::WA_AlwaysShowToolTips);
-    Q_ASSERT(s_mainWindow == NULL);
-    s_mainWindow = this;
     h_lay	 = NULL;
     m_bNoResize = false;
 
     m_icon = "SIM";
     setWindowIcon(Icon(m_icon));
     setTitle();
-
-//    setIconSize(QSize(16,16));
 
     m_bar = NULL;
 
@@ -107,17 +102,15 @@ MainWindow::MainWindow(Geometry &geometry)
     }
     ::restoreGeometry(this, geometry, true, true);
 
+	m_view = new UserView;
+	m_view->init();
+
     getEventHub()->getEvent("init")->connectTo(this, SLOT(eventInit()));
 }
 
 MainWindow::~MainWindow()
 {
-    s_mainWindow = NULL;
-}
-
-MainWindow *MainWindow::mainWindow()
-{
-    return s_mainWindow;
+	delete m_view;
 }
 
 void MainWindow::resizeEvent(QResizeEvent *e)
@@ -259,8 +252,7 @@ void MainWindow::setTitle()
 void MainWindow::focusInEvent(QFocusEvent *e)
 {
     QMainWindow::focusInEvent(e);
-    if (CorePlugin::instance()->m_view)
-        CorePlugin::instance()->m_view->setFocus();
+	m_view->setFocus();
 }
 
 

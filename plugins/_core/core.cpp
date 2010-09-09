@@ -137,10 +137,10 @@ Plugin *createCorePluginObject()
 
 static PluginInfo info =
 {
-	I18N_NOOP("Interface"),
-	I18N_NOOP("System interface"),
-	VERSION,
-	createCorePlugin,
+    I18N_NOOP("Interface"),
+    I18N_NOOP("System interface"),
+    VERSION,
+    createCorePlugin,
     PLUGIN_DEFAULT | PLUGIN_NODISABLE | PLUGIN_RELOAD,
     createCorePluginObject
 };
@@ -227,14 +227,12 @@ static autoReply autoReplies[] =
 
 CorePlugin::CorePlugin(unsigned base, Buffer* /*config*/)
     : QObject()
-    //, PropertyHub     ("_core")
     , Plugin            (base)
     , EventReceiver     (HighPriority)
     , historyXSL        (NULL)
     , m_bInit           (false)
     , m_cfg             (NULL)
     , m_focus           (NULL)
-    , m_view            (NULL)
     , m_search          (NULL)
     , m_translator      (NULL)
     , m_manager         (NULL)
@@ -1074,6 +1072,7 @@ bool CorePlugin::processEventPluginChanged(SIM::Event* e)
 
 void CorePlugin::eventInit()
 {
+    log(L_DEBUG, "CorePlugin::eventInit");
     if (!m_bInit && !init(true)) {
         getEventHub()->triggerEvent("init_abort");
         return;
@@ -3094,6 +3093,7 @@ void CorePlugin::selectProfile()
 
 bool CorePlugin::init(bool bInit)
 {
+    log(L_DEBUG, "CorePlugin::init");
 	m_bInit = bInit;
 	bool bLoaded = false;
 	bool bRes = true;
@@ -3236,8 +3236,8 @@ bool CorePlugin::init(bool bInit)
 
     log(L_DEBUG, "geometry: %s", value("geometry").toByteArray().toHex().data());
     m_main->restoreGeometry(value("geometry").toByteArray());
-    m_view = new UserView;
-    m_view->init();
+
+    m_main->show();
 
     EventLoginStart e;
     e.process();
@@ -3307,11 +3307,6 @@ void CorePlugin::destroy()
         delete m_statusWnd;
         m_statusWnd = NULL;
     }
-    if (m_view)
-    {
-        delete m_view;
-        m_view = NULL;
-    }
     if (m_cfg)
     {
         delete m_cfg;
@@ -3321,11 +3316,6 @@ void CorePlugin::destroy()
     {
         delete m_main;
         m_main = NULL;
-    }
-    if (m_view)
-    {
-        delete m_view;
-        m_view = NULL;
     }
     if (m_search)
     {

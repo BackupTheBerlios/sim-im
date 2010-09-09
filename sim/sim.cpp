@@ -27,6 +27,8 @@
 #include "contacts/protocolmanager.h"
 #include "events/eventhub.h"
 #include "events/standardevent.h"
+#include "commands/commandhub.h"
+#include "imagestorage/imagestorage.h"
 
 #include <QDir>
 
@@ -116,6 +118,8 @@ int main(int argc, char *argv[])
 
     SIM::createEventHub();
     registerEvents();
+    SIM::createImageStorage();
+    SIM::createCommandHub();
     SIM::createSocketFactory();
     SIM::createContactList();
     SIM::createProtocolManager();
@@ -134,6 +138,8 @@ int main(int argc, char *argv[])
     SIM::destroyProtocolManager();
     SIM::destroyContactList();
     SIM::destroySocketFactory();
+    SIM::destroyCommandHub();
+    SIM::destroyImageStorage();
     SIM::destroyEventHub();
     return res;
 }
