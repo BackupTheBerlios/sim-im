@@ -374,6 +374,7 @@ bool SnacIcqICBM::sendThruServer(Message *msg, void *_data)
                 processSendQueue();
                 return true;
         }
+         /* following Block is commented out because it avoids to send online-messages to icq7.x */
         //if ((data->getstatus() != icq_status_offline) &&
         //        (client()->getsendformat() <= 1) &&
         //        client()->hascap(data, cap_utf) &&
