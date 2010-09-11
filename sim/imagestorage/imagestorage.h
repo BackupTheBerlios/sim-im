@@ -16,6 +16,7 @@ class ImageStorage : public QObject
     Q_OBJECT
 public:
     explicit ImageStorage(QObject *parent = 0);
+    virtual ~ImageStorage();
 
     QIcon icon(const QString& id);
     QImage image(const QString& id);
@@ -23,6 +24,8 @@ public:
 
     bool addIconSet(IconSet* set);
     bool removeIconset(const QString& id);
+
+    QString parseSmiles(const QString& input);
 
 private:
     QList<IconSet*> m_sets;

@@ -32,13 +32,20 @@ bool JispIconSet::parse(const QByteArray& arr)
     QDomElement icon = icondef.firstChildElement("icon");
     while(!icon.isNull()) {
         QString name = icon.attribute("name");
-        QDomElement object = icon.firstChildElement("object");
-        QString pictfile = object.text();
+        if(!name.isEmpty()) {
+            QDomElement object = icon.firstChildElement("object");
+            QString pictfile = object.text();
 
-        QPixmap image;
-        if(image.load(pictfile))
-            m_images.insert(name, pictfile);
+            QPixmap image;
+            if(image.load(pictfile))
+                m_images.insert(name, pictfile);
 
+            QDomNodeList texts = icon.elementsByTagName("text");
+            for(int i = 0; i < texts.count(); i++) {
+                QString text = texts.at(i).toElement().text();
+                m_smiles.insert(text, name);
+            }
+        }
         icon = icon.nextSiblingElement("icon");
     }
     return true;
@@ -67,6 +74,19 @@ QIcon JispIconSet::icon(const QString& iconId)
 QPixmap JispIconSet::pixmap(const QString& iconId)
 {
     return m_images.value(iconId);
+}
+
+QString JispIconSet::parseSmiles(const QString& input)
+{
+    QString result = input;
+    for(QMap<QString, QString>::iterator it = m_smiles.begin(); it != m_smiles.end(); ++it)
+    {
+        if(result.contains(it.key()))
+        {
+            result.replace(it.key(), QString("<img src=\"sim:icons/%1\" />").arg(it.value()));
+        }
+    }
+    return result;
 }
 
 } // namespace SIM
