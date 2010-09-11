@@ -698,6 +698,8 @@ CorePlugin::~CorePlugin()
 	delete m_status;
 	delete historyXSL;
 	delete m_HistoryThread;
+    delete m_containerManager;
+    delete m_main;
 
 	removeTranslator();
 }
@@ -3276,7 +3278,7 @@ void CorePlugin::startLogin()
     clients.addToContacts();
     getContacts()->load();
 
-    for (int i = 0; i < clients.size(); i++)
+    for (unsigned i = 0; i < clients.size(); i++)
     {
         Client *client = getContacts()->getClient(i);
         unsigned status = client->getStatus();
@@ -3311,11 +3313,6 @@ void CorePlugin::destroy()
         delete m_cfg;
         m_cfg = NULL;
     }
-    if (m_main)
-    {
-        delete m_main;
-        m_main = NULL;
-    }
     if (m_search)
     {
         delete m_search;
@@ -3325,11 +3322,6 @@ void CorePlugin::destroy()
     {
         delete m_manager;
         m_manager = NULL;
-    }
-    if (m_containerManager)
-    {
-        delete m_containerManager;
-        m_containerManager = NULL;
     }
 }
 
