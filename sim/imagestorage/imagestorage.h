@@ -11,7 +11,7 @@
 
 namespace SIM {
 
-class ImageStorage : public QObject
+class EXPORT ImageStorage : public QObject
 {
     Q_OBJECT
 public:

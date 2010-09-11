@@ -5,14 +5,15 @@
 #include <QString>
 #include <QStringList>
 #include <QSharedPointer>
+#include "simapi.h"
 
 namespace SIM
 {
 
-class UiCommand;
+class EXPORT UiCommand;
 typedef QSharedPointer<UiCommand> UiCommandPtr;
 
-class UiCommand : public QAction
+class EXPORT UiCommand : public QAction
 {
     Q_OBJECT
 public:
@@ -26,6 +27,8 @@ public:
     void addTag(const QString& tag);
     void clearTags();
     QStringList tags() const;
+
+    void addSubCommand(const UiCommandPtr& subcmd);
 signals:
 
 public slots:
@@ -36,6 +39,7 @@ private:
     QString m_id;
     QStringList m_tags;
     QString m_iconId;
+    QList<UiCommandPtr> m_subcmds;
 };
 }
 

@@ -51,7 +51,8 @@ public:
     void closeEvent(QCloseEvent *e);
 protected:
     QWidget *main;
-    CToolBar *m_bar;
+    //CToolBar *m_bar;
+    QToolBar* m_bar;
     QVBoxLayout *lay;
     QHBoxLayout *h_lay;
     void focusInEvent(QFocusEvent*);
@@ -67,6 +68,7 @@ protected:
     friend class CorePlugin;
 
 private:
+    void populateMainToolbar();
 	UserView* m_view;
 
 private slots:

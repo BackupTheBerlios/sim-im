@@ -225,6 +225,7 @@ namespace SIM
             QStringList descrs;
             PluginPtr m_core;
             PluginPtr m_homedir; // HACK
+            PluginPtr m_logger;
 
             unsigned m_base;
             bool m_bLoaded;
@@ -458,6 +459,7 @@ namespace SIM
         }
 
         m_homedir = plugin("__homedir");
+        m_logger = plugin("logger");
 
         log(L_DEBUG, "PluginManagerPrivate::initialize()");
         getEventHub()->triggerEvent("init");

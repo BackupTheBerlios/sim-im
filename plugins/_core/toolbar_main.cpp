@@ -20,16 +20,38 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <QMenu>
 #include "core.h"
 #include "log.h"
+#include "commands/commandhub.h"
+#include "commands/uicommand.h"
 
 using namespace SIM;
 
+void CorePlugin::createGroupModeMenu()
+{
+    UiCommandPtr dontshow = UiCommand::create(I18N_NOOP("Do&n't show groups"), "grp_off", "groupmode_dontshow", QStringList("groupmode_menu"));
+    UiCommandPtr mode1 = UiCommand::create(I18N_NOOP("Group mode 1"), "grp_on", "groupmode_mode1", QStringList("groupmode_menu"));
+    UiCommandPtr mode2 = UiCommand::create(I18N_NOOP("Group mode 2"), "grp_on", "groupmode_mode2", QStringList("groupmode_menu"));
+    UiCommandPtr groups = UiCommand::create(I18N_NOOP("&Groups"), value("GroupMode").toUInt() ? "grp_on" : "grp_off",
+                                            "groupmode_menu", QStringList("main_toolbar"));
+    groups->addSubCommand(dontshow);
+    groups->addSubCommand(mode1);
+    groups->addSubCommand(mode2);
+    getCommandHub()->registerCommand(groups);
+}
 
 void CorePlugin::createMainToolbar()
 {
+    log(L_DEBUG, "createMainToolbar()");
+    UiCommandPtr showOffline = UiCommand::create(I18N_NOOP("Show &offline"), "offline_on", "show_online", QStringList("main_toolbar"));
+    showOffline->setCheckable(true);
+    getCommandHub()->registerCommand(showOffline);
 
-	log(L_DEBUG, "createMainToolbar()");
+    createGroupModeMenu();
+
+    return;
+
 	Command cmd;
 
 	// **** Main ToolBar ****

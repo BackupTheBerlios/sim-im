@@ -224,6 +224,7 @@ protected:
     bool lockProfile(const QString &profile, bool bSend = false);
 
     void createMainToolbar();
+    void createGroupModeMenu();
     bool updateMainToolbar(unsigned long commandID);
     void createHistoryToolbar();
     void createContainerToolbar();

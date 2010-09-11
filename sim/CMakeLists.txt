@@ -25,6 +25,7 @@ SET(sim_LIB_SRCS
         events/nulleventdata.cpp
         events/standardevent.cpp
         events/ievent.cpp
+        events/logevent.cpp
 		exec.cpp
 		fetch.cpp
 		icons.cpp
@@ -105,6 +106,7 @@ SET(sim_LIB_HDRS
         events/nulleventdata.h
         events/standardevent.h
         events/ievent.h
+        events/logevent.h
 		exec.h
 		fetch.h
 		icons.h

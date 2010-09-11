@@ -1,5 +1,5 @@
 #include "jispiconset.h"
-#include "qzip/qzip.h"
+#include "log.h"
 
 #include <QtXml>
 
@@ -11,12 +11,13 @@ JispIconSet::JispIconSet()
 
 bool JispIconSet::load(const QString& filename)
 {
+    //printf("JispIconSet::load(%s)\n", qPrintable(filename));
     m_id = filename;
-    UnZip uz(filename);
+    m_uz.setName(filename);
     QByteArray arr;
-    if(uz.open() &&
-       (uz.readFile("icondef.xml", &arr) ||
-        uz.readFile(QFileInfo(uz.name()).baseName() + "/icondef.xml", &arr)))
+    if(m_uz.open() &&
+       (m_uz.readFile("icondef.xml", &arr) ||
+        m_uz.readFile(QFileInfo(m_uz.name()).baseName() + "/icondef.xml", &arr)))
         return parse(arr);
     else
         return false;
@@ -32,19 +33,20 @@ bool JispIconSet::parse(const QByteArray& arr)
     QDomElement icon = icondef.firstChildElement("icon");
     while(!icon.isNull()) {
         QString name = icon.attribute("name");
-        if(!name.isEmpty()) {
-            QDomElement object = icon.firstChildElement("object");
-            QString pictfile = object.text();
+        QDomElement object = icon.firstChildElement("object");
+        QString pictfile = object.text();
 
-            QPixmap image;
-            if(image.load(pictfile))
-                m_images.insert(name, pictfile);
+        if(name.isEmpty())
+            name = pictfile;
 
-            QDomNodeList texts = icon.elementsByTagName("text");
-            for(int i = 0; i < texts.count(); i++) {
-                QString text = texts.at(i).toElement().text();
-                m_smiles.insert(text, name);
-            }
+        //printf("JispIconSet::parse(%s)\n", qPrintable(name));
+
+        m_images.insert(name, pictfile);
+
+        QDomNodeList texts = icon.elementsByTagName("text");
+        for(int i = 0; i < texts.count(); i++) {
+            QString text = texts.at(i).toElement().text();
+            m_smiles.insert(text, name);
         }
         icon = icon.nextSiblingElement("icon");
     }
@@ -63,17 +65,27 @@ QString JispIconSet::name() const
 
 bool JispIconSet::hasIcon(const QString& iconId)
 {
+    //printf("JispIconSet::hasIcon(%s)\n", qPrintable(iconId));
     return m_images.contains(iconId);
 }
 
 QIcon JispIconSet::icon(const QString& iconId)
 {
-    return QIcon(m_images.value(iconId));
+    return QIcon(pixmap(iconId));
 }
 
 QPixmap JispIconSet::pixmap(const QString& iconId)
 {
-    return m_images.value(iconId);
+    //printf("JispIconSet::pixmap()\n");
+    QByteArray arr;
+    if (!m_uz.readFile(m_images.value(iconId), &arr) && !m_uz.readFile(QFileInfo(m_uz.name()).baseName() + '/' + m_images.value(iconId), &arr))
+    {
+        printf("no pixmap: %s/%s\n", qPrintable(iconId), qPrintable(m_images.value(iconId)));
+        return QPixmap();
+    }
+    QPixmap p;
+    p.loadFromData(arr);
+    return p;
 }
 
 QString JispIconSet::parseSmiles(const QString& input)

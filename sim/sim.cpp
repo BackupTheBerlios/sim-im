@@ -27,6 +27,7 @@
 #include "contacts/protocolmanager.h"
 #include "events/eventhub.h"
 #include "events/standardevent.h"
+#include "events/logevent.h"
 #include "commands/commandhub.h"
 #include "imagestorage/imagestorage.h"
 
@@ -85,6 +86,7 @@ void registerEvents()
     SIM::getEventHub()->registerEvent(SIM::StandardEvent::create("init"));
     SIM::getEventHub()->registerEvent(SIM::StandardEvent::create("init_abort"));
     SIM::getEventHub()->registerEvent(SIM::StandardEvent::create("quit"));
+    SIM::getEventHub()->registerEvent(SIM::LogEvent::create());
 }
 
 int main(int argc, char *argv[])
@@ -108,6 +110,7 @@ int main(int argc, char *argv[])
     if (!KUniqueApplication::start())
         exit(-1);
 #endif
+
     SimApp app(argc, argv);
 #ifdef Q_OS_MAC
     QString sPluginPath = app.applicationDirPath() + "/../";

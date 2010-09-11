@@ -19,7 +19,7 @@ email                : vovan@shutoff.ru
 #include "contacts/protocolmanager.h"
 #include "clientmanager.h"
 #include "core.h"
-#include "icons.h"
+#include "imagestorage/imagestorage.h"
 #include "log.h"
 #include "profilemanager.h"
 #include "simgui/ballonmsg.h"
@@ -74,7 +74,7 @@ LoginDialog::LoginDialog(bool bInit, ClientPtr client, const QString &text, cons
 	if (m_client)
 	{
 		setWindowTitle(windowTitle() + ' ' + client->name());
-		setWindowIcon(Icon(m_client->protocol()->description()->icon));
+        setWindowIcon(getImageStorage()->icon(m_client->protocol()->description()->icon));
 		chkSave->hide();
 		chkNoShow->hide();
 		btnDelete->hide();
@@ -85,7 +85,7 @@ LoginDialog::LoginDialog(bool bInit, ClientPtr client, const QString &text, cons
 	else
 	{
 		setWindowTitle(i18n("Select profile"));
-		setWindowIcon(Icon("SIM"));
+        setWindowIcon(getImageStorage()->icon("SIM"));
 	}
 	for(int i = 0; i < cmbProfile->count(); i++)
 	{
@@ -354,7 +354,7 @@ static void rmDir(const QString &path)
 void LoginDialog::makeInputs(unsigned &row, ClientPtr client)
 {
     m_pict = new QLabel(groupBoxPasswords);
-    m_pict->setPixmap(Pict(client->protocol()->description()->icon));
+    m_pict->setPixmap(getImageStorage()->pixmap(client->protocol()->description()->icon));
     picts.push_back(m_pict);
 
     m_vboxlayout = new QVBoxLayout;

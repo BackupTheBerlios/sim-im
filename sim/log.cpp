@@ -17,6 +17,8 @@
 
 #include "log.h"
 #include "event.h"
+#include "events/eventhub.h"
+#include "events/logevent.h"
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -74,8 +76,7 @@ static void log_string(unsigned short l, const QString &s)
     m += level_name(l);
     m += QLatin1String("] ");
     m += s;
-    EventLog e(l, m);
-    e.process();
+    getEventHub()->triggerEvent("log", EventDataPtr(new LogEventData(m, l)));
 }
 
 void log(unsigned short l, const char *fmt, ...)

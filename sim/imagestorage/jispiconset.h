@@ -2,6 +2,7 @@
 #define JISPICONSET_H
 
 #include "iconset.h"
+#include "qzip/qzip.h"
 #include <QMap>
 
 namespace SIM {
@@ -23,10 +24,11 @@ public:
 private:
     bool parse(const QByteArray& arr);
 
-    QMap<QString, QPixmap> m_images;
+    QMap<QString, QString> m_images;
     QMap<QString, QString> m_smiles;
     QString m_id;
     QString m_name;
+    UnZip m_uz;
 };
 
 } // namespace SIM

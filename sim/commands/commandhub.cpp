@@ -9,30 +9,33 @@ CommandHub::CommandHub(QObject *parent) :
 
 void CommandHub::registerCommand(const UiCommandPtr& cmd)
 {
-    m_commands.insert(cmd->id(), cmd);
+    m_commands.append(cmd);
 }
 
 void CommandHub::unregisterCommand(const QString& id)
 {
-    QMap<QString, UiCommandPtr>::iterator it = m_commands.find(id);
-    if(it == m_commands.end())
-        return;
-    m_commands.erase(it);
+    for(QList<UiCommandPtr>::iterator it = m_commands.begin(); it != m_commands.end(); ++it) {
+        if((*it)->id() == id) {
+            m_commands.erase(it);
+            return;
+        }
+    }
 }
 
 UiCommandPtr CommandHub::command(const QString& id) const
 {
-    QMap<QString, UiCommandPtr>::const_iterator it = m_commands.find(id);
-    if(it == m_commands.end())
-        return UiCommandPtr();
-    return it.value();
+    for(QList<UiCommandPtr>::const_iterator it = m_commands.begin(); it != m_commands.end(); ++it) {
+        if((*it)->id() == id) {
+            return *it;
+        }
+    }
+    return UiCommandPtr();
 }
 
 QStringList CommandHub::commandsForTag(const QString& tag) const
 {
     QStringList ids;
-    foreach(const UiCommandPtr& cmd, m_commands)
-    {
+    foreach(const UiCommandPtr& cmd, m_commands) {
         if(cmd->tags().contains(tag))
             ids.append(cmd->id());
     }

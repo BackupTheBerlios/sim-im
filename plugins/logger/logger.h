@@ -45,8 +45,12 @@ public:
     SIM::PropertyHubPtr propertyHub();
     QVariant value(const QString& key);
     void setValue(const QString& key, const QVariant& v);
+
+public slots:
+    void logEvent(const QString& str, int level);
+
 protected:
-//    bool eventFilter(QObject *o, QEvent *e);
+    void setDefaultConfigValues();
     QSet<unsigned> m_packets;
     virtual QWidget *createConfigWindow(QWidget *parent);
     virtual QByteArray getConfig();

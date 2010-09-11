@@ -241,7 +241,6 @@ CorePlugin::CorePlugin(unsigned base, Buffer* /*config*/)
     , m_nClients        (0)
     , m_nClientsMenu    (0)
     , m_nResourceMenu   (0)
-    , m_main            (NULL)
     , m_alert           (NULL)
     , m_lock            (NULL)
     , m_RegNew          (false)
@@ -287,6 +286,8 @@ CorePlugin::CorePlugin(unsigned base, Buffer* /*config*/)
 
 	createEventCmds();
     subscribeToEvents();
+
+    m_main = new MainWindow();
 }
 
 void CorePlugin::subscribeToEvents()
@@ -3228,8 +3229,6 @@ bool CorePlugin::init(bool bInit)
 		NewProtocol pDlg(NULL,1,true);
 		pDlg.exec();
 	}
-	if (!m_main)
-        m_main = new MainWindow(/*data.geometry*/);
 
 	loadUnread();
     containerManager()->init();

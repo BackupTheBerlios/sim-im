@@ -10,9 +10,11 @@
 
 class EXPORT SimApp : public QApplication
 {
+    Q_OBJECT
 public:
     SimApp(int &argc, char **argv);
     ~SimApp();
+
 protected:
     void commitData(QSessionManager&);
     void saveState(QSessionManager&);

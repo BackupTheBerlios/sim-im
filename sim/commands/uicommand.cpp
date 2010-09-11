@@ -1,4 +1,6 @@
+#include <QMenu>
 #include "uicommand.h"
+#include "imagestorage/imagestorage.h"
 
 namespace SIM
 {
@@ -37,12 +39,22 @@ QStringList UiCommand::tags() const
 void UiCommand::setIconId(const QString& id)
 {
     m_iconId = id;
-    // TODO update QAction::icon
+    QAction::setIcon(getImageStorage()->icon(id));
 }
 
 QString UiCommand::iconId() const
 {
     return m_iconId;
+}
+
+void UiCommand::addSubCommand(const UiCommandPtr& subcmd)
+{
+    if(!menu())
+    {
+        setMenu(new QMenu());
+    }
+    menu()->addAction(subcmd.data());
+    m_subcmds.append(subcmd);
 }
 
 }

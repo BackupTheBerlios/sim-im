@@ -24,6 +24,8 @@
 #include "contacts/contact.h"
 #include "simgui/toolbtn.h"
 #include "events/eventhub.h"
+#include "commands/commandhub.h"
+#include "commands/uicommand.h"
 
 #include <QApplication>
 #include <QPixmap>
@@ -39,6 +41,7 @@ MainWindow::MainWindow()
     : QMainWindow(NULL, Qt::Window)
     , EventReceiver(LowestPriority)
 {
+    log(L_DEBUG, "MainWindow::MainWindow()");
     setObjectName("mainwnd");
     setAttribute(Qt::WA_AlwaysShowToolTips);
     h_lay	 = NULL;
@@ -48,7 +51,7 @@ MainWindow::MainWindow()
     setWindowIcon(Icon(m_icon));
     setTitle();
 
-    m_bar = NULL;
+    m_bar = new QToolBar("Main toolbar");
 
     main = new QWidget(this);
     setCentralWidget(main);
@@ -70,6 +73,7 @@ MainWindow::MainWindow(Geometry &geometry)
     : QMainWindow(NULL, Qt::Window)
     , EventReceiver(LowestPriority)
 {
+    log(L_DEBUG, "MainWindow::MainWindow()");
     setObjectName("mainwnd");
     setAttribute(Qt::WA_AlwaysShowToolTips);
     h_lay	 = NULL;
@@ -79,7 +83,7 @@ MainWindow::MainWindow(Geometry &geometry)
     setWindowIcon(Icon(m_icon));
     setTitle();
 
-    m_bar = NULL;
+     m_bar = new QToolBar("Main toolbar");
 
     main = new QWidget(this);
     setCentralWidget(main);
@@ -111,6 +115,7 @@ MainWindow::MainWindow(Geometry &geometry)
 MainWindow::~MainWindow()
 {
 	delete m_view;
+    delete m_bar;
 }
 
 void MainWindow::resizeEvent(QResizeEvent *e)
@@ -139,13 +144,20 @@ bool MainWindow::eventFilter(QObject *o, QEvent *e)
     return QMainWindow::eventFilter(o, e);
 }
 
+void MainWindow::populateMainToolbar()
+{
+    QStringList cmds = getCommandHub()->commandsForTag("main_toolbar");
+    foreach(const QString& cmdId, cmds) {
+        UiCommandPtr cmd = getCommandHub()->command(cmdId);
+        m_bar->addAction(cmd.data());
+    }
+}
+
 void MainWindow::eventInit()
 {
+    log(L_DEBUG, "MainWindow::eventInit()");
     setTitle();
-    EventToolbar e(ToolBarMain, this);
-    e.process();
-    m_bar = e.toolBar();
-    m_bar->setObjectName("MainToolbar");
+    populateMainToolbar();
     this->addToolBar(m_bar);
     raiseWindow(this);
 }

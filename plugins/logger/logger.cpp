@@ -22,6 +22,8 @@
 #include <QFileInfo>
 #include <QByteArray>
 
+#include "events/eventhub.h"
+
 #ifdef Q_OS_WIN
 # include <windows.h>
 #endif
@@ -70,7 +72,7 @@ LoggerPlugin::LoggerPlugin(unsigned base, Buffer *add_info)
         , m_file(NULL)
         , m_bFilter(false)
 {
-
+    printf("LoggerPlugin:\n");
     m_propertyHub = PropertyHub::create("logger");
     EventArg e("-d:", I18N_NOOP("Set debug level"));
     if (e.process())
@@ -81,6 +83,9 @@ LoggerPlugin::LoggerPlugin(unsigned base, Buffer *add_info)
     }
     
     openFile();
+
+    setDefaultConfigValues();
+    getEventHub()->getEvent("log")->connectTo(this, SLOT(logEvent(QString, int)));
 }
 
 LoggerPlugin::~LoggerPlugin()
@@ -90,34 +95,11 @@ LoggerPlugin::~LoggerPlugin()
 
 QByteArray LoggerPlugin::getConfig()
 {
-    /*
-    QByteArray packets;
-    QSetIterator<unsigned> setIt(m_packets);
-    while(setIt.hasNext()) {
-        if (packets.length())
-            packets += ',';
-        packets += QByteArray::number(setIt.next());
-    }
-    setValue("LogPackets", packets);
-    */
     return QByteArray();
 }
 
 void LoggerPlugin::openFile()
 {
-/*
-    if (m_bFilter){
-        if ((getLogLevel() & L_EVENTS) == 0){
-            qApp->removeEventFilter(this);
-            m_bFilter = false;
-        }
-    }else{
-        if (getLogLevel() & L_EVENTS){
-            qApp->installEventFilter(this);
-            m_bFilter = true;
-        }
-    }
-*/
     delete m_file;
     m_file = NULL;
     QString fname = value("File").toString();
@@ -156,14 +138,7 @@ void LoggerPlugin::setLogType(unsigned id, bool bLog)
     else
       m_packets.remove(id);
 }
-/*
-bool LoggerPlugin::eventFilter(QObject *o, QEvent *e)
-{
-    if (strcmp(o->className(), "QTimer"))
-        log(L_DEBUG, "Event: %u %s %s", e->type(), o->className(), o->name());
-    return QObject::eventFilter(o, e);
-}
-*/
+
 QWidget *LoggerPlugin::createConfigWindow(QWidget *parent)
 {
     return new LogConfig(parent, this);
@@ -173,56 +148,66 @@ bool LoggerPlugin::processEvent(Event *e)
 {
     if(e->type() == eEventLog)
     {
-        EventLog *l = static_cast<EventLog*>(e);
-        if (((l->packetID() == 0) && (l->logLevel() & value("LogLevel").toUInt())) ||
-                (l->packetID() && ((value("LogLevel").toUInt() & L_PACKETS) || isLogType(l->packetID()))))
-        {
-            QString s;
-            s = EventLog::make_packet_string(*l);
-            if (m_file) {
-#if defined(Q_OS_WIN) || defined(__OS2__)
-                s += "\r\n";
-#else
-                s += "\n";
-#endif
-                m_file->write(s.toLocal8Bit());
-            }
-#ifdef Q_OS_WIN
-            const QStringList slist = s.split('\n');
-            for(int i = 0 ; i < slist.count() ; i++)
-            {
-                QString out = slist[i];
-                if (out.length() > 256){
-                    while (!out.isEmpty()){
-                        QString l;
-                        if (out.length() < 256){
-                            l = out;
-                            out.clear();
-                        }else{
-                            l = out.left(256);
-                            out = out.mid(256);
-                        }
-                        OutputDebugStringW((LPCWSTR)l.utf16());
-                    }
-                }
-                else
-                {
-                    OutputDebugStringW((LPCWSTR)out.utf16());
-                }
-                OutputDebugStringW(L"\n");
-            }
-#else
-            fprintf(stderr, "%s\n", qPrintable(s));
-#endif
-        }
+
     }
     else if(e->type() == eEventPluginLoadConfig)
     {
         PropertyHubPtr hub = ProfileManager::instance()->getPropertyHub("logger");
         if(!hub.isNull())
             setPropertyHub(hub);
+        setDefaultConfigValues();
     }
     return false;
+}
+
+void LoggerPlugin::setDefaultConfigValues()
+{
+    if(!value("LogLevel").isValid()) {
+        setValue("LogLevel", L_DEBUG | L_WARN | L_ERROR);
+    }
+}
+
+void LoggerPlugin::logEvent(const QString& str, int level)
+{
+    if (level & value("LogLevel").toUInt())
+    {
+        QString s = str;
+        if (m_file) {
+#if defined(Q_OS_WIN) || defined(__OS2__)
+            s += "\r\n";
+#else
+            s += "\n";
+#endif
+            m_file->write(s.toLocal8Bit());
+        }
+#ifdef Q_OS_WIN
+        const QStringList slist = s.split('\n');
+        for(int i = 0 ; i < slist.count() ; i++)
+        {
+            QString out = slist[i];
+            if (out.length() > 256){
+                while (!out.isEmpty()){
+                    QString l;
+                    if (out.length() < 256){
+                        l = out;
+                        out.clear();
+                    }else{
+                        l = out.left(256);
+                        out = out.mid(256);
+                    }
+                    OutputDebugStringW((LPCWSTR)l.utf16());
+                }
+            }
+            else
+            {
+                OutputDebugStringW((LPCWSTR)out.utf16());
+            }
+            OutputDebugStringW(L"\n");
+        }
+#else
+        fprintf(stderr, "%s\n", qPrintable(s));
+#endif
+    }
 }
 
 void LoggerPlugin::setPropertyHub(SIM::PropertyHubPtr hub)

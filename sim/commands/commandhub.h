@@ -8,7 +8,7 @@
 
 namespace SIM
 {
-class CommandHub : public QObject
+class EXPORT CommandHub : public QObject
 {
     Q_OBJECT
 public:
@@ -23,7 +23,7 @@ signals:
 public slots:
 
 private:
-    QMap<QString, UiCommandPtr> m_commands;
+    QList<UiCommandPtr> m_commands;
 
 };
 
