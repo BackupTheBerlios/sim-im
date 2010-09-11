@@ -30,12 +30,12 @@ using namespace std;
 using namespace SIM;
 
 
-const unsigned long MenuListView		= 0x100;
-const unsigned long CmdListDelete	= 0x100;
+const unsigned long MenuListView    = 0x100;
+const unsigned long CmdListDelete   = 0x100;
 
 class QTimer;
 
-class EXPORT ListView : public QTreeWidget, public SIM::EventReceiver
+class CORE_EXPORT ListView : public QTreeWidget, public SIM::EventReceiver
 {
     Q_OBJECT
 public:

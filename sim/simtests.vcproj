@@ -118,8 +118,8 @@
 			OutputDirectory="Release"
 			IntermediateDirectory="test.dir\Release"
 			ConfigurationType="1"
-			UseOfMFC="0"
 			InheritedPropertySheets="$(SolutionDir)sim\win32\sim-default.vsprops"
+			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
 			>
@@ -458,7 +458,7 @@
 						AdditionalOptions="/U HAVE_CONFIG_H"
 					/>
 				</FileConfiguration>
-			</File>			
+			</File>
 			<File
 				RelativePath=".\tests\testclientsocket.cpp"
 				>
@@ -479,7 +479,7 @@
 					/>
 				</FileConfiguration>
 			</File>
- 			<File
+			<File
 				RelativePath=".\tests\testconfig.cpp"
 				>
 				<FileConfiguration
@@ -504,6 +504,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\tests\testeventhub.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\tests\testpropertyhub.cpp"
 				>
 				<FileConfiguration
@@ -526,7 +530,7 @@
 						AdditionalOptions="/U HAVE_CONFIG_H"
 					/>
 				</FileConfiguration>
-			</File>			
+			</File>
 			<File
 				RelativePath=".\tests\testsocketfactory.cpp"
 				>
@@ -566,7 +570,7 @@
 					RelativePath=".\tests\moc_testbuffer.cpp"
 					>
 				</File>
- 				<File
+				<File
 					RelativePath=".\tests\moc_testclientmanager.cpp"
 					>
 					<FileConfiguration
@@ -577,7 +581,7 @@
 							AdditionalOptions="/U HAVE_CONFIG_H"
 						/>
 					</FileConfiguration>
-				</File>				
+				</File>
 				<File
 					RelativePath=".\tests\moc_testclientsocket.cpp"
 					>
@@ -590,7 +594,7 @@
 						/>
 					</FileConfiguration>
 				</File>
- 				<File
+				<File
 					RelativePath=".\tests\moc_testconfig.cpp"
 					>
 				</File>
@@ -685,7 +689,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputName).h ..."
-						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h"
+						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h&#x0D;&#x0A;"
 						Outputs="$(InputDir)moc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
@@ -695,7 +699,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputName).h ..."
-						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h"
+						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h&#x0D;&#x0A;"
 						Outputs="$(InputDir)moc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
@@ -703,7 +707,7 @@
 			<File
 				RelativePath=".\tests\testclientsocket.h"
 				>
- 				<FileConfiguration
+				<FileConfiguration
 					Name="Debug|Win32"
 					>
 					<Tool
@@ -714,16 +718,16 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
- 					Name="Release|Win32"
- 					>
- 					<Tool
- 						Name="VCCustomBuildTool"
- 						Description="Moc&apos;ing $(InputName).h ..."
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputName).h ..."
 						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h&#x0D;&#x0A;"
- 						Outputs="$(InputDir)moc_$(InputName).cpp"
- 					/>
- 				</FileConfiguration>
- 			</File>
+						Outputs="$(InputDir)moc_$(InputName).cpp"
+					/>
+				</FileConfiguration>
+			</File>
 			<File
 				RelativePath=".\tests\testconfig.h"
 				>
@@ -748,6 +752,50 @@
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputName).h ..."
 						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h&#x0D;&#x0A;"
+						Outputs="$(InputDir)moc_$(InputName).cpp"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\tests\testeventhub.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputName).h ..."
+						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h"
+						Outputs="$(InputDir)moc_$(InputName).cpp"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputName).h ..."
+						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h"
+						Outputs="$(InputDir)moc_$(InputName).cpp"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="MinSizeRel|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputName).h ..."
+						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h"
+						Outputs="$(InputDir)moc_$(InputName).cpp"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="RelWithDebInfo|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputName).h ..."
+						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h"
 						Outputs="$(InputDir)moc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
@@ -789,7 +837,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputName).h ..."
-						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h"
+						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h&#x0D;&#x0A;"
 						Outputs="$(InputDir)moc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
@@ -799,7 +847,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputName).h ..."
-						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h"
+						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h&#x0D;&#x0A;"
 						Outputs="$(InputDir)moc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
