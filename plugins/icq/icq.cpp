@@ -80,7 +80,7 @@ IMContact* ICQProtocol::createIMContact(const QSharedPointer<Client>& client)
     return new ICQUserData(client);
 }
 
-QStringList ICQProtocol::statuses()
+QStringList ICQProtocol::states()
 {
     QStringList list;
     foreach(const ICQStatusPtr& status, m_states) 
@@ -269,7 +269,7 @@ AIMProtocol::~AIMProtocol()
 {
 }
 
-QStringList AIMProtocol::statuses()
+QStringList AIMProtocol::states()
 {
 	// TODO
 	return QStringList();

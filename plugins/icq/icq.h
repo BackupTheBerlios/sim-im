@@ -53,7 +53,7 @@ public:
     virtual const SIM::DataDef *userDataDef();
     virtual SIM::IMContact* createIMContact(const QSharedPointer<SIM::Client>& client);
     static const SIM::DataDef *icqUserData;
-    virtual QStringList statuses();
+	virtual QStringList states();
 	virtual SIM::IMStatusPtr status(const QString& id);
 
 private:
@@ -74,7 +74,7 @@ public:
     virtual const SIM::DataDef *userDataDef();
     virtual SIM::IMContact* createIMContact(const QSharedPointer<SIM::Client>& client);
     static const SIM::DataDef *icqUserData;
-    virtual QStringList statuses();
+	virtual QStringList states();
 	virtual SIM::IMStatusPtr status(const QString& id);
 };
 

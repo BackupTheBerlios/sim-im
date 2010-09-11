@@ -80,7 +80,7 @@ protected:
     QTreeWidgetItem *m_pressedItem;
 };
 
-class EXPORT ContactDragObject : public QMimeData
+class CORE_EXPORT ContactDragObject : public QMimeData
 {
     Q_OBJECT
 public:

@@ -923,7 +923,7 @@ bool UserListBase::updateContactGroupMode2(SIM::Contact* contact)
     }
     if (unread == 0 && !bShow && status <= STATUS_OFFLINE && m_bShowOnline)
         return changed;
-    DivItem *divItem;
+    DivItem *divItem=NULL;
     if (status > STATUS_OFFLINE)
         divItem = m_itemOnline;
     else if (m_itemOffline == NULL)

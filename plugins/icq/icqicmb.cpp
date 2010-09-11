@@ -387,21 +387,21 @@ bool SnacIcqICBM::sendThruServer(Message *msg, void *_data)
         //    processsendqueue();
         //    return true;
         //}
-        if (data->getStatus() != ICQ_STATUS_OFFLINE && 
-            data->getVersion() >= 8                 && 
-            !data->getBadClient()                   && 
-            (unsigned)msg->getPlainText().length() >= MAX_PLAIN_MESSAGE_SIZE)
-        {
-                s.flags  = SEND_TYPE2;
-                s.msg    = msg;
-                s.text   = msg->getPlainText();
-                s.screen = client()->screen(data);
-                sendFgQueue.push_back(s);
-                processSendQueue();
-                return true;
+
+        if ((data->getStatus() != ICQ_STATUS_OFFLINE) &&
+                (data->getVersion() >= 8) &&
+                !data->getBadClient() &&
+                ((unsigned)msg->getPlainText().length() >= MAX_PLAIN_MESSAGE_SIZE)){
+            s.flags  = SEND_TYPE2;
+            s.msg    = msg;
+            s.text   = msg->getPlainText();
+            s.screen = client()->screen(data);
+            sendFgQueue.push_back(s);
+            processSendQueue();
+            return true;
         }
-        if (data->getUin() == 0 || client()->m_bAIM)
-        {
+
+        if ((data->getUin() == 0) || client()->m_bAIM){
             s.msg	 = msg;
             if (msg->getFlags() & MESSAGE_RICHTEXT)
             {
