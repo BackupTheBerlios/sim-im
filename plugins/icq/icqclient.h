@@ -170,6 +170,9 @@ const unsigned RATE_LIMIT = 5;
 
 const unsigned short SEARCH_DONE = USHRT_MAX;
 
+const unsigned short TLV_CONTENT          = 0x2711;
+const unsigned short TLV_EXTENDED_CONTENT = 0x2712;
+
 class AIMFileTransfer;
 class DirectClient;
 

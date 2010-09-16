@@ -51,6 +51,8 @@ email                : vovan@shutoff.ru
 #include "contacts/contact.h"
 #include "contacts/group.h"
 
+
+
 using namespace std;
 using namespace SIM;
 
@@ -260,8 +262,8 @@ void SnacIcqICBM::sendType2(const QString &screen, ICQBuffer &msgBuf, const Mess
     copyTlv(b, tlvs, 0x02);
     copyTlv(b, tlvs, 0x16);
     if(type != 4)
-        b.tlv(0x2711, msgBuf);
-    copyTlv(b, tlvs, 0x2712);
+        b.tlv(TLV_CONTENT, msgBuf);
+    copyTlv(b, tlvs, TLV_EXTENDED_CONTENT);
     copyTlv(b, tlvs, 0x03);
     sendThroughServer(screen, 2, b, id, bOffline, true);
 }
@@ -510,7 +512,7 @@ void SnacIcqICBM::sendFile(TlvList& tlv, unsigned long primary_ip, unsigned long
 {
     log(L_DEBUG, "ICQClient::icbmSendFile()");
     Tlv *desc = tlv(0x0A);
-    Tlv *info = tlv(0x2711);
+    Tlv *info = tlv(TLV_CONTENT);
     QString d;
     unsigned short type;
     unsigned short nFiles;
@@ -540,7 +542,7 @@ void SnacIcqICBM::sendFile(TlvList& tlv, unsigned long primary_ip, unsigned long
         }
         ICQBuffer b(*info);
         b >> type >> nFiles >> size;
-        QString name = client()->convert(b.data(8), b.size() - 8, tlv, 0x2712);
+        QString name = client()->convert(b.data(8), b.size() - 8, tlv, TLV_EXTENDED_CONTENT);
         AIMFileMessage *msg = new AIMFileMessage;
         msg->setPort(port);
         msg->setBackground(client()->clearTags(d));
@@ -1462,9 +1464,9 @@ void SnacIcqICBM::parseAdvancedMessage(const QString &screen, ICQBuffer &m, bool
     if (!memcmp(cap, m_client->capabilities[CAP_DIRECT], sizeof(cap)))
 	{
         TlvList tlv(m);
-        if(!tlv(0x2711))
+        if(!tlv(TLV_CONTENT))
 		{
-            log(L_DEBUG, "TLV 0x2711 not found");
+            log(L_DEBUG, "TLV TLV_INFO not found");
             return;
         }
         unsigned long req_uin;
@@ -1473,7 +1475,7 @@ void SnacIcqICBM::parseAdvancedMessage(const QString &screen, ICQBuffer &m, bool
         unsigned long remotePort;
         unsigned long localPort1;
         char mode;
-        ICQBuffer adv(*tlv(0x2711));
+        ICQBuffer adv(*tlv(TLV_CONTENT));
         adv.unpack(req_uin);
         adv.unpack(localIP);
         adv.unpack(localPort);
@@ -1561,11 +1563,11 @@ void SnacIcqICBM::parseAdvancedMessage(const QString &screen, ICQBuffer &m, bool
     if (!memcmp(cap, m_client->capabilities[CAP_AIM_BUDDYLIST], sizeof(cap)))
 	{
         log(L_DEBUG, "AIM buddies list");
-        if (!tlv(0x2711)){
+        if (!tlv(TLV_CONTENT)){
             log(L_WARN, "No body in ICMB message found");
             return;
         }
-        ICQBuffer adv(*tlv(0x2711));
+        ICQBuffer adv(*tlv(TLV_CONTENT));
         QString contacts;
         while (adv.readPos() < (unsigned)adv.size()){
             QString grp;
@@ -1612,12 +1614,12 @@ void SnacIcqICBM::parseAdvancedMessage(const QString &screen, ICQBuffer &m, bool
         return;
     }
 
-    if (!tlv(0x2711)){
+    if (!tlv(TLV_CONTENT)){
         log(L_WARN, "No body in ICMB message found");
         return;
     }
 
-    ICQBuffer adv(*tlv(0x2711));
+    ICQBuffer adv(*tlv(TLV_CONTENT));
     unsigned short len;
     unsigned short tcp_version;
     plugin p;
@@ -2469,7 +2471,7 @@ bool SnacIcqICBM::processMsg()
                     break;
                 }
             charset = bWide ? "utf8" : "us-ascii";
-            tlvs += new Tlv(0x2712, charset.length(), charset.toUtf8());
+            tlvs += new Tlv(TLV_EXTENDED_CONTENT, charset.length(), charset.toUtf8());
             msgBuf << (const char*)(fname.toUtf8()) << (char)0;
             sendType2(m_send.screen, msgBuf, m_send.id, CAP_AIM_SENDFILE, false, m_send.socket->localPort(), &tlvs);
             return true;

@@ -847,17 +847,16 @@ void ICQClient::sendInvisible(bool bInvisible)
 
 ListRequest *ICQClient::findContactListRequest(const QString &screen)
 {
-    for (list<ListRequest>::iterator it = listRequests.begin(); it != listRequests.end(); ++it){
-        if (((it->type == LIST_USER_CHANGED) || (it->type == LIST_USER_DELETED)) &&
-                (it->screen == screen))
+    for (list<ListRequest>::iterator it = listRequests.begin(); it != listRequests.end(); ++it)
+        if ((it->type == LIST_USER_CHANGED || it->type == LIST_USER_DELETED) && it->screen == screen)
             return &(*it);
-    }
     return NULL;
 }
 
 ListRequest *ICQClient::findGroupListRequest(unsigned short id)
 {
-    for (list<ListRequest>::iterator it = listRequests.begin(); it != listRequests.end(); ++it){
+    for (list<ListRequest>::iterator it = listRequests.begin(); it != listRequests.end(); ++it)
+    {
         switch (it->type){
         case LIST_GROUP_DELETED:
         case LIST_GROUP_CHANGED:
@@ -871,17 +870,18 @@ ListRequest *ICQClient::findGroupListRequest(unsigned short id)
 
 void ICQClient::removeListRequest(ListRequest *lr)
 {
-    for (list<ListRequest>::iterator it = listRequests.begin(); it != listRequests.end(); ++it){
-        if (&(*it) == lr){
+    for (list<ListRequest>::iterator it = listRequests.begin(); it != listRequests.end(); ++it)
+        if (&(*it) == lr)
+        {
             listRequests.erase(it);
             return;
         }
-    }
 }
 
 void ICQClient::clearListServerRequest()
 {
-    if (m_listRequest){
+    if (m_listRequest)
+    {
         delete m_listRequest;
         m_listRequest = NULL;
     }
@@ -899,7 +899,8 @@ void GroupServerRequest::process(ICQClient *client, unsigned short res)
     ListServerRequest::process(client, res);
 
     ListRequest *lr = client->findGroupListRequest(m_icqId);
-    if (lr && (lr->type == LIST_GROUP_DELETED)){
+    if (lr && (lr->type == LIST_GROUP_DELETED))
+    {
         lr->icq_id = 0;
         return;
     }
@@ -960,7 +961,8 @@ void ContactServerRequest::process(ICQClient *client, unsigned short res)
         EventContact e(contact, EventContact::eChanged);
         e.process();
     }
-    if (m_tlv){
+    if (m_tlv)
+    {
         Tlv *tlv_alias = (*m_tlv)(TLV_ALIAS);
         if (tlv_alias){
             // ok here since Alias is utf8 and TLV_ALIAS too

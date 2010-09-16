@@ -183,7 +183,8 @@ void SearchSocket::process()
 {
     if (!connected())
         return;
-    for (REQUEST_MAP::iterator it = m_requests.begin(); it != m_requests.end(); ++it){
+    for (REQUEST_MAP::iterator it = m_requests.begin(); it != m_requests.end(); ++it)
+    {
         snac(USER_DIRECTORY_SERVICE, USER_DIRECTORY_SEARCH, true);
         bool bLatin;
         if (!it->count() == 0)

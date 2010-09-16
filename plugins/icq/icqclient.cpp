@@ -65,6 +65,8 @@
 #include "icqdirect.h"
 
 
+const unsigned short FLAP_START = 0x2A;
+
 using namespace std;
 using namespace SIM;
 
@@ -548,7 +550,8 @@ unsigned long ICQUserData::getSign()
 
 void ICQUserData::deserialize(Buffer* cfg)
 {
-    while(1) {
+    for(;;)
+    {
         const QString line = QString::fromUtf8(cfg->getLine());
         if (line.isEmpty())
             break;
@@ -769,8 +772,10 @@ static DataDef icqClientData[] =
 static const char aim_server[] = "login.oscar.aol.com";
 static const char icq_server[] = "login.icq.com";
 
-ICQClientData::ICQClientData() : IMContact(),
-m_port(5190), owner(SIM::ClientPtr(0))
+ICQClientData::ICQClientData() 
+    : IMContact()
+    , m_port(5190)
+    , owner(SIM::ClientPtr(0))
 {
 
 }
@@ -808,7 +813,9 @@ QByteArray ICQClientData::serialize()
 
 void ICQClientData::deserialize(Buffer* cfg)
 {
-    while(1) {
+    
+    for(;;)
+    {
         const QString line = QString::fromUtf8(cfg->getLine());
         if (line.isEmpty())
             break;
@@ -827,81 +834,105 @@ void ICQClientData::deserializeLine(const QString& key, const QString& value)
         val = val.mid(1, val.length() - 2);
     if(key == "Server") {
         setServer(val);
+        return;
     }
-    else if(key == "ServerPort") {
+    if(key == "ServerPort") {
         setPort(val.toULong());
+        return;
     }
-    else if(key == "HideIP") {
+    if(key == "HideIP") {
         setHideIP(val == "true");
+        return;
     }
-    else if(key == "IgnoreAuth") {
+    if(key == "IgnoreAuth") {
         setIgnoreAuth(val == "true");
+        return;
     }
-    else if(key == "UseMD5") {
+    if(key == "UseMD5") {
         setUseMD5(val == "true");
+        return;
     }
-    else if(key == "DirectMode") {
+    if(key == "DirectMode") {
         setDirectMode(val.toULong());
+        return;
     }
-    else if(key == "IdleTime") {
+    if(key == "IdleTime") {
         setIdleTime(val.toULong());
+        return;
     }
-    else if(key == "ListRequests") {
-       setListRequests  (val);
+    if(key == "ListRequests") {
+        setListRequests  (val);
+        return;
     }
-    else if(key == "Picture") {
-       setPicture(val);
+    if(key == "Picture") {
+        setPicture(val);
+        return;
     }
-    else if(key == "RandomChatGroup") {
+    if(key == "RandomChatGroup") {
         setRandomChatGroup(val.toULong());
+        return;
     }
-    else if(key == "SendFormat") {
+    if(key == "SendFormat") {
         setSendFormat(val.toULong());
+        return;
     }
-    else if(key == "DisablePlugins") {
+    if(key == "DisablePlugins") {
         setDisablePlugins(val == "true");
+        return;
     }
-    else if(key == "DisableAutoUpdate") {
+    if(key == "DisableAutoUpdate") {
         setDisableAutoUpdate(val == "true");
+        return;
     }
-    else if(key == "DisableAutoReplyUpdate") {
+    if(key == "DisableAutoReplyUpdate") {
         setDisableAutoReplyUpdate(val == "true");
+        return;
     }
-    else if(key == "DisableTypingNotification") {
+    if(key == "DisableTypingNotification") {
         setDisableTypingNotification(val == "true");
+        return;
     }
-    else if(key == "AcceptInDND") {
+    if(key == "AcceptInDND") {
         setAcceptInDND(val == "true");
+        return;
     }
-    else if(key == "AcceptInOccupied") {
+    if(key == "AcceptInOccupied") {
         setAcceptInOccupied(val == "true");
+        return;
     }
-    else if(key == "MinPort") {
+    if(key == "MinPort") {
         setMinPort(val.toULong());
+        return;
     }
-    else if(key == "MaxPort") {
+    if(key == "MaxPort") {
         setMaxPort(val.toULong());
+        return;
     }
-    else if(key == "WarnAnonimously") {
+    if(key == "WarnAnonimously") {
         setWarnAnonymously(val == "true");
+        return;
     }
-    else if(key == "ACKMode") {
+    if(key == "ACKMode") {
         setAckMode(val.toULong());
+        return;
     }
-    else if(key == "UseHTTP") {
+    if(key == "UseHTTP") {
         setUseHttp(val == "true");
+        return;
     }
-    else if(key == "AutoHTTP") {
+    if(key == "AutoHTTP") {
         setAutoHttp(val == "true");
+        return;
     }
-    else if(key == "KeepAlive") {
+    if(key == "KeepAlive") {
         setKeepAlive(val == "true");
+        return;
     }
-    else if(key == "MediaSense") {
+    if(key == "MediaSense") {
         setMediaSense(val == "true");
+        return;
     }
-    else
-        owner.deserializeLine(key, value);
+    owner.deserializeLine(key, value);
 }
 
 unsigned long ICQClientData::getSign()
@@ -1867,7 +1898,7 @@ void OscarSocket::packet_ready()
 	{
         char c;
         socket()->readBuffer() >> c;
-        if (c != 0x2A)
+        if (c != FLAP_START)
         {
             log(L_ERROR, "Server send bad packet start code: %02X", c);
             socket()->error_state(I18N_NOOP("Protocol error"));

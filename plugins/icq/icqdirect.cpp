@@ -43,6 +43,7 @@
 
 #include "log.h"
 
+
 using namespace std;
 using namespace SIM;
 
@@ -2075,10 +2076,10 @@ void AIMFileTransfer::requestFT()
 			buf.pack((unsigned char)0);
 		}
 	}
-	b.tlv(0x2711, buf);
+	b.tlv(TLV_CONTENT, buf);
 	if(m_stage == 1)
 	{
-        b.tlv(0x2712, charset.toAscii(), charset.length());
+        b.tlv(TLV_EXTENDED_CONTENT, charset.toAscii(), charset.length());
 	}
     m_client->snacICBM()->sendThroughServer(m_client->screen(m_data), 2, b, m_cookie, false, true);
 }
