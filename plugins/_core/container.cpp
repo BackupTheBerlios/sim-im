@@ -105,9 +105,7 @@ Container::Container(unsigned id, const char *cfg)
     , m_avatar_label(&m_avatar_window)
     , m_tabBar      (NULL)
     , m_wnds        (NULL)
-{
-    
-
+{    
     m_avatar_window.setWidget(&m_avatar_label);
     //m_avatar_window.setOrientation(Qt::Vertical);
     m_avatar_window.setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -246,7 +244,7 @@ void Container::init()
     //connect(this, SIGNAL(toolBarPositionChanged(QToolBar*)), this, SLOT(toolbarChanged(QToolBar*)));
     connect(m_status, SIGNAL(sizeChanged(int)), this, SLOT(statusChanged(int)));
     setupAccel();
-    showBar();
+    showBar(); //Fixme, generates wrong data-type-MSGboxes 
 	setStatusBar(m_status);
 
     for (list<UserWnd*>::iterator it = m_childs.begin(); it != m_childs.end(); ++it)
@@ -254,13 +252,13 @@ void Container::init()
 
     m_childs.clear();
 
-    loadState();
+    loadState(); //Fixme, generates wrong data-type-MSGboxes
 
     if (m_tabBar->count() == 0)
         QTimer::singleShot(0, this, SLOT(close()));
-    setWindows(QString::null);
-    clearWndConfig();
-    m_tabBar->raiseTab(getActiveWindow());
+    //setWindows(QString()); //Fixme, Crash
+  
+    //m_tabBar->raiseTab(getActiveWindow()); //Fixme, Crash
     show();
 }
 
@@ -477,7 +475,7 @@ void Container::showBar()
     e.process();
     m_bar = e.toolBar();
     m_bBarChanged = true;
-    restoreToolbar(m_bar, data.barState);
+    restoreToolbar(m_bar, data.barState); //Fixme generates wrong data-type msg-boxes
     m_bar->show();
 	addToolBar(m_bar);
     m_bBarChanged = false;

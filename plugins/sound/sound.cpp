@@ -1,19 +1,19 @@
 /***************************************************************************
-                          sound.cpp  -  description
-                             -------------------
+    sound.cpp  -  description
+    -------------------
     begin                : Sun Mar 17 2002
     copyright            : (C) 2002 by Vladimir Shutoff
     email                : vovan@shutoff.ru
- ***************************************************************************/
+***************************************************************************/
 
 /***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+*                                                                         *
+***************************************************************************/
 
 #include <QDir>
 #include "simapi.h"
@@ -47,14 +47,14 @@ Plugin *createSoundPluginObject()
 }
 
 static PluginInfo info =
-    {
-        I18N_NOOP("Sound"),
-        I18N_NOOP("Plugin provides sounds on any events"),
-        VERSION,
-        createSoundPlugin,
-        PLUGIN_DEFAULT,
-        createSoundPluginObject
-    };
+{
+    I18N_NOOP("Sound"),
+    I18N_NOOP("Plugin provides sounds on any events"),
+    VERSION,
+    createSoundPlugin,
+    PLUGIN_DEFAULT,
+    createSoundPluginObject
+};
 
 EXPORT_PROC PluginInfo* GetPluginInfo()
 {
@@ -69,9 +69,9 @@ static QWidget *getSoundSetup(QWidget *parent, SIM::PropertyHubPtr data)
 }
 
 SoundPlugin::SoundPlugin(unsigned base, bool bFirst, Buffer *config)
-    : QObject(), Plugin(base)
+: QObject(), Plugin(base)
 {
-	m_propertyHub = SIM::PropertyHub::create("sound");
+    m_propertyHub = SIM::PropertyHub::create("sound");
     soundPlugin = this;
     m_media = Phonon::createPlayer(Phonon::NotificationCategory);
 
@@ -82,7 +82,7 @@ SoundPlugin::SoundPlugin(unsigned base, bool bFirst, Buffer *config)
     cmd->flags    = COMMAND_CONTACT;
     cmd->text	  = I18N_NOOP("&Sound");
     cmd->icon	  = "sound";
-	cmd->accel    = "sound";
+    cmd->accel    = "sound";
     cmd->icon_on  = QString();
     cmd->param	  = (void*)getSoundSetup;
     EventAddPreferences(cmd).process();
@@ -113,25 +113,25 @@ bool SoundPlugin::processEvent(SIM::Event *e)
 {
     switch (e->type())
     {
-        case eEventLoginStart:
+    case eEventLoginStart:
         {
             playSound(value("StartUp").toString());
             break;
         }
-        case eEventPluginLoadConfig:
-		{
-                        PropertyHubPtr hub = ProfileManager::instance()->getPropertyHub("sound");
-			if(!hub.isNull())
-				setPropertyHub(hub);
-			if(!value("StartUp").isValid())
-				setValue("StartUp", "sounds/startup.ogg");
-			if(!value("MessageSent").isValid())
-				setValue("MessageSent", "sounds/msgsent.ogg");
-			if(!value("FileDone").isValid())
-				setValue("FileDone", "sounds/filedone.ogg");
-			break;
-		}
-		case eEventContact:
+    case eEventPluginLoadConfig:
+        {
+            PropertyHubPtr hub = ProfileManager::instance()->getPropertyHub("sound");
+            if(!hub.isNull())
+                setPropertyHub(hub);
+            if(!value("StartUp").isValid())
+                setValue("StartUp", "sounds/startup.ogg");
+            if(!value("MessageSent").isValid())
+                setValue("MessageSent", "sounds/msgsent.ogg");
+            if(!value("FileDone").isValid())
+                setValue("FileDone", "sounds/filedone.ogg");
+            break;
+        }
+    case eEventContact:
         {
             EventContact *ec = static_cast<EventContact*>(e);
             if(ec->action() != EventContact::eOnline)
@@ -142,12 +142,10 @@ bool SoundPlugin::processEvent(SIM::Event *e)
             if(alert.isEmpty())
                 alert = getContacts()->userdata()->value("sound/Alert").toString();
             if (!alert.isEmpty() && !disable)
-            {
                 EventPlaySound(alert).process();
-            }
             break;
         }
-        case eEventMessageSent:
+    case eEventMessageSent:
         {
             EventMessage *em = static_cast<EventMessage*>(e);
             Message *msg = em->msg();
@@ -156,9 +154,7 @@ bool SoundPlugin::processEvent(SIM::Event *e)
                 return false;
             QString sound;
             if (msg->type() == MessageFile)
-            {
                 sound = value("FileDone").toString();
-            }
             else if ((msg->getFlags() & MESSAGE_NOHISTORY) == 0)
             {
                 if ((msg->getFlags() & MESSAGE_MULTIPLY) && ((msg->getFlags() & MESSAGE_LAST) == 0))
@@ -166,12 +162,10 @@ bool SoundPlugin::processEvent(SIM::Event *e)
                 sound = value("MessageSent").toString();
             }
             if (!sound.isEmpty())
-            {
                 EventPlaySound(sound).process();
-            }
             break;
         }
-        case eEventMessageReceived:
+    case eEventMessageReceived:
         {
             EventMessage *em = static_cast<EventMessage*>(e);
             Message *msg = em->msg();
@@ -203,13 +197,13 @@ bool SoundPlugin::processEvent(SIM::Event *e)
             }
             break;
         }
-        case eEventPlaySound:
+    case eEventPlaySound:
         {
             EventPlaySound *s = static_cast<EventPlaySound*>(e);
             playSound(s->sound());
             return true;
         }
-        default:
+    default:
         break;
     }
     return false;
@@ -237,35 +231,26 @@ void SoundPlugin::playSound(const QString& path)
 QString SoundPlugin::messageSound(unsigned type, unsigned long contact_id)
 {
     SIM::PropertyHubPtr data;
+    Contact *c = getContacts()->contact(contact_id);
     if(!contact_id)
-    {
         data = getContacts()->userdata();
-    }
-    else
+    else if(c)
     {
-        Contact* c = getContacts()->contact(contact_id);
-        if(c)
+        data = c->getUserData()->root();
+        if(!data->value("sound/override").toBool())
         {
-            data = c->getUserData()->root();
-            if(!data->value("sound/override").toBool())
-            {
-                Group* g = getContacts()->group(c->getGroup(), false);
-                if(g->userdata()->value("sound/override").toBool())
-                    data = g->userdata();
-                else
-                    data = getContacts()->userdata();
-            }
+            Group* g = getContacts()->group(c->getGroup(), false);
+            if(g->userdata()->value("sound/override").toBool())
+                data = g->userdata();
+            else
+                data = getContacts()->userdata();
         }
     }
     QString sound;
     if(data)
-    {
         sound = data->value("sound/Receive" + QString::number(type)).toString();
-    }
     if(sound == "(nosound)")
-    {
         return QString();
-    }
     return sound;
 }
 

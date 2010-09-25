@@ -1294,7 +1294,8 @@ Data &Data::operator =(const Data &d)
 
 void Data::clear(bool bNew)
 {
-    if(data) {
+    if(data) 
+    {
         delete data->m_dataAsQString;
         delete data->m_dataAsQStringMap;
         delete data->m_dataAsBinary;

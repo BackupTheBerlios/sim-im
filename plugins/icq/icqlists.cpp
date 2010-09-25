@@ -1452,8 +1452,13 @@ unsigned ICQClient::processListRequest()
                 break;
             }
             if (lr.screen.length() && lr.grp_id){
+                //__asm int 3;
                 group = getContacts()->group(contact->getGroup());
-				QString groupname = group->getName();
+                QString groupname;
+                if (group) //quickfix remove it, fix it real
+                    QString groupname = group->getName();
+                else
+                    return false;
 				/*
                 if(group)
 				{
