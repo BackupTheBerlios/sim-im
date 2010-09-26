@@ -332,7 +332,7 @@ void FileTransferDlg::process()
         if (!m_fn.isEmpty())
         {
             status += ' ';
-            status += QDir::convertSeparators(m_fn);
+            //status += QDir::convertSeparators(m_fn); //commented out, avoids doubling filenames in ft-dialog
             if (m_files > 1)
                 status += QString(" %1/%2")
                           .arg(m_file + 1)
