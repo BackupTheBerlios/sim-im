@@ -47,8 +47,9 @@ namespace testProtocolManager
             return 0;
         }
 
-        QStringList statuses() { return QStringList(); };
+        QStringList states() { return QStringList(); }
         IMStatusPtr status(const QString& id) { return IMStatusPtr(); }
+		virtual SIM::IMStatusInfo* statusInfo(const QString&) {}
     };
 
     void Test::initTestCase()

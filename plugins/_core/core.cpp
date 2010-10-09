@@ -287,7 +287,7 @@ CorePlugin::CorePlugin(unsigned base, Buffer* /*config*/)
 	createEventCmds();
     subscribeToEvents();
 
-    m_main = new MainWindow();
+    m_main = new MainWindow(this);
 }
 
 void CorePlugin::subscribeToEvents()
@@ -692,6 +692,11 @@ CorePlugin::~CorePlugin()
     prepareConfig();
 	//PropertyHub::save();
 	destroy();
+    if (m_containerManager)
+    {
+        delete m_containerManager;
+        m_containerManager = NULL;
+    }
 	delete m_lock;
 	delete m_cmds;
 	delete m_tmpl;

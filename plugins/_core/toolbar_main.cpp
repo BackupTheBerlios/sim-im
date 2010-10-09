@@ -38,14 +38,25 @@ void CorePlugin::createGroupModeMenu()
     groups->addSubCommand(dontshow);
     groups->addSubCommand(mode1);
     groups->addSubCommand(mode2);
+    groups->addSubCommand(getCommandHub()->command("show_offline"));
+
+    UiCommandPtr showEmptyGroups = UiCommand::create(I18N_NOOP("Show &empty groups"), QString(), "show_empty_groups", QStringList("groupmode_menu"));
+    groups->addSubCommand(showEmptyGroups);
+
+    UiCommandPtr createGroup = UiCommand::create(I18N_NOOP("&Create group"), "grp_create", "create_group", QStringList("groupmode_menu"));
+    groups->addSubCommand(createGroup);
+    groups->setWidgetType(UiCommand::wtButton);
     getCommandHub()->registerCommand(groups);
 }
 
 void CorePlugin::createMainToolbar()
 {
     log(L_DEBUG, "createMainToolbar()");
-    UiCommandPtr showOffline = UiCommand::create(I18N_NOOP("Show &offline"), "offline_on", "show_online", QStringList("main_toolbar"));
+    UiCommandPtr showOffline = UiCommand::create(I18N_NOOP("Show &offline"), "online_on", "show_offline", QStringList("main_toolbar"));
+    showOffline->setWidgetType(UiCommand::wtButton);
     showOffline->setCheckable(true);
+    if (value("ShowOnLine").toBool())
+        showOffline->setChecked(true);
     getCommandHub()->registerCommand(showOffline);
 
     createGroupModeMenu();

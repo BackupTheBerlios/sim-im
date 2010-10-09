@@ -1,88 +1,64 @@
 
-#include "testclientmanager.h"
+#include <gtest/gtest.h>
+#include <gmock/gmock.h>
+#include "stubs/stubclient.h"
+
+#include "contacts/client.h"
 #include "clientmanager.h"
 #include "contacts.h"
+#include "events/eventhub.h"
 
-namespace testClientManager
+namespace
 {
-    TestClient::TestClient(const QString& n, Protocol* protocol) : Client(protocol, 0),
-        m_name(n)
+    using namespace SIM;
+    class MockClient : public SIM::Client
     {
-    }
+        QString name();
+        QString dataName(void*);
+        QWidget *setupWnd();
+		IMContact* getOwnerContact();
+        void setOwnerContact(IMContact* contact);
+        QWidget *searchWindow(QWidget *parent);
+        bool isMyData(IMContact*&, Contact*&);
+        bool createData(IMContact*&, Contact*);
+        void contactInfo(void *clientData, unsigned long &status, unsigned &style, QString &statusIcon, QSet<QString> *icons);
+        void setupContact(Contact*, void *data);
+        bool send(Message*, void *data);
+        bool canSend(unsigned type, void *data);
+    };
 
-    QString TestClient::name()
+    class TestClientManager : public ::testing::Test
     {
-        return m_name;
-    }
+    protected:
+        void SetUp()
+        {
+            SIM::createEventHub();
+            SIM::createClientManager();
+            SIM::createContactList();
+        }
 
-    QString TestClient::dataName(void*)
-    {
-        return QString();
-    }
+        void TearDown()
+        {
+            SIM::destroyClientManager();
+            SIM::destroyContactList();
+            SIM::destroyEventHub();
+        }
 
-    QWidget* TestClient::setupWnd()
-    {
-        return NULL;
-    }
+        void testClientManipulation();
+    };
 
-    bool TestClient::isMyData(IMContact*& /*data*/, Contact*& /*contact*/)
+    TEST_F(TestClientManager, ClientManipulation)
     {
-        return false;
-    }
-
-    bool TestClient::createData(IMContact*& /*data*/, Contact* /*contact*/)
-    {
-        return false;
-    }
-
-	void TestClient::contactInfo(void* /*clientData*/, unsigned long& /*status*/, unsigned& /*style*/, QString& /*statusIcon*/, QSet<QString>* /*icons*/)
-    {
-    }
-
-	void TestClient::setupContact(Contact*, void* /*data*/)
-    {
-    }
-
-	bool TestClient::send(Message*, void* /*data*/)
-    {
-        return false;
-    }
-
-	bool TestClient::canSend(unsigned /*type*/, void* /*data*/)
-    {
-        return false;
-    }
-
-	QWidget* TestClient::searchWindow(QWidget* /*parent*/)
-    {
-        return NULL;
-    }
-    void Test::initTestCase()
-    {
-        SIM::createClientManager();
-        QVERIFY(SIM::getClientManager());
-        SIM::createContactList();
-    }
-
-    void Test::cleanupTestCase()
-    {
-        SIM::destroyClientManager();
-        QVERIFY(!SIM::getClientManager());
-        SIM::destroyContactList();
-    }
-
-    void Test::testClientManipulation()
-    {
-        SIM::ClientPtr icqclient = SIM::ClientPtr(new TestClient("ICQ.666666666", 0));
-        SIM::ClientPtr jabberclient = SIM::ClientPtr(new TestClient("Jabber.loh@jabber.org", 0));
-        QCOMPARE(icqclient->name(), QString("ICQ.666666666"));
+        SIM::ClientPtr icqclient = SIM::ClientPtr(new StubObjects::StubClient("ICQ.666666666"));
+        SIM::ClientPtr jabberclient = SIM::ClientPtr(new StubObjects::StubClient("Jabber.loh@jabber.org"));
+        EXPECT_TRUE(icqclient->name() == QString("ICQ.666666666"));
         SIM::getClientManager()->addClient(icqclient);
         SIM::getClientManager()->addClient(jabberclient);
         SIM::ClientPtr client2 = SIM::getClientManager()->client("ICQ.666666666");
-        QCOMPARE(client2->name(), QString("ICQ.666666666"));
+        EXPECT_TRUE(client2->name() == QString("ICQ.666666666"));
 
         SIM::ClientPtr nonexistant = SIM::getClientManager()->client("Nothing");
-        QVERIFY(nonexistant.isNull());
+        EXPECT_TRUE(nonexistant.isNull());
     }
 }
 

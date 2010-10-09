@@ -9,6 +9,7 @@
 #include "cfg.h"
 #include "contacts/imstatus.h"
 #include "contacts/imcontact.h"
+#include "contacts/imstatusinfo.h"
 
 namespace SIM
 {
@@ -24,6 +25,7 @@ namespace SIM
         virtual const CommandDef *description() = 0;
         virtual const CommandDef *statusList() = 0;
         virtual QStringList states() = 0;
+        //virtual IMStatusInfo* statusInfo(const QString& id) = 0;
         virtual IMStatusPtr status(const QString& id) = 0;
         virtual const DataDef *userDataDef() = 0;
         virtual IMContact* createIMContact(const QSharedPointer<Client>& client) = 0;

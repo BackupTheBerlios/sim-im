@@ -26,6 +26,7 @@
 #include "events/eventhub.h"
 #include "commands/commandhub.h"
 #include "commands/uicommand.h"
+#include "imagestorage/imagestorage.h"
 
 #include <QApplication>
 #include <QPixmap>
@@ -34,12 +35,14 @@
 #include <QSizeGrip>
 #include <QStatusBar>
 #include <QDesktopWidget>
+#include "profilemanager.h"
 
 using namespace SIM;
 
-MainWindow::MainWindow()
+MainWindow::MainWindow(CorePlugin* core)
     : QMainWindow(NULL, Qt::Window)
-    , EventReceiver(LowestPriority)
+    , EventReceiver(LowestPriority),
+    m_core(core)
 {
     log(L_DEBUG, "MainWindow::MainWindow()");
     setObjectName("mainwnd");
@@ -48,10 +51,10 @@ MainWindow::MainWindow()
     m_bNoResize = false;
 
     m_icon = "SIM";
-    setWindowIcon(Icon(m_icon));
+    setWindowIcon(getImageStorage()->icon(m_icon));
     setTitle();
 
-    m_bar = new QToolBar("Main toolbar");
+    m_bar = new SIM::ToolBar("Main toolbar", this);
 
     main = new QWidget(this);
     setCentralWidget(main);
@@ -62,49 +65,6 @@ MainWindow::MainWindow()
     QStatusBar *status = statusBar();
     status->show();
     status->installEventFilter(this);
-
-	m_view = new UserView;
-	m_view->init();
-
-	getEventHub()->getEvent("init")->connectTo(this, SLOT(eventInit()));
-}
-
-MainWindow::MainWindow(Geometry &geometry)
-    : QMainWindow(NULL, Qt::Window)
-    , EventReceiver(LowestPriority)
-{
-    log(L_DEBUG, "MainWindow::MainWindow()");
-    setObjectName("mainwnd");
-    setAttribute(Qt::WA_AlwaysShowToolTips);
-    h_lay	 = NULL;
-    m_bNoResize = false;
-
-    m_icon = "SIM";
-    setWindowIcon(Icon(m_icon));
-    setTitle();
-
-     m_bar = new QToolBar("Main toolbar");
-
-    main = new QWidget(this);
-    setCentralWidget(main);
-
-    lay = new QVBoxLayout(main);
-    lay->setMargin(0);
-
-    QStatusBar *status = statusBar();
-    status->show();
-    status->installEventFilter(this);
-    
-    if ((geometry[WIDTH].toLong() == -1) && (geometry[HEIGHT].toLong() == -1))
-    {
-        geometry[HEIGHT].asLong() = QApplication::desktop()->height() * 2 / 3;
-        geometry[WIDTH].asLong()  = geometry[HEIGHT].toLong() / 3;
-    }
-    if ((geometry[LEFT].toLong() == -1) && (geometry[TOP].toLong() == -1)){
-        geometry[LEFT].asLong() = QApplication::desktop()->width() - 25 - geometry[WIDTH].toLong();
-        geometry[TOP].asLong() = 5;
-    }
-    ::restoreGeometry(this, geometry, true, true);
 
 	m_view = new UserView;
 	m_view->init();
@@ -144,12 +104,22 @@ bool MainWindow::eventFilter(QObject *o, QEvent *e)
     return QMainWindow::eventFilter(o, e);
 }
 
+void MainWindow::loadDefaultCommandList()
+{
+    log(L_DEBUG, "loadDefaultCommandList");
+    m_bar->addUiCommand(getCommandHub()->command("show_offline"));
+    m_bar->addUiCommand(getCommandHub()->command("groupmode_menu"));
+    m_bar->addSeparator();
+}
+
 void MainWindow::populateMainToolbar()
 {
-    QStringList cmds = getCommandHub()->commandsForTag("main_toolbar");
-    foreach(const QString& cmdId, cmds) {
-        UiCommandPtr cmd = getCommandHub()->command(cmdId);
-        m_bar->addAction(cmd.data());
+    QStringList actions = m_core->propertyHub()->value("mainwindow_toolbar_actions").toStringList();
+    if(actions.isEmpty()) {
+        loadDefaultCommandList();
+    }
+    else {
+        m_bar->loadCommandList(actions);
     }
 }
 
@@ -221,6 +191,7 @@ void MainWindow::closeEvent(QCloseEvent *e)
 {
 	CorePlugin::instance()->prepareConfig();
     save_state();
+    m_core->propertyHub()->setValue("mainwindow_toolbar_actions", m_bar->saveCommandList());
     QMainWindow::closeEvent(e);
     qApp->quit();
 }

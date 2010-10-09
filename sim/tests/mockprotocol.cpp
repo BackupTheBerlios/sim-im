@@ -107,7 +107,7 @@ namespace test
         return 0;
     }
 
-    QStringList MockProtocol::statuses()
+    QStringList MockProtocol::states()
     {
         return QStringList();
     }

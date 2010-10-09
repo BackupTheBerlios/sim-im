@@ -1,6 +1,7 @@
 ###############
 # icq library #
 ###############
+IF(BUILD_DROPPED)
 SET(icq_SRCS
         aboutinfo.cpp
         advsearch.cpp
@@ -103,3 +104,4 @@ SET(icq_UICS
 ADD_FLEX_FILES(icq_SRCS rtf.ll)
 
 SIM_ADD_PLUGIN(icq)
+ENDIF(BUILD_DROPPED)

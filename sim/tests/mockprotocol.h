@@ -35,10 +35,11 @@ namespace test
         virtual QSharedPointer<Client> createClient(const QString& n, Buffer *cfg);
         virtual const CommandDef *description();
         virtual const CommandDef *statusList();
-        virtual QStringList statuses();
+        virtual QStringList states();
         virtual IMStatusPtr status(const QString& id);
         virtual const DataDef *userDataDef();
         virtual IMContact* createIMContact(const QSharedPointer<SIM::Client>& client);
+		virtual SIM::IMStatusInfo* statusInfo(const QString&) {}
     };
 }
 

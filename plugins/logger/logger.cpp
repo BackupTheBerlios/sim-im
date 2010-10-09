@@ -72,7 +72,6 @@ LoggerPlugin::LoggerPlugin(unsigned base, Buffer *add_info)
         , m_file(NULL)
         , m_bFilter(false)
 {
-    printf("LoggerPlugin:\n");
     m_propertyHub = PropertyHub::create("logger");
     EventArg e("-d:", I18N_NOOP("Set debug level"));
     if (e.process())

@@ -30,6 +30,7 @@ SET(sim_LIB_SRCS
 		fetch.cpp
 		icons.cpp
         imagestorage/imagestorage.cpp
+        imagestorage/standardimagestorage.cpp
         imagestorage/iconset.cpp
         imagestorage/jispiconset.cpp
 		log.cpp
@@ -58,6 +59,7 @@ SET(sim_LIB_SRCS
 		contacts/client.cpp
 		contacts/imstatus.cpp
         contacts/imcontact.cpp
+        contacts/imstatusinfo.cpp
 		socket/socket.cpp
 		socket/serversocketnotify.cpp
 		socket/serversocket.cpp
@@ -85,6 +87,10 @@ SET(sim_LIB_SRCS
 		simgui/qkeybutton.cpp
 		simgui/textshow.cpp
 		simgui/toolbtn.cpp
+        simgui/toolbar.cpp
+        simgui/toolbaractionfactory.cpp
+        simgui/standardtoolbaractionfactory.cpp
+        simgui/toolitem.cpp
 	)
 
 SET(sim_LIB_MESSAGE_SOURCES  ${sim_LIB_SRCS} PARENT_SCOPE)
@@ -111,6 +117,7 @@ SET(sim_LIB_HDRS
 		fetch.h
 		icons.h
         imagestorage/imagestorage.h
+        imagestorage/standardimagestorage.h
         imagestorage/iconset.h
         imagestorage/jispiconset.h
 		log.h
@@ -142,6 +149,7 @@ SET(sim_LIB_HDRS
 		contacts/client.h
 		contacts/imstatus.h
         contacts/imcontact.h
+        contacts/imstatusinfo.h
 		socket/socket.h
 		socket/socketnotify.h
 		socket/serversocketnotify.h
@@ -169,6 +177,10 @@ SET(sim_LIB_HDRS
 		simgui/qkeybutton.h
 		simgui/textshow.h
 		simgui/toolbtn.h
+        simgui/toolbar.h
+        simgui/toolbaractionfactory.h
+        simgui/standardtoolbaractionfactory.h
+        simgui/toolitem.h
 	)
 
 #SET(sim_ui
@@ -240,41 +252,26 @@ ENDIF(APPLE)
 SET(sim_tests_srcs
     tests/test.cpp
     tests/testbuffer.cpp
-    tests/testconfig.cpp
     tests/testclientmanager.cpp
-    tests/testsocketfactory.cpp
-    tests/testclientsocket.cpp
-    tests/testcontactlist.cpp
-    tests/testcontact.cpp
-    tests/testprotocolmanager.cpp
-    tests/testpropertyhub.cpp
-    tests/testuserdata.cpp
-    tests/testeventhub.cpp
-    tests/mockclient.cpp
-    tests/mockprotocol.cpp
+	tests/testcommandhub.cpp
+    tests/testuicommand.cpp
+    tests/testtoolbar.cpp
+    tests/teststandardtoolbaractionfactory.cpp
 )
 
 
 SET(sim_tests_hdrs
-    tests/testbuffer.h
-    tests/testconfig.h
-    tests/testclientmanager.h
-    tests/testsocketfactory.h
-    tests/testclientsocket.h
-    tests/testcontactlist.h
-    tests/testcontact.h
-    tests/testprotocolmanager.h
-    tests/testpropertyhub.h
-    tests/testuserdata.h
-    tests/testeventhub.h
     tests/mockclient.h
     tests/mockprotocol.h
+    tests/stubs/stubclient.h
+    tests/stubs/stubimagestorage.h
+    tests/testuicommand.h
 )
 
 QT4_WRAP_CPP(testmocs ${sim_tests_hdrs})
 
 ADD_EXECUTABLE(test ${sim_tests_srcs} ${testmocs})
-TARGET_LINK_LIBRARIES(test simlib ${QT_LIBRARIES} ${sim_ui_headers})
+TARGET_LINK_LIBRARIES(test simlib ${QT_LIBRARIES} ${sim_ui_headers} gtest gmock)
 
 ##################
 # sim executable #

@@ -35,6 +35,8 @@
 #include "socket/socketfactory.h"
 #include "clientmanager.h"
 #include "simgui/ballonmsg.h"
+#include "commands/commandhub.h"
+#include "commands/uicommand.h"
 
 using namespace std;
 using namespace SIM;
@@ -60,8 +62,11 @@ CommonStatus::CommonStatus()
 
     EventCommandCreate(cmd).process();
 
-    m_bInitialized = false;
+    UiCommandPtr statusMenu = UiCommand::create(I18N_NOOP("Status"), "SIM_inactive", "common_status", QStringList("main_toolbar"));
     rebuildStatus();
+    getCommandHub()->registerCommand(statusMenu);
+
+    m_bInitialized = false;
     QTimer::singleShot(500, this, SLOT(setBarStatus()));
 
     getEventHub()->getEvent("init")->connectTo(this, SLOT(eventInit()));
@@ -237,7 +242,7 @@ void CommonStatus::rebuildStatus()
 			else
 				it->second++;
         }
-		if (!(nInvisible == -1 && client->protocol()->description()->flags & PROTOCOL_INVISIBLE))
+        if (!(nInvisible == -1 && client->protocol()->description()->flags & PROTOCOL_INVISIBLE))
 			continue;
 
 		nInvisible = i;

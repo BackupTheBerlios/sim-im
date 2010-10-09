@@ -33,7 +33,6 @@ private:
     QIcon m_icon;
     QString m_show;
     QString m_type;
-
 };
 
 typedef QSharedPointer<JabberStatus> JabberStatusPtr;

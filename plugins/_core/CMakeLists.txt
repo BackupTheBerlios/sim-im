@@ -167,6 +167,13 @@ SET(_core_UICS
         userviewcfgbase.ui
 )
 
+SET(core_test_sources
+        tests/test.cpp
+		tests/testcoreplugin.cpp)
+
+ADD_EXECUTABLE(test_core ${core_test_sources})
+TARGET_LINK_LIBRARIES(test_core simlib ${QT_LIBRARIES} gtest gmock _core)
+
 # so we don't need an extra CMakeLists.txt in every subdirectory
 ADD_JISP_ARCHIVE(jisp       sim.jisp        _core_SRCS)
 

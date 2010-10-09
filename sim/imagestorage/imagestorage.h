@@ -11,27 +11,23 @@
 
 namespace SIM {
 
-class EXPORT ImageStorage : public QObject
+class EXPORT ImageStorage
 {
-    Q_OBJECT
 public:
-    explicit ImageStorage(QObject *parent = 0);
-    virtual ~ImageStorage();
+    virtual ~ImageStorage() {}
 
-    QIcon icon(const QString& id);
-    QImage image(const QString& id);
-    QPixmap pixmap(const QString& id);
+    virtual QIcon icon(const QString& id) = 0;
+    virtual QImage image(const QString& id) = 0;
+    virtual QPixmap pixmap(const QString& id) = 0;
 
-    bool addIconSet(IconSet* set);
-    bool removeIconset(const QString& id);
+    virtual bool addIconSet(IconSet* set) = 0;
+    virtual bool removeIconset(const QString& id) = 0;
 
-    QString parseSmiles(const QString& input);
-
-private:
-    QList<IconSet*> m_sets;
+    virtual QString parseSmiles(const QString& input) = 0;
 };
 
 EXPORT ImageStorage* getImageStorage();
+void EXPORT setImageStorage(ImageStorage* storage);
 void EXPORT createImageStorage();
 void EXPORT destroyImageStorage();
 

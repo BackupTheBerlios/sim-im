@@ -1,6 +1,7 @@
 ##################
 # jabber library #
 ##################
+IF(BUILD_DROPPED)
 SET(jabber_SRCS
         discoinfo.cpp
         httppoll.cpp
@@ -65,4 +66,6 @@ SET(jabber_UICS
 )
 
 SIM_ADD_PLUGIN(jabber)
+
+ENDIF(BUILD_DROPPED)
 

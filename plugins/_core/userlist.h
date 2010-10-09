@@ -22,10 +22,11 @@
 #include "simgui/listview.h"
 #include "contacts/contact.h"
 #include "contacts/group.h"
+#include "core.h"
 #include <QMouseEvent>
 #include <QTimer>
 #include <QSharedPointer>
-
+#include <QMimeData>
 using namespace std;
 using namespace SIM;
 
@@ -80,7 +81,7 @@ protected:
     QTreeWidgetItem *m_pressedItem;
 };
 
-class CORE_EXPORT ContactDragObject : public QMimeData
+class EXPORT ContactDragObject : public QMimeData
 {
     Q_OBJECT
 public:

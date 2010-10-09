@@ -21,6 +21,7 @@
 #include <list>
 #include "simapi.h"
 #include "event.h"
+#include "simgui/toolbar.h"
 
 #include "cfg.h"
 
@@ -38,21 +39,19 @@ class QResizeEvent;
 class QSizeGrip;
 class QVBoxLayout;
 
+class CorePlugin;
 class UserView;
 
 class MainWindow : public QMainWindow, public SIM::EventReceiver
 {
     Q_OBJECT
 public:
-    MainWindow();
-    MainWindow(SIM::Geometry&);
+    MainWindow(CorePlugin* core);
     ~MainWindow();
     bool m_bNoResize;
-    void closeEvent(QCloseEvent *e);
 protected:
     QWidget *main;
-    //CToolBar *m_bar;
-    QToolBar* m_bar;
+    SIM::ToolBar* m_bar;
     QVBoxLayout *lay;
     QHBoxLayout *h_lay;
     void focusInEvent(QFocusEvent*);
@@ -65,11 +64,16 @@ protected:
     void addStatus(QWidget *w, bool);
     list<QWidget*> statusWidgets;
     QString	m_icon;
+
+    virtual void closeEvent(QCloseEvent *e);
+
     friend class CorePlugin;
 
 private:
     void populateMainToolbar();
-	UserView* m_view;
+    void loadDefaultCommandList();
+    UserView* m_view;
+    CorePlugin* m_core;
 
 private slots:
     void eventInit();
