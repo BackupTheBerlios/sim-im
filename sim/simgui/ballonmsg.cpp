@@ -36,7 +36,6 @@
 #include <QTextDocument>
 
 #include "misc.h"
-#include "unquot.h"
 
 #define BALLOON_R               10
 #define BALLOON_TAIL            20
@@ -90,7 +89,7 @@ BalloonMsg::BalloonMsg(void *param, const QString &text, QStringList &btn, QWidg
             bFirst = false;
         }
     }
-    setButtonsPict(this);
+    //setButtonsPict(this);
     lay->addStretch();
     int hButton  = frm->minimumSizeHint().height();
 
@@ -212,7 +211,7 @@ BalloonMsg::BalloonMsg(void *param, const QString &text, QStringList &btn, QWidg
     if (parent)
         top = parent->topLevelWidget();
     if (top){
-        raiseWindow(top);
+        //raiseWindow(top);
         top->installEventFilter(this);
     }
 }
@@ -272,7 +271,7 @@ void BalloonMsg::message(const QString &text, QWidget *parent, bool bModal, unsi
 {
     QStringList btns;
     btns.append(i18n("&Ok"));
-    BalloonMsg *msg = new BalloonMsg(NULL, QString("<center>") + quoteString(text) + "</center>", btns, parent, rc, bModal, true, width);
+    BalloonMsg *msg = new BalloonMsg(NULL, QString("<center>") + (text) + "</center>", btns, parent, rc, bModal, true, width);
     if (bModal){
         msg->exec();
     }else{
@@ -288,7 +287,7 @@ void BalloonMsg::ask(void *param, const QString &text, QWidget *parent,
     QStringList btns;
     btns.append(i18n("&Yes"));
     btns.append(i18n("&No"));
-    BalloonMsg *msg = new BalloonMsg(param, QString("<center>") + quoteString(text) + "</center>", btns, parent, rc, false, true, 300, checkText, bCheck);
+    BalloonMsg *msg = new BalloonMsg(param, QString("<center>") + (text) + "</center>", btns, parent, rc, false, true, 300, checkText, bCheck);
     if (receiver == NULL)
         receiver = parent;
     if (slotYes)

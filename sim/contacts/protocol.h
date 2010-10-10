@@ -20,15 +20,12 @@ namespace SIM
         Protocol(Plugin *plugin=NULL);
         virtual ~Protocol();
         Plugin  *plugin() { return m_plugin; }
+        virtual QString name() = 0;
         virtual QSharedPointer<Client> createClient(Buffer *cfg) = 0;
         virtual QSharedPointer<Client> createClient(const QString& name) = 0;
-        virtual const CommandDef *description() = 0;
-        virtual const CommandDef *statusList() = 0;
         virtual QStringList states() = 0;
-        //virtual IMStatusInfo* statusInfo(const QString& id) = 0;
         virtual IMStatusPtr status(const QString& id) = 0;
-        virtual const DataDef *userDataDef() = 0;
-        virtual IMContact* createIMContact(const QSharedPointer<Client>& client) = 0;
+        virtual IMContactPtr createIMContact(const QSharedPointer<Client>& client) = 0;
 
     protected:
         Plugin *m_plugin;

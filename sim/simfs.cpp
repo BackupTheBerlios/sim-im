@@ -1,5 +1,4 @@
 #include "simfs.h"
-#include "icons.h"
 
 #include <QDateTime>
 
@@ -74,23 +73,23 @@ bool SimFileEngine::mkdir( const QString & /*dirName*/, bool /*createParentDirec
 }
 
 bool SimFileEngine::open( QIODevice::OpenMode mode ) {
-    if( mode & QIODevice::WriteOnly )
-        return false;
+//    if( mode & QIODevice::WriteOnly )
+//        return false;
 
-    QString sType = m_fileName.left( m_fileName.indexOf( '/' ) ).toLower();
-    QString sName = m_fileName.right( m_fileName.length() - m_fileName.indexOf( '/' ) - 1);
+//    QString sType = m_fileName.left( m_fileName.indexOf( '/' ) ).toLower();
+//    QString sName = m_fileName.right( m_fileName.length() - m_fileName.indexOf( '/' ) - 1);
 
-    if( sType == "icons" ) {
-        QPixmap pict = SIM::Pict( sName );
-        if( pict.isNull() )
-            return false;
-        if( !m_buffer.open( QIODevice::WriteOnly ) )
-            return false;
-        if( !pict.save( &m_buffer, "PNG" ) )
-            return false;
-        m_buffer.close();
-        return m_buffer.open( mode );
-    }
+//    if( sType == "icons" ) {
+//        QPixmap pict = SIM::Pict( sName );
+//        if( pict.isNull() )
+//            return false;
+//        if( !m_buffer.open( QIODevice::WriteOnly ) )
+//            return false;
+//        if( !pict.save( &m_buffer, "PNG" ) )
+//            return false;
+//        m_buffer.close();
+//        return m_buffer.open( mode );
+//    }
 
     return false;
 }

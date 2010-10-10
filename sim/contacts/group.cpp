@@ -3,138 +3,127 @@
 
 #include "group.h"
 
-#include "contacts.h"
+#include "contacts/client.h"
+#include "contacts/contactlist.h"
 #include "contact.h"
+#include "clientmanager.h"
 
 namespace SIM
 {
-    DataDef groupData[] =
+    Group::Group(int id) : m_id(id)
     {
-        { "Name", DATA_UTF, 1, 0 },
-        { NULL, DATA_UNKNOWN, 0, 0 }
-    };
-
-    Group::Group(unsigned long id, Buffer *cfg)
-    {
-        m_id = id;
         m_userData = UserData::create();
-        userdata()->setValue("id", (uint)id);
     }
 
     Group::~Group()
     {
-//        if (!getContacts()->p->m_bNoRemove){
-//            Contact *contact;
-//            ContactList::ContactIterator itc;
-//            while ((contact = ++itc) != NULL){
-//                if (contact->getGroup() != (int)id())
-//                    continue;
-//                contact->setGroup(0);
-//                EventContact e(contact, EventContact::eChanged);
-//                e.process();
-//            }
-//            EventGroup e(this, EventGroup::eDeleted);
-//            e.process();
-//        }
-        getContacts()->removeGroup(id());
-
     }
 
-    PropertyHubPtr Group::getUserData(const QString& id, bool bCreate)
+    QString Group::name() const
     {
-        PropertyHubPtr hub = m_userData->getUserData(id);
-        if(!hub.isNull())
-            return hub;
-        if(bCreate)
-            return m_userData->createUserData(id);
-        return getContacts()->getUserData(id);
-    }
-
-    QString Group::getName()
-    {
-        if(id() == 0)
-            return i18n("Not in list");
-        return userdata()->value("Name").toString();
+        return m_name;
     }
 
     void Group::setName(const QString& name)
     {
-        userdata()->setValue("Name", name);
+        m_name = name;
     }
 
-    ClientDataIterator Group::clientDataIterator(Client* client)
+    void Group::addClientGroup(const IMGroupPtr& group)
     {
-        return ClientDataIterator(m_clientData, client);
+        m_imGroups.append(group);
     }
 
-    QByteArray Group::saveUserData() const
+    IMGroupPtr Group::clientGroup(const QString& clientId) const
     {
-        return m_clientData.save();
+        foreach(const IMGroupPtr& group, m_imGroups)
+        {
+            ClientPtr client = group->client().toStrongRef();
+            if(!client)
+                continue;
+            if(client->name() == clientId)
+                return group;
+        }
+        return IMGroupPtr();
     }
 
-    void Group::loadUserData(Client *client, Buffer *cfg)
+    QStringList Group::clientIds() const
     {
-        m_clientData.load(client, cfg);
+        QStringList result;
+        foreach(const IMGroupPtr& group, m_imGroups)
+        {
+            ClientPtr client = group->client().toStrongRef();
+            if(!client)
+                continue;
+            result.append(client->name());
+        }
+        return result;
     }
 
-    IMContact* Group::createData(Client* client)
+    bool Group::flag(Flag fl) const
     {
-        return m_clientData.createData(client);
+        return m_flags.at(fl);
     }
 
-    IMContact* Group::getData(Client *client)
+    void Group::setFlag(Flag fl, bool value)
     {
-        return m_clientData.getData(client);
+        m_flags.setBit(fl, value);
     }
 
-    IMContact* Group::getData(const QString& clientName)
+    bool Group::serialize(QDomElement& element)
     {
-        return m_clientData.getData(clientName);
+        userdata()->serialize(element);
+        QStringList clients = clientIds();
+        QDomElement maininfo = element.ownerDocument().createElement("main");
+        serializeMainInfo(maininfo);
+        element.appendChild(maininfo);
+        foreach(const QString& clname, clients) {
+            IMGroupPtr imgr = clientGroup(clname);
+            QDomElement clientElement = element.ownerDocument().createElement("clientdata");
+            ClientPtr client = imgr->client().toStrongRef();
+            clientElement.setAttribute("clientname", client->name());
+            imgr->serialize(clientElement);
+            element.appendChild(clientElement);
+        }
+        return true;
     }
 
-    QStringList Group::clientNames()
+    bool Group::deserialize(QDomElement& element)
     {
-        return m_clientData.clientNames();
+        userdata()->deserialize(element);
+        QDomElement main = element.elementsByTagName("main").at(0).toElement();
+        if(!main.isNull())
+        {
+            deserializeMainInfo(main);
+        }
+        QDomNodeList cldatalist = element.elementsByTagName("clientdata");
+        for(int j = 0; j < cldatalist.size(); j++) {
+            QDomElement clientElement = cldatalist.at(j).toElement();
+            ClientPtr client = getClientManager()->client(clientElement.attribute("clientname"));
+            if(!client)
+                continue;
+            IMGroupPtr imgr = clientGroup(client->name());
+            if(!imgr)
+                imgr = client->createIMGroup();
+            imgr->deserialize(clientElement);
+        }
+        return true;
     }
 
-    bool Group::have(IMContact* c)
+    bool Group::serializeMainInfo(QDomElement& element)
     {
-        return m_clientData.have(c);
+        PropertyHubPtr hub = PropertyHub::create();
+        hub->setValue("Name", name());
+        return hub->serialize(element);
     }
 
-    void Group::sort()
+    bool Group::deserializeMainInfo(const QDomElement& element)
     {
-        m_clientData.sort();
-    }
-
-    void Group::join(Group* c)
-    {
-        m_clientData.join(c->m_clientData);
-    }
-
-    void Group::join(SIM::IMContact *cData, Group* c)
-    {
-        m_clientData.join(cData, c->m_clientData);
-    }
-
-    unsigned Group::size()
-    {
-        return m_clientData.size();
-    }
-
-    Client *Group::activeClient(void *&data, Client *client)
-    {
-        return m_clientData.activeClient(data, client);
-    }
-
-    void Group::freeData(SIM::IMContact* d)
-    {
-        m_clientData.freeData(d);
-    }
-
-    void Group::freeClientData(Client *client)
-    {
-        m_clientData.freeClientData(client);
+        PropertyHubPtr hub = PropertyHub::create();
+        if(!hub->deserialize(element))
+            return false;
+        setName(hub->value("Name").toString());
+        return true;
     }
 }
 

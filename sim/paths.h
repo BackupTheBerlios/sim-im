@@ -13,6 +13,7 @@ namespace SIM
     {
     public:
         static QString configRoot();
+        static QString appFile(const QString& filename);
     };
 }
 

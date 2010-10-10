@@ -1,37 +1,44 @@
 #ifndef IMCONTACT_H
 #define IMCONTACT_H
 
-#include <QSharedPointer>
+#include <QWeakPointer>
+#include <QDomElement>
 #include "simapi.h"
-#include "cfg.h"
+#include "contacts/imstatus.h"
+#include "messaging/message.h"
 
 namespace SIM
 {
     class Client;
-    typedef QSharedPointer<Client> ClientPtr;
+    typedef QWeakPointer<Client> ClientWeakPtr;
+    class IMGroup;
+    typedef QWeakPointer<IMGroup> IMGroupWeakPtr;
+
     class EXPORT IMContact
     {
     public:
         IMContact();
         virtual ~IMContact();
 
-        virtual unsigned long getSign() = 0;
+        virtual ClientWeakPtr client() = 0;
+        virtual IMStatusPtr status() = 0;
 
-        unsigned long getLastSend() { return m_lastSend; }
-        void setLastSend(unsigned long ls) { m_lastSend = ls; }
+        virtual bool sendMessage(const MessagePtr& message) = 0;
+        virtual bool hasUnreadMessages() = 0;
 
-        virtual ClientPtr client() = 0;
+        virtual MessagePtr dequeueUnreadMessage() = 0;
+        virtual void enqueueUnreadMessage(const MessagePtr& message) = 0;
 
-        virtual QByteArray serialize() = 0;
-        virtual void deserialize(Buffer* cfg) = 0;
-        virtual void deserializeLine(const QString& key, const QString& value) = 0;
+        virtual IMGroupWeakPtr group() = 0;
+
+        virtual QString makeToolTipText() = 0;
 
         virtual void serialize(QDomElement& element) = 0;
         virtual void deserialize(QDomElement& element) = 0;
 
-    private:
-        unsigned long m_lastSend;
     };
+    typedef QSharedPointer<IMContact> IMContactPtr;
+    typedef QWeakPointer<IMContact> IMContactWeakPtr;
 }
 
 #endif // IMCONTACT_H

@@ -1,6 +1,7 @@
 ###############
 # osd library #
 ###############
+IF(BUILD_DROPPED)
 SET(osd_SRCS
         osd.cpp
         osdconfig.cpp
@@ -22,3 +23,4 @@ REMOVE_DEFINITIONS(-DQT3_SUPPORT)
 REMOVE_DEFINITIONS(-DQT_3SUPPORT_LIB)
 REMOVE_DEFINITIONS(-DQT3_SUPPORT_WARNINGS)
 SIM_ADD_PLUGIN(osd)
+ENDIF(BUILD_DROPPED)

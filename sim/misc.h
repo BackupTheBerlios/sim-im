@@ -20,7 +20,6 @@
 
 #include "simapi.h"
 
-#include "contacts.h"
 #include "country.h"
 
 #include <QColor>
@@ -76,7 +75,6 @@ namespace SIM {
 EXPORT QString formatDateTime(QDateTime t);
 inline QString formatDateTime(unsigned int t){ return formatDateTime(QDateTime::fromTime_t(t)); }
 EXPORT QString formatDate(QDate t);
-EXPORT QString formatAddr(const Data &addr, unsigned port);
 EXPORT QString formatAddr(unsigned long ip, unsigned port);
 
 // _____________________________________________________________________________________
@@ -93,10 +91,6 @@ EXPORT QString formatAddr(unsigned long ip, unsigned port);
 		#define SET_WNDPROC(A)
 	#endif
 #endif
-
-/* Raises widget w (on the KDE-Desktop desk) */
-EXPORT bool raiseWindow(QWidget *w, unsigned desk = 0);
-EXPORT void setButtonsPict(QWidget *w);
 
 EXPORT void setAboutData(KAboutData*);
 EXPORT KAboutData *getAboutData();
@@ -132,8 +126,6 @@ EXPORT bool logEnabled();
 EXPORT void setLogEnable(bool);
 
 } // namespace SIM
-
-EXPORT QString g_i18n(const char *text, SIM::Contact *contact);
 
 EXPORT QString get_os_version();
 

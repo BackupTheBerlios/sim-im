@@ -47,7 +47,7 @@ namespace SIM
     {
         foreach(const ProtocolPtr& proto, m_protocols)
         {
-            if(proto->description()->text == name)
+            if(proto->name() == name)
                 return proto;
         }
         return ProtocolPtr();

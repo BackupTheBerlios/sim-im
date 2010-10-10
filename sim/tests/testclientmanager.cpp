@@ -5,27 +5,12 @@
 
 #include "contacts/client.h"
 #include "clientmanager.h"
-#include "contacts.h"
+#include "contacts/contactlist.h"
 #include "events/eventhub.h"
 
 namespace
 {
     using namespace SIM;
-    class MockClient : public SIM::Client
-    {
-        QString name();
-        QString dataName(void*);
-        QWidget *setupWnd();
-		IMContact* getOwnerContact();
-        void setOwnerContact(IMContact* contact);
-        QWidget *searchWindow(QWidget *parent);
-        bool isMyData(IMContact*&, Contact*&);
-        bool createData(IMContact*&, Contact*);
-        void contactInfo(void *clientData, unsigned long &status, unsigned &style, QString &statusIcon, QSet<QString> *icons);
-        void setupContact(Contact*, void *data);
-        bool send(Message*, void *data);
-        bool canSend(unsigned type, void *data);
-    };
 
     class TestClientManager : public ::testing::Test
     {

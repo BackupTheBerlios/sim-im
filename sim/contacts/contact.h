@@ -7,109 +7,72 @@
 #include "propertyhub.h"
 #include "clientuserdata.h"
 #include "misc.h"
+#include "imcontact.h"
 
 namespace SIM
 {
-    const unsigned CONTACT_TEMP             = 0x0001;
-    const unsigned CONTACT_DRAG             = 0x0002;
-    const unsigned CONTACT_NOREMOVE_HISTORY = 0x1000;
-
-    const unsigned CONTACT_TEMPORARY    = CONTACT_TEMP | CONTACT_DRAG;
+    class Contact;
+    typedef QSharedPointer<Contact> ContactPtr;
 
     class EXPORT Contact
     {
     public:
-        Contact(unsigned long id = 0, Buffer *cfg = NULL);
+        enum Flag
+        {
+            flIgnore = 0,
+            flTemporary,
+            flMaxFlag
+        };
+
+        Contact(int id);
         virtual ~Contact();
-        unsigned long id() const { return m_id; }
+
+        int id() const { return m_id; }
+
+        int groupId() const;
+        void setGroupId(int g);
+
+        bool flag(Flag fl) const;
+        void setFlag(Flag fl, bool value);
+
+        QString name() const;
+        void setName(const QString& s);
+
+        time_t lastActive() const;
+        void setLastActive(time_t la);
+
+        QString notes() const;
+        void setNotes(const QString& n);
+
+        void addClientContact(const IMContactPtr& contact);
+        IMContactPtr clientContact(const QString& clientId) const;
+        QStringList clientContactNames() const;
+
+        bool hasUnreadMessages();
+
+        void join(const ContactPtr& contact);
+
+        QString toolTipText();
+
+        UserDataPtr getUserData() { return m_userData; }
 
         bool serialize(QDomElement& element);
         bool deserialize(const QDomElement& element);
 
-        int getGroup();
-        void setGroup(int g);
-
-        QString getName();
-        void setName(const QString& s);
-
-        bool getIgnore();
-        void setIgnore(bool i);
-
-        int getLastActive();
-        void setLastActive(int la);
-
-        QString getEMails();
-        void setEMails(const QString& e);
-
-        QString getPhones();
-        void setPhones(const QString& p);
-
-        void addPhone(const QString& p);
-//        QStringList getPhones();
-
-        int getPhoneStatus();
-        void setPhoneStatus(int ps);
-
-        QString getFirstName();
-        void setFirstName(const QString& n);
-
-        QString getLastName();
-        void setLastName(const QString& n);
-
-        QString getNotes();
-        void setNotes(const QString& n);
-
-        int getFlags();
-        void setFlags(int flags);
-
-        QString getEncoding();
-        void setEncoding(const QString& enc);
-
-        PropertyHubPtr getUserData(const QString& id, bool bCreate = false);
-        bool setFirstName(const QString &name, const QString &client);
-        bool setLastName(const QString &name, const QString &client);
-        bool setEMails(const QString &mails, const QString &client);
-        bool setPhones(const QString &phones, const QString &client);
-        unsigned long contactInfo(unsigned &style, QString &statusIcon, QSet<QString> *icons = NULL);
-        QString tipText();
-        const DataDef *dataDef();
-        void setup();
-
-        UserDataPtr getUserData() { return m_userData; }
-
-        // m_clientData accessors
-        ClientDataIterator clientDataIterator(Client* client = NULL);
-        QByteArray saveUserData() const;
-        void loadUserData(Client *client, Buffer *cfg);
-        IMContact* createData(Client* client);
-        IMContact* getData(Client *client);
-        IMContact* getData(const QString& clientName);
-        QStringList clientNames();
-        bool have(IMContact*);
-        void sort();
-        void join(Contact* c);
-        void join(SIM::IMContact *cData, Contact* c);
-        unsigned size();
-        Client *activeClient(void *&data, Client *client);
-        void freeData(SIM::IMContact*);
-        void freeClientData(Client *client);
-        // m_clientData accessors end
     protected:
         bool serializeMainInfo(QDomElement& element);
         bool deserializeMainInfo(const QDomElement& element);
 
-        unsigned long m_id;
-        friend class ContactList;
-        friend class ContactListPrivate;
-
     private:
         UserDataPtr m_userData;
-        ClientUserData m_clientData;
-
-        QString m_encoding;
+        int m_id;
+        int m_groupId;
+        QBitArray m_flags;
+        QString m_name;
+        time_t m_lastActive;
+        QString m_notes;
+        QList<IMContactPtr> m_imContacts;
     };
-    typedef QSharedPointer<Contact> ContactPtr;
-
 }
 
 #endif

@@ -20,7 +20,6 @@
 
 #include "cfg.h"
 #include "plugins.h"
-#include "message.h"
 #include "contacts/userdata.h"
 #include "contacts/clientuserdata.h"
 #include "contacts/packettype.h"
@@ -72,19 +71,6 @@ const unsigned PROTOCOL_TEMP_DATA       = 0x04000000;
 const unsigned PROTOCOL_NODATA          = 0x08000000;
 const unsigned PROTOCOL_NO_AUTH         = 0x10000000;
 
-class ContactList;
-class Client;
-
-
-const unsigned AuthError = 1;
-
-struct UserDataDef
-{
-    unsigned        id;
-    QString         name;
-    const DataDef   *def;
-};
-
 struct ENCODING
 {
     const char *language;
@@ -95,142 +81,9 @@ struct ENCODING
     bool        bMain;
 };
 
-class ContactListPrivate;
-
-class EXPORT ContactList
-{
-public:
-    ContactList();
-    virtual ~ContactList();
-    Contact* owner();
-    void clear();
-    void load();
-    void save();
-    void addClient(Client*);
-    unsigned registerUserData(const QString& name, const DataDef *def);
-    void unregisterUserData(unsigned id);
-    Contact* contact(unsigned long id = 0, bool isNew = false);
-    bool contactExists(unsigned long id);
-    void removeContact(unsigned long id);
-    QList<Contact*> contactsInGroup(Group* gr);
-
-    bool groupExists(unsigned long id);
-    Group* group(unsigned long id = 0, bool isNew = false);
-    void addContact(Contact* contact);
-    void removeGroup(unsigned long id);
-    int  groupIndex(unsigned long id);
-    int  groupCount();
-    bool moveGroup(unsigned long id, bool bUp);
-    QList<Group*> allGroups();
-
-    bool moveClient(Client* client, bool bUp);
-    class EXPORT GroupIterator
-    {
-    public:
-        Group *operator++();
-        GroupIterator();
-        ~GroupIterator();
-        void reset();
-    protected:
-        class GroupIteratorPrivate *p;
-        friend class ContactList;
-
-        COPY_RESTRICTED(GroupIterator)
-    };
-    class EXPORT ContactIterator
-    {
-    public:
-        Contact *operator++();
-        ContactIterator();
-        ~ContactIterator();
-        void reset();
-    protected:
-        class ContactIteratorPrivate *p;
-        friend class ContactList;
-
-        COPY_RESTRICTED(ContactIterator)
-    };
-    class EXPORT PacketIterator
-    {
-    public:
-        PacketType *operator++();
-        PacketIterator();
-        ~PacketIterator();
-        void reset();
-    protected:
-        class PacketIteratorPrivate *p;
-        friend class ContactList;
-
-        COPY_RESTRICTED(PacketIterator)
-    };
-    PropertyHubPtr getUserData(const QString& id);
-    unsigned nClients();
-    Client *getClient(unsigned n);
-    void clearClients();
-    void removeClient(Client* cl);
-
-    void addPacketType(unsigned id, const QString &name, bool bText=false);
-    void removePacketType(unsigned id);
-    PacketType *getPacketType(unsigned i);
-
-    Contact *contactByPhone(const QString &phone);
-    Contact *contactByMail(const QString &_mail, const QString &_name);
-
-    static bool cmpPhone(const QString &p1, const QString &p2);
-
-    QString toUnicode(Contact *contact, const QByteArray &str);
-    QByteArray fromUnicode(Contact *contact, const QString &str);
-    QTextCodec *getCodec(Contact *contact);
-
-    static QTextCodec *getCodecByName(const QString &encoding);
-    static QTextCodec *getCodecByCodePage(const int iCP);
-    static const ENCODING *getEncodings();
-    const ENCODING *getEncoding(Contact *contact);
-    PropertyHubPtr userdata() { return m_userData->root(); }
-
-protected:
-    void save_new();
-    bool save_owner(QDomElement element);
-    bool save_groups(QDomElement element);
-    bool save_contacts(QDomElement element);
-    bool load_new();
-    bool load_owner(const QDomElement& owner);
-    bool load_groups(const QDomElement& groups);
-    bool load_contacts(const QDomElement& contacts);
-    bool load_old();
-
-    class ContactListPrivate *p;
-    friend class Contact;
-    friend class Group;
-    friend class UserData_old;
-    friend class GroupIterator;
-    friend class GroupIteratorPrivate;
-    friend class ContactIterator;
-    friend class ContactIteratorPrivate;
-    friend class Client;
-    friend class ClientIterator;
-    friend class ClientIteratorPrivate;
-    friend class Protocol;
-    friend class ProtocolIterator;
-    friend class ProtocolIteratorPrivate;
-    friend class PacketIterator;
-    friend class PacketIteratorPrivate;
-    friend class UserDataIterator;
-
-    COPY_RESTRICTED(ContactList)
-
-private:
-    UserDataPtr getUserData() { return m_userData; }
-    UserDataPtr m_userData;
-};
-
 QString addString(const QString &oldValue, const QString &newValue, const QString &client);
 QString addStrings(const QString &old_value, const QString &values, const QString &client);
 
-EXPORT void createContactList();
-EXPORT void destroyContactList();
-
-EXPORT ContactList *getContacts();
 typedef std::map<unsigned, PacketType*>	PACKET_MAP;
 
 } // namespace SIM

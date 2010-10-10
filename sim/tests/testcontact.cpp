@@ -1,116 +1,113 @@
+#include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
-#include "testcontact.h"
+#include <QDomDocument>
+#include <QDomElement>
+
 #include "contacts/contact.h"
 #include "contacts/client.h"
-#include "contacts/imcontact.h"
-#include "mockprotocol.h"
-#include "mockclient.h"
+#include "stubs/stubimcontact.h"
+#include "stubs/stubclient.h"
+#include "mocks/mockimcontact.h"
+#include "clientmanager.h"
+#include "messaging/genericmessage.h"
 
-namespace testContact
+namespace
 {
     using namespace SIM;
+    using ::testing::Return;
 
-    void Test::init()
+    class TestContact : public ::testing::Test
     {
-        SIM::createContactList();
+    protected:
+
+        ClientPtr createStubClient(const QString& id)
+        {
+            return ClientPtr(new StubObjects::StubClient(id));
+        }
+
+        IMContactPtr createStubIMContact(const ClientPtr& client)
+        {
+            return IMContactPtr(new StubObjects::StubIMContact(client));
+        }
+
+        MessagePtr createGenericMessage(const IMContactPtr& contact)
+        {
+            return MessagePtr(new GenericMessage(contact));
+        }
+
+        void fillContactData(Contact& c)
+        {
+            c.setName("Foo");
+            c.setNotes("Bar");
+            c.setGroupId(42);
+            c.setFlag(Contact::flIgnore, true);
+            c.setLastActive(112);
+        }
+    };
+
+    TEST_F(TestContact, clientContact_IfContactIsAdded_ReturnsAddedContact)
+    {
+        ClientPtr client =  createStubClient("ICQ.123456");
+        IMContactPtr imContact = createStubIMContact(client);
+        Contact contact(1);
+        contact.addClientContact(imContact);
+
+        IMContactPtr returnedContact = contact.clientContact("ICQ.123456");
+        EXPECT_TRUE(returnedContact == imContact);
     }
 
-    void Test::cleanup()
+    TEST_F(TestContact, clientContact_IfContactIsntAdded_ReturnsNullPointer)
     {
-        SIM::destroyContactList();
+        Contact contact(1);
+
+        IMContactPtr returnedContact = contact.clientContact("XMPP.bad@motherfucker.com");
+        EXPECT_TRUE(!returnedContact);
     }
 
-    void Test::testAccessors()
+    TEST_F(TestContact, clientContactNames_ReturnsNamesOfClients)
     {
-        Contact* c = getContacts()->contact(1, true);
-        QCOMPARE(c->id(), (unsigned long)1);
-        c->setGroup(42);
-        QCOMPARE(c->getGroup(), 42);
-        c->setIgnore(true);
-        QCOMPARE(c->getIgnore(), true);
-        c->setName("qux");
-        QCOMPARE(c->getName(), QString("qux"));
-        c->setLastActive(666);
-        QCOMPARE(c->getLastActive(), 666);
-        c->setEMails("banana");
-        QCOMPARE(c->getEMails(), QString("banana"));
-        c->setPhoneStatus(23);
-        QCOMPARE(c->getPhoneStatus(), 23);
-        c->setNotes("gamma");
-        QCOMPARE(c->getNotes(), QString("gamma"));
-        c->setFlags(56);
-        QCOMPARE(c->getFlags(), 56);
-        c->setEncoding("UTF-8");
-        QCOMPARE(c->getEncoding(), QString("UTF-8"));
+        ClientPtr client =  createStubClient("ICQ.123456");
+        IMContactPtr imContact = createStubIMContact(client);
+        Contact contact(1);
+        contact.addClientContact(imContact);
+
+        EXPECT_EQ(1, contact.clientContactNames().size());
+        EXPECT_TRUE(contact.clientContactNames().contains("ICQ.123456"));
     }
 
-    void Test::testCompositeProperties()
+    TEST_F(TestContact, hasUnreadMessages)
     {
-        Contact* c = getContacts()->contact(1, true);
-        c->setFirstName("foo", "bar");
-        QCOMPARE(c->getFirstName(), QString("foo/bar"));
-        c->setLastName("alpha", "beta");
-        QCOMPARE(c->getLastName(), QString("alpha/beta"));
+        ClientPtr client =  createStubClient("ICQ.123456");
+        QSharedPointer<MockObjects::MockIMContact> imContact = QSharedPointer<MockObjects::MockIMContact>(new MockObjects::MockIMContact());
+        EXPECT_CALL(*imContact.data(), hasUnreadMessages()).WillOnce(Return(true));
+        Contact contact(1);
+        contact.addClientContact(imContact);
+
+        EXPECT_TRUE(contact.hasUnreadMessages());
     }
 
-    void Test::testClientData()
+    TEST_F(TestContact, SerializationAndDeserialization)
     {
-        Contact* c = getContacts()->contact(1, true);
-        test::MockProtocol p;
-        ClientPtr client = p.createClient("mock", 0);
-        test::MockUserData* d = (test::MockUserData*)c->createData(client.data());
-        test::MockUserData* d2 = (test::MockUserData*)c->getData(client.data());
-        d->Alpha.asULong() = 12;
-        QCOMPARE(d->Alpha.toULong(), 12ul);
-        QCOMPARE(d, d2);
-        QVERIFY(c->have(d));
-        QCOMPARE(c->size(), (unsigned int)1);
+        ClientPtr client =  createStubClient("ICQ.123456");
+        IMContactPtr imContact = createStubIMContact(client);
+        Contact contact(1);
+        contact.addClientContact(imContact);
+        fillContactData(contact);
+        QDomDocument doc;
+        QDomElement el = doc.createElement("contact");
+        SIM::createClientManager();
 
-        Contact* c2 = getContacts()->contact(2, true);
-        test::MockUserData* d3 = (test::MockUserData*)c2->createData(client.data());
-        QVERIFY(!c->have(d3));
-        c->join(c2);
+        contact.serialize(el);
+        Contact deserializedContact(1);
+        deserializedContact.deserialize(el);
 
-        QVERIFY(c->have(d3));
-    }
-
-    void Test::testClientDataPartialJoin()
-    {
-        Contact* c1 = getContacts()->contact(22, true);
-        Contact* c2 = getContacts()->contact(33, true);
-        test::MockProtocol p;
-        ClientPtr client1 = p.createClient("mock1", 0);
-        ClientPtr client2 = p.createClient("mock2", 0);
-
-        test::MockUserData* d = (test::MockUserData*)c1->createData(client1.data());
-
-        test::MockUserData* d2 = (test::MockUserData*)c2->createData(client1.data());
-        test::MockUserData* d3 = (test::MockUserData*)c2->createData(client2.data());
-
-        QVERIFY(!c1->have(d2));
-        QVERIFY(c2->have(d2));
-        QVERIFY(c2->have(d3));
-
-        c1->join(d2, c2);
-
-        QVERIFY(c1->have(d2));
-        QVERIFY(!c2->have(d2));
-
-    }
-
-    void Test::testClientDataPersistance()
-    {
-        Contact* c1 = getContacts()->contact(1, true);
-        test::MockProtocol p;
-        ClientPtr client1 = p.createClient("mock1", 0);
-        test::MockUserData* d = (test::MockUserData*)c1->createData(client1.data());
-        d->Alpha.asULong() = 12ul;
-        QByteArray arr = c1->saveUserData();
-
-        Contact* c2 = getContacts()->contact(2, true);
-        Buffer buf(arr);
-        c2->loadUserData(client1.data(), &buf);
-        QCOMPARE(((test::MockUserData*)c2->getData(client1.data()))->Alpha.toULong(), 12ul);
+        SIM::destroyClientManager();
+        EXPECT_TRUE(deserializedContact.name() == "Foo");
+        EXPECT_TRUE(deserializedContact.notes() == "Bar");
+        EXPECT_TRUE(deserializedContact.groupId() == 42);
+        EXPECT_TRUE(deserializedContact.lastActive() == 112);
+        EXPECT_TRUE(deserializedContact.flag(Contact::flIgnore));
     }
 }
 

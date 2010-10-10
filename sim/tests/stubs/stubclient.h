@@ -1,9 +1,10 @@
 
 #include "contacts/client.h"
+#include "stubimcontact.h"
+#include "stubimgroup.h"
 
 namespace StubObjects
 {
-    using namespace SIM;
     class StubClient : public SIM::Client
     {
     public:
@@ -16,56 +17,76 @@ namespace StubObjects
             return m_name;
         }
 
-        virtual QString dataName(void*)
+        virtual SIM::IMContactPtr createIMContact()
         {
-            return QString();
-        }
-        virtual QWidget *setupWnd()
-        {
-            return 0;
+            return SIM::IMContactPtr();
         }
 
-        virtual IMContact* getOwnerContact()
+        virtual SIM::IMGroupPtr createIMGroup()
         {
-            return 0;
+            return SIM::IMGroupPtr();
         }
 
-        virtual void setOwnerContact(IMContact* contact)
+        virtual QWidget* createSetupWidget(const QString& id, QWidget* parent)
+        {
+            Q_UNUSED(id);
+            Q_UNUSED(parent);
+            return NULL;
+        }
+
+        virtual void destroySetupWidget()
         {
         }
 
-        virtual QWidget *searchWindow(QWidget *parent)
+        virtual QStringList availableSetupWidgets() const
         {
-            return 0;
+            return QStringList();
         }
 
-        virtual bool isMyData(IMContact*&, Contact*&)
+        virtual SIM::IMContactPtr ownerContact()
         {
+            return SIM::IMContactPtr();
+        }
+
+        virtual void setOwnerContact(SIM::IMContactPtr contact)
+        {
+            Q_UNUSED(contact);
+        }
+
+        virtual bool serialize(QDomElement& element)
+        {
+            Q_UNUSED(element);
             return false;
         }
 
-        virtual bool createData(IMContact*&, Contact*)
+        virtual bool deserialize(QDomElement& element)
         {
+            Q_UNUSED(element);
             return false;
         }
 
-        virtual void contactInfo(void *clientData, unsigned long &status, unsigned &style, QString &statusIcon, QSet<QString> *icons = NULL)
+        virtual bool deserialize(Buffer* buf)
         {
-        }
-
-        virtual void setupContact(Contact*, void *data)
-        {
-        }
-
-        virtual bool send(Message*, void *data) 
-        {
+            Q_UNUSED(buf);
             return false;
         }
 
-        virtual bool canSend(unsigned type, void *data)
+        virtual QWidget* createSearchWidow(QWidget *parent)
         {
-            return false;
+            Q_UNUSED(parent);
+            return NULL;
         }
+
+        virtual QList<SIM::IMGroupPtr> groups()
+        {
+            return QList<SIM::IMGroupPtr>();
+        }
+
+        virtual QList<SIM::IMContactPtr> contacts()
+        {
+            return QList<SIM::IMContactPtr>();
+        }
+
     private:
         QString m_name;
     };

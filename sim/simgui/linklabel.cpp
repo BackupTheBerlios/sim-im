@@ -16,11 +16,9 @@
  ***************************************************************************/
 
 #include "simgui/linklabel.h"
-#include "event.h"
 
 #include <QMouseEvent>
 
-using namespace SIM;
 
 LinkLabel::LinkLabel(QWidget *parent)
   : QLabel(parent)
@@ -39,7 +37,5 @@ void LinkLabel::setUrl(const QString &url)
 void LinkLabel::mouseReleaseEvent(QMouseEvent * e)
 {
     if ((e->button() == Qt::LeftButton) && !m_url.isEmpty()){
-        EventGoURL e(m_url);
-        e.process();
     }
 }

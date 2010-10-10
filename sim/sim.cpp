@@ -23,13 +23,15 @@
 #include "clientmanager.h"
 #include "simfs.h"
 #include "paths.h"
-#include "socket/socketfactory.h"
 #include "contacts/protocolmanager.h"
 #include "events/eventhub.h"
 #include "events/standardevent.h"
 #include "events/logevent.h"
 #include "commands/commandhub.h"
 #include "imagestorage/imagestorage.h"
+#include "contacts/contactlist.h"
+#include "builtinlogger.h"
+#include "log.h"
 
 #include <QDir>
 
@@ -86,7 +88,20 @@ void registerEvents()
     SIM::getEventHub()->registerEvent(SIM::StandardEvent::create("init"));
     SIM::getEventHub()->registerEvent(SIM::StandardEvent::create("init_abort"));
     SIM::getEventHub()->registerEvent(SIM::StandardEvent::create("quit"));
+}
+
+static BuiltinLogger* gs_logger = 0;
+void initLogging()
+{
+    gs_logger = new BuiltinLogger(L_ERROR | L_WARN | L_DEBUG);
     SIM::getEventHub()->registerEvent(SIM::LogEvent::create());
+    SIM::getEventHub()->getEvent("log")->connectTo(gs_logger, SLOT(logEvent(QString,int)));
+}
+
+void destroyLogging()
+{
+    delete gs_logger;
+    gs_logger = 0;
 }
 
 int main(int argc, char *argv[])
@@ -121,9 +136,9 @@ int main(int argc, char *argv[])
 
     SIM::createEventHub();
     registerEvents();
+    initLogging();
     SIM::createImageStorage();
     SIM::createCommandHub();
-    SIM::createSocketFactory();
     SIM::createContactList();
     SIM::createProtocolManager();
     SIM::createPluginManager(argc, argv);
@@ -140,9 +155,9 @@ int main(int argc, char *argv[])
     SIM::destroyPluginManager();
     SIM::destroyProtocolManager();
     SIM::destroyContactList();
-    SIM::destroySocketFactory();
     SIM::destroyCommandHub();
     SIM::destroyImageStorage();
+    destroyLogging();
     SIM::destroyEventHub();
     return res;
 }

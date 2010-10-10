@@ -1,6 +1,7 @@
 #################
 # sound library #
 #################
+IF(BUILD_DROPPED)
 SET(sound_SRCS
         sound.cpp
         soundconfig.cpp
@@ -51,3 +52,4 @@ INSTALL(FILES sounds/startup.ogg	DESTINATION ${SIM_SOUND_DIR})
 INSTALL(FILES sounds/url.ogg		DESTINATION ${SIM_SOUND_DIR})
 INSTALL(FILES sounds/vip-online.ogg	DESTINATION ${SIM_SOUND_DIR})
 INSTALL(FILES sounds/web.ogg		DESTINATION ${SIM_SOUND_DIR})
+ENDIF(BUILD_DROPPED)

@@ -54,33 +54,33 @@ void LogConfig::apply()
 {
     unsigned log_level = 0;
     /* test if file exist */
-    if(!edtFile->text().isEmpty()) {
-      QFile file(edtFile->text());
-      if (!file.open(QIODevice::Append | QIODevice::ReadWrite)) {
-          log(L_DEBUG,"Logfile %s isn't a valid file - discarded!", qPrintable(edtFile->text()));
-          edtFile->setText(QString());
-      } else {
-          file.close();
-      }
-      m_plugin->setValue("File", edtFile->text());
-    }
+//    if(!edtFile->text().isEmpty()) {
+//      QFile file(edtFile->text());
+//      if (!file.open(QIODevice::Append | QIODevice::ReadWrite)) {
+//          log(L_DEBUG,"Logfile %s isn't a valid file - discarded!", qPrintable(edtFile->text()));
+//          edtFile->setText(QString());
+//      } else {
+//          file.close();
+//      }
+//      m_plugin->setValue("File", edtFile->text());
+//    }
 
-    /* check selected protocols */
-    for (int row = 0; row < lstLevel->count(); ++row) {
-        QListWidgetItem *item = lstLevel->item(row);
-        unsigned level  = item->data(Qt::UserRole).toUInt();
-        unsigned packet =  item->data(Qt::UserRole).toUInt();
-        if (item->checkState() == Qt::Checked){
-            if (level){
-                log_level |= level;
-            }else{
-                m_plugin->setLogType(packet, true);
-            }
-        }else{
-            if (level == 0)
-                m_plugin->setLogType(packet, false);
-        }
-    }
+//    /* check selected protocols */
+//    for (int row = 0; row < lstLevel->count(); ++row) {
+//        QListWidgetItem *item = lstLevel->item(row);
+//        unsigned level  = item->data(Qt::UserRole).toUInt();
+//        unsigned packet =  item->data(Qt::UserRole).toUInt();
+//        if (item->checkState() == Qt::Checked){
+//            if (level){
+//                log_level |= level;
+//            }else{
+//                m_plugin->setLogType(packet, true);
+//            }
+//        }else{
+//            if (level == 0)
+//                m_plugin->setLogType(packet, false);
+//        }
+//    }
     m_plugin->setValue("LogLevel", log_level);
     m_plugin->openFile();
 }
@@ -104,11 +104,11 @@ void LogConfig::fill()
     lstLevel->addItem(createItem(i18n("Packets"), (m_plugin->value("LogLevel").toUInt() & L_PACKETS) != 0, L_PACKETS));
     //lstLevel->addItem(createItem(i18n("Events"),  (m_plugin->getLogLevel() & L_EVENTS ) != 0, L_EVENTS);
 
-    PacketType *type;
-    ContactList::PacketIterator it;
-    while ((type = ++it) != NULL){
-       lstLevel->addItem(createItem(type->name(), m_plugin->isLogType(type->id()), type->id(), true));
-    }
+//    PacketType *type;
+//    ContactList::PacketIterator it;
+//    while ((type = ++it) != NULL){
+//       lstLevel->addItem(createItem(type->name(), m_plugin->isLogType(type->id()), type->id(), true));
+//    }
 }
 
 bool LogConfig::processEvent(Event *e)

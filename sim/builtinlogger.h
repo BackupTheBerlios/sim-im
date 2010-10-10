@@ -21,20 +21,23 @@
 #ifndef SIMBUILTINLOGGER_H
 #define SIMBUILTINLOGGER_H
 
+#include <QObject>
 #include "simapi.h"
-#include "event.h"
 #include "log.h"
 
 namespace SIM {
 
-class BuiltinLogger : public EventReceiver
+class EXPORT BuiltinLogger : public QObject
 {
+    Q_OBJECT
 public:
-    BuiltinLogger(unsigned logLevel = L_ERROR | L_WARN, unsigned priority = LowPriority);
+    BuiltinLogger(unsigned logLevel = L_ERROR | L_WARN);
     virtual ~BuiltinLogger();
 
+public slots:
+    void logEvent(const QString& message, int logLevel);
+
 private:
-    virtual bool processEvent(Event *e);
     unsigned m_logLevel;
 };
 

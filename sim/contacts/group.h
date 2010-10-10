@@ -2,54 +2,58 @@
 #ifndef SIM_GROUP_H
 #define SIM_GROUP_H
 
+#include <QSharedPointer>
+#include <QWeakPointer>
+#include <QBitArray>
+
 #include "simapi.h"
 #include "userdata.h"
 #include "clientuserdata.h"
 #include "propertyhub.h"
 #include "misc.h"
+#include "contacts/imgroup.h"
 
 namespace SIM
 {
     class EXPORT Group
     {
     public:
-        Group(unsigned long id = 0, Buffer *cfg = NULL);
-        virtual ~Group();
-        unsigned long id() { return m_id; }
+        enum Flag
+        {
+            flMaxFlag
+        };
 
-        QString getName();
+        Group(int id);
+        virtual ~Group();
+
+        int id() const { return m_id; }
+
+        QString name() const;
         void setName(const QString& name);
 
-        PropertyHubPtr getUserData(const QString& id, bool bCreate = false);
-        PropertyHubPtr userdata() const { return m_userData->root(); }
-        UserDataPtr getUserData() { return m_userData; }
+        UserDataPtr userdata() const { return m_userData; }
 
-        ClientDataIterator clientDataIterator(Client* client = NULL);
-        QByteArray saveUserData() const;
-        void loadUserData(Client *client, Buffer *cfg);
-        IMContact* createData(Client* client);
-        IMContact* getData(Client *client);
-        IMContact* getData(const QString& clientName);
-        QStringList clientNames();
-        bool have(IMContact*);
-        void sort();
-        void join(Group* c);
-        void join(SIM::IMContact *cData, Group* c);
-        unsigned size();
-        Client *activeClient(void *&data, Client *client);
-        void freeData(SIM::IMContact*);
-        void freeClientData(Client *client);
+        void addClientGroup(const IMGroupPtr& group);
+        IMGroupPtr clientGroup(const QString& clientId) const;
+        QStringList clientIds() const;
 
-    protected:
-        unsigned long m_id;
-        ClientUserData m_clientData;
-        friend class ContactList;
-        friend class ContactListPrivate;
+        bool flag(Flag fl) const;
+        void setFlag(Flag fl, bool value);
 
+        bool serialize(QDomElement& el);
+        bool deserialize(QDomElement& el);
     private:
+        bool serializeMainInfo(QDomElement& element);
+        bool deserializeMainInfo(const QDomElement& element);
+
+        int m_id;
         QString m_name;
-        UserDataPtr m_userData; // FIXME this mess
+        UserDataPtr m_userData;
+        QBitArray m_flags;
+        QList<IMGroupPtr> m_imGroups;
     };
+    typedef QSharedPointer<Group> GroupPtr;
+    typedef QWeakPointer<Group> GroupWeakPtr;
 }
 
 #endif

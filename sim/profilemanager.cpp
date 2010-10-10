@@ -75,8 +75,7 @@ namespace SIM
         QDir::setCurrent(m_rootPath + QDir::separator() + name);
         m_currentProfile = ProfilePtr(new Profile(config, name));
         m_currentProfile->loadPlugins();
-        EventPluginLoadConfig event;
-        event.process(NULL);
+
         return true;
     }
 

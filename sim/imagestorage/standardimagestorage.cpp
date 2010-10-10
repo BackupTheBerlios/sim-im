@@ -6,6 +6,7 @@
 #include "jispiconset.h"
 #include "log.h"
 #include "cfg.h"
+#include "paths.h"
 
 namespace SIM
 {
@@ -56,7 +57,7 @@ namespace SIM
                 "icons/sim.jisp" << "icons/smiles.jisp" <<
                 "icons/icqlite.jisp" << "icons/additional.jisp") {
             JispIconSet* set = new JispIconSet();
-            if(!set->load(app_file(s)))
+            if(!set->load(SIM::PathManager::appFile(s)))
             {
                 printf("Unable to load default icon set: %s\n", qPrintable(s));
                 delete set;
