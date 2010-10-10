@@ -1,72 +1,71 @@
 #################
 # _core library #
 #################
-IF(BUILD_DROPPED)
 ADD_SUBDIRECTORY(pict)
 ADD_SUBDIRECTORY(styles)
 
 SET(_core_SRCS
-        arcfg.cpp
-        autoreply.cpp
-        cfgdlg.cpp
-        cmenu.cpp
-        commands.cpp
-        connectionsettings.cpp
-        connectwnd.cpp
-        containermanager.cpp
-        container.cpp
+#        arcfg.cpp
+#        autoreply.cpp
+#        cfgdlg.cpp
+#        cmenu.cpp
+#        commands.cpp
+#        connectionsettings.cpp
+#        connectwnd.cpp
+#        containermanager.cpp
+#        container.cpp
         core.cpp
-        declinedlg.cpp
-        editmail.cpp
-        editphone.cpp
-        filecfg.cpp
-        filetransfer.cpp
-        history.cpp
-        historycfg.cpp
-        historywnd.cpp
-        interfacecfg.cpp
+#        declinedlg.cpp
+#        editmail.cpp
+#        editphone.cpp
+#        filecfg.cpp
+#        filetransfer.cpp
+#        history.cpp
+#        historycfg.cpp
+#        historywnd.cpp
+#        interfacecfg.cpp
         logindlg.cpp
-        maininfo.cpp
-        mainwin.cpp
-        manager.cpp
-        msgauth.cpp
-        msgcfg.cpp
-        msgcontacts.cpp
-        msgedit.cpp
-        msgfile.cpp
-        msggen.cpp
-        msgrecv.cpp
-        msgsms.cpp
-        msgurl.cpp
-        msgview.cpp
-        msgview_menu.cpp
-        newprotocol.cpp
-        nonim.cpp
-        pagerdetails.cpp
-        phonedetails.cpp
-        plugincfg.cpp
-        prefcfg.cpp
-        search.cpp
-        searchall.cpp
-        smscfg.cpp
-        status.cpp
-        statuswnd.cpp
-        textedit_menu.cpp
-        tmpl.cpp
-        toolbar_container.cpp
-        toolbar_history.cpp
-        toolbar_main.cpp
-        toolbar_msgedit.cpp
-        toolbar_textedit.cpp
-        toolbarcfg.cpp
-        toolsetup.cpp
-        usercfg.cpp
-        userhistorycfg.cpp
-        userlist.cpp
-        userviewcfg.cpp
-        userwnd.cpp
-        roster/userview.cpp
-        roster/userviewdelegate.cpp
+#        maininfo.cpp
+#        mainwin.cpp
+#        manager.cpp
+#        msgauth.cpp
+#        msgcfg.cpp
+#        msgcontacts.cpp
+#        msgedit.cpp
+#        msgfile.cpp
+#        msggen.cpp
+#        msgrecv.cpp
+#        msgsms.cpp
+#        msgurl.cpp
+#        msgview.cpp
+#        msgview_menu.cpp
+#        newprotocol.cpp
+#        nonim.cpp
+#        pagerdetails.cpp
+#        phonedetails.cpp
+#        plugincfg.cpp
+#        prefcfg.cpp
+#        search.cpp
+#        searchall.cpp
+#        smscfg.cpp
+#        status.cpp
+#        statuswnd.cpp
+#        textedit_menu.cpp
+#        tmpl.cpp
+#        toolbar_container.cpp
+#        toolbar_history.cpp
+#        toolbar_main.cpp
+#        toolbar_msgedit.cpp
+#        toolbar_textedit.cpp
+#        toolbarcfg.cpp
+#        toolsetup.cpp
+#        usercfg.cpp
+#        userhistorycfg.cpp
+#        userlist.cpp
+#        userviewcfg.cpp
+#        userwnd.cpp
+#        roster/userview.cpp
+#        roster/userviewdelegate.cpp
 )
 
 # is this really needed?
@@ -78,94 +77,94 @@ SET(_core_SRCS
 ENDIF(NOT WIN32)
 
 SET(_core_HDRS
-        arcfg.h
-        autoreply.h
-        cfgdlg.h
-        cmenu.h
-        commands.h
-        connectionsettings.h
-        connectwnd.h
-        containermanager.h
-        container.h
+#        arcfg.h
+#        autoreply.h
+#        cfgdlg.h
+#        cmenu.h
+#        commands.h
+#        connectionsettings.h
+#        connectwnd.h
+#        containermanager.h
+#        container.h
         core.h
-        core_consts.h
-        core_events.h
-        declinedlg.h
-        editmail.h
-        editphone.h
-        filecfg.h
-        filetransfer.h
-        history.h
-        historycfg.h
-        historywnd.h
-        interfacecfg.h
+#        core_consts.h
+#        core_events.h
+#        declinedlg.h
+#        editmail.h
+#        editphone.h
+#        filecfg.h
+#        filetransfer.h
+#        history.h
+#        historycfg.h
+#        historywnd.h
+#        interfacecfg.h
         logindlg.h
-        maininfo.h
-        mainwin.h
-        manager.h
-        msgauth.h
-        msgcfg.h
-        msgcontacts.h
-        msgedit.h
-        msgfile.h
-        msggen.h
-        msgrecv.h
-        msgsms.h
-        msgurl.h
-        msgview.h
-        newprotocol.h
-        nonim.h
-        pagerdetails.h
-        phonedetails.h
-        plugincfg.h
-        prefcfg.h
-        search.h
-        searchall.h
-        smscfg.h
-        status.h
-        statuswnd.h
-        tmpl.h
-        toolbarcfg.h
-        toolsetup.h
-        usercfg.h
-        userhistorycfg.h
-        userlist.h
-        userviewcfg.h
-        userwnd.h
-        roster/userview.h
-        roster/userviewdelegate.h
+#        maininfo.h
+#        mainwin.h
+#        manager.h
+#        msgauth.h
+#        msgcfg.h
+#        msgcontacts.h
+#        msgedit.h
+#        msgfile.h
+#        msggen.h
+#        msgrecv.h
+#        msgsms.h
+#        msgurl.h
+#        msgview.h
+#        newprotocol.h
+#        nonim.h
+#        pagerdetails.h
+#        phonedetails.h
+#        plugincfg.h
+#        prefcfg.h
+#        search.h
+#        searchall.h
+#        smscfg.h
+#        status.h
+#        statuswnd.h
+#        tmpl.h
+#        toolbarcfg.h
+#        toolsetup.h
+#        usercfg.h
+#        userhistorycfg.h
+#        userlist.h
+#        userviewcfg.h
+#        userwnd.h
+#        roster/userview.h
+#        roster/userviewdelegate.h
 )
 
 SET(_core_UICS
-        arcfgbase.ui
-        autoreplybase.ui
-        cfgdlgbase.ui
-        connectionsettingsbase.ui
-        connectwndbase.ui
-        declinedlgbase.ui
-        editmailbase.ui
-        editphonebase.ui
-        filecfgbase.ui
-        filetransferbase.ui
-        fontconfigbase.ui
-        historycfgbase.ui
-        interfacecfgbase.ui
+#        arcfgbase.ui
+#        autoreplybase.ui
+#        cfgdlgbase.ui
+#        connectionsettingsbase.ui
+#        connectwndbase.ui
+#        declinedlgbase.ui
+#        editmailbase.ui
+#        editphonebase.ui
+#        filecfgbase.ui
+#        filetransferbase.ui
+#        fontconfigbase.ui
+#        historycfgbase.ui
+#        interfacecfgbase.ui
         logindlgbase.ui
-        maininfobase.ui
-        managerbase.ui
-        msgcfgbase.ui
-        newprotocolbase.ui
-        nonimbase.ui
-        pagerbase.ui
-        phonebase.ui
-        plugincfgbase.ui
-        prefcfgbase.ui
-        searchallbase.ui
-        searchbase.ui
-        smscfgbase.ui
-        toolsetupbase.ui
-        userhistorycfgbase.ui
-        userviewcfgbase.ui
+#        maininfobase.ui
+#        managerbase.ui
+#        msgcfgbase.ui
+#        newprotocolbase.ui
+#        nonimbase.ui
+#        pagerbase.ui
+#        phonebase.ui
+#        plugincfgbase.ui
+#        prefcfgbase.ui
+#        searchallbase.ui
+#        searchbase.ui
+#        smscfgbase.ui
+#        toolsetupbase.ui
+#        userhistorycfgbase.ui
+#        userviewcfgbase.ui
 )
 
 SET(core_test_sources
@@ -213,4 +212,4 @@ INSTALL(FILES ${_prebuilt} DESTINATION ${SIM_ICONS_DIR})
 SIM_ADD_PLUGIN(_core)
 
 SET_TARGET_PROPERTIES(_core PROPERTIES DEFINE_SYMBOL CORE_EXPORTS)
-ENDIF(BUILD_DROPPED)
+

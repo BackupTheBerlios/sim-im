@@ -19,7 +19,6 @@
 #define _LOGINDLG_H
 
 #include "buffer.h"
-#include "clientlist.h"
 #include "contacts/client.h"
 #include "event.h"
 #include "plugins.h"
@@ -32,7 +31,7 @@ class QLabel;
 class QLineEdit;
 class LinkLabel;
 
-class LoginDialog : public QDialog, public Ui::LoginDialogBase, public SIM::EventReceiver
+class LoginDialog : public QDialog, public Ui::LoginDialogBase
 {
     Q_OBJECT
 public:
@@ -59,7 +58,7 @@ protected slots:
     void newNameChanged( const QString &text );
 
 protected:
-    virtual bool processEvent(SIM::Event*);
+    //virtual bool processEvent(SIM::Event*);
     virtual void closeEvent(QCloseEvent *e);
     virtual void accept();
     virtual void reject();
@@ -68,7 +67,7 @@ protected:
     void fill();
     void startLogin();
     void stopLogin();
-    void loadClients(const QString& profilename, SIM::ClientList&);
+    //void loadClients(const QString& profilename, SIM::ClientList&);
 
 private:
     QString m_profile;
