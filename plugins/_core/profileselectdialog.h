@@ -15,14 +15,14 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _LOGINDLG_H
-#define _LOGINDLG_H
+#ifndef PROFILESELECTDIALOG_H
+#define PROFILESELECTDIALOG_H
 
 #include "buffer.h"
 #include "contacts/client.h"
 #include "event.h"
 #include "plugins.h"
-#include "ui_logindlgbase.h"
+#include "ui_profileselectdialog.h"
 #include <QLabel>
 #include <QLayout>
 #include <QLineEdit>
@@ -31,12 +31,12 @@ class QLabel;
 class QLineEdit;
 class LinkLabel;
 
-class LoginDialog : public QDialog
+class ProfileSelectDialog : public QDialog
 {
     Q_OBJECT
 public:
-    LoginDialog();
-    ~LoginDialog();
+    ProfileSelectDialog();
+    ~ProfileSelectDialog();
 	QString profile() { return m_profile; }
 
 signals:
@@ -73,7 +73,7 @@ private:
     QString m_newProfileName;
     QList<SIM::PluginPtr> m_protocolPlugins;
 
-    Ui::LoginDialogBase* m_ui;
+    Ui::ProfileSelectDialog* m_ui;
 };
 
 #endif

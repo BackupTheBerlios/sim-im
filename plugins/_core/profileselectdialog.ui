@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>LoginDialogBase</class>
- <widget class="QDialog" name="LoginDialogBase">
+ <class>ProfileSelectDialog</class>
+ <widget class="QDialog" name="ProfileSelectDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -190,7 +190,7 @@
   <connection>
    <sender>buttonOk</sender>
    <signal>clicked()</signal>
-   <receiver>LoginDialogBase</receiver>
+   <receiver>ProfileSelectDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -206,7 +206,7 @@
   <connection>
    <sender>buttonCancel</sender>
    <signal>clicked()</signal>
-   <receiver>LoginDialogBase</receiver>
+   <receiver>ProfileSelectDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -222,7 +222,7 @@
   <connection>
    <sender>cmbProfile</sender>
    <signal>currentIndexChanged(int)</signal>
-   <receiver>LoginDialogBase</receiver>
+   <receiver>ProfileSelectDialog</receiver>
    <slot>profileChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -238,7 +238,7 @@
   <connection>
    <sender>chkSave</sender>
    <signal>clicked(bool)</signal>
-   <receiver>LoginDialogBase</receiver>
+   <receiver>ProfileSelectDialog</receiver>
    <slot>saveToggled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -254,7 +254,7 @@
   <connection>
    <sender>btnRename</sender>
    <signal>clicked()</signal>
-   <receiver>LoginDialogBase</receiver>
+   <receiver>ProfileSelectDialog</receiver>
    <slot>profileRename()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -270,7 +270,7 @@
   <connection>
    <sender>btnDelete</sender>
    <signal>clicked()</signal>
-   <receiver>LoginDialogBase</receiver>
+   <receiver>ProfileSelectDialog</receiver>
    <slot>profileDelete()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -286,7 +286,7 @@
   <connection>
    <sender>e_newName</sender>
    <signal>textChanged(QString)</signal>
-   <receiver>LoginDialogBase</receiver>
+   <receiver>ProfileSelectDialog</receiver>
    <slot>newNameChanged(QString)</slot>
    <hints>
     <hint type="sourcelabel">

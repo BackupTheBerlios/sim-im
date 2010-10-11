@@ -11,6 +11,6 @@ namespace {
 
 	TEST_F(TestCorePlugin, Constructor)
 	{
-		CorePlugin plugin(0, 0);
+        CorePlugin plugin();
 	}
 }

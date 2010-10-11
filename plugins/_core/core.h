@@ -140,7 +140,7 @@ class CORE_EXPORT CorePlugin : public QObject, public SIM::Plugin
 {
     Q_OBJECT
 public:
-    CorePlugin(unsigned, Buffer*);
+    CorePlugin();
     virtual ~CorePlugin();
 //    void setManualStatus(unsigned long status);
 //    unsigned long getManualStatus();

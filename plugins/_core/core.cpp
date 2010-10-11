@@ -56,7 +56,7 @@ email                : vovan@shutoff.ru
 
 // _core
 #include "core.h"
-#include "logindlg.h"
+#include "profileselectdialog.h"
 
 using namespace std;
 using namespace SIM;
@@ -90,13 +90,13 @@ using namespace SIM;
 
 Plugin *createCorePlugin(unsigned base, bool, Buffer *config)
 {
-    Plugin *plugin = new CorePlugin(base, config);
+    Plugin *plugin = new CorePlugin();
     return plugin;
 }
 
 Plugin *createCorePluginObject()
 {
-    Plugin *plugin = new CorePlugin(0, 0);
+    Plugin *plugin = new CorePlugin();
     return plugin;
 }
 
@@ -190,8 +190,7 @@ EXPORT_PROC PluginInfo* GetPluginInfo()
 //	{ 0, NULL }
 //};
 
-CorePlugin::CorePlugin(unsigned base, Buffer* /*config*/)
-    : QObject()
+CorePlugin::CorePlugin() : QObject()
     , Plugin            ()
 //    , historyXSL        (NULL)
 //    , m_bInit           (false)
@@ -3096,7 +3095,7 @@ bool CorePlugin::init()
 
     if(!noshow)
     {
-        LoginDialog dlg;
+        ProfileSelectDialog dlg;
         dlg.setModal(true);
         if(dlg.exec() != QDialog::Accepted)
             return false;

@@ -24,7 +24,7 @@ email                : vovan@shutoff.ru
 #include "profilemanager.h"
 #include "simgui/ballonmsg.h"
 #include "simgui/linklabel.h"
-#include "logindlg.h"
+#include "profileselectdialog.h"
 
 #include <QApplication>
 #include <QCheckBox>
@@ -41,9 +41,9 @@ email                : vovan@shutoff.ru
 
 using namespace SIM;
 
-LoginDialog::LoginDialog() : QDialog(NULL)
+ProfileSelectDialog::ProfileSelectDialog() : QDialog(NULL)
 {
-    m_ui = new Ui::LoginDialogBase;
+    m_ui = new Ui::ProfileSelectDialog;
     m_ui->setupUi(this);
 
     QSettings settings;
@@ -65,11 +65,11 @@ LoginDialog::LoginDialog() : QDialog(NULL)
     m_ui->cmbProfile->setFocus();
 }
 
-LoginDialog::~LoginDialog()
+ProfileSelectDialog::~ProfileSelectDialog()
 {
 }
 
-void LoginDialog::updateProfilesList()
+void ProfileSelectDialog::updateProfilesList()
 {
     QStringList profiles = ProfileManager::instance()->enumProfiles();
     m_ui->cmbProfile->addItems(profiles);
@@ -86,14 +86,14 @@ void LoginDialog::updateProfilesList()
     m_ui->cmbProfile->addItem(i18n("New profile"));
 }
 
-void LoginDialog::saveToggled(bool bState)
+void ProfileSelectDialog::saveToggled(bool bState)
 {
     if (!bState)
         m_ui->chkNoShow->setChecked(false);
     m_ui->chkNoShow->setEnabled(bState);
 }
 
-void LoginDialog::profileChanged(int index)
+void ProfileSelectDialog::profileChanged(int index)
 {
     if (index < 0)
     {
@@ -139,14 +139,14 @@ void LoginDialog::profileChanged(int index)
     QTimer::singleShot(0, this, SLOT(adjust()));
 }
 
-void LoginDialog::adjust()
+void ProfileSelectDialog::adjust()
 {
     int h = minimumSizeHint().height();
     resize(width(), h);
     move(x(), (qApp->desktop()->height() - h) / 2);
 }
 
-void LoginDialog::makeInputs(const ClientPtr& client)
+void ProfileSelectDialog::makeInputs(const ClientPtr& client)
 {
     ClientEntry entry;
     QHBoxLayout* layout = new QHBoxLayout();
@@ -188,7 +188,7 @@ void LoginDialog::makeInputs(const ClientPtr& client)
     m_lines.append(line);
 }
 
-void LoginDialog::clearInputs()
+void ProfileSelectDialog::clearInputs()
 {
     foreach(const ClientEntry& entry, m_clientEntries)
     {
@@ -203,7 +203,7 @@ void LoginDialog::clearInputs()
     m_lines.clear();
 }
 
-void LoginDialog::pswdChanged(const QString&)
+void ProfileSelectDialog::pswdChanged(const QString&)
 {
     bool hasEmptyPasswordField = false;
     for(int i = 0; i < m_clientEntries.size(); i++)
@@ -217,7 +217,7 @@ void LoginDialog::pswdChanged(const QString&)
     m_ui->buttonOk->setEnabled(!hasEmptyPasswordField);
 }
 
-void LoginDialog::profileDelete()
+void ProfileSelectDialog::profileDelete()
 {
     int n = m_ui->cmbProfile->currentIndex();
     if ((n < 0) || (n >= m_ui->cmbProfile->count() - 1))
@@ -230,7 +230,7 @@ void LoginDialog::profileDelete()
     updateProfilesList();
 }
 
-void LoginDialog::profileRename()
+void ProfileSelectDialog::profileRename()
 {
     QString old_name = m_ui->cmbProfile->currentText();
 
@@ -254,7 +254,7 @@ void LoginDialog::profileRename()
     updateProfilesList();
 }
 
-void LoginDialog::newNameChanged(const QString &text)
+void ProfileSelectDialog::newNameChanged(const QString &text)
 {
     if(text.isEmpty()) {
         m_ui->buttonOk->setEnabled(false);
