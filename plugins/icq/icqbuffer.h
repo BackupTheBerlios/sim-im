@@ -18,8 +18,6 @@
 #define _ICQBUFFER_H
 
 #include "buffer.h"
-#include "socket/socket.h"
-#include "socket/clientsocket.h"
 #include <string> //Fixme
 #include <QList>
 
@@ -135,18 +133,18 @@ public:
     void unpack(unsigned long &c);
 };
 
-class ICQClientSocket : public SIM::ClientSocket
-{
-public:
-    ICQClientSocket(SIM::ClientSocketNotify *notify, SIM::Socket *sock = NULL)
-        : ClientSocket(notify, sock) {};
-    ~ICQClientSocket() {};
+//class ICQClientSocket : public SIM::ClientSocket
+//{
+//public:
+//    ICQClientSocket(SIM::ClientSocketNotify *notify, SIM::Socket *sock = NULL)
+//        : ClientSocket(notify, sock) {};
+//    ~ICQClientSocket() {};
 
-    virtual ICQBuffer &readBuffer() { return m_readICQBuffer; }
-    virtual ICQBuffer &writeBuffer() { return m_writeICQBuffer; }
-protected:
-    ICQBuffer m_readICQBuffer;
-    ICQBuffer m_writeICQBuffer;
-};
+//    virtual ICQBuffer &readBuffer() { return m_readICQBuffer; }
+//    virtual ICQBuffer &writeBuffer() { return m_writeICQBuffer; }
+//protected:
+//    ICQBuffer m_readICQBuffer;
+//    ICQBuffer m_writeICQBuffer;
+//};
 
 #endif  // _ICQBUFFER_H

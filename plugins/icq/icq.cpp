@@ -16,26 +16,24 @@
  ***************************************************************************/
 
 #include "icq.h"
-#include "icqconfig.h"
 #include "core.h"
 #include "log.h"
 #include "clientmanager.h"
-#include "icons.h"
-
+#include "imagestorage/imagestorage.h"
 #include "contacts/protocolmanager.h"
+#include "icqclient.h"
 
 using namespace SIM;
 
 Plugin *createICQPlugin(unsigned base, bool, Buffer*)
 {
-    Plugin *plugin = new ICQPlugin(base);
+    Plugin *plugin = new ICQPlugin();
     return plugin;
 }
 
 Plugin *createICQPluginObject()
 {
-    Plugin *plugin = new ICQPlugin(0);
-    return plugin;
+    return new ICQPlugin();
 }
 
 static PluginInfo info =
@@ -43,7 +41,6 @@ static PluginInfo info =
         NULL,
         NULL,
         VERSION,
-        createICQPlugin,
         PLUGIN_PROTOCOL,
         createICQPluginObject
     };
@@ -56,11 +53,26 @@ EXPORT_PROC PluginInfo* GetPluginInfo()
 ICQProtocol::ICQProtocol(Plugin *plugin)
         : Protocol(plugin)
 {
-	initStatuses();
+    initStatuses();
 }
 
 ICQProtocol::~ICQProtocol()
 {
+}
+
+QString ICQProtocol::name()
+{
+    return "ICQ";
+}
+
+QString ICQProtocol::iconId()
+{
+    return "ICQ";
+}
+
+QString ICQProtocol::helpLink()
+{
+    return QString("http://www.icq.com");
 }
 
 ClientPtr ICQProtocol::createClient(Buffer *cfg)
@@ -77,7 +89,7 @@ SIM::ClientPtr ICQProtocol::createClient(const QString& name)
 
 IMContact* ICQProtocol::createIMContact(const QSharedPointer<Client>& client)
 {
-    return new ICQUserData(client);
+    return new ICQContact(client);
 }
 
 QStringList ICQProtocol::states()
@@ -93,13 +105,13 @@ QStringList ICQProtocol::states()
 void ICQProtocol::initStatuses()
 {
     m_states.clear();
-    addStatus(ICQStatusPtr(new ICQStatus("online", "Online", true, "", Icon("ICQ_online"))));
-    addStatus(ICQStatusPtr(new ICQStatus("away", "Away", true, "", Icon("ICQ_away"))));
-    addStatus(ICQStatusPtr(new ICQStatus("n/a", "N/A", true, "", Icon("ICQ_na"))));
-    addStatus(ICQStatusPtr(new ICQStatus("dnd", "Do not disturb", true, "", Icon("ICQ_dnd"))));
-	addStatus(ICQStatusPtr(new ICQStatus("occupied", "Occupied", true, "", Icon("ICQ_occupied"))));
-	addStatus(ICQStatusPtr(new ICQStatus("free_for_chat", "Free for chat", true, "", Icon("ICQ_ffc"))));
-    addStatus(ICQStatusPtr(new ICQStatus("offline", "Offline", true, "", Icon("ICQ_offline"))));
+    addStatus(ICQStatusPtr(new ICQStatus("online", "Online", true, "", getImageStorage()->icon("ICQ_online"))));
+    addStatus(ICQStatusPtr(new ICQStatus("away", "Away", true, "", getImageStorage()->icon("ICQ_away"))));
+    addStatus(ICQStatusPtr(new ICQStatus("n/a", "N/A", true, "", getImageStorage()->icon("ICQ_na"))));
+    addStatus(ICQStatusPtr(new ICQStatus("dnd", "Do not disturb", true, "", getImageStorage()->icon("ICQ_dnd"))));
+    addStatus(ICQStatusPtr(new ICQStatus("occupied", "Occupied", true, "", getImageStorage()->icon("ICQ_occupied"))));
+    addStatus(ICQStatusPtr(new ICQStatus("free_for_chat", "Free for chat", true, "", getImageStorage()->icon("ICQ_ffc"))));
+    addStatus(ICQStatusPtr(new ICQStatus("offline", "Offline", true, "", getImageStorage()->icon("ICQ_offline"))));
 }
 
 void ICQProtocol::addStatus(ICQStatusPtr status)
@@ -118,352 +130,126 @@ SIM::IMStatusPtr ICQProtocol::status(const QString& id)
     return SIM::IMStatusPtr();
 }
 
-static CommandDef icq_descr =
-    CommandDef (
-        0,
-        I18N_NOOP("ICQ"),
-        "ICQ_online",
-        "ICQ_invisible",
-        "http://www.icq.com/password/",
-        0,
-        0,
-        0,
-        0,
-        0,
-        PROTOCOL_INFO | PROTOCOL_SEARCH | PROTOCOL_INVISIBLE | PROTOCOL_AR_USER | PROTOCOL_ANY_PORT | PROTOCOL_NODATA,
-        NULL,
-        QString::null
-    );
+//AIMProtocol::AIMProtocol(Plugin *plugin)
+//        : Protocol(plugin)
+//{
+//}
 
-const CommandDef *ICQProtocol::description()
-{
-    return &icq_descr;
-}
+//AIMProtocol::~AIMProtocol()
+//{
+//}
 
-static CommandDef icq_status_list[] =
-    {
-        CommandDef (
-            STATUS_ONLINE,
-            I18N_NOOP("Online"),
-            "ICQ_online",
-            QString::null,
-            QString::null,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            NULL,
-            QString::null
-        ),
-        CommandDef (
-            STATUS_AWAY,
-            I18N_NOOP("Away"),
-            "ICQ_away",
-            QString::null,
-            QString::null,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            NULL,
-            QString::null
-        ),
-        CommandDef (
-            STATUS_NA,
-            I18N_NOOP("N/A"),
-            "ICQ_na",
-            QString::null,
-            QString::null,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            NULL,
-            QString::null
-        ),
-        CommandDef (
-            STATUS_DND,
-            I18N_NOOP("Do not Disturb"),
-            "ICQ_dnd",
-            QString::null,
-            QString::null,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            NULL,
-            QString::null
-        ),
-        CommandDef (
-            STATUS_OCCUPIED,
-            I18N_NOOP("Occupied"),
-            "ICQ_occupied",
-            QString::null,
-            QString::null,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            NULL,
-            QString::null
-        ),
-        CommandDef (
-            STATUS_FFC,
-            I18N_NOOP("Free for chat"),
-            "ICQ_ffc",
-            QString::null,
-            QString::null,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            NULL,
-            QString::null
-        ),
-        CommandDef (
-            STATUS_OFFLINE,
-            I18N_NOOP("Offline"),
-            "ICQ_offline",
-            QString::null,
-            QString::null,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            NULL,
-            QString::null
-        ),
-        CommandDef ()
-    };
+//QStringList AIMProtocol::states()
+//{
+//	// TODO
+//	return QStringList();
+//}
 
-const CommandDef *ICQProtocol::statusList()
-{
-    return icq_status_list;
-}
+//SIM::IMStatusPtr AIMProtocol::status(const QString& /*id*/)
+//{
+//	// TODO
+//	return SIM::IMStatusPtr();
+//}
 
-const CommandDef *ICQProtocol::_statusList()
-{
-    return icq_status_list;
-}
+//IMContact* AIMProtocol::createIMContact(const QSharedPointer<Client>& client)
+//{
+//    return new ICQUserData(client);
+//}
 
-AIMProtocol::AIMProtocol(Plugin *plugin)
-        : Protocol(plugin)
-{
-}
+//ClientPtr AIMProtocol::createClient(Buffer *cfg)
+//{
+//	ClientPtr aim = ClientPtr(new ICQClient(this, cfg, true));
+//	getClientManager()->addClient(aim);
+//	return aim;
+//}
 
-AIMProtocol::~AIMProtocol()
-{
-}
-
-QStringList AIMProtocol::states()
-{
-	// TODO
-	return QStringList();
-}
-
-SIM::IMStatusPtr AIMProtocol::status(const QString& /*id*/)
-{
-	// TODO
-	return SIM::IMStatusPtr();
-}
-
-IMContact* AIMProtocol::createIMContact(const QSharedPointer<Client>& client)
-{
-    return new ICQUserData(client);
-}
-
-ClientPtr AIMProtocol::createClient(Buffer *cfg)
-{
-	ClientPtr aim = ClientPtr(new ICQClient(this, cfg, true));
-	getClientManager()->addClient(aim);
-	return aim;
-}
-
-SIM::ClientPtr AIMProtocol::createClient(const QString& name)
-{
-    ClientPtr aim = ClientPtr(new ICQClient(this, 0, true));
-    getClientManager()->addClient(aim);
-    return aim;
-}
-
-static CommandDef aim_descr =
-    CommandDef (
-        0,
-        I18N_NOOP("AIM"),
-        "AIM_online",
-        QString::null,
-        "http://www.aim.com/help_faq/forgot_password/password.adp",
-        0,
-        0,
-        0,
-        0,
-        0,
-        PROTOCOL_INFO | PROTOCOL_AR | PROTOCOL_ANY_PORT,
-        NULL,
-        QString::null
-    );
-
-const CommandDef *AIMProtocol::description()
-{
-    return &aim_descr;
-}
-
-static CommandDef aim_status_list[] =
-    {
-        CommandDef (
-            STATUS_ONLINE,
-            I18N_NOOP("Online"),
-            "AIM_online",
-            QString::null,
-            QString::null,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            NULL,
-            QString::null
-        ),
-        CommandDef (
-            STATUS_AWAY,
-            I18N_NOOP("Away"),
-            "AIM_away",
-            QString::null,
-            QString::null,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            NULL,
-            QString::null
-        ),
-        CommandDef (
-            STATUS_OFFLINE,
-            I18N_NOOP("Offline"),
-            "AIM_offline",
-            QString::null,
-            QString::null,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            NULL,
-            QString::null
-        ),
-        CommandDef ()
-    };
-
-const CommandDef *AIMProtocol::statusList()
-{
-    return aim_status_list;
-}
+//SIM::ClientPtr AIMProtocol::createClient(const QString& name)
+//{
+//    ClientPtr aim = ClientPtr(new ICQClient(this, 0, true));
+//    getClientManager()->addClient(aim);
+//    return aim;
+//}
 
 //Protocol *ICQPlugin::m_icq = NULL;
 //Protocol *ICQPlugin::m_aim = NULL;
 
 ICQPlugin *ICQPlugin::icq_plugin = NULL;
 
-ICQPlugin::ICQPlugin(unsigned base)
-        : Plugin(base)
+ICQPlugin::ICQPlugin()
+        : Plugin()
 {
     icq_plugin = this;
 
-    OscarPacket = registerType();
-    getContacts()->addPacketType(OscarPacket, "Oscar");
-    ICQDirectPacket = registerType();
-    getContacts()->addPacketType(ICQDirectPacket, "ICQ.Direct");
-    AIMDirectPacket = registerType();
-    getContacts()->addPacketType(AIMDirectPacket, "AIM.Direct");
-
     m_icq = ProtocolPtr(new ICQProtocol(this));
 	getProtocolManager()->addProtocol(m_icq);
-    m_aim = ProtocolPtr(new AIMProtocol(this));
-	getProtocolManager()->addProtocol(m_aim);
+//    m_aim = ProtocolPtr(new AIMProtocol(this));
+//    getProtocolManager()->addProtocol(m_aim);
 
-    EventMenu(MenuSearchResult, EventMenu::eAdd).process();
-    EventMenu(MenuIcqGroups, EventMenu::eAdd).process();
+//    EventMenu(MenuSearchResult, EventMenu::eAdd).process();
+//    EventMenu(MenuIcqGroups, EventMenu::eAdd).process();
 
-    Command cmd;
-    cmd->id          = CmdVisibleList;
-    cmd->text        = I18N_NOOP("Visible list");
-    cmd->menu_id     = MenuContactGroup;
-    cmd->menu_grp    = 0x8010;
-    cmd->flags		 = COMMAND_CHECK_STATE;
-    EventCommandCreate(cmd).process();
+//    Command cmd;
+//    cmd->id          = CmdVisibleList;
+//    cmd->text        = I18N_NOOP("Visible list");
+//    cmd->menu_id     = MenuContactGroup;
+//    cmd->menu_grp    = 0x8010;
+//    cmd->flags		 = COMMAND_CHECK_STATE;
+//    EventCommandCreate(cmd).process();
 
-    cmd->id			 = CmdInvisibleList;
-    cmd->text		 = I18N_NOOP("Invisible list");
-    cmd->menu_grp	 = 0x8011;
-    EventCommandCreate(cmd).process();
+//    cmd->id			 = CmdInvisibleList;
+//    cmd->text		 = I18N_NOOP("Invisible list");
+//    cmd->menu_grp	 = 0x8011;
+//    EventCommandCreate(cmd).process();
 
-    cmd->id			 = CmdIcqSendMessage;
-    cmd->text		 = I18N_NOOP("&Message");
-    cmd->icon		 = "message";
-    cmd->menu_id	 = MenuSearchResult;
-    cmd->menu_grp	 = 0x1000;
-    cmd->bar_id		 = 0;
-    cmd->popup_id	 = 0;
-    cmd->flags		 = COMMAND_DEFAULT;
-    EventCommandCreate(cmd).process();
+//    cmd->id			 = CmdIcqSendMessage;
+//    cmd->text		 = I18N_NOOP("&Message");
+//    cmd->icon		 = "message";
+//    cmd->menu_id	 = MenuSearchResult;
+//    cmd->menu_grp	 = 0x1000;
+//    cmd->bar_id		 = 0;
+//    cmd->popup_id	 = 0;
+//    cmd->flags		 = COMMAND_DEFAULT;
+//    EventCommandCreate(cmd).process();
 
-    cmd->id			 = CmdInfo;
-    cmd->text		 = I18N_NOOP("User &info");
-    cmd->icon		 = "info";
-    cmd->menu_grp	 = 0x1001;
-    EventCommandCreate(cmd).process();
+//    cmd->id			 = CmdInfo;
+//    cmd->text		 = I18N_NOOP("User &info");
+//    cmd->icon		 = "info";
+//    cmd->menu_grp	 = 0x1001;
+//    EventCommandCreate(cmd).process();
 
-    cmd->id			 = CmdGroups;
-    cmd->text		 = I18N_NOOP("&Add to group");
-    cmd->icon		 = QString::null;
-    cmd->menu_grp	 = 0x1002;
-    cmd->popup_id	 = MenuIcqGroups;
-    EventCommandCreate(cmd).process();
+//    cmd->id			 = CmdGroups;
+//    cmd->text		 = I18N_NOOP("&Add to group");
+//    cmd->icon		 = QString::null;
+//    cmd->menu_grp	 = 0x1002;
+//    cmd->popup_id	 = MenuIcqGroups;
+//    EventCommandCreate(cmd).process();
 
-    cmd->id			 = CmdGroups;
-    cmd->text		 = "_";
-    cmd->menu_id	 = MenuIcqGroups;
-    cmd->flags		 = COMMAND_CHECK_STATE;
-    EventCommandCreate(cmd).process();
+//    cmd->id			 = CmdGroups;
+//    cmd->text		 = "_";
+//    cmd->menu_id	 = MenuIcqGroups;
+//    cmd->flags		 = COMMAND_CHECK_STATE;
+//    EventCommandCreate(cmd).process();
 
-    registerMessages();
+//    registerMessages();
 
-    RetrySendDND = registerType();
-    RetrySendOccupied = registerType();
+//    RetrySendDND = registerType();
+//    RetrySendOccupied = registerType();
 }
 
 ICQPlugin::~ICQPlugin()
 {
-    unregisterMessages();
-	getProtocolManager()->removeProtocol(m_aim);
-	getProtocolManager()->removeProtocol(m_icq);
+    //unregisterMessages();
+    getProtocolManager()->removeProtocol(m_aim);
+    getProtocolManager()->removeProtocol(m_icq);
 
-    getContacts()->removePacketType(OscarPacket);
-    getContacts()->removePacketType(ICQDirectPacket);
-    getContacts()->removePacketType(AIMDirectPacket);
+//    getContacts()->removePacketType(OscarPacket);
+//    getContacts()->removePacketType(ICQDirectPacket);
+//    getContacts()->removePacketType(AIMDirectPacket);
 
-    EventCommandRemove(CmdVisibleList).process();
-    EventCommandRemove(CmdInvisibleList).process();
+//    EventCommandRemove(CmdVisibleList).process();
+//    EventCommandRemove(CmdInvisibleList).process();
 
-    EventMenu(MenuSearchResult, EventMenu::eRemove).process();
-    EventMenu(MenuIcqGroups, EventMenu::eRemove).process();
+//    EventMenu(MenuSearchResult, EventMenu::eRemove).process();
+//    EventMenu(MenuIcqGroups, EventMenu::eRemove).process();
 }
 

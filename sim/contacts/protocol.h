@@ -3,6 +3,7 @@
 #define SIM_PROTOCOL_H
 
 #include <QSharedPointer>
+#include <QBitArray>
 #include "simapi.h"
 #include "plugins.h"
 #include "event.h"
@@ -21,14 +22,25 @@ namespace SIM
         virtual ~Protocol();
         Plugin  *plugin() { return m_plugin; }
         virtual QString name() = 0;
+        virtual QString iconId() = 0;
+        virtual QString helpLink() = 0;
         virtual QSharedPointer<Client> createClient(Buffer *cfg) = 0;
         virtual QSharedPointer<Client> createClient(const QString& name) = 0;
         virtual QStringList states() = 0;
         virtual IMStatusPtr status(const QString& id) = 0;
-        virtual IMContactPtr createIMContact(const QSharedPointer<Client>& client) = 0;
 
-    protected:
+        enum Flag
+        {
+            flNoAuth = 0,
+            flMaxFlag
+        };
+
+        bool flag(Flag fl) const;
+        void setFlag(Flag fl, bool value);
+
+    private:
         Plugin *m_plugin;
+        QBitArray m_flags;
     };
 
     typedef QSharedPointer<Protocol> ProtocolPtr;

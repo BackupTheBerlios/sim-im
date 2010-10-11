@@ -31,28 +31,23 @@ namespace SIM
 {
     struct PluginInfo;
 
-	class EXPORT Plugin
-	{
-	public:
-		Plugin(unsigned base);
-		virtual ~Plugin();
-		virtual QWidget *createConfigWindow(QWidget* /* *parent */ ) { return NULL; }
-		virtual QByteArray getConfig() { return QByteArray(); }
-		unsigned registerType();
-		void boundTypes();
+    class EXPORT Plugin
+    {
+    public:
+        Plugin();
+        virtual ~Plugin();
+        virtual QWidget *createConfigWindow(QWidget* /* *parent */ ) { return NULL; }
+        virtual QByteArray getConfig() { return QByteArray(); }
 
         void setName(const QString& n);
         QString name();
 
         PluginInfo* getInfo();
 
-	protected:
-		unsigned m_current;
-		unsigned m_base;
 
     private:
         class PluginPrivate* p;
-	};
+    };
 
     typedef QSharedPointer<Plugin> PluginPtr;
 
@@ -107,7 +102,6 @@ namespace SIM
         const char      *title;         // User title
         const char      *description;   // Description
         const char      *version;       // Version
-        createPlugin    *create;        // create proc
         unsigned        flags;          // plugin flags
         createPluginObject createObject;
     };

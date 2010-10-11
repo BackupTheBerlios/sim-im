@@ -84,6 +84,12 @@ namespace SIM
         return m_currentProfile;
     }
 
+    bool ProfileManager::profileExists(const QString& name) const
+    {
+        QDir d(rootPath());
+        return d.exists(name);
+    }
+
     QString ProfileManager::profilePath()
     {
         if(m_currentProfile.isNull())
@@ -91,13 +97,16 @@ namespace SIM
         return m_rootPath + QDir::separator() + m_currentProfile->name();
     }
 
-    void ProfileManager::removeProfile(const QString& /*name*/)
+    bool ProfileManager::removeProfile(const QString& /*name*/)
     {
         // TODO
+        return false;
     }
-    void ProfileManager::renameProfile(const QString& /*oldname*/, const QString& /*newname*/)
+
+    bool ProfileManager::renameProfile(const QString& /*oldname*/, const QString& /*newname*/)
     {
         // TODO
+        return false;
     }
 
     bool ProfileManager::newProfile(const QString& name)

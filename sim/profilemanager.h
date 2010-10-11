@@ -10,36 +10,37 @@
 
 namespace SIM
 {
-	class EXPORT ProfileManager : public Singleton<ProfileManager>
-	{
-	public:
-		ProfileManager(const QString& rootpath);
-		virtual ~ProfileManager();
+    class EXPORT ProfileManager : public Singleton<ProfileManager>
+    {
+    public:
+        ProfileManager(const QString& rootpath);
+        virtual ~ProfileManager();
 
-		QStringList enumProfiles();
+        QStringList enumProfiles();
 
-		bool selectProfile(const QString& name);
+        bool selectProfile(const QString& name);
+        bool profileExists(const QString& name) const;
 
-		ProfilePtr currentProfile();
-		QString currentProfileName();
+        ProfilePtr currentProfile();
+        QString currentProfileName();
 
-		QString profilePath();
+        QString profilePath();
 
-		QString rootPath() { return m_rootPath; }
+        QString rootPath() const { return m_rootPath; }
 
-		void removeProfile(const QString& name);
+        bool removeProfile(const QString& name);
 
-		void renameProfile(const QString& oldname, const QString& newname);
+        bool renameProfile(const QString& oldname, const QString& newname);
 
-		bool newProfile(const QString& name);
+        bool newProfile(const QString& name);
 
-		void sync();
+        void sync();
 
-		PropertyHubPtr getPropertyHub(const QString& name);
-	private:
-		QString m_rootPath;
-		ProfilePtr m_currentProfile;
-	};
+        PropertyHubPtr getPropertyHub(const QString& name);
+    private:
+        QString m_rootPath;
+        ProfilePtr m_currentProfile;
+    };
 }
 
 #endif

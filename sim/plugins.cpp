@@ -67,8 +67,6 @@ namespace SIM
             bool alwaysEnabled;
             bool protocolPlugin;
             PluginWeakPtr plugin;
-            Buffer *cfg;           // configuration data
-            unsigned base;           // base for plugin types
             QString filePath;
             PluginInfo *info;
             QLibrary *module;        // so or dll handle
@@ -122,10 +120,7 @@ namespace SIM
         bool m_alwaysEnabled;
     };
 
-    Plugin::Plugin(unsigned base)
-        : m_current(base)
-        , m_base(base)
-        , p(new PluginPrivate)
+    Plugin::Plugin() : p(new PluginPrivate)
     {
         p->setProtocolPlugin(false);
         p->setAlwaysEnabled(false);
@@ -135,16 +130,6 @@ namespace SIM
     {
         log(L_DEBUG, "Plugin::~Plugin(%s)", qPrintable(name()));
         delete p;
-    }
-
-    unsigned Plugin::registerType()
-    {
-        return m_current++;
-    }
-
-    void Plugin::boundTypes()
-    {
-        m_current = (m_current | 0x3F) + 1;
     }
 
     void Plugin::setName(const QString& name)
@@ -412,10 +397,8 @@ namespace SIM
             info.plugin         = PluginPtr();
             info.name           = name;
             info.filePath       = path;
-            info.cfg            = NULL;
             info.module         = NULL;
             info.info           = NULL;
-            info.base           = 0;
             info.alwaysEnabled  = false;
             info.protocolPlugin = false;
 
@@ -518,10 +501,6 @@ namespace SIM
         {
             pluginInfo &info = plugins[n];
             release(info);
-            if (info.cfg) {
-                delete info.cfg;
-                info.cfg = NULL;
-            }
         }
     }
 
@@ -600,21 +579,14 @@ namespace SIM
     PluginPtr PluginManagerPrivate::createPlugin(pluginInfo &info)
     {
         log(L_DEBUG, "[1]Load plugin %s", qPrintable(info.name));
-        if (info.base == 0){
-            m_base += 0x1000;
-            info.base = m_base;
-        }
-        PluginPtr plugin = PluginPtr(info.info->create(info.base, m_bInInit, info.cfg));
+
+        PluginPtr plugin = PluginPtr(info.info->createObject());
         if( plugin == NULL )
             return PluginPtr();
         info.plugin = plugin.toWeakRef();
         plugin->setName(info.name);
         if (info.plugin == NULL) {
             return PluginPtr();
-        }
-        if (info.cfg){
-            delete info.cfg;
-            info.cfg = NULL;
         }
 
         return plugin;

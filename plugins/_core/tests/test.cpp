@@ -7,6 +7,7 @@
 #include "commands/commandhub.h"
 #include "events/standardevent.h"
 #include "events/logevent.h"
+#include "contacts/contactlist.h"
 #include "contacts.h"
 
 void registerEvents()

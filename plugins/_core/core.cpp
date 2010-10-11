@@ -51,6 +51,8 @@ email                : vovan@shutoff.ru
 #include "contacts/protocolmanager.h"
 #include "contacts/imcontact.h"
 #include "events/eventhub.h"
+#include "profilemanager.h"
+#include "clientmanager.h"
 
 // _core
 #include "core.h"
@@ -86,33 +88,32 @@ using namespace SIM;
 //#endif
 //};
 
-//Plugin *createCorePlugin(unsigned base, bool, Buffer *config)
-//{
-//	Plugin *plugin = new CorePlugin(base, config);
-//	return plugin;
-//}
+Plugin *createCorePlugin(unsigned base, bool, Buffer *config)
+{
+    Plugin *plugin = new CorePlugin(base, config);
+    return plugin;
+}
 
-//Plugin *createCorePluginObject()
-//{
-//    Plugin *plugin = new CorePlugin(0, 0);
-//    return plugin;
-//}
+Plugin *createCorePluginObject()
+{
+    Plugin *plugin = new CorePlugin(0, 0);
+    return plugin;
+}
 
 
-//static PluginInfo info =
-//{
-//    I18N_NOOP("Interface"),
-//    I18N_NOOP("System interface"),
-//    VERSION,
-//    createCorePlugin,
-//    PLUGIN_DEFAULT | PLUGIN_NODISABLE | PLUGIN_RELOAD,
-//    createCorePluginObject
-//};
+static PluginInfo info =
+{
+    I18N_NOOP("Core"),
+    I18N_NOOP("Core plugin"),
+    VERSION,
+    PLUGIN_DEFAULT | PLUGIN_NODISABLE | PLUGIN_RELOAD,
+    createCorePluginObject
+};
 
-//EXPORT_PROC PluginInfo* GetPluginInfo()
-//{
-//	return &info;
-//}
+EXPORT_PROC PluginInfo* GetPluginInfo()
+{
+    return &info;
+}
 
 //#if !defined(WIN32) && !defined(USE_KDE)
 
@@ -191,7 +192,7 @@ using namespace SIM;
 
 CorePlugin::CorePlugin(unsigned base, Buffer* /*config*/)
     : QObject()
-    , Plugin            (base)
+    , Plugin            ()
 //    , historyXSL        (NULL)
 //    , m_bInit           (false)
 //    , m_cfg             (NULL)
@@ -248,16 +249,16 @@ CorePlugin::CorePlugin(unsigned base, Buffer* /*config*/)
 //	EventMenu(MenuMsgCommand, EventMenu::eAdd).process();
 
 //	createEventCmds();
-//    subscribeToEvents();
+    subscribeToEvents();
 
 //    m_main = new MainWindow(this);
 }
 
-//void CorePlugin::subscribeToEvents()
-//{
-//    getEventHub()->getEvent("init")->connectTo(this, SLOT(eventInit()));
-//    getEventHub()->getEvent("quit")->connectTo(this, SLOT(eventQuit()));
-//}
+void CorePlugin::subscribeToEvents()
+{
+    getEventHub()->getEvent("init")->connectTo(this, SLOT(eventInit()));
+    getEventHub()->getEvent("quit")->connectTo(this, SLOT(eventQuit()));
+}
 
 void CorePlugin::eventQuit()
 {
@@ -1043,11 +1044,11 @@ CorePlugin::~CorePlugin()
 
 void CorePlugin::eventInit()
 {
-//    log(L_DEBUG, "CorePlugin::eventInit");
-//    if (!m_bInit && !init(true)) {
-//        getEventHub()->triggerEvent("init_abort");
-//        return;
-//    }
+    log(L_DEBUG, "CorePlugin::eventInit");
+    if(!init()) {
+        getEventHub()->triggerEvent("init_abort");
+        return;
+    }
 //    QTimer::singleShot(0, this, SLOT(checkHistory()));
 //    QTimer::singleShot(0, this, SLOT(postInit()));
 }
@@ -3062,145 +3063,85 @@ void CorePlugin::eventInit()
 ////	}
 //}
 
-//bool CorePlugin::init(bool bInit)
-//{
-//    log(L_DEBUG, "CorePlugin::init");
-//	m_bInit = bInit;
-//	bool bLoaded = false;
-//	bool bRes = true;
-//	bool bNew = false;
-//	bool bCmdLineProfile = false;
-//	QSettings settings;
+bool CorePlugin::init()
+{
+    log(L_DEBUG, "CorePlugin::init");
+    QSettings settings;
 
-//	// FIXME:
-//	/*
-//	EventArg e1("-profile:", I18N_NOOP("Use specified profile"));
-//	e1.process();
-//	QString cmd_line_profile = e1.value();
-//	if (!cmd_line_profile.isEmpty()){
-//		bCmdLineProfile = true;
-//		setProfile(QString::null);
-//		QString profileDir = user_file(cmd_line_profile);
-//		QDir d(profileDir);
-//		if (d.exists()) {
-//			bCmdLineProfile = false;
-//			setProfile(cmd_line_profile);
-//		}
-//	}
-//	*/
+    // FIXME:
+    /*
+    EventArg e1("-profile:", I18N_NOOP("Use specified profile"));
+    e1.process();
+    QString cmd_line_profile = e1.value();
+    if (!cmd_line_profile.isEmpty()){
+        bCmdLineProfile = true;
+        setProfile(QString::null);
+        QString profileDir = user_file(cmd_line_profile);
+        QDir d(profileDir);
+        if (d.exists()) {
+            bCmdLineProfile = false;
+            setProfile(cmd_line_profile);
+        }
+    }
+    */
 
-//	QStringList profiles = ProfileManager::instance()->enumProfiles();
-//	QString profile;
-//	bool newProfile = false;
-	
-//	if(settings.value("Profile").toString().isEmpty() && settings.value("NoShow", false).toBool())
-//	{
-//		settings.setValue("NoShow", false);
-//	}
+    QString profile = settings.value("Profile").toString();
+    bool noshow = settings.value("NoShow", false).toBool();
 
-//    QString sNewProfileName;
+    if(profile.isEmpty() && noshow)
+    {
+        settings.setValue("NoShow", false);
+        noshow = false;
+    }
 
-//	if((!bInit ||
-//			settings.value("Profile").toString().isEmpty() ||
-//			!settings.value("NoShow", false).toBool() ||
-//		!settings.value("SavePasswd", false).toBool()))
-//	{
-//		LoginDialog dlg(bInit, ClientPtr(), "", bInit ? QString() : settings.value("Profile").toString());
-//		if (dlg.exec() == 0)
-//		{
-//			return false;
-//		}
-//		newProfile = dlg.isNewProfile();
-//        sNewProfileName = dlg.newProfileName();
-//		profile = dlg.profile();
-//		if (dlg.isChanged())
-//			bRes = false;
-//		bLoaded = true;
-//	}
-//	else if(bInit && !profile.isEmpty())
-//	{
-//		log(L_DEBUG, "profile = %s", profile.toUtf8().data());
-//		ProfileManager::instance()->selectProfile(profile);
-//	}
-//	else if(settings.value("NoShow", false).toBool())
-//	{
-//		profile = settings.value("Profile").toString();
-//		ProfileManager::instance()->selectProfile(profile);
-//        changeProfile(profile);
-//        startLogin();
-//		//bLoaded = true;
-//	}
-//	if(newProfile)
-//	{
-//		hideWindows();
-//		getContacts()->clearClients();
+    if(!noshow)
+    {
+        LoginDialog dlg;
+        dlg.setModal(true);
+        if(dlg.exec() != QDialog::Accepted)
+            return false;
 
-//		QDir d(ProfileManager::instance()->rootPath());
-//        settings.setValue("Profile", sNewProfileName);
+        profile = dlg.profile();
+    }
 
-//		NewProtocol *pDlg = NULL;
-//		if (bCmdLineProfile)
-//		{
-//			settings.setValue("SavePasswd", true);
-//			settings.setValue("NoShow", true);
-//			pDlg = new NewProtocol(NULL,1,getRegNew());
-//		} else {
-//			pDlg = new NewProtocol(NULL);
-//		}
-//		if (!pDlg->exec() && !pDlg->connected()){
-//			delete(pDlg);
-//            if (d.exists(sNewProfileName))
-//                d.rmdir(sNewProfileName);
-//			return false;
-//		}
-//		delete(pDlg);
-
-//		bLoaded = true;
-//		bRes = false;
-//		bNew = true;
-//	}
+    log(L_DEBUG, "Profile selected: %s", qPrintable(profile));
 
 //    PropertyHubPtr hub = ProfileManager::instance()->getPropertyHub("_core");
 //    if(!hub.isNull())
 //        setPropertyHub(hub);
-//	// Defaults:
-//	if(!value("ShowPanel").isValid())
-//		setValue("ShowPanel", true); // Show status panel by default
-//	if(!value("HistoryStyle").isValid())
-//		setValue("HistoryStyle", "SIM");
-//	if(value("HistoryPage").toUInt() == 0)
-//		setValue("HistoryPage", 100);
-//	historyXSL = new XSL(value("HistoryStyle").toString());
-//	EventPluginLoadConfig eplc;
-//	eplc.process();
-//	if (!bLoaded)
-//	{
+
+    getEventHub()->triggerEvent("load_config");
+
+    return true;
+
+//    if (!bLoaded)
+//    {
 //        SIM::ClientList clients;
 //        connect(&clients, SIGNAL(ignoreEvents(bool)), this, SLOT(ignoreEvents(bool)));
-//		loadClients(clients);
-//		clients.addToContacts();
-//	}
-//	if (!bNew)
-//    {
-//		getContacts()->load();
+//        loadClients(clients);
+//        clients.addToContacts();
 //    }
-//	for (unsigned i = 0; i < getContacts()->nClients(); i++)
+//    if (!bNew)
 //    {
-//		Client *client = getContacts()->getClient(i);
-//		// "Emulate" contactsLoaded() when we're dealing with a new contact list
-//		if (bNew)
-//			client->contactsLoaded();
+//        getContacts()->load();
+//    }
+//    for (unsigned i = 0; i < getContacts()->nClients(); i++)
+//    {
+//        Client *client = getContacts()->getClient(i);
+//        // "Emulate" contactsLoaded() when we're dealing with a new contact list
+//        if (bNew)
+//            client->contactsLoaded();
 //        if (client->getCommonStatus())
 //            client->setManualStatus(getManualStatus());
-//		client->setStatus(client->getManualStatus(), client->getCommonStatus());
-//	}
-//	if (getRegNew()&&!bCmdLineProfile){
-//		hideWindows();
-//		NewProtocol pDlg(NULL,1,true);
-//		pDlg.exec();
-//	}
+//        client->setStatus(client->getManualStatus(), client->getCommonStatus());
+//    }
+//    if (getRegNew()&&!bCmdLineProfile){
+//        hideWindows();
+//        NewProtocol pDlg(NULL,1,true);
+//        pDlg.exec();
+//    }
 
-//	loadUnread();
+//    loadUnread();
 //    containerManager()->init();
 
 //    log(L_DEBUG, "geometry: %s", value("geometry").toByteArray().toHex().data());
@@ -3221,20 +3162,20 @@ void CorePlugin::eventInit()
 //            c->init();
 //        }
 //    }
-//	//clearContainer();
-//	setValue("Containers", QString());
-//	setValue("Container", QVariantMap());
+//    //clearContainer();
+//    setValue("Containers", QString());
+//    setValue("Container", QVariantMap());
 
-//	m_bInit = true;
-//	loadMenu();
-//	if (!bRes)
+//    m_bInit = true;
+//    loadMenu();
+//    if (!bRes)
 //    {
-//		EventSaveState eSave;
-//		eSave.process();
-//		return true;
-//	}
-//	return bRes || bNew;
-//}
+//        EventSaveState eSave;
+//        eSave.process();
+//        return true;
+//    }
+//    return bRes || bNew;
+}
 
 //void CorePlugin::startLogin()
 //{

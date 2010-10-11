@@ -171,6 +171,7 @@ public:
 //    void changeClientStatus(SIM::Client* client, const SIM::IMStatusPtr& status);
 
 //    ContainerManager* containerManager() const;
+    bool init();
 
 //signals:
 //    void modeChanged(int);
@@ -186,16 +187,14 @@ public:
 //    void showMain();
 //    void postInit();
 //    void ignoreEvents(bool i);
-//protected:
-
-//    void subscribeToEvents();
+protected:
+    void subscribeToEvents();
     
 //    virtual bool processEvent(SIM::Event*);
 //    virtual QByteArray getConfig();
 //    virtual QWidget *createConfigWindow(QWidget *parent);
 //    void createEventCmds();
 //    void showInfo(SIM::CommandDef *cmd);
-//    bool init(bool bFirst);
 //    void destroy();
 //    void loadDir();
 //    void loadClients(SIM::ClientList&);

@@ -26,7 +26,7 @@ class ICQConfig : public QWidget, public Ui::ICQConfigBase
     Q_OBJECT
 public:
     ICQConfig(QWidget *parent, ICQClient *client, bool bConfig);
-    CorePlugin *core;
+    //CorePlugin *core;
 signals:
     void okEnabled(bool);
 public slots:

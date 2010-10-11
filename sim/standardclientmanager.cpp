@@ -85,14 +85,16 @@ bool StandardClientManager::load_new()
         }
         ClientPtr newClient;
         ProfileManager::instance()->currentProfile()->enablePlugin(pluginName);
-        ProtocolPtr protocol;
-        ProtocolIterator it;
-        while ((protocol = ++it) != NULL)
+
+        for(int i = 0; i < getProtocolManager()->protocolCount(); i++)
+        {
+            ProtocolPtr protocol = getProtocolManager()->protocol(i);
             if (protocol->name() == protocolName)
             {
                 newClient = protocol->createClient(clientName);
                 addClient(newClient);
             }
+        }
 
         QDomElement clientData = thisClient.elementsByTagName("clientdata").at(0).toElement();
         if(clientData.isNull())

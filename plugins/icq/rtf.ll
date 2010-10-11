@@ -24,7 +24,6 @@
 
 #include <QTextCodec>
 
-#include "unquot.h"
 #include "log.h"
 
 #include "icqclient.h"
@@ -472,7 +471,7 @@ void RTF2HTML::PrintUnquoted(const char *str, ...)
 
 void RTF2HTML::PrintQuoted(const QString &str)
 {
-    sParagraph += quoteString(str);
+    sParagraph += (str);
 }
 
 void RTF2HTML::FlushParagraph()

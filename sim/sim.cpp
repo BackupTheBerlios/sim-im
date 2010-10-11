@@ -88,6 +88,8 @@ void registerEvents()
     SIM::getEventHub()->registerEvent(SIM::StandardEvent::create("init"));
     SIM::getEventHub()->registerEvent(SIM::StandardEvent::create("init_abort"));
     SIM::getEventHub()->registerEvent(SIM::StandardEvent::create("quit"));
+    SIM::getEventHub()->registerEvent(SIM::StandardEvent::create("load_config"));
+    SIM::getEventHub()->registerEvent(SIM::StandardEvent::create("save_config"));
 }
 
 static BuiltinLogger* gs_logger = 0;
