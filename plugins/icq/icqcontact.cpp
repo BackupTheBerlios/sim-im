@@ -285,6 +285,11 @@ void ICQContact::deserializeLine(const QString& key, const QString& value)
     }
 }
 
+bool ICQContact::deserialize(const QString& data)
+{
+    return true;
+}
+
 QByteArray ICQContact::serialize()
 {
     QString result;

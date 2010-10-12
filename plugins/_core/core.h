@@ -255,9 +255,9 @@ private slots:
     void eventInit();
     void eventQuit();
 
-//private:
+private:
+    SIM::PropertyHubPtr m_propertyHub;
 //    bool m_bIgnoreEvents;
-//    SIM::PropertyHubPtr m_propertyHub;
 //    ContainerManager* m_containerManager;
 
 //    // Event handlers:

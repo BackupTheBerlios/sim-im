@@ -54,10 +54,11 @@ namespace SIM
 
         QString toolTipText();
 
-        UserDataPtr getUserData() { return m_userData; }
+        UserDataPtr userdata() { return m_userData; }
 
         bool serialize(QDomElement& element);
         bool deserialize(const QDomElement& element);
+        bool deserialize(const QString& data);
 
     protected:
         bool serializeMainInfo(QDomElement& element);

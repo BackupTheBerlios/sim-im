@@ -152,7 +152,7 @@ namespace SIM
 
     bool Contact::serialize(QDomElement& element)
     {
-        getUserData()->serialize(element);
+        userdata()->serialize(element);
         QStringList clients = clientContactNames();
         QDomElement maininfo = element.ownerDocument().createElement("main");
         serializeMainInfo(maininfo);
@@ -170,7 +170,7 @@ namespace SIM
 
     bool Contact::deserialize(const QDomElement& element)
     {
-        getUserData()->deserialize(element);
+        userdata()->deserialize(element);
         QDomElement main = element.elementsByTagName("main").at(0).toElement();
         if(!main.isNull())
         {
@@ -188,6 +188,11 @@ namespace SIM
             imc->deserialize(clientElement);
         }
         return true;
+    }
+
+    bool Contact::deserialize(const QString& data)
+    {
+
     }
 }
 

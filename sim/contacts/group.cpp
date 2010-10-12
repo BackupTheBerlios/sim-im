@@ -125,6 +125,11 @@ namespace SIM
         setName(hub->value("Name").toString());
         return true;
     }
+
+    bool Group::deserialize(const QString& data)
+    {
+        return true;
+    }
 }
 
 // vim: set expandtab:

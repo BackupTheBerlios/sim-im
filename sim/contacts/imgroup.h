@@ -22,6 +22,7 @@ public:
 
     virtual bool serialize(QDomElement& element) = 0;
     virtual bool deserialize(QDomElement& element) = 0;
+    virtual bool deserialize(const QString& data) = 0;
 };
 
 typedef QSharedPointer<IMGroup> IMGroupPtr;

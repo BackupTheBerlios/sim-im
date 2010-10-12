@@ -60,6 +60,13 @@ public:
     {
         Q_UNUSED(element);
     }
+
+    virtual bool deserialize(const QString& data)
+    {
+        Q_UNUSED(data);
+        return false;
+    }
+
 private:
     SIM::ClientWeakPtr m_client;
 };

@@ -28,8 +28,9 @@ namespace SIM
         virtual void destroySetupWidget() = 0;
         virtual QStringList availableSetupWidgets() const = 0;
 
-        IMStatusPtr currentStatus();
-        virtual void changeStatus(const IMStatusPtr& status);
+        virtual IMStatusPtr currentStatus() = 0;
+        virtual void changeStatus(const IMStatusPtr& status) = 0;
+        virtual IMStatusPtr savedStatus() = 0;
 
         virtual IMContactPtr ownerContact() = 0;
         virtual void setOwnerContact(IMContactPtr contact) = 0;
@@ -53,8 +54,6 @@ namespace SIM
         static QString uncryptPassword(const QString& passwd);
 
     private:
-
-        IMStatusPtr m_currentStatus;
         PropertyHubPtr m_data;
         Protocol* m_protocol;
         QString m_password;

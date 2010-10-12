@@ -30,6 +30,7 @@ public:
 
     virtual void serialize(QDomElement& element);
     virtual void deserialize(QDomElement& element);
+    virtual bool deserialize(const QString& data);
 
     unsigned long getUin() const { return m_uin; }
     void setUin(unsigned long uin) { m_uin = uin; }

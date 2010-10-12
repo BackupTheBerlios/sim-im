@@ -35,6 +35,7 @@ namespace SIM
 
         virtual void serialize(QDomElement& element) = 0;
         virtual void deserialize(QDomElement& element) = 0;
+        virtual bool deserialize(const QString& data) = 0;
 
     };
     typedef QSharedPointer<IMContact> IMContactPtr;

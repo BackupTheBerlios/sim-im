@@ -18,17 +18,6 @@ namespace SIM
     {
     }
 
-    void Client::changeStatus(const IMStatusPtr& status)
-    {
-        m_currentStatus = status;
-        // TODO emit event
-    }
-
-    IMStatusPtr Client::currentStatus()
-    {
-        return m_currentStatus;
-    }
-
     QString Client::cryptPassword(const QString& passwd)
     {
         if (passwd.length()) {

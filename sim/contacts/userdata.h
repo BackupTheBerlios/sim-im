@@ -22,6 +22,7 @@ namespace SIM
 
         PropertyHubPtr getUserData(const QString& id); 
         PropertyHubPtr createUserData(const QString& id);
+        QStringList userDataIds() const;
         void destroyUserData(const QString& id);
 
         PropertyHubPtr root();

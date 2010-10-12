@@ -16,6 +16,7 @@ SET(icq_SRCS
 #        icqbuffer.cpp
         icqclient.cpp
         icqcontact.cpp
+        icqgroup.cpp
 #        icqconfig.cpp
 #        icqdirect.cpp
 #        icqicmb.cpp
@@ -57,6 +58,7 @@ SET(icq_HDRS
 #        icqbuffer.h
         icqclient.h
         icqcontact.h
+        icqgroup.h
 #        icqconfig.h
 #        icqinfo.h
 #        icqlocation.h

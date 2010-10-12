@@ -94,6 +94,11 @@ namespace SIM
         return UserDataPtr(new UserData());
     }
 
+    QStringList UserData::userDataIds() const
+    {
+        return m_data.keys();
+    }
+
 }
 
 // vim: set expandtab:

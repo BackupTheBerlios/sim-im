@@ -42,6 +42,7 @@ namespace SIM
 
         bool serialize(QDomElement& el);
         bool deserialize(QDomElement& el);
+        bool deserialize(const QString& data);
     private:
         bool serializeMainInfo(QDomElement& element);
         bool deserializeMainInfo(const QDomElement& element);

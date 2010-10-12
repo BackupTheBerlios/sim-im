@@ -35,6 +35,11 @@ namespace StubObjects
             return false;
         }
 
+        virtual bool deserialize(const QString& data)
+        {
+            return false;
+        }
+
     private:
         SIM::ClientWeakPtr m_client;
     };

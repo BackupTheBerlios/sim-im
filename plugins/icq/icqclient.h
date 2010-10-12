@@ -517,7 +517,7 @@ typedef std::map<SIM::my_string, alias_group>	CONTACTS_MAP;
 typedef std::map<unsigned, unsigned>			RATE_MAP;
 typedef std::map<unsigned short, SnacHandler*> mapSnacHandlers;
 
-class ICQClient : public QObject, public SIM::Client // public OscarSocket
+class ICQClient : public QObject, public SIM::Client
 {
     Q_OBJECT
 public:
@@ -532,6 +532,10 @@ public:
     QWidget* createSetupWidget(const QString& id, QWidget* parent);
     void destroySetupWidget();
     QStringList availableSetupWidgets() const;
+
+    virtual SIM::IMStatusPtr currentStatus();
+    virtual void changeStatus(const SIM::IMStatusPtr& status);
+    virtual SIM::IMStatusPtr savedStatus();
 
     SIM::IMContactPtr ownerContact();
     void setOwnerContact(SIM::IMContactPtr contact);

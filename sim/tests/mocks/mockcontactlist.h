@@ -22,6 +22,7 @@ namespace MockObjects
         MOCK_CONST_METHOD1(group, SIM::GroupPtr(int id));
         MOCK_METHOD1(removeGroup, void(int id));
         MOCK_METHOD1(createGroup, SIM::GroupPtr(int id));
+        MOCK_METHOD0(ownerContact, SIM::ContactPtr());
         MOCK_CONST_METHOD0(allGroups, QList<SIM::GroupPtr>());
         MOCK_METHOD1(contactsForGroup, QList<SIM::ContactPtr>(int groupId));
         MOCK_METHOD1(incomingMessage, void(const SIM::MessagePtr& message));

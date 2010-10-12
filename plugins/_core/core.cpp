@@ -53,6 +53,7 @@ email                : vovan@shutoff.ru
 #include "events/eventhub.h"
 #include "profilemanager.h"
 #include "clientmanager.h"
+#include "contacts/contactlist.h"
 
 // _core
 #include "core.h"
@@ -3105,35 +3106,24 @@ bool CorePlugin::init()
 
     log(L_DEBUG, "Profile selected: %s", qPrintable(profile));
 
-//    PropertyHubPtr hub = ProfileManager::instance()->getPropertyHub("_core");
-//    if(!hub.isNull())
-//        setPropertyHub(hub);
+    m_propertyHub = ProfileManager::instance()->getPropertyHub("_core");
+    if(!m_propertyHub)
+        return false;
 
     getEventHub()->triggerEvent("load_config");
 
+    QStringList clients = getClientManager()->clientList();
+    foreach(const QString& clname, clients)
+    {
+        ClientPtr client = getClientManager()->client(clname);
+        client->changeStatus(client->savedStatus());
+    }
+
+    getContactList()->load();
+    log(L_DEBUG, "Contact list loaded");
+
     return true;
 
-//    if (!bLoaded)
-//    {
-//        SIM::ClientList clients;
-//        connect(&clients, SIGNAL(ignoreEvents(bool)), this, SLOT(ignoreEvents(bool)));
-//        loadClients(clients);
-//        clients.addToContacts();
-//    }
-//    if (!bNew)
-//    {
-//        getContacts()->load();
-//    }
-//    for (unsigned i = 0; i < getContacts()->nClients(); i++)
-//    {
-//        Client *client = getContacts()->getClient(i);
-//        // "Emulate" contactsLoaded() when we're dealing with a new contact list
-//        if (bNew)
-//            client->contactsLoaded();
-//        if (client->getCommonStatus())
-//            client->setManualStatus(getManualStatus());
-//        client->setStatus(client->getManualStatus(), client->getCommonStatus());
-//    }
 //    if (getRegNew()&&!bCmdLineProfile){
 //        hideWindows();
 //        NewProtocol pDlg(NULL,1,true);

@@ -29,6 +29,7 @@
 #include <QByteArray>
 #include <QDateTime>
 
+#include "clientmanager.h"
 #include "buffer.h"
 #include "log.h"
 #include "contacts/contact.h"
@@ -36,6 +37,8 @@
 
 #include "icq.h"
 #include "icqconfig.h"
+#include "icqgroup.h"
+
 //#include "aimconfig.h"
 //#include "icqinfo.h"
 //#include "homeinfo.h"
@@ -393,6 +396,21 @@ bool ICQClient::deserialize(Buffer* cfg)
     //Client::deserialize(cfg);
     m_name = "";
     return true;
+}
+
+SIM::IMStatusPtr ICQClient::currentStatus()
+{
+    return SIM::IMStatusPtr();
+}
+
+void ICQClient::changeStatus(const SIM::IMStatusPtr& status)
+{
+    Q_UNUSED(status);
+}
+
+SIM::IMStatusPtr ICQClient::savedStatus()
+{
+    return SIM::IMStatusPtr();
 }
 
 //void ICQClient::setOwnerContact(SIM::IMContact* contact)
@@ -757,10 +775,12 @@ QString ICQClient::name()
 
 SIM::IMContactPtr ICQClient::createIMContact()
 {
+    return SIM::IMContactPtr(new ICQContact(SIM::getClientManager()->client(name())));
 }
 
 SIM::IMGroupPtr ICQClient::createIMGroup()
 {
+    return SIM::IMGroupPtr(new ICQGroup(SIM::getClientManager()->client(name())));
 }
 
 QWidget* ICQClient::createSetupWidget(const QString& id, QWidget* parent)

@@ -18,6 +18,7 @@ namespace MockObjects
         MOCK_METHOD0(makeToolTipText, QString());
         MOCK_METHOD1(serialize, void(QDomElement& element));
         MOCK_METHOD1(deserialize, void(QDomElement& element));
+        MOCK_METHOD1(deserialize, bool(const QString&));
     };
 }
 

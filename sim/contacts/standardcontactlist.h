@@ -22,13 +22,15 @@ public:
     virtual GroupPtr group(int id) const;
     virtual void removeGroup(int id);
     virtual GroupPtr createGroup(int id);
+
+    virtual ContactPtr ownerContact();
+
     virtual QList<GroupPtr> allGroups() const;
     virtual QList<ContactPtr> contactsForGroup(int groupId);
     virtual void incomingMessage(const MessagePtr& message);
     virtual UserDataPtr userdata() const;
 
 protected:
-    void save_new();
     bool save_owner(QDomElement element);
     bool save_groups(QDomElement element);
     bool save_contacts(QDomElement element);
@@ -38,9 +40,29 @@ protected:
     bool load_contacts(const QDomElement& contacts);
     bool load_old();
 
+    struct ParserState
+    {
+        enum SectionType
+        {
+            Contact,
+            Group,
+            Client
+        };
+
+        int contactId;
+        int groupId;
+        QString dataname;
+        SectionType nextSection;
+        QString data;
+    };
+
+    bool load_old_dispatch(ParserState& state);
+    void resetState(ParserState& state);
+    bool deserializeLines(const UserDataPtr& ud, const QString& dataname, const QString& data);
+
 private:
-    UserDataPtr getUserData() { return m_userData; }
     UserDataPtr m_userData;
+    ContactPtr m_owner;
     QMap<int, ContactPtr> m_contacts;
     QMap<int, GroupPtr> m_groups;
 };

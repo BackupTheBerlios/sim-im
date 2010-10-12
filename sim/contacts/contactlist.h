@@ -29,6 +29,8 @@ public:
     virtual void removeGroup(int id) = 0;
     virtual GroupPtr createGroup(int id) = 0;
 
+    virtual ContactPtr ownerContact() = 0;
+
     virtual QList<GroupPtr> allGroups() const = 0;
     virtual QList<ContactPtr> contactsForGroup(int groupId) = 0;
     virtual void incomingMessage(const MessagePtr& message) = 0;
