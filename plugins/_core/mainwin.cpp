@@ -19,7 +19,7 @@
 
 #include "mainwin.h"
 #include "core.h"
-//#include "roster/userview.h"
+#include "roster/userview.h"
 #include "contacts/contact.h"
 #include "contacts/contactlist.h"
 #include "events/eventhub.h"
@@ -43,11 +43,10 @@ using namespace SIM;
 MainWindow::MainWindow(CorePlugin* core)
     : QMainWindow(NULL, Qt::Window)
     , m_core(core)
+    , m_noresize(false)
 {
     log(L_DEBUG, "MainWindow::MainWindow()");
-//    setObjectName("mainwnd");
     setAttribute(Qt::WA_AlwaysShowToolTips);
-//    m_bNoResize = false;
 
     setWindowIcon(getImageStorage()->icon("SIM"));
     updateTitle();
@@ -62,24 +61,25 @@ MainWindow::MainWindow(CorePlugin* core)
     statusBar()->show();
     statusBar()->installEventFilter(this);
 
-//	m_view = new UserView;
-//	m_view->init();
+    m_view = new UserView(core);
+    m_view->init();
+    addWidget(m_view);
 
     getEventHub()->getEvent("init")->connectTo(this, SLOT(eventInit()));
 }
 
 MainWindow::~MainWindow()
 {
-//  delete m_view;
+    delete m_view;
     delete m_bar;
 }
 
-//void MainWindow::resizeEvent(QResizeEvent *e)
-//{
-//    if (m_bNoResize)
-//        return;
-//    QMainWindow::resizeEvent(e);
-//}
+void MainWindow::resizeEvent(QResizeEvent *e)
+{
+    if (m_noresize)
+        return;
+    QMainWindow::resizeEvent(e);
+}
 
 bool MainWindow::eventFilter(QObject *o, QEvent *e)
 {
@@ -192,18 +192,14 @@ void MainWindow::eventInit()
 //    qApp->quit();
 //}
 
-//void MainWindow::addWidget(QWidget *w, bool bDown)
-//{
-//    w->setParent(main);
-//    w->move(QPoint());
-//    if (bDown){
-//        lay->addWidget(w);
-//    }else{
-//        lay->insertWidget(0, w);
-//    }
-//    if (isVisible())
-//        w->show();
-//}
+void MainWindow::addWidget(QWidget *w)
+{
+    w->setParent(m_centralWidget);
+    w->move(QPoint());
+    m_layout->addWidget(w);
+    if(isVisible())
+        w->show();
+}
 
 //void MainWindow::addStatus(QWidget *w, bool)
 //{

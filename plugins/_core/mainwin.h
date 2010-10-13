@@ -46,31 +46,32 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(CorePlugin* core);
     ~MainWindow();
-    //bool m_bNoResize;
+
 protected:
     bool eventFilter(QObject *o, QEvent *e);
+    void resizeEvent(QResizeEvent *e);
+
 //    void focusInEvent(QFocusEvent*);
-//    void resizeEvent(QResizeEvent *e);
 //    void quit();
-//    void addWidget(QWidget*, bool bDown);
 //    void addStatus(QWidget *w, bool);
 //    list<QWidget*> statusWidgets;
 //    QString	m_icon;
 
 //    virtual void closeEvent(QCloseEvent *e);
 
-//    friend class CorePlugin;
-
 private:
     void updateTitle();
+    void addWidget(QWidget* widget);
+
 //    void populateMainToolbar();
 //    void loadDefaultCommandList();
-//    UserView* m_view;
 
+    UserView* m_view;
     SIM::ToolBar* m_bar;
     QVBoxLayout* m_layout;
     QWidget* m_centralWidget;
     CorePlugin* m_core;
+    bool m_noresize;
 
 private slots:
     void eventInit();

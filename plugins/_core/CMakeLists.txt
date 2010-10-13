@@ -64,7 +64,7 @@ SET(_core_SRCS
 #        userlist.cpp
 #        userviewcfg.cpp
 #        userwnd.cpp
-#        roster/userview.cpp
+        roster/userview.cpp
 #        roster/userviewdelegate.cpp
 )
 
@@ -131,7 +131,7 @@ SET(_core_HDRS
 #        userlist.h
 #        userviewcfg.h
 #        userwnd.h
-#        roster/userview.h
+        roster/userview.h
 #        roster/userviewdelegate.h
 )
 
