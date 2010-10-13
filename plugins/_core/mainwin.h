@@ -23,8 +23,6 @@
 #include "event.h"
 #include "simgui/toolbar.h"
 
-#include "cfg.h"
-
 #include <QMainWindow>
 
 using namespace std;
@@ -42,37 +40,36 @@ class QVBoxLayout;
 class CorePlugin;
 class UserView;
 
-class MainWindow : public QMainWindow, public SIM::EventReceiver
+class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
     MainWindow(CorePlugin* core);
     ~MainWindow();
-    bool m_bNoResize;
+    //bool m_bNoResize;
 protected:
-    QWidget *main;
-    SIM::ToolBar* m_bar;
-    QVBoxLayout *lay;
-    QHBoxLayout *h_lay;
-    void focusInEvent(QFocusEvent*);
-    virtual bool processEvent(SIM::Event*);
-    void setTitle();
-    void resizeEvent(QResizeEvent *e);
     bool eventFilter(QObject *o, QEvent *e);
-    void quit();
-    void addWidget(QWidget*, bool bDown);
-    void addStatus(QWidget *w, bool);
-    list<QWidget*> statusWidgets;
-    QString	m_icon;
+//    void focusInEvent(QFocusEvent*);
+//    void resizeEvent(QResizeEvent *e);
+//    void quit();
+//    void addWidget(QWidget*, bool bDown);
+//    void addStatus(QWidget *w, bool);
+//    list<QWidget*> statusWidgets;
+//    QString	m_icon;
 
-    virtual void closeEvent(QCloseEvent *e);
+//    virtual void closeEvent(QCloseEvent *e);
 
-    friend class CorePlugin;
+//    friend class CorePlugin;
 
 private:
-    void populateMainToolbar();
-    void loadDefaultCommandList();
-    UserView* m_view;
+    void updateTitle();
+//    void populateMainToolbar();
+//    void loadDefaultCommandList();
+//    UserView* m_view;
+
+    SIM::ToolBar* m_bar;
+    QVBoxLayout* m_layout;
+    QWidget* m_centralWidget;
     CorePlugin* m_core;
 
 private slots:

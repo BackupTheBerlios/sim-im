@@ -15,6 +15,7 @@ SET(sim_LIB_SRCS
 		clientmanager.cpp
         standardclientmanager.cpp
         commands/commandhub.cpp
+        commands/commandset.cpp
         commands/uicommand.cpp
 		country.cpp
         events/eventdata.cpp
@@ -80,6 +81,7 @@ SET(sim_LIB_HDRS
 		clientmanager.h
         standardclientmanager.h
         commands/commandhub.h
+        commands/commandset.h
         commands/uicommand.h
 		country.h
         events/eventdata.h
@@ -208,7 +210,8 @@ SET(sim_tests_srcs
     tests/test.cpp
     tests/testbuffer.cpp
     tests/testclientmanager.cpp
-	tests/testcommandhub.cpp
+    tests/testcommandhub.cpp
+    tests/testcommandset.cpp
     tests/testuicommand.cpp
     tests/testtoolbar.cpp
     tests/teststandardtoolbaractionfactory.cpp

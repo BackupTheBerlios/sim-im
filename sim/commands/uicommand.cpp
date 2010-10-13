@@ -54,9 +54,9 @@ QStringList UiCommand::tags() const
 
 void UiCommand::setIconId(const QString& id)
 {
-    Q_ASSERT(getImageStorage());
     m_iconId = id;
-    m_icon = getImageStorage()->icon(id);
+    if(getImageStorage())
+        m_icon = getImageStorage()->icon(id);
 }
 
 QString UiCommand::iconId() const

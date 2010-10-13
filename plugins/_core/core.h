@@ -31,6 +31,7 @@
 #include "plugins.h"
 #include "propertyhub.h"
 #include "simapi.h"
+#include "mainwin.h"
 
 using namespace std;
 
@@ -257,6 +258,7 @@ private slots:
 
 private:
     SIM::PropertyHubPtr m_propertyHub;
+    MainWindow* m_main;
 //    bool m_bIgnoreEvents;
 //    ContainerManager* m_containerManager;
 

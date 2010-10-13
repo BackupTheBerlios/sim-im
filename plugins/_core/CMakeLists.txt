@@ -26,7 +26,7 @@ SET(_core_SRCS
 #        interfacecfg.cpp
         profileselectdialog.cpp
 #        maininfo.cpp
-#        mainwin.cpp
+        mainwin.cpp
 #        manager.cpp
 #        msgauth.cpp
 #        msgcfg.cpp
@@ -100,7 +100,7 @@ SET(_core_HDRS
 #        interfacecfg.h
         profileselectdialog.h
 #        maininfo.h
-#        mainwin.h
+        mainwin.h
 #        manager.h
 #        msgauth.h
 #        msgcfg.h

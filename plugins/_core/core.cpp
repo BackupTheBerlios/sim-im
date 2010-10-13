@@ -251,7 +251,7 @@ CorePlugin::CorePlugin() : QObject()
 //	createEventCmds();
     subscribeToEvents();
 
-//    m_main = new MainWindow(this);
+    m_main = new MainWindow(this);
 }
 
 void CorePlugin::subscribeToEvents()
@@ -3121,6 +3121,8 @@ bool CorePlugin::init()
 
     getContactList()->load();
     log(L_DEBUG, "Contact list loaded");
+
+    m_main->show();
 
     return true;
 
