@@ -18,53 +18,53 @@
 #ifndef _STATUS_H
 #define _STATUS_H
 
-#include <list>
+#include "clientmanager.h"
+#include "core.h"
 
 #include <QObject>
 #include <QString>
 #include <QStringList>
 
-#include "event.h"
+//struct BalloonItem
+//{
+//    QString		text;
+//    QStringList	buttons;
+//    unsigned	id;
+//    SIM::Client	*client;
+//};
 
-using namespace std;
-
-class QTimer;
-class CorePlugin;
-class BalloonMsg;
-
-struct BalloonItem
-{
-    QString		text;
-    QStringList	buttons;
-    unsigned	id;
-    SIM::Client	*client;
-};
-
-class CommonStatus : public QObject, public SIM::EventReceiver
+class CORE_EXPORT CommonStatus : public QObject
 {
     Q_OBJECT
 public:
-    CommonStatus();
-    ~CommonStatus();
-protected slots:
-    void timeout();
-    void setBarStatus();
-    void yes_action(void*);
-    void finished();
-    void showBalloon();
-protected:
-    QTimer *m_timer;
-    virtual bool processEvent(SIM::Event*);
-    void rebuildStatus();
-    void checkInvisible();
-    bool m_bInitialized;
-    bool m_bBlink;
-    bool m_bConnected;
-    BalloonMsg		  *m_balloon;
-    list<BalloonItem> m_queue;
+    CommonStatus(SIM::ClientManager* manager);
+    virtual ~CommonStatus();
+
+    void rebuildStatusList();
+    int stateCount() const;
+
+//protected slots:
+//    void timeout();
+//    void setBarStatus();
+//    void yes_action(void*);
+//    void finished();
+//    void showBalloon();
+//protected:
+//    QTimer *m_timer;
+//    virtual bool processEvent(SIM::Event*);
+//    void rebuildStatus();
+//    void checkInvisible();
+//    bool m_bInitialized;
+//    bool m_bBlink;
+//    bool m_bConnected;
+//    BalloonMsg		  *m_balloon;
+//    list<BalloonItem> m_queue;
 
 private slots:
     void eventInit();
+
+private:
+    SIM::ClientManager* m_clientManager;
 };
 
 #endif

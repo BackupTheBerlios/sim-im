@@ -59,5 +59,11 @@ bool ICQStatus::hasText() const
     return m_hasText;
 }
 
+bool ICQStatus::isNonexclusive() const
+{
+    return false;
+}
+
+
 // vim: set expandtab:
 

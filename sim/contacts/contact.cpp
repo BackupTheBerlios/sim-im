@@ -192,7 +192,7 @@ namespace SIM
 
     bool Contact::deserialize(const QString& data)
     {
-
+        return true;
     }
 }
 

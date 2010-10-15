@@ -15,6 +15,7 @@ SET(_core_SRCS
 #        containermanager.cpp
 #        container.cpp
         core.cpp
+        commonstatus.cpp
 #        declinedlg.cpp
 #        editmail.cpp
 #        editphone.cpp
@@ -87,6 +88,7 @@ SET(_core_HDRS
 #        containermanager.h
 #        container.h
         core.h
+        commonstatus.h
 #        core_consts.h
 #        core_events.h
 #        declinedlg.h

@@ -14,7 +14,6 @@ StandardClientManager::StandardClientManager()
 
 StandardClientManager::~StandardClientManager()
 {
-    save();
 }
 
 void StandardClientManager::addClient(ClientPtr client)

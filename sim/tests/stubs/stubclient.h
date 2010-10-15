@@ -8,7 +8,7 @@ namespace StubObjects
     class StubClient : public SIM::Client
     {
     public:
-        StubClient(const QString& id) : SIM::Client(0), m_name(id)
+        StubClient(SIM::Protocol* proto, const QString& id) : SIM::Client(proto), m_name(id)
         {
         }
 

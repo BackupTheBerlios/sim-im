@@ -23,7 +23,7 @@ namespace
 
         ClientPtr createStubClient(const QString& id)
         {
-            return ClientPtr(new StubObjects::StubClient(id));
+            return ClientPtr(new StubObjects::StubClient(0, id));
         }
 
         IMContactPtr createStubIMContact(const ClientPtr& client)

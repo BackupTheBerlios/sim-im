@@ -17,6 +17,9 @@ public:
     virtual QString text() const;
     virtual QIcon icon() const;
 
+    virtual bool isNonexclusive() const;
+
+
     virtual QStringList substates();
     virtual SIM::IMStatusPtr substatus(const QString& id);
     virtual SIM::IMStatusPtr clone();

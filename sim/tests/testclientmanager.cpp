@@ -34,8 +34,8 @@ namespace
 
     TEST_F(TestClientManager, ClientManipulation)
     {
-        SIM::ClientPtr icqclient = SIM::ClientPtr(new StubObjects::StubClient("ICQ.666666666"));
-        SIM::ClientPtr jabberclient = SIM::ClientPtr(new StubObjects::StubClient("Jabber.loh@jabber.org"));
+        SIM::ClientPtr icqclient = SIM::ClientPtr(new StubObjects::StubClient(0, "ICQ.666666666"));
+        SIM::ClientPtr jabberclient = SIM::ClientPtr(new StubObjects::StubClient(0, "Jabber.loh@jabber.org"));
         EXPECT_TRUE(icqclient->name() == QString("ICQ.666666666"));
         SIM::getClientManager()->addClient(icqclient);
         SIM::getClientManager()->addClient(jabberclient);
