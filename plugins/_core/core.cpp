@@ -54,9 +54,11 @@ email                : vovan@shutoff.ru
 #include "profilemanager.h"
 #include "clientmanager.h"
 #include "contacts/contactlist.h"
+#include "commands/commandhub.h"
 
 // _core
 #include "core.h"
+#include "roster/userview.h"
 #include "profileselectdialog.h"
 
 using namespace std;
@@ -212,7 +214,7 @@ CorePlugin::CorePlugin() : QObject()
 //    , m_cmds            (new Commands())
 //    , m_HistoryThread   (NULL)
 //    , m_bIgnoreEvents   (false)
-//    , m_propertyHub     (SIM::PropertyHub::create("_core"))
+    , m_propertyHub(SIM::PropertyHub::create("_core"))
 {
 //    g_plugin = this;
 //	setValue("StatusTime", QDateTime::currentDateTime().toTime_t());
@@ -263,7 +265,41 @@ void CorePlugin::subscribeToEvents()
 void CorePlugin::eventQuit()
 {
     //destroy();
-    //m_cmds->clear();
+}
+
+void CorePlugin::createCommands()
+{
+    log(L_DEBUG, "createMainToolbar()");
+    UiCommandPtr showOffline = UiCommand::create(I18N_NOOP("Show &offline"), "online_on", "show_offline", QStringList("main"));
+    showOffline->setWidgetType(UiCommand::wtButton);
+    showOffline->setCheckable(true);
+    showOffline->setChecked(m_main->userview()->isShowOffline());
+    getCommandHub()->registerCommand(showOffline);
+
+    UiCommandPtr dontshow = UiCommand::create(I18N_NOOP("Do&n't show groups"), "grp_off", "groupmode_dontshow", QStringList("groupmode_menu"));
+    dontshow->setCheckable(true);
+    dontshow->setChecked(true);
+    dontshow->setAutoExclusive(true);
+    UiCommandPtr mode1 = UiCommand::create(I18N_NOOP("Group mode 1"), "grp_on", "groupmode_mode1", QStringList("groupmode_menu"));
+    mode1->setCheckable(true);
+    mode1->setAutoExclusive(true);
+    UiCommandPtr mode2 = UiCommand::create(I18N_NOOP("Group mode 2"), "grp_on", "groupmode_mode2", QStringList("groupmode_menu"));
+    mode2->setCheckable(true);
+    mode2->setAutoExclusive(true);
+    UiCommandPtr groups = UiCommand::create(I18N_NOOP("&Groups"), (m_main->userview()->groupMode() > 0) ? "grp_on" : "grp_off",
+                                            "groupmode_menu", QStringList("main"));
+    groups->addSubCommand(dontshow);
+    groups->addSubCommand(mode1);
+    groups->addSubCommand(mode2);
+    groups->addSubCommand(SIM::getCommandHub()->command("show_offline"));
+
+    UiCommandPtr showEmptyGroups = UiCommand::create(I18N_NOOP("Show &empty groups"), QString(), "show_empty_groups", QStringList("groupmode_menu"));
+    groups->addSubCommand(showEmptyGroups);
+
+    UiCommandPtr createGroup = UiCommand::create(I18N_NOOP("&Create group"), "grp_create", "create_group", QStringList("groupmode_menu"));
+    groups->addSubCommand(createGroup);
+    groups->setWidgetType(UiCommand::wtButton);
+    getCommandHub()->registerCommand(groups);
 }
 
 //void CorePlugin::createCommand(int id, const QString& text, const QString& icon, int menu_id,
@@ -623,10 +659,10 @@ void CorePlugin::eventQuit()
 //    m_propertyHub = hub;
 //}
 
-//SIM::PropertyHubPtr CorePlugin::propertyHub()
-//{
-//    return m_propertyHub;
-//}
+SIM::PropertyHubPtr CorePlugin::propertyHub()
+{
+    return m_propertyHub;
+}
 
 //QVariant CorePlugin::value(const QString& key)
 //{
@@ -3110,6 +3146,8 @@ bool CorePlugin::init()
     if(!m_propertyHub)
         return false;
 
+    createCommands();
+
     getEventHub()->triggerEvent("load_config");
 
     QStringList clients = getClientManager()->clientList();
@@ -3122,6 +3160,7 @@ bool CorePlugin::init()
     getContactList()->load();
     log(L_DEBUG, "Contact list loaded");
 
+    m_main->init();
     m_main->show();
 
     return true;

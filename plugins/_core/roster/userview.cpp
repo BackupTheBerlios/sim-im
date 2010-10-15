@@ -59,7 +59,8 @@ const unsigned BLINK_COUNT      = 8;
 //static JoinContacts joinContactsData;
 
 UserView::UserView(CorePlugin* plugin, QWidget* parent) : QTreeView(parent),
-    m_plugin(plugin)
+    m_plugin(plugin),
+    m_showOffline(false)
 //, m_bBlink		(false)
 //, m_bUnreadBlink(false)
 //, m_blinkTimer	(new QTimer(this))
@@ -132,6 +133,26 @@ bool UserView::init()
 //    m_bInit = true;
 //    fill();
     return true;
+}
+
+void UserView::setShowOffline(bool s)
+{
+    m_showOffline = s;
+}
+
+bool UserView::isShowOffline() const
+{
+    return m_showOffline;
+}
+
+void UserView::setGroupMode(GroupMode mode)
+{
+    m_groupMode = mode;
+}
+
+UserView::GroupMode UserView::groupMode() const
+{
+    return m_groupMode;
 }
 
 //bool UserView::processEvent(Event *e)

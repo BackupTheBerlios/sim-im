@@ -2,6 +2,7 @@
 #include <gmock/gmock.h>
 
 #include <QComboBox>
+#include <QToolButton>
 
 #include "stubs/stubimagestorage.h"
 #include "standardtoolbaractionfactory.h"
@@ -25,13 +26,19 @@ namespace
             setImageStorage(NULL);
         }
 
+        UiCommandPtr createButtonCmd()
+        {
+            UiCommandPtr cmd = UiCommand::create("Test", "", "test_cmd");
+            cmd->setWidgetType(UiCommand::wtButton);
+            return cmd;
+        }
+
         ToolbarActionFactory* factory;
     };
 
     TEST_F(TestStandardToolbarActionFactory, ButtonCreation)
     {
-        UiCommandPtr cmd = UiCommand::create("Test", "", "test_cmd");
-        cmd->setWidgetType(UiCommand::wtButton);
+        UiCommandPtr cmd = createButtonCmd();
 
         QWidget* widget = factory->createWidget(cmd, 0);
         ASSERT_TRUE(widget != NULL);
@@ -52,5 +59,20 @@ namespace
         EXPECT_TRUE(action->isChecked() == cmd->isChecked());
 
         delete action;
+    }
+
+    TEST_F(TestStandardToolbarActionFactory, SubcommandRemoval)
+    {
+        UiCommandPtr cmd = createButtonCmd();
+        UiCommandPtr subcmd1 = UiCommand::create("Test", "", "test_subcmd1");
+        UiCommandPtr subcmd2 = UiCommand::create("Test", "", "test_subcmd2");
+        cmd->addSubCommand(subcmd1);
+        cmd->addSubCommand(subcmd2);
+        QToolButton* widget = qobject_cast<QToolButton*>(factory->createWidget(cmd, 0));
+        ASSERT_TRUE(widget);
+
+        cmd->clearSubcommands();
+
+        ASSERT_TRUE(widget->menu() == 0);
     }
 }

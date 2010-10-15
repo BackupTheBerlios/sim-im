@@ -66,6 +66,7 @@ SET(sim_LIB_SRCS
 		simgui/qchildwidget.cpp
 		simgui/qcolorbutton.cpp
 		simgui/qkeybutton.cpp
+        simgui/toolbarbutton.cpp
         simgui/toolbar.cpp
         simgui/toolbaractionfactory.cpp
         simgui/standardtoolbaractionfactory.cpp
@@ -134,6 +135,7 @@ SET(sim_LIB_HDRS
 		simgui/qchildwidget.h
 		simgui/qcolorbutton.h
 		simgui/qkeybutton.h
+        simgui/toolbarbutton.h
         simgui/toolbar.h
         simgui/toolbaractionfactory.h
         simgui/standardtoolbaractionfactory.h

@@ -169,7 +169,9 @@ SET(_core_UICS
 
 SET(core_test_sources
         tests/test.cpp
-		tests/testcoreplugin.cpp)
+        tests/testcoreplugin.cpp
+        tests/testcommonstatus.cpp
+)
 
 ADD_EXECUTABLE(test_core ${core_test_sources})
 TARGET_LINK_LIBRARIES(test_core simlib ${QT_LIBRARIES} gtest gmock _core)

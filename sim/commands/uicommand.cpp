@@ -17,7 +17,8 @@ UiCommand::UiCommand(const QString& text, const QString& iconId, const QString& 
     m_text(text),
     m_widgetType(UiCommand::wtNone),
     m_checkable(false),
-    m_checked(false)
+    m_checked(false),
+    m_autoExclusive(false)
 {
     setIconId(iconId);
 }
@@ -66,12 +67,23 @@ QString UiCommand::iconId() const
 
 void UiCommand::addSubCommand(const UiCommandPtr& subcmd)
 {
+    subcmd->setParentCommand(this);
     m_subcmds.append(subcmd);
 }
 
 QList<UiCommandPtr> UiCommand::subCommands() const
 {
     return m_subcmds;
+}
+
+void UiCommand::clearSubcommands()
+{
+    emit subcommandsRemoved();
+}
+
+void UiCommand::setParentCommand(UiCommand* cmd)
+{
+    m_parent = cmd;
 }
 
 void UiCommand::trigger()
@@ -122,4 +134,15 @@ void UiCommand::setChecked(bool b)
         emit checked(b);
     }
 }
+
+bool UiCommand::isAutoExclusive() const
+{
+    return m_autoExclusive;
+}
+
+void UiCommand::setAutoExclusive(bool ae)
+{
+    m_autoExclusive = ae;
+}
+
 }

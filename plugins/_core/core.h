@@ -165,7 +165,7 @@ public:
 //    static CorePlugin* instance();
 
 //    void setPropertyHub(SIM::PropertyHubPtr hub);
-//    SIM::PropertyHubPtr propertyHub();
+    SIM::PropertyHubPtr propertyHub();
 //    QVariant value(const QString& key);
 //    void setValue(const QString& key, const QVariant& v);
 
@@ -190,7 +190,7 @@ public:
 //    void ignoreEvents(bool i);
 protected:
     void subscribeToEvents();
-    
+    void createCommands();
 //    virtual bool processEvent(SIM::Event*);
 //    virtual QByteArray getConfig();
 //    virtual QWidget *createConfigWindow(QWidget *parent);

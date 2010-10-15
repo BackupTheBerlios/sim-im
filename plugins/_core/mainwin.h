@@ -47,9 +47,13 @@ public:
     MainWindow(CorePlugin* core);
     ~MainWindow();
 
+    UserView* userview() const;
+    void init();
+
 protected:
     bool eventFilter(QObject *o, QEvent *e);
     void resizeEvent(QResizeEvent *e);
+
 
 //    void focusInEvent(QFocusEvent*);
 //    void quit();
@@ -63,8 +67,8 @@ private:
     void updateTitle();
     void addWidget(QWidget* widget);
 
-//    void populateMainToolbar();
-//    void loadDefaultCommandList();
+    void populateMainToolbar();
+    void loadDefaultCommandList();
 
     UserView* m_view;
     SIM::ToolBar* m_bar;
@@ -72,9 +76,6 @@ private:
     QWidget* m_centralWidget;
     CorePlugin* m_core;
     bool m_noresize;
-
-private slots:
-    void eventInit();
 };
 
 #endif

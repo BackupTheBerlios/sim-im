@@ -9,6 +9,8 @@
 #include "events/logevent.h"
 #include "contacts/contactlist.h"
 #include "contacts.h"
+#include "tests/stubs/stubimagestorage.h"
+
 
 void registerEvents()
 {
@@ -20,14 +22,15 @@ void registerEvents()
 
 int main(int argc, char** argv)
 {
-	QApplication app(argc, argv);
-	::testing::InitGoogleTest(&argc, argv);
-	::testing::InitGoogleMock(&argc, argv);
-	SIM::createEventHub();
-	SIM::createImageStorage();
-	SIM::createCommandHub();
-	SIM::createContactList();
-	registerEvents();
-	return RUN_ALL_TESTS();
+    QApplication app(argc, argv);
+    ::testing::InitGoogleTest(&argc, argv);
+    ::testing::InitGoogleMock(&argc, argv);
+    SIM::createEventHub();
+    StubObjects::StubImageStorage imagestorage;
+    SIM::setImageStorage(&imagestorage);
+    SIM::createCommandHub();
+    SIM::createContactList();
+    registerEvents();
+    return RUN_ALL_TESTS();
 }
 

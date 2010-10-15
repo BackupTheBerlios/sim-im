@@ -52,6 +52,7 @@ MainWindow::MainWindow(CorePlugin* core)
     updateTitle();
 
     m_bar = new SIM::ToolBar("Main toolbar", this);
+    addToolBar(m_bar);
 
     m_centralWidget = new QWidget(this);
     setCentralWidget(m_centralWidget);
@@ -64,8 +65,6 @@ MainWindow::MainWindow(CorePlugin* core)
     m_view = new UserView(core);
     m_view->init();
     addWidget(m_view);
-
-    getEventHub()->getEvent("init")->connectTo(this, SLOT(eventInit()));
 }
 
 MainWindow::~MainWindow()
@@ -100,32 +99,30 @@ bool MainWindow::eventFilter(QObject *o, QEvent *e)
     return QMainWindow::eventFilter(o, e);
 }
 
-//void MainWindow::loadDefaultCommandList()
-//{
-//    log(L_DEBUG, "loadDefaultCommandList");
-//    m_bar->addUiCommand(getCommandHub()->command("show_offline"));
-//    m_bar->addUiCommand(getCommandHub()->command("groupmode_menu"));
-//    m_bar->addSeparator();
-//}
-
-//void MainWindow::populateMainToolbar()
-//{
-//    QStringList actions = m_core->propertyHub()->value("mainwindow_toolbar_actions").toStringList();
-//    if(actions.isEmpty()) {
-//        loadDefaultCommandList();
-//    }
-//    else {
-//        m_bar->loadCommandList(actions);
-//    }
-//}
-
-void MainWindow::eventInit()
+void MainWindow::loadDefaultCommandList()
 {
-    log(L_DEBUG, "MainWindow::eventInit()");
+    log(L_DEBUG, "loadDefaultCommandList");
+    m_bar->addUiCommand(getCommandHub()->command("show_offline"));
+    m_bar->addUiCommand(getCommandHub()->command("groupmode_menu"));
+    m_bar->addSeparator();
+}
+
+void MainWindow::populateMainToolbar()
+{
+    QStringList actions = m_core->propertyHub()->value("mainwindow_toolbar_actions").toStringList();
+    if(actions.isEmpty()) {
+        loadDefaultCommandList();
+    }
+    else {
+        m_bar->loadCommandList(actions);
+    }
+}
+
+void MainWindow::init()
+{
+    log(L_DEBUG, "MainWindow::init()");
     updateTitle();
-//    populateMainToolbar();
-//    this->addToolBar(m_bar);
-//    raiseWindow(this);
+    populateMainToolbar();
 }
 
 //bool MainWindow::processEvent(Event *e)
@@ -229,5 +226,10 @@ void MainWindow::updateTitle()
 //    QMainWindow::focusInEvent(e);
 //    m_view->setFocus();
 //}
+
+UserView* MainWindow::userview() const
+{
+    return m_view;
+}
 
 

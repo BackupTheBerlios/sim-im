@@ -33,6 +33,8 @@ public:
 
     void addSubCommand(const UiCommandPtr& subcmd);
     QList<UiCommandPtr> subCommands() const;
+    void clearSubcommands();
+    void setParentCommand(UiCommand* cmd);
 
     bool subscribeTo(QObject* obj, const char* slot);
     bool unsubscribe(QObject* obj, const char* slot);
@@ -52,15 +54,20 @@ public:
     void setCheckable(bool b);
 
     bool isChecked() const;
-    void setChecked(bool b);
+
+
+    bool isAutoExclusive() const;
+    void setAutoExclusive(bool ae);
 
 
 signals:
     void triggered();
     void checked(bool b);
+    void subcommandsRemoved();
 
 public slots:
     void trigger();
+    void setChecked(bool b);
 
 protected:
     explicit UiCommand(const QString& text, const QString& iconId, const QString& id, const QStringList& tags = QStringList(), QObject* parent = NULL);
@@ -70,11 +77,13 @@ private:
     QStringList m_tags;
     QString m_iconId;
     QList<UiCommandPtr> m_subcmds;
+    UiCommand* m_parent;
     QString m_text;
     QIcon m_icon;
     WidgetType m_widgetType;
     bool m_checkable;
     bool m_checked;
+    bool m_autoExclusive;
 };
 }
 

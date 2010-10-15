@@ -2,6 +2,7 @@
 #include "toolbar.h"
 #include "commands/commandhub.h"
 #include "standardtoolbaractionfactory.h"
+#include "log.h"
 
 namespace SIM {
 
@@ -20,31 +21,18 @@ ToolBar::~ToolBar()
 
 void ToolBar::addUiCommand(const UiCommandPtr& cmd)
 {
+    if(!cmd)
+        return;
     if(m_factory)
     {
         QAction* action = addWidget(m_factory->createWidget(cmd, this));
         m_items.append(createItem(cmd, action));
-        QList<UiCommandPtr> subcmds = cmd->subCommands();
-        if(!subcmds.isEmpty())
-            action->setMenu(createMenuWithCommands(subcmds));
     }
 }
 
 ToolItem* ToolBar::createItem(const UiCommandPtr& cmd, QAction* action)
 {
     return new ToolItem(cmd, action);
-}
-
-QMenu* ToolBar::createMenuWithCommands(const QList<UiCommandPtr>& cmds)
-{
-    QMenu* menu = new QMenu(this);
-    foreach(const UiCommandPtr& cmd, cmds)
-    {
-        QAction* subaction = m_factory->createAction(cmd, this);
-        menu->addAction(subaction);
-        // TODO submenus
-    }
-    return menu;
 }
 
 void ToolBar::addSeparator()

@@ -1,18 +1,24 @@
 #include <QToolButton>
 #include <QMenu>
 
+#include "toolbarbutton.h"
 #include "standardtoolbaractionfactory.h"
 
 namespace SIM {
 
 QWidget* StandardToolbarActionFactory::createButton(const UiCommandPtr& cmd, QWidget* parent)
 {
-    QToolButton* w = new QToolButton(parent);
+    ToolbarButton* w = new ToolbarButton(parent);
     w->setText(cmd->text());
     w->setIcon(cmd->icon());
     w->setCheckable(cmd->isCheckable());
     w->setChecked(cmd->isChecked());
+    w->setAutoExclusive(cmd->isAutoExclusive());
     w->setPopupMode(QToolButton::InstantPopup);
+
+    w->connect(cmd.data(), SIGNAL(checked(bool)), w, SLOT(setChecked(bool)));
+    w->connect(w, SIGNAL(toggled(bool)), cmd.data(), SLOT(setChecked(bool)));
+    w->connect(cmd.data(), SIGNAL(subcommandsRemoved()), w, SLOT(removeMenu()));
 
     QList<UiCommandPtr> subcmds = cmd->subCommands();
     if(subcmds.size() > 0)
@@ -48,16 +54,24 @@ QAction* StandardToolbarActionFactory::createAction(const UiCommandPtr& cmd, QWi
     QAction* action = new QAction(cmd->icon(), cmd->text(), parent);
     action->setCheckable(cmd->isCheckable());
     action->setChecked(cmd->isChecked());
+    action->connect(action, SIGNAL(triggered()), cmd.data(), SLOT(trigger()));
     return action;
 }
 
 QMenu* StandardToolbarActionFactory::createMenuWithCommands(const QList<UiCommandPtr>& cmds, QWidget* parent)
 {
     QMenu* menu = new QMenu(parent);
+    QActionGroup* group = new QActionGroup(parent);
     foreach(const UiCommandPtr& cmd, cmds)
     {
         QAction* subaction = createAction(cmd, menu);
         menu->addAction(subaction);
+        if(cmd->isAutoExclusive())
+        {
+            group->addAction(subaction);
+        }
+        subaction->connect(cmd.data(), SIGNAL(checked(bool)), subaction, SLOT(setChecked(bool)));
+        subaction->connect(subaction, SIGNAL(toggled(bool)), cmd.data(), SLOT(setChecked(bool)));
         // TODO submenus
     }
     return menu;

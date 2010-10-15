@@ -30,7 +30,6 @@ public slots:
 
 private:
     ToolItem* createItem(const UiCommandPtr& cmd, QAction* action);
-    QMenu* createMenuWithCommands(const QList<UiCommandPtr>& cmds);
 
     QList<ToolItem*> m_items;
     ToolbarActionFactory* m_factory;

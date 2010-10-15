@@ -26,8 +26,6 @@ namespace
         {
             setImageStorage(&storage);
             toolbar = new ToolBar("test toolbar");
-            factory = new MockToolbarActionFactory();
-            toolbar->setToolbarActionFactory(factory);
         }
 
         virtual void TearDown()
@@ -36,13 +34,19 @@ namespace
             delete toolbar;
         }
 
+        UiCommandPtr createTestCommand(const QString& id, const QString& text = "Test")
+        {
+            return UiCommand::create(text, QString(), id);
+        }
+
         ToolBar* toolbar;
-        MockToolbarActionFactory* factory;
     };
 
     TEST_F(TestToolbar, addUiCommand_UsesToolbarActionFactory)
     {
-        UiCommandPtr cmd = UiCommand::create("Test", QString(), "test_cmd");
+        MockToolbarActionFactory* factory = new MockToolbarActionFactory();
+        toolbar->setToolbarActionFactory(factory);
+        UiCommandPtr cmd = createTestCommand("test_cmd");
         QWidget* w = new QWidget(toolbar);
         EXPECT_CALL(*factory, createWidget(_, toolbar)).WillOnce(Return(w));
 
@@ -53,29 +57,12 @@ namespace
 
     TEST_F(TestToolbar, addSeparator_UsesToolbarActionFactory)
     {
+        MockToolbarActionFactory* factory = new MockToolbarActionFactory();
+        toolbar->setToolbarActionFactory(factory);
         QAction* act = new QAction(toolbar);
         act->setSeparator(true);
         EXPECT_CALL(*factory, createSeparator(toolbar)).WillOnce(Return(act));
 
         toolbar->addSeparator();
-    }
-
-    TEST_F(TestToolbar, addUiCommand_WhenAddingCommandWithSubcommands_CreatesActionsForSubcommands)
-    {
-        UiCommandPtr cmd = UiCommand::create("Test", QString(), "test_cmd");
-        UiCommandPtr subcmd1 = UiCommand::create("Test", QString(), "test_subcmd1");
-        UiCommandPtr subcmd2 = UiCommand::create("Test", QString(), "test_subcmd2");
-        cmd->addSubCommand(subcmd1);
-        cmd->addSubCommand(subcmd2);
-        QWidget* w = new QWidget(toolbar);
-        QAction* subcmd1Action = new QAction(toolbar);
-        QAction* subcmd2Action = new QAction(toolbar);
-
-        EXPECT_CALL(*factory, createWidget(_, toolbar)).WillOnce(Return(w));
-        EXPECT_CALL(*factory, createAction(_, toolbar)).
-                WillOnce(Return(subcmd1Action)).
-                WillOnce(Return(subcmd2Action));
-
-        toolbar->addUiCommand(cmd);
     }
 }

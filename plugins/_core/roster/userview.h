@@ -34,10 +34,23 @@ class UserView : public QTreeView // public UserListBase
 {
     Q_OBJECT
 public:
+    enum GroupMode
+    {
+        NoGroups = 0,
+        Mode1 = 1,
+        Mode2 = 2
+    };
+
     UserView(CorePlugin* plugin, QWidget* parent = 0);
     ~UserView();
 
     bool init();
+
+    void setShowOffline(bool s);
+    bool isShowOffline() const;
+
+    void setGroupMode(GroupMode mode);
+    GroupMode groupMode() const;
 
 //    IntLineEdit *m_edtGroup;
 //    IntLineEdit *m_edtContact;
@@ -96,6 +109,8 @@ public:
 //	UserWnd *m_userWnd;
 private:
     CorePlugin *m_plugin;
+    bool m_showOffline;
+    GroupMode m_groupMode;
 };
 
 #endif
