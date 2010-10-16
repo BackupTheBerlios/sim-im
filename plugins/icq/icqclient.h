@@ -533,9 +533,9 @@ public:
     void destroySetupWidget();
     QStringList availableSetupWidgets() const;
 
-    virtual SIM::IMStatusPtr currentStatus();
-    virtual void changeStatus(const SIM::IMStatusPtr& status);
-    virtual SIM::IMStatusPtr savedStatus();
+    virtual SIM::IMStatusPtr currentStatus(int group);
+    virtual void changeStatus(const SIM::IMStatusPtr& status, int group);
+    virtual SIM::IMStatusPtr savedStatus(int group);
 
     SIM::IMContactPtr ownerContact();
     void setOwnerContact(SIM::IMContactPtr contact);

@@ -42,6 +42,35 @@ QStringList CommandHub::commandsForTag(const QString& tag) const
     return ids;
 }
 
+CommandSetPtr CommandHub::createCommandSet(const QString& id)
+{
+    CommandSetPtr cmdset = CommandSetPtr(new CommandSet(id, this));
+    m_commandSets.append(cmdset);
+    return cmdset;
+}
+
+CommandSetPtr CommandHub::commandSet(const QString& id) const
+{
+    foreach(const CommandSetPtr& cmdset, m_commandSets)
+    {
+        if(cmdset->id() == id)
+            return cmdset;
+    }
+    return CommandSetPtr();
+}
+
+void CommandHub::deleteCommandSet(const QString& id)
+{
+    for(QList<CommandSetPtr>::iterator it = m_commandSets.begin(); it != m_commandSets.end(); ++it)
+    {
+        if((*it)->id() == id)
+        {
+            m_commandSets.erase(it);
+            return;
+        }
+    }
+}
+
 static CommandHub* g_commandHub = 0;
 
 EXPORT CommandHub* getCommandHub()

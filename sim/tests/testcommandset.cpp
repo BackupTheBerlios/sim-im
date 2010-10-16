@@ -35,7 +35,7 @@ namespace
 
     TEST_F(TestCommandSet, Addition)
     {
-        CommandSet set(hub);
+        CommandSet set("cmdset", hub);
         set.appendCommand(hub->command("test_cmd1"));
         set.appendSeparator();
         set.appendCommand(hub->command("test_cmd2"));
@@ -45,11 +45,13 @@ namespace
 
     TEST_F(TestCommandSet, createActionList)
     {
-        CommandSet set(hub);
+        CommandSet set("cmdset", hub);
         addDefaultCommands(set);
 
         QList<QAction*> actions = set.createActionList(0);
         EXPECT_EQ(3, actions.size());
         EXPECT_TRUE(actions.at(1)->isSeparator());
+
+        qDeleteAll(actions);
     }
 }

@@ -398,17 +398,17 @@ bool ICQClient::deserialize(Buffer* cfg)
     return true;
 }
 
-SIM::IMStatusPtr ICQClient::currentStatus()
+SIM::IMStatusPtr ICQClient::currentStatus(int group)
 {
     return SIM::IMStatusPtr();
 }
 
-void ICQClient::changeStatus(const SIM::IMStatusPtr& status)
+void ICQClient::changeStatus(const SIM::IMStatusPtr& status, int group)
 {
     Q_UNUSED(status);
 }
 
-SIM::IMStatusPtr ICQClient::savedStatus()
+SIM::IMStatusPtr ICQClient::savedStatus(int group)
 {
     return SIM::IMStatusPtr();
 }

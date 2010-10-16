@@ -1,7 +1,7 @@
 #include <QMenu>
 #include "uicommand.h"
 #include "imagestorage/imagestorage.h"
-#include <cstdio>
+#include "log.h"
 
 namespace SIM
 {
@@ -65,25 +65,35 @@ QString UiCommand::iconId() const
     return m_iconId;
 }
 
-void UiCommand::addSubCommand(const UiCommandPtr& subcmd)
+//void UiCommand::addSubCommand(const UiCommandPtr& subcmd)
+//{
+//    subcmd->setParentCommand(this);
+//    m_subcmds.append(subcmd);
+//}
+
+//QList<UiCommandPtr> UiCommand::subCommands() const
+//{
+//    return m_subcmds;
+//}
+
+//void UiCommand::clearSubcommands()
+//{
+//    emit subcommandsRemoved();
+//}
+
+//void UiCommand::setParentCommand(UiCommand* cmd)
+//{
+//    m_parent = cmd;
+//}
+
+void UiCommand::setSubcommands(const CommandSetPtr& cmdset)
 {
-    subcmd->setParentCommand(this);
-    m_subcmds.append(subcmd);
+    m_subcommands = cmdset;
 }
 
-QList<UiCommandPtr> UiCommand::subCommands() const
+CommandSetPtr UiCommand::subcommands() const
 {
-    return m_subcmds;
-}
-
-void UiCommand::clearSubcommands()
-{
-    emit subcommandsRemoved();
-}
-
-void UiCommand::setParentCommand(UiCommand* cmd)
-{
-    m_parent = cmd;
+    return m_subcommands;
 }
 
 void UiCommand::trigger()

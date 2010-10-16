@@ -25,6 +25,8 @@
 #include <QString>
 #include <QStringList>
 
+#include "commands/uicommand.h"
+
 //struct BalloonItem
 //{
 //    QString		text;
@@ -41,7 +43,6 @@ public:
     virtual ~CommonStatus();
 
     void rebuildStatusList();
-    int stateCount() const;
 
 //protected slots:
 //    void timeout();
@@ -63,8 +64,19 @@ public:
 private slots:
     void eventInit();
 
+    void statusOnline();
+    void statusFreeForChat();
+    void statusAway();
+    void statusNa();
+    void statusDnd();
+    void statusOffline();
+    void statusInvisible();
+
+    void setCommonStatus(const QString& id);
+
 private:
     SIM::ClientManager* m_clientManager;
+    SIM::UiCommandPtr m_statusCmd;
 };
 
 #endif

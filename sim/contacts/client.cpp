@@ -6,6 +6,7 @@
 #include "misc.h"
 #include "log.h"
 #include "contacts/contact.h"
+#include "contacts/protocol.h"
 using namespace std;
 
 namespace SIM
@@ -69,6 +70,11 @@ namespace SIM
             return false;
         setPassword(uncryptPassword(hub->value("Password").toString()));
         return true;
+    }
+
+    int Client::statusGroups() const
+    {
+        return m_protocol->statusGroups();
     }
 
     QString Client::password() const

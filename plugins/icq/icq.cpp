@@ -92,14 +92,21 @@ IMContact* ICQProtocol::createIMContact(const QSharedPointer<Client>& client)
     return new ICQContact(client);
 }
 
-QStringList ICQProtocol::states()
+QStringList ICQProtocol::states(int groupNumber)
 {
     QStringList list;
+    if(groupNumber != DefaultGroup) // TODO
+        return list;
     foreach(const ICQStatusPtr& status, m_states) 
     {
         list.append(status->id());
     }
     return list;
+}
+
+int ICQProtocol::statusGroups() const
+{
+    return 1;
 }
 
 void ICQProtocol::initStatuses()
@@ -119,8 +126,10 @@ void ICQProtocol::addStatus(ICQStatusPtr status)
     m_states.append(status);
 }
 
-SIM::IMStatusPtr ICQProtocol::status(const QString& id)
+SIM::IMStatusPtr ICQProtocol::status(const QString& id, int groupNumber)
 {
+    if(groupNumber != DefaultGroup)
+        return SIM::IMStatusPtr();
     foreach(const ICQStatusPtr& status, m_states) 
     {
         if(status->id() == id) 

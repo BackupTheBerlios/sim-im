@@ -9,10 +9,9 @@ namespace SIM {
 class IMStatusInfo
 {
 public:
-
     enum Flag {
         fCheckable = 0,
-        fMessage = 0
+        fMessage = 1
     };
 
     IMStatusInfo();

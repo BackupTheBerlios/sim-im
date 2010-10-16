@@ -30,6 +30,11 @@ ClientPtr StandardClientManager::client(const QString& name)
     return ClientPtr();
 }
 
+QList<ClientPtr> StandardClientManager::allClients() const
+{
+    return m_clients.values();
+}
+
 bool StandardClientManager::load()
 {
     log(L_DEBUG, "ClientManager::load()");

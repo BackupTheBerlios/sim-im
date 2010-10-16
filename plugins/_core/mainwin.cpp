@@ -105,6 +105,9 @@ void MainWindow::loadDefaultCommandList()
     m_bar->addUiCommand(getCommandHub()->command("show_offline"));
     m_bar->addUiCommand(getCommandHub()->command("groupmode_menu"));
     m_bar->addSeparator();
+    m_bar->addUiCommand(getCommandHub()->command("common_status"));
+    m_bar->addSeparator();
+    m_bar->addUiCommand(getCommandHub()->command("main_menu"));
 }
 
 void MainWindow::populateMainToolbar()

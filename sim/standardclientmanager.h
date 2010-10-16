@@ -14,6 +14,7 @@ public:
     virtual void addClient(ClientPtr client);
     virtual ClientPtr client(const QString& name);
     virtual QStringList clientList();
+    virtual QList<ClientPtr> allClients() const;
 
     virtual bool load();
     virtual bool save();

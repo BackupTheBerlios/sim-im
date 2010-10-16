@@ -2,13 +2,15 @@
 #include <QMenu>
 
 #include "toolbarbutton.h"
+#include "toolbarcombobox.h"
 #include "standardtoolbaractionfactory.h"
 
 namespace SIM {
 
 QWidget* StandardToolbarActionFactory::createButton(const UiCommandPtr& cmd, QWidget* parent)
 {
-    ToolbarButton* w = new ToolbarButton(parent);
+    ToolbarButton* w = new ToolbarButton(cmd, parent);
+
     w->setText(cmd->text());
     w->setIcon(cmd->icon());
     w->setCheckable(cmd->isCheckable());
@@ -18,15 +20,17 @@ QWidget* StandardToolbarActionFactory::createButton(const UiCommandPtr& cmd, QWi
 
     w->connect(cmd.data(), SIGNAL(checked(bool)), w, SLOT(setChecked(bool)));
     w->connect(w, SIGNAL(toggled(bool)), cmd.data(), SLOT(setChecked(bool)));
-    w->connect(cmd.data(), SIGNAL(subcommandsRemoved()), w, SLOT(removeMenu()));
 
-    QList<UiCommandPtr> subcmds = cmd->subCommands();
-    if(subcmds.size() > 0)
-    {
-        QMenu* menu = createMenuWithCommands(subcmds, parent);
-        w->setMenu(menu);
-    }
+    return w;
+}
 
+QWidget* StandardToolbarActionFactory::createCombobox(const UiCommandPtr& cmd, QWidget* parent)
+{
+    ToolbarComboBox* w = new ToolbarComboBox(cmd, parent);
+
+    w->setText(cmd->text());
+    w->setIcon(cmd->icon());
+    w->setAutoExclusive(cmd->isAutoExclusive());
     return w;
 }
 
@@ -36,6 +40,8 @@ QWidget* StandardToolbarActionFactory::createWidget(const UiCommandPtr& cmd, QWi
     {
     case UiCommand::wtButton:
         return createButton(cmd, parent);
+    case UiCommand::wtCombobox:
+        return createCombobox(cmd, parent);
     case UiCommand::wtNone:
     default:
         return NULL;

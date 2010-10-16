@@ -53,15 +53,15 @@ namespace
         ClientManager* manager;
     };
 
-    TEST_F(TestCommonStatus, rebuildStatusList_OneClient)
-    {
-        MockProtocol proto;
-        CommonStatus status(manager);
-        manager->addClient(createClient(&proto));
-        EXPECT_CALL(proto, states()).WillOnce(Return(fullStatusList()));
+//    TEST_F(TestCommonStatus, rebuildStatusList_OneClient)
+//    {
+//        MockProtocol proto;
+//        CommonStatus status(manager);
+//        manager->addClient(createClient(&proto));
+//        EXPECT_CALL(proto, states()).WillOnce(Return(fullStatusList()));
 
-        status.rebuildStatusList();
+//        status.rebuildStatusList();
 
-        ASSERT_EQ(7, status.stateCount());
-    }
+//        ASSERT_EQ(7, status.stateCount());
+//    }
 }

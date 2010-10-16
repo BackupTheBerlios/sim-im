@@ -58,7 +58,6 @@ SET(sim_LIB_SRCS
 		contacts/imstatus.cpp
         contacts/imcontact.cpp
         contacts/imgroup.cpp
-        contacts/imstatusinfo.cpp
 
         simgui/ballonmsg.cpp
 		simgui/linklabel.cpp
@@ -67,6 +66,7 @@ SET(sim_LIB_SRCS
 		simgui/qcolorbutton.cpp
 		simgui/qkeybutton.cpp
         simgui/toolbarbutton.cpp
+        simgui/toolbarcombobox.cpp
         simgui/toolbar.cpp
         simgui/toolbaractionfactory.cpp
         simgui/standardtoolbaractionfactory.cpp
@@ -127,7 +127,6 @@ SET(sim_LIB_HDRS
 		contacts/imstatus.h
         contacts/imcontact.h
         contacts/imgroup.h
-        contacts/imstatusinfo.h
 
 		simgui/ballonmsg.h
 		simgui/linklabel.h
@@ -136,6 +135,7 @@ SET(sim_LIB_HDRS
 		simgui/qcolorbutton.h
 		simgui/qkeybutton.h
         simgui/toolbarbutton.h
+        simgui/toolbarcombobox.h
         simgui/toolbar.h
         simgui/toolbaractionfactory.h
         simgui/standardtoolbaractionfactory.h

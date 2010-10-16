@@ -78,12 +78,7 @@ namespace SIM
 
     QIcon StandardImageStorage::icon(const QString& id)
     {
-        foreach(IconSet* set, m_sets) {
-            if(set->hasIcon(id)) {
-                return set->icon(id);
-            }
-        }
-        return QIcon();
+        return QIcon(pixmap(id));
     }
 
     QImage StandardImageStorage::image(const QString& id)
@@ -93,6 +88,7 @@ namespace SIM
 
     QPixmap StandardImageStorage::pixmap(const QString& id)
     {
+        //log(L_DEBUG, "pixmap request: %s", qPrintable(id));
         foreach(IconSet* set, m_sets) {
             if(set->hasIcon(id)) {
                 return set->pixmap(id);
@@ -105,6 +101,7 @@ namespace SIM
             QString id2 = id.mid(slashIndex + 1);
             QImage base = image(id1);
             QImage overlay = image(id2);
+            //log(L_DEBUG, "pixmap subrequest: %s/%s", qPrintable(id1), qPrintable(id2));
             return QPixmap::fromImage(merge(base, overlay));
         }
         return QPixmap();

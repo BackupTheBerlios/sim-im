@@ -48,4 +48,24 @@ namespace
         UiCommandPtr c = getCommandHub()->command("test_cmd");
         ASSERT_EQ(cmd, c);
     }
+
+    TEST_F(TestCommandHub, CommandSetManipulation)
+    {
+        CommandSetPtr newcmdset = getCommandHub()->createCommandSet("test_command_set");
+
+        CommandSetPtr cmdset = getCommandHub()->commandSet("test_command_set");
+
+        ASSERT_TRUE(cmdset);
+        ASSERT_TRUE(newcmdset == cmdset);
+    }
+
+    TEST_F(TestCommandHub, CommandSetDeletion)
+    {
+        CommandSetPtr newcmdset = getCommandHub()->createCommandSet("test_command_set");
+
+        getCommandHub()->deleteCommandSet("test_command_set");
+        CommandSetPtr cmdset = getCommandHub()->commandSet("test_command_set");
+
+        ASSERT_FALSE(cmdset);
+    }
 }

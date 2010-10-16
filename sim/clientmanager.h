@@ -16,6 +16,7 @@ namespace SIM
 
         virtual void addClient(ClientPtr client) = 0;
         virtual ClientPtr client(const QString& name) = 0;
+        virtual QList<ClientPtr> allClients() const = 0;
         virtual QStringList clientList() = 0;
 
         virtual bool load() = 0;

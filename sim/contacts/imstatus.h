@@ -23,10 +23,7 @@ namespace SIM
         virtual void setText(const QString& t) = 0;
         virtual QString text() const = 0;
         virtual QIcon icon() const = 0;
-        virtual bool isNonexclusive() const = 0;
 
-        virtual QStringList substates() = 0;
-        virtual IMStatusPtr substatus(const QString& id) = 0;
         virtual IMStatusPtr clone() = 0;
     };
 }

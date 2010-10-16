@@ -2,6 +2,7 @@
 #define TOOLBARBUTTON_H
 
 #include <QToolButton>
+#include "commands/uicommand.h"
 
 namespace SIM {
 
@@ -9,12 +10,13 @@ class ToolbarButton : public QToolButton
 {
     Q_OBJECT
 public:
-    explicit ToolbarButton(QWidget *parent = 0);
+    explicit ToolbarButton(const UiCommandPtr& cmd, QWidget *parent = 0);
 
-signals:
+protected:
+    virtual void mouseReleaseEvent(QMouseEvent* e);
 
-public slots:
-    void removeMenu();
+private:
+    UiCommandPtr m_cmd;
 
 };
 

@@ -15,6 +15,7 @@ public:
 
 private:
     QWidget* createButton(const UiCommandPtr& cmd, QWidget* parent);
+    QWidget* createCombobox(const UiCommandPtr& cmd, QWidget* parent);
     QMenu* createMenuWithCommands(const QList<UiCommandPtr>& cmds, QWidget* parent);
 };
 

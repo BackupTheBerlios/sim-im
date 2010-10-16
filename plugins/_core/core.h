@@ -137,6 +137,8 @@ using namespace std;
 #   endif // CORE_EXPORTS
 #endif // CORE_EXPORT
 
+class CommonStatus;
+
 class CORE_EXPORT CorePlugin : public QObject, public SIM::Plugin
 {
     Q_OBJECT
@@ -191,6 +193,7 @@ public:
 protected:
     void subscribeToEvents();
     void createCommands();
+    void createMainMenuCommand();
 //    virtual bool processEvent(SIM::Event*);
 //    virtual QByteArray getConfig();
 //    virtual QWidget *createConfigWindow(QWidget *parent);
@@ -259,6 +262,7 @@ private slots:
 private:
     SIM::PropertyHubPtr m_propertyHub;
     MainWindow* m_main;
+    CommonStatus* m_commonStatus;
 //    bool m_bIgnoreEvents;
 //    ContainerManager* m_containerManager;
 

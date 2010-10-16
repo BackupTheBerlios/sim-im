@@ -13,6 +13,9 @@ namespace SIM
 class EXPORT UiCommand;
 typedef QSharedPointer<UiCommand> UiCommandPtr;
 
+class EXPORT CommandSet;
+typedef QSharedPointer<CommandSet> CommandSetPtr;
+
 class EXPORT UiCommand : public QObject
 {
     Q_OBJECT
@@ -31,10 +34,13 @@ public:
     void clearTags();
     QStringList tags() const;
 
-    void addSubCommand(const UiCommandPtr& subcmd);
-    QList<UiCommandPtr> subCommands() const;
-    void clearSubcommands();
-    void setParentCommand(UiCommand* cmd);
+//    void addSubCommand(const UiCommandPtr& subcmd);
+//    QList<UiCommandPtr> subCommands() const;
+//    void clearSubcommands();
+//    void setParentCommand(UiCommand* cmd);
+
+    void setSubcommands(const CommandSetPtr& cmdset);
+    CommandSetPtr subcommands() const;
 
     bool subscribeTo(QObject* obj, const char* slot);
     bool unsubscribe(QObject* obj, const char* slot);
@@ -43,6 +49,7 @@ public:
     {
         wtNone = 0,
         wtButton,
+        wtCombobox,
         wtEdit,
         wtLabel
     };
@@ -76,7 +83,7 @@ private:
     QString m_id;
     QStringList m_tags;
     QString m_iconId;
-    QList<UiCommandPtr> m_subcmds;
+    CommandSetPtr m_subcommands;
     UiCommand* m_parent;
     QString m_text;
     QIcon m_icon;

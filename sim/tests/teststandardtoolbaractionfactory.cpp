@@ -60,19 +60,4 @@ namespace
 
         delete action;
     }
-
-    TEST_F(TestStandardToolbarActionFactory, SubcommandRemoval)
-    {
-        UiCommandPtr cmd = createButtonCmd();
-        UiCommandPtr subcmd1 = UiCommand::create("Test", "", "test_subcmd1");
-        UiCommandPtr subcmd2 = UiCommand::create("Test", "", "test_subcmd2");
-        cmd->addSubCommand(subcmd1);
-        cmd->addSubCommand(subcmd2);
-        QToolButton* widget = qobject_cast<QToolButton*>(factory->createWidget(cmd, 0));
-        ASSERT_TRUE(widget);
-
-        cmd->clearSubcommands();
-
-        ASSERT_TRUE(widget->menu() == 0);
-    }
 }
