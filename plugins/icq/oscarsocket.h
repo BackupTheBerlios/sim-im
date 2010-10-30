@@ -17,21 +17,33 @@ public:
     // takes ownership of socket
     void setSocket(SIM::AsyncSocket* socket);
 
-    void snac(unsigned short food, unsigned short type, bool msgId = false, bool bType = true);
-    void sendPacket(bool bSend = true);
+    void flap(int channel, int length);
+    void snac(int type, int subtype, int requestId, const QByteArray& data);
 
 protected:
     //virtual ICQClientSocket *socket() = 0;
     //virtual void packet(unsigned long size) = 0;
-    void flap(char channel);
     void connect_ready();
     void packet_ready();
+
+    QByteArray makeFlapPacket(int channel, int length);
+    QByteArray makeSnacHeader(int type, int subtype, int requestId);
 
 signals:
 
 public slots:
 
 private:
+    static const char FlapId = 0x2a;
+
+    static const char FlapChannelNewConnection = 0x01;
+    static const char FlapChannelSnac = 0x02;
+    static const char FlapChannelError = 0x03;
+    static const char FlapChannelCloseConnection = 0x04;
+    static const char FlapChannelKeepAlive = 0x05;
+
+    static const int SizeOfSnacHeader = 10;
+
     bool m_bHeader;
     char m_nChannel;
     unsigned short m_nFlapSequence;
