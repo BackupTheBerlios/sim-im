@@ -126,7 +126,7 @@ namespace SIM
         return true;
     }
 
-    bool Group::deserialize(const QString& data)
+    bool Group::deserialize(const QString& /*data*/)
     {
         return true;
     }

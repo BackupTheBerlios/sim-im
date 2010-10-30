@@ -46,7 +46,11 @@ namespace SIM
 
         void addClientContact(const IMContactPtr& contact);
         IMContactPtr clientContact(const QString& clientId) const;
+        IMContactPtr clientContact(int num) const;
         QStringList clientContactNames() const;
+        int clientContactCount() const;
+
+        bool isOnline() const;
 
         bool hasUnreadMessages();
 
@@ -63,6 +67,8 @@ namespace SIM
     protected:
         bool serializeMainInfo(QDomElement& element);
         bool deserializeMainInfo(const QDomElement& element);
+
+        bool deserializeLine(const QString& key, const QString& value);
 
     private:
         UserDataPtr m_userData;

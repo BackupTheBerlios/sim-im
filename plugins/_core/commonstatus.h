@@ -27,14 +27,6 @@
 
 #include "commands/uicommand.h"
 
-//struct BalloonItem
-//{
-//    QString		text;
-//    QStringList	buttons;
-//    unsigned	id;
-//    SIM::Client	*client;
-//};
-
 class CORE_EXPORT CommonStatus : public QObject
 {
     Q_OBJECT
@@ -43,23 +35,6 @@ public:
     virtual ~CommonStatus();
 
     void rebuildStatusList();
-
-//protected slots:
-//    void timeout();
-//    void setBarStatus();
-//    void yes_action(void*);
-//    void finished();
-//    void showBalloon();
-//protected:
-//    QTimer *m_timer;
-//    virtual bool processEvent(SIM::Event*);
-//    void rebuildStatus();
-//    void checkInvisible();
-//    bool m_bInitialized;
-//    bool m_bBlink;
-//    bool m_bConnected;
-//    BalloonMsg		  *m_balloon;
-//    list<BalloonItem> m_queue;
 
 private slots:
     void eventInit();
@@ -70,7 +45,6 @@ private slots:
     void statusNa();
     void statusDnd();
     void statusOffline();
-    void statusInvisible();
 
     void setCommonStatus(const QString& id);
 

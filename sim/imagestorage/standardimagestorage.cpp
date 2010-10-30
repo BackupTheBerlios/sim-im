@@ -54,8 +54,8 @@ namespace SIM
     {
         log(L_DEBUG, "ImageStorage::ImageStorage()");
         foreach(const QString& s, QStringList() <<
-                "icons/sim.jisp" << "icons/smiles.jisp" <<
-                "icons/icqlite.jisp" << "icons/additional.jisp") {
+                "icons/GPL-Icons.jisp" << "icons/smiles.jisp" <<
+                "icons/ijcqlite.jisp" << "icons/additional.jisp") {
             JispIconSet* set = new JispIconSet();
             if(!set->load(SIM::PathManager::appFile(s)))
             {

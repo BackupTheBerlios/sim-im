@@ -72,11 +72,6 @@ namespace SIM
         return true;
     }
 
-    int Client::statusGroups() const
-    {
-        return m_protocol->statusGroups();
-    }
-
     QString Client::password() const
     {
         return m_password;

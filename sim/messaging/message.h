@@ -47,7 +47,7 @@ public:
 
     virtual ~Message() {}
 
-    virtual ClientWeakPtr client() = 0;
+    virtual Client* client() = 0;
     virtual IMContactWeakPtr contact() const = 0;
 
     virtual QIcon icon() = 0;

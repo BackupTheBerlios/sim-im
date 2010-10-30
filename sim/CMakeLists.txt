@@ -225,7 +225,7 @@ SET(sim_tests_srcs
 
 
 SET(sim_tests_hdrs
-    tests/mockclient.h
+    tests/mocks/mockclient.h
     tests/mockprotocol.h
     tests/stubs/stubclient.h
     tests/stubs/stubimagestorage.h
@@ -234,6 +234,7 @@ SET(sim_tests_hdrs
     tests/mocks/mockcontactlist.h
     tests/mocks/mockimcontact.h
     tests/testuicommand.h
+    tests/gtest-qt.h
 )
 
 QT4_WRAP_CPP(testmocs ${sim_tests_hdrs})

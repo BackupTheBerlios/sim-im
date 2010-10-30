@@ -30,7 +30,7 @@ struct BlinkCount
     unsigned		count;
 };
 
-class UserView : public QTreeView // public UserListBase
+class UserView : public QTreeView
 {
     Q_OBJECT
 public:

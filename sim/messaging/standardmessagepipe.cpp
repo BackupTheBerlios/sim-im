@@ -27,7 +27,7 @@ void StandardMessagePipe::addMessageProcessor(MessageProcessor* processor)
     m_processors.append(processor);
 }
 
-void StandardMessagePipe::removeMessageProcessor(const QString& id)
+void StandardMessagePipe::removeMessageProcessor(const QString& /*id*/)
 {
 }
 

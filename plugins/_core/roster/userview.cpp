@@ -23,6 +23,8 @@ email                : vovan@shutoff.ru
 #include "contacts/imcontact.h"
 #include "contacts/client.h"
 #include "contacts/group.h"
+#include "userviewmodel.h"
+#include "contacts/contactlist.h"
 
 #include <QPainter>
 #include <QPixmap>
@@ -130,8 +132,8 @@ UserView::~UserView()
 
 bool UserView::init()
 {
-//    m_bInit = true;
-//    fill();
+    setModel(new UserViewModel(SIM::getContactList()));
+    setHeaderHidden(true);
     return true;
 }
 

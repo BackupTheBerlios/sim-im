@@ -43,17 +43,17 @@ namespace StubObjects
             return QStringList();
         }
 
-        virtual SIM::IMStatusPtr currentStatus(int group)
+        virtual SIM::IMStatusPtr currentStatus()
         {
             return SIM::IMStatusPtr();
         }
 
-        virtual void changeStatus(const SIM::IMStatusPtr& status, int group)
+        virtual void changeStatus(const SIM::IMStatusPtr& status)
         {
             Q_UNUSED(status);
         }
 
-        virtual SIM::IMStatusPtr savedStatus(int group)
+        virtual SIM::IMStatusPtr savedStatus()
         {
             return SIM::IMStatusPtr();
         }

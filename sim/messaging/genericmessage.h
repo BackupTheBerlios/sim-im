@@ -12,7 +12,7 @@ public:
     GenericMessage(const IMContactPtr& contact);
     virtual ~GenericMessage();
 
-    virtual ClientWeakPtr client();
+    virtual Client* client();
     virtual IMContactWeakPtr contact() const;
 
     virtual QIcon icon();
@@ -25,7 +25,7 @@ public:
     void setHtml(const QString& html);
 
 private:
-    ClientWeakPtr m_client;
+    Client* m_client;
     IMContactWeakPtr m_contact;
     QString m_originatingClientId;
     QString m_text;

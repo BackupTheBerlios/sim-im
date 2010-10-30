@@ -82,7 +82,7 @@ namespace SIM
     {
         foreach(const IMContactPtr& contact, m_imContacts)
         {
-            ClientPtr client = contact->client().toStrongRef();
+            Client* client = contact->client();
             if(!client)
                 continue;
             if(client->name() == clientId)
@@ -91,17 +91,44 @@ namespace SIM
         return IMContactPtr();
     }
 
+    IMContactPtr Contact::clientContact(int num) const
+    {
+        if((num < 0) || (num >= clientContactCount()))
+            return IMContactPtr();
+        return m_imContacts.at(num);
+    }
+
     QStringList Contact::clientContactNames() const
     {
         QStringList result;
         foreach(const IMContactPtr& contact, m_imContacts)
         {
-            ClientPtr client = contact->client().toStrongRef();
+            Client* client = contact->client();
             if(!client)
                 continue;
             result.append(client->name());
         }
         return result;
+    }
+
+    int Contact::clientContactCount() const
+    {
+        return m_imContacts.size();
+    }
+
+    bool Contact::isOnline() const
+    {
+        if(m_imContacts.size() == 0)
+            return false;
+        foreach(const IMContactPtr& contact, m_imContacts)
+        {
+            IMStatusPtr status = contact->status();
+            if(!status)
+                continue;
+            if(status->flag(IMStatus::flOffline))
+                return false;
+        }
+        return true;
     }
 
     bool Contact::hasUnreadMessages()
@@ -114,7 +141,7 @@ namespace SIM
         return false;
     }
 
-    void Contact::join(const ContactPtr& contact)
+    void Contact::join(const ContactPtr& /*contact*/)
     {
 
     }
@@ -160,7 +187,7 @@ namespace SIM
         foreach(const QString& clname, clients) {
             IMContactPtr imc = clientContact(clname);
             QDomElement clientElement = element.ownerDocument().createElement("clientdata");
-            ClientPtr client = imc->client().toStrongRef();
+            Client* client = imc->client();
             clientElement.setAttribute("clientname", client->name());
             imc->serialize(clientElement);
             element.appendChild(clientElement);
@@ -192,6 +219,28 @@ namespace SIM
 
     bool Contact::deserialize(const QString& data)
     {
+        QStringList list = data.split('\n');
+        foreach(const QString& s, list)
+        {
+            QStringList keyval = s.split('=');
+            if(keyval.size() != 2)
+                continue;
+            if(keyval.at(1).startsWith('\"') && keyval.at(1).endsWith('\"'))
+                deserializeLine(keyval.at(0), keyval.at(1).mid(1, keyval.at(1).size() - 2));
+            else
+                deserializeLine(keyval.at(0), keyval.at(1));
+        }
+        return true;
+    }
+
+    bool Contact::deserializeLine(const QString& key, const QString& value)
+    {
+        if(key == "Ignore")
+            setFlag(flIgnore, value == "true");
+        else if(key == "Name")
+            setName(value);
+        else if(key == "Group")
+            setGroupId(value.toUInt());
         return true;
     }
 }

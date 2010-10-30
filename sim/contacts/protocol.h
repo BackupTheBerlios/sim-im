@@ -27,12 +27,6 @@ namespace SIM
         virtual QSharedPointer<Client> createClient(Buffer *cfg) = 0;
         virtual QSharedPointer<Client> createClient(const QString& name) = 0;
 
-        static const int DefaultGroup = 0;
-
-        virtual QStringList states(int groupNumber) = 0;
-        virtual int statusGroups() const = 0;
-        virtual IMStatusPtr status(const QString& id, int group) = 0;
-
         enum Flag
         {
             flNoAuth = 0,

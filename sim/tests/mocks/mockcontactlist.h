@@ -18,6 +18,7 @@ namespace MockObjects
         MOCK_CONST_METHOD1(contactExists, bool(int id));
         MOCK_METHOD1(removeContact, void(int id));
         MOCK_METHOD1(createContact, SIM::ContactPtr(int id));
+        MOCK_CONST_METHOD0(contactIds, QList<int>());
         MOCK_METHOD1(addGroup, bool(const SIM::GroupPtr& group));
         MOCK_CONST_METHOD1(group, SIM::GroupPtr(int id));
         MOCK_METHOD1(removeGroup, void(int id));

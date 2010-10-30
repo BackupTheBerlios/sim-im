@@ -20,8 +20,10 @@ namespace SIM
         IMContact();
         virtual ~IMContact();
 
-        virtual ClientWeakPtr client() = 0;
-        virtual IMStatusPtr status() = 0;
+        virtual Client* client() = 0;
+        virtual IMStatusPtr status() const = 0;
+
+        virtual QString name() const = 0;
 
         virtual bool sendMessage(const MessagePtr& message) = 0;
         virtual bool hasUnreadMessages() = 0;

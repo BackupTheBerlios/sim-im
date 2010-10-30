@@ -25,17 +25,17 @@ namespace StubObjects
             return QList<SIM::IMContactPtr>();
         }
 
-        virtual bool serialize(QDomElement& element)
+        virtual bool serialize(QDomElement& /*element*/)
         {
             return false;
         }
 
-        virtual bool deserialize(QDomElement& element)
+        virtual bool deserialize(QDomElement& /*element*/)
         {
             return false;
         }
 
-        virtual bool deserialize(const QString& data)
+        virtual bool deserialize(const QString& /*data*/)
         {
             return false;
         }

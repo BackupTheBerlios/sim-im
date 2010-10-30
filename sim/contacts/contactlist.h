@@ -23,6 +23,7 @@ public:
     virtual bool contactExists(int id) const = 0;
     virtual void removeContact(int id) = 0;
     virtual ContactPtr createContact(int id) = 0;
+    virtual QList<int> contactIds() const = 0;
 
     virtual bool addGroup(const GroupPtr& group) = 0;
     virtual GroupPtr group(int id) const = 0;

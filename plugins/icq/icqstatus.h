@@ -3,11 +3,13 @@
 #define ICQSTATUS_H
 
 #include "contacts/imstatus.h"
+#include "contacts/protocol.h"
+#include "icq_defines.h"
 
-class ICQStatus : public SIM::IMStatus
+class ICQ_EXPORT ICQStatus : public SIM::IMStatus
 {
 public:
-    ICQStatus(const QString& id, const QString& name, bool hasText, const QString& defaultText, const QIcon& icon);
+    ICQStatus(const QString& id, const QString& name, bool hasText, const QString& defaultText, const QPixmap& icon);
     virtual ~ICQStatus();
 
     virtual QString id() const;
@@ -15,22 +17,22 @@ public:
     virtual bool hasText() const;
     virtual void setText(const QString& t);
     virtual QString text() const;
-    virtual QIcon icon() const;
+    virtual QPixmap icon() const;
+    virtual int group() const;
 
-    virtual bool isNonexclusive() const;
+    virtual bool flag(Flag fl) const;
+    virtual void setFlag(Flag fl, bool val);
 
-
-    virtual QStringList substates();
-    virtual SIM::IMStatusPtr substatus(const QString& id);
     virtual SIM::IMStatusPtr clone();
-
 
 private:
     QString m_id;
     QString m_name;
     bool m_hasText;
     QString m_text;
-    QIcon m_icon;
+    QPixmap m_icon;
+    int m_group;
+    unsigned int m_flags;
 };
 
 typedef QSharedPointer<ICQStatus> ICQStatusPtr;

@@ -6,17 +6,22 @@
 
 #include "contacts/imcontact.h"
 #include "contacts/client.h"
+#include "icqstatus.h"
+#include "icq_defines.h"
 
-class ICQContact : public SIM::IMContact
+class ICQClient;
+
+class ICQ_EXPORT ICQContact : public QObject, public SIM::IMContact
 {
+    Q_OBJECT
 public:
-    ICQContact(const SIM::ClientPtr& cl);
+    ICQContact(ICQClient* client);
 
-    virtual QByteArray serialize();
-    virtual void deserialize(Buffer* cfg);
+    virtual QString name() const;
 
-    virtual SIM::ClientWeakPtr client() { return m_client; }
-    virtual SIM::IMStatusPtr status();
+    virtual SIM::Client* client();
+    virtual SIM::IMStatusPtr status() const;
+    virtual ICQStatusPtr icqStatus() const;
 
     virtual bool sendMessage(const SIM::MessagePtr& message);
     virtual bool hasUnreadMessages();
@@ -318,6 +323,10 @@ public:
     void setDirectPluginStatus(QObject* obj) { m_directPluginStatus = obj; }
 
     void deserializeLine(const QString& key, const QString& value);
+
+public slots:
+    void statusChanged();
+
 private:
     unsigned long m_uin;
     QString m_screen;
@@ -412,7 +421,8 @@ private:
     QObject* m_directPluginStatus;
     QByteArray m_unknown[6];
 
-    SIM::ClientWeakPtr m_client;
+    ICQClient* m_client;
+    ICQStatusPtr m_icqstatus;
 };
 
 #endif // ICQCONTACT_H

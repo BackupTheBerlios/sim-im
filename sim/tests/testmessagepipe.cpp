@@ -23,7 +23,7 @@ namespace
     class StubMessage : public Message
     {
     public:
-        ClientWeakPtr client() { return ClientWeakPtr(); }
+        Client* client() { return 0; }
         IMContactWeakPtr contact() const { return IMContactWeakPtr(); }
         QIcon icon() { return QIcon(); }
         QDateTime timestamp() { return QDateTime(); }

@@ -1,7 +1,7 @@
 
 #include "icqstatus.h"
 
-ICQStatus::ICQStatus(const QString& id, const QString& name, bool hasText, const QString& defaultText, const QIcon& icon) : IMStatus(),
+ICQStatus::ICQStatus(const QString& id, const QString& name, bool hasText, const QString& defaultText, const QPixmap& icon) : IMStatus(),
     m_id(id),
     m_name(name),
     m_hasText(hasText),
@@ -34,24 +34,22 @@ QString ICQStatus::text() const
     return m_text;
 }
 
-QIcon ICQStatus::icon() const
+QPixmap ICQStatus::icon() const
 {
     return m_icon;
 }
 
-QStringList ICQStatus::substates()
+int ICQStatus::group() const
 {
-    return QStringList();
-}
-
-SIM::IMStatusPtr ICQStatus::substatus(const QString& id)
-{
-    return SIM::IMStatusPtr();
+    return m_group;
 }
 
 SIM::IMStatusPtr ICQStatus::clone()
 {
-    return SIM::IMStatusPtr(new ICQStatus(m_id, m_name, m_hasText, m_text, m_icon));
+    ICQStatus* status = new ICQStatus(m_id, m_name, m_hasText, m_text, m_icon);
+    status->setFlag(flOffline, flag(flOffline));
+    status->setFlag(flInvisible, flag(flInvisible));
+    return SIM::IMStatusPtr(status);
 }
 
 bool ICQStatus::hasText() const
@@ -59,9 +57,18 @@ bool ICQStatus::hasText() const
     return m_hasText;
 }
 
-bool ICQStatus::isNonexclusive() const
+
+bool ICQStatus::flag(Flag fl) const
 {
-    return false;
+    return (m_flags & (1 << fl)) == (1 << fl);
+}
+
+void ICQStatus::setFlag(Flag fl, bool val)
+{
+    if(val)
+        m_flags |= (1 << fl);
+    else
+        m_flags &= ~(1 << fl);
 }
 
 

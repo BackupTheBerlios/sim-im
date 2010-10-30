@@ -93,6 +93,18 @@ ContactPtr StandardContactList::createContact(int id)
     return ContactPtr(new Contact(id));
 }
 
+QList<int> StandardContactList::contactIds() const
+{
+    QList<int> result;
+    foreach(const ContactPtr& contact, m_contacts)
+    {
+        if(contact->flag(Contact::flIgnore))
+            continue;
+        result.append(contact->id());
+    }
+    return result;
+}
+
 bool StandardContactList::addGroup(const GroupPtr& newGroup)
 {
     GroupPtr g = group(newGroup->id());
@@ -154,7 +166,7 @@ UserDataPtr StandardContactList::userdata() const
     return UserDataPtr();
 }
 
-bool StandardContactList::save_owner(QDomElement element)
+bool StandardContactList::save_owner(QDomElement /*element*/)
 {
     return true;
 }
@@ -218,7 +230,7 @@ bool StandardContactList::load_new()
     return true;
 }
 
-bool StandardContactList::load_owner(const QDomElement& owner)
+bool StandardContactList::load_owner(const QDomElement& /*owner*/)
 {
     return true;
 }
@@ -320,10 +332,16 @@ bool StandardContactList::load_old_dispatch(ParserState& state)
                 IMContactPtr imcontact = client->createIMContact();
                 imcontact->deserialize(state.data);
                 c->addClientContact(imcontact);
+                if(c->name().isEmpty())
+                    c->setName(imcontact->name());
+            }
+            else if(!state.dataname.isEmpty())
+            {
+                deserializeLines(c->userdata(), state.dataname, state.data);
             }
             else
             {
-                deserializeLines(c->userdata(), state.dataname, state.data);
+                c->deserialize(state.data);
             }
         }
     }

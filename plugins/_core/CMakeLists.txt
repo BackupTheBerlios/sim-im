@@ -66,6 +66,7 @@ SET(_core_SRCS
 #        userviewcfg.cpp
 #        userwnd.cpp
         roster/userview.cpp
+        roster/userviewmodel.cpp
 #        roster/userviewdelegate.cpp
 )
 
@@ -88,6 +89,7 @@ SET(_core_HDRS
 #        containermanager.h
 #        container.h
         core.h
+        core_api.h
         commonstatus.h
 #        core_consts.h
 #        core_events.h
@@ -134,6 +136,7 @@ SET(_core_HDRS
 #        userviewcfg.h
 #        userwnd.h
         roster/userview.h
+        roster/userviewmodel.h
 #        roster/userviewdelegate.h
 )
 
@@ -173,6 +176,7 @@ SET(core_test_sources
         tests/test.cpp
         tests/testcoreplugin.cpp
         tests/testcommonstatus.cpp
+        tests/testuserviewmodel.cpp
 )
 
 ADD_EXECUTABLE(test_core ${core_test_sources})

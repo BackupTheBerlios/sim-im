@@ -29,6 +29,8 @@
 
 #include "misc.h"
 #include "snac.h"
+#include "icqstatus.h"
+#include "icq_defines.h"
 //#include "icqbuddy.h"
 //#include "icqservice.h"
 //#include "icqicmb.h"
@@ -169,17 +171,18 @@ const unsigned short TLV_EXTENDED_CONTENT = 0x2712;
 class AIMFileTransfer;
 class DirectClient;
 
+class ICQClient;
 
 class ICQClientData
 {
 public:
 
-    ICQClientData();
+    ICQClientData(ICQClient* client);
     virtual QByteArray serialize();
     virtual void deserialize(Buffer* cfg);
 
-    virtual void serialize(QDomElement& element) {}
-    virtual void deserialize(QDomElement& element) {}
+    virtual void serialize(QDomElement& /*element*/) {}
+    virtual void deserialize(QDomElement& /*element*/) {}
 
     virtual SIM::ClientWeakPtr client() { Q_ASSERT_X(false, "ICQClientData::client", "Shouldn't be called"); return SIM::ClientWeakPtr(); }
 
@@ -517,13 +520,13 @@ typedef std::map<SIM::my_string, alias_group>	CONTACTS_MAP;
 typedef std::map<unsigned, unsigned>			RATE_MAP;
 typedef std::map<unsigned short, SnacHandler*> mapSnacHandlers;
 
-class ICQClient : public QObject, public SIM::Client
+class ICQ_EXPORT ICQClient : public QObject, public SIM::Client
 {
     Q_OBJECT
 public:
     ICQClient(SIM::Protocol*, Buffer *cfg, bool bAIM);
     ICQClient(SIM::Protocol*, const QString& name, bool bAIM);
-    ~ICQClient();
+    virtual ~ICQClient();
     virtual QString name();
 
     SIM::IMContactPtr createIMContact();
@@ -533,9 +536,9 @@ public:
     void destroySetupWidget();
     QStringList availableSetupWidgets() const;
 
-    virtual SIM::IMStatusPtr currentStatus(int group);
-    virtual void changeStatus(const SIM::IMStatusPtr& status, int group);
-    virtual SIM::IMStatusPtr savedStatus(int group);
+    virtual SIM::IMStatusPtr currentStatus();
+    virtual void changeStatus(const SIM::IMStatusPtr& status);
+    virtual SIM::IMStatusPtr savedStatus();
 
     SIM::IMContactPtr ownerContact();
     void setOwnerContact(SIM::IMContactPtr contact);
@@ -639,7 +642,10 @@ public:
     bool getMediaSense() const;
     void setMediaSense(bool b);
 
-    ICQClientData   data;
+    ICQClientData* clientPersistentData;
+
+    void initDefaultStates();
+    ICQStatusPtr getDefaultStatus(const QString& id);
     // reimplement socket() to get correct Buffer
 //    virtual ICQClientSocket *socket() { return static_cast<ICQClientSocket*>(TCPClient::socket()); }
 //    virtual ICQClientSocket *createClientSocket() { return new ICQClientSocket(this, createSocket()); }
@@ -894,10 +900,10 @@ public:
 
 private:
     void initialize(bool bAIM);
-
     SIM::PropertyHubPtr m_propertyHub;
-    //bool m_bBirthdayInfoDisplayed;
+    QList<ICQStatusPtr> m_defaultStates;
     QString m_name;
+    //bool m_bBirthdayInfoDisplayed;
 };
 
 //class ServiceSocket : public SIM::ClientSocketNotify, public OscarSocket

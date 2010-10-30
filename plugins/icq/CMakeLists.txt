@@ -59,6 +59,7 @@ SET(icq_HDRS
         icqclient.h
         icqcontact.h
         icqgroup.h
+        icq_defines.h
 #        icqconfig.h
 #        icqinfo.h
 #        icqlocation.h
@@ -107,4 +108,16 @@ SET(icq_UICS
 #ADD_FLEX_FILES(icq_SRCS rtf.ll)
 
 SIM_ADD_PLUGIN(icq)
+SET_TARGET_PROPERTIES(icq PROPERTIES DEFINE_SYMBOL ICQ_EXPORTS)
+
+
+SET(icq_test_sources
+    tests/test.cpp
+    tests/testicqclient.cpp
+    tests/testicqstatus.cpp
+    tests/testicqcontact.cpp
+)
+
+ADD_EXECUTABLE(test_icq ${icq_test_sources})
+TARGET_LINK_LIBRARIES(test_icq simlib ${QT_LIBRARIES} gtest gmock icq)
 

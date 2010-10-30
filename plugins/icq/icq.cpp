@@ -89,54 +89,27 @@ SIM::ClientPtr ICQProtocol::createClient(const QString& name)
 
 IMContact* ICQProtocol::createIMContact(const QSharedPointer<Client>& client)
 {
-    return new ICQContact(client);
-}
-
-QStringList ICQProtocol::states(int groupNumber)
-{
-    QStringList list;
-    if(groupNumber != DefaultGroup) // TODO
-        return list;
-    foreach(const ICQStatusPtr& status, m_states) 
-    {
-        list.append(status->id());
-    }
-    return list;
-}
-
-int ICQProtocol::statusGroups() const
-{
-    return 1;
+    QSharedPointer<ICQClient> icqclient = client.dynamicCast<ICQClient>();
+    if(!icqclient)
+        return 0;
+    return new ICQContact(icqclient.data());
 }
 
 void ICQProtocol::initStatuses()
 {
-    m_states.clear();
-    addStatus(ICQStatusPtr(new ICQStatus("online", "Online", true, "", getImageStorage()->icon("ICQ_online"))));
-    addStatus(ICQStatusPtr(new ICQStatus("away", "Away", true, "", getImageStorage()->icon("ICQ_away"))));
-    addStatus(ICQStatusPtr(new ICQStatus("n/a", "N/A", true, "", getImageStorage()->icon("ICQ_na"))));
-    addStatus(ICQStatusPtr(new ICQStatus("dnd", "Do not disturb", true, "", getImageStorage()->icon("ICQ_dnd"))));
-    addStatus(ICQStatusPtr(new ICQStatus("occupied", "Occupied", true, "", getImageStorage()->icon("ICQ_occupied"))));
-    addStatus(ICQStatusPtr(new ICQStatus("free_for_chat", "Free for chat", true, "", getImageStorage()->icon("ICQ_ffc"))));
-    addStatus(ICQStatusPtr(new ICQStatus("offline", "Offline", true, "", getImageStorage()->icon("ICQ_offline"))));
+//    m_states.clear();
+//    addStatus(ICQStatusPtr(new ICQStatus("online", "Online", true, "", getImageStorage()->icon("ICQ_online"))));
+//    addStatus(ICQStatusPtr(new ICQStatus("away", "Away", true, "", getImageStorage()->icon("ICQ_away"))));
+//    addStatus(ICQStatusPtr(new ICQStatus("n/a", "N/A", true, "", getImageStorage()->icon("ICQ_na"))));
+//    addStatus(ICQStatusPtr(new ICQStatus("dnd", "Do not disturb", true, "", getImageStorage()->icon("ICQ_dnd"))));
+//    addStatus(ICQStatusPtr(new ICQStatus("occupied", "Occupied", true, "", getImageStorage()->icon("ICQ_occupied"))));
+//    addStatus(ICQStatusPtr(new ICQStatus("free_for_chat", "Free for chat", true, "", getImageStorage()->icon("ICQ_ffc"))));
+//    addStatus(ICQStatusPtr(new ICQStatus("offline", "Offline", true, "", getImageStorage()->icon("ICQ_offline"))));
 }
 
 void ICQProtocol::addStatus(ICQStatusPtr status)
 {
     m_states.append(status);
-}
-
-SIM::IMStatusPtr ICQProtocol::status(const QString& id, int groupNumber)
-{
-    if(groupNumber != DefaultGroup)
-        return SIM::IMStatusPtr();
-    foreach(const ICQStatusPtr& status, m_states) 
-    {
-        if(status->id() == id) 
-            return status;
-    }
-
-    return SIM::IMStatusPtr();
 }
 
 //AIMProtocol::AIMProtocol(Plugin *plugin)

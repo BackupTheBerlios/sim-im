@@ -51,9 +51,6 @@ public:
     virtual SIM::ClientPtr createClient(Buffer *cfg);
     virtual SIM::ClientPtr createClient(const QString& name);
     virtual SIM::IMContact* createIMContact(const QSharedPointer<SIM::Client>& client);
-    virtual QStringList states(int groupNuber);
-    virtual int statusGroups() const;
-    virtual SIM::IMStatusPtr status(const QString& id, int groupNumber);
 
 private:
 	void initStatuses();

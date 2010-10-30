@@ -38,6 +38,7 @@
 #include "icq.h"
 #include "icqconfig.h"
 #include "icqgroup.h"
+#include "imagestorage/imagestorage.h"
 
 //#include "aimconfig.h"
 //#include "icqinfo.h"
@@ -72,9 +73,9 @@ using namespace SIM;
 static const char aim_server[] = "login.oscar.aol.com";
 static const char icq_server[] = "login.icq.com";
 
-ICQClientData::ICQClientData() 
+ICQClientData::ICQClientData(ICQClient* client)
     : m_port(5190)
-    , owner(SIM::ClientPtr(0))
+    , owner(client)
 {
 
 }
@@ -242,20 +243,27 @@ unsigned long ICQClientData::getSign()
 ICQClient::ICQClient(SIM::Protocol* protocol, const QString& name, bool bAIM) : SIM::Client(protocol),
     m_name(name)
 {
-
     initialize(bAIM);
+    clientPersistentData = new ICQClientData(this);
 }
 
-ICQClient::ICQClient(Protocol *protocol, Buffer *cfg, bool bAIM) : SIM::Client(protocol)
+ICQClient::ICQClient(Protocol *protocol, Buffer */*cfg*/, bool bAIM) : SIM::Client(protocol)
 {
     initialize(bAIM);
+    clientPersistentData = new ICQClientData(this);
 }
 
-void ICQClient::initialize(bool bAIM)
+ICQClient::~ICQClient()
 {
+    delete clientPersistentData;
+}
+
+void ICQClient::initialize(bool /*bAIM*/)
+{
+    initDefaultStates();
     //m_bAIM = bAIM;
 
-//    data.owner.setDCcookie(rand());
+//    clientPersistentData->owner.setDCcookie(rand());
 
 //    QString requests = getListRequests();
 //    while (requests.length())
@@ -293,8 +301,8 @@ void ICQClient::initialize(bool bAIM)
 //        return;
 }
 
-ICQClient::~ICQClient()
-{
+//ICQClient::~ICQClient()
+//{
 //    setStatus(STATUS_OFFLINE, false);
 //    freeData(); // before deleting of other members!
 
@@ -317,11 +325,11 @@ ICQClient::~ICQClient()
 //    while (!m_sockets.empty())
 //        delete m_sockets.front();
 //    m_processMsg.clear();
-}
+//}
 
 //SIM::IMContact* ICQClient::getOwnerContact()
 //{
-//    return &data.owner;
+//    return &clientPersistentData->owner;
 //}
 
 bool ICQClient::serialize(QDomElement& element)
@@ -392,23 +400,23 @@ bool ICQClient::deserialize(QDomElement& element)
 bool ICQClient::deserialize(Buffer* cfg)
 {
     log(L_DEBUG, "ICQClient::deserialize");
-    data.deserialize(cfg);
+    clientPersistentData->deserialize(cfg);
     //Client::deserialize(cfg);
     m_name = "";
     return true;
 }
 
-SIM::IMStatusPtr ICQClient::currentStatus(int group)
+SIM::IMStatusPtr ICQClient::currentStatus()
 {
     return SIM::IMStatusPtr();
 }
 
-void ICQClient::changeStatus(const SIM::IMStatusPtr& status, int group)
+void ICQClient::changeStatus(const SIM::IMStatusPtr& status)
 {
     Q_UNUSED(status);
 }
 
-SIM::IMStatusPtr ICQClient::savedStatus(int group)
+SIM::IMStatusPtr ICQClient::savedStatus()
 {
     return SIM::IMStatusPtr();
 }
@@ -420,278 +428,278 @@ SIM::IMStatusPtr ICQClient::savedStatus(int group)
 ////        d = static_cast<ICQUserData*>(contact);
 
 ////    if(d)
-////        data.owner = *d;
+////        clientPersistentData->owner = *d;
 //}
 
 unsigned long ICQClient::getContactsTime() const
 {
-    return data.getContactsTime();
+    return clientPersistentData->getContactsTime();
 }
 
 void ICQClient::setContactsTime(unsigned long contactsTime)
 {
-    data.setContactsTime(contactsTime);
+    clientPersistentData->setContactsTime(contactsTime);
 }
 
 unsigned short ICQClient::getContactsLength() const
 {
-    return data.getContactsLength();
+    return clientPersistentData->getContactsLength();
 }
 
 void ICQClient::setContactsLength(unsigned short contactsLength)
 {
-    data.setContactsLength(contactsLength);
+    clientPersistentData->setContactsLength(contactsLength);
 }
 
 unsigned short ICQClient::getContactsInvisible() const
 {
-    return data.getContactsInvisible();
+    return clientPersistentData->getContactsInvisible();
 }
 
 void ICQClient::setContactsInvisible(unsigned short contactsInvisible)
 {
-    data.setContactsInvisible(contactsInvisible);
+    clientPersistentData->setContactsInvisible(contactsInvisible);
 }
 
 bool ICQClient::getHideIP() const
 {
-    return data.getHideIP();
+    return clientPersistentData->getHideIP();
 }
 
 void ICQClient::setHideIP(bool hideip)
 {
-    data.setHideIP(hideip);
+    clientPersistentData->setHideIP(hideip);
 }
 
 bool ICQClient::getIgnoreAuth() const
 {
-    return data.getIgnoreAuth();
+    return clientPersistentData->getIgnoreAuth();
 }
 
 void ICQClient::setIgnoreAuth(bool ignoreAuth)
 {
-    data.setIgnoreAuth(ignoreAuth);
+    clientPersistentData->setIgnoreAuth(ignoreAuth);
 }
 
 bool ICQClient::getUseMD5() const
 {
-    return data.getUseMD5();
+    return clientPersistentData->getUseMD5();
 }
 
 void ICQClient::setUseMD5(bool usemd5)
 {
-    data.setUseMD5(usemd5);
+    clientPersistentData->setUseMD5(usemd5);
 }
 
 unsigned long ICQClient::getDirectMode()
 {
-    return data.getDirectMode();
+    return clientPersistentData->getDirectMode();
 }
 
 void ICQClient::setDirectMode(unsigned long mode)
 {
-    data.setDirectMode(mode);
+    clientPersistentData->setDirectMode(mode);
 }
 
 unsigned long ICQClient::getIdleTime() const
 {
-    return data.getIdleTime();
+    return clientPersistentData->getIdleTime();
 }
 
 void ICQClient::setIdleTime(unsigned long time)
 {
-    data.setIdleTime(time);
+    clientPersistentData->setIdleTime(time);
 }
 
 QString ICQClient::getListRequests() const
 {
-    return data.getListRequests();
+    return clientPersistentData->getListRequests();
 }
 
 void ICQClient::setListRequests(const QString& listrequests)
 {
-    data.setListRequests(listrequests);
+    clientPersistentData->setListRequests(listrequests);
 }
 
 QString ICQClient::getPicture() const
 {
-    return data.getPicture();
+    return clientPersistentData->getPicture();
 }
 
 void ICQClient::setPicture(const QString& pic)
 {
-    data.setPicture(pic);
-    data.owner.setPicture(pic);
+    clientPersistentData->setPicture(pic);
+    clientPersistentData->owner.setPicture(pic);
 }
 
 unsigned long ICQClient::getRandomChatGroup() const
 {
-    return data.getRandomChatGroup();
+    return clientPersistentData->getRandomChatGroup();
 }
 
 void ICQClient::setRandomChatGroup(unsigned long group)
 {
-    data.setRandomChatGroup(group);
+    clientPersistentData->setRandomChatGroup(group);
 }
 
 unsigned long ICQClient::getRandomChatGroupCurrent() const
 {
-    return data.getRandomChatGroupCurrent();
+    return clientPersistentData->getRandomChatGroupCurrent();
 }
 
 void ICQClient::setRandomChatGroupCurrent(unsigned long group)
 {
-    data.setRandomChatGroupCurrent(group);
+    clientPersistentData->setRandomChatGroupCurrent(group);
 }
 
 unsigned long ICQClient::getSendFormat() const
 {
-    return data.getSendFormat();
+    return clientPersistentData->getSendFormat();
 }
 
 void ICQClient::setSendFormat(unsigned long format)
 {
-    data.setSendFormat(format);
+    clientPersistentData->setSendFormat(format);
 }
 
 bool ICQClient::getDisablePlugins() const
 {
-    return data.getDisablePlugins();
+    return clientPersistentData->getDisablePlugins();
 }
 
 void ICQClient::setDisablePlugins(bool b)
 {
-    data.setDisablePlugins(b);
+    clientPersistentData->setDisablePlugins(b);
 }
 
 bool ICQClient::getDisableAutoUpdate() const
 {
-    return data.getDisableAutoUpdate();
+    return clientPersistentData->getDisableAutoUpdate();
 }
 
 void ICQClient::setDisableAutoUpdate(bool b)
 {
-    data.setDisableAutoUpdate(b);
+    clientPersistentData->setDisableAutoUpdate(b);
 }
 
 bool ICQClient::getDisableAutoReplyUpdate() const
 {
-    return data.getDisableAutoReplyUpdate();
+    return clientPersistentData->getDisableAutoReplyUpdate();
 }
 
 void ICQClient::setDisableAutoReplyUpdate(bool b)
 {
-    data.setDisableAutoReplyUpdate(b);
+    clientPersistentData->setDisableAutoReplyUpdate(b);
 }
 
 bool ICQClient::getDisableTypingNotification() const
 {
-    return data.getDisableTypingNotification();
+    return clientPersistentData->getDisableTypingNotification();
 }
 
 void ICQClient::setDisableTypingNotification(bool b)
 {
-    data.setDisableTypingNotification(b);
+    clientPersistentData->setDisableTypingNotification(b);
 }
 
 bool ICQClient::getAcceptInDND() const
 {
-    return data.getAcceptInDND();
+    return clientPersistentData->getAcceptInDND();
 }
 
 void ICQClient::setAcceptInDND(bool b)
 {
-    data.setAcceptInDND(b);
+    clientPersistentData->setAcceptInDND(b);
 }
 
 bool ICQClient::getAcceptInOccupied() const
 {
-    return data.getAcceptInOccupied();
+    return clientPersistentData->getAcceptInOccupied();
 }
 
 void ICQClient::setAcceptInOccupied(bool b)
 {
-    data.setAcceptInOccupied(b);
+    clientPersistentData->setAcceptInOccupied(b);
 }
 
 unsigned long ICQClient::getMinPort() const
 {
-    return data.getMinPort();
+    return clientPersistentData->getMinPort();
 }
 
 void ICQClient::setMinPort(unsigned long port)
 {
-    data.setMinPort(port);
+    clientPersistentData->setMinPort(port);
 }
 
 unsigned long ICQClient::getMaxPort() const
 {
-    return data.getMinPort();
+    return clientPersistentData->getMinPort();
 }
 
 void ICQClient::setMaxPort(unsigned long port)
 {
-    data.setMinPort(port);
+    clientPersistentData->setMinPort(port);
 }
 
 bool ICQClient::getWarnAnonymously() const
 {
-    return data.getWarnAnonymously();
+    return clientPersistentData->getWarnAnonymously();
 }
 
 void ICQClient::setWarnAnonymously(bool b)
 {
-    data.setWarnAnonymously(b);
+    clientPersistentData->setWarnAnonymously(b);
 }
 
 unsigned long ICQClient::getAckMode() const
 {
-    return data.getAckMode();
+    return clientPersistentData->getAckMode();
 }
 
 void ICQClient::setAckMode(unsigned long mode)
 {
-    data.setAckMode(mode);
+    clientPersistentData->setAckMode(mode);
 }
 
 bool ICQClient::getUseHTTP() const
 {
-    return data.getUseHttp();
+    return clientPersistentData->getUseHttp();
 }
 
 void ICQClient::setUseHTTP(bool b)
 {
-    data.setUseHttp(b);
+    clientPersistentData->setUseHttp(b);
 }
 
 bool ICQClient::getAutoHTTP() const
 {
-    return data.getAutoHttp();
+    return clientPersistentData->getAutoHttp();
 }
 
 void ICQClient::setAutoHTTP(bool b)
 {
-    data.setAutoHttp(b);
+    clientPersistentData->setAutoHttp(b);
 }
 
 bool ICQClient::getKeepAlive() const
 {
-    return data.getKeepAlive();
+    return clientPersistentData->getKeepAlive();
 }
 
 void ICQClient::setKeepAlive(bool b)
 {
-    data.setKeepAlive(b);
+    clientPersistentData->setKeepAlive(b);
 }
 
 bool ICQClient::getMediaSense() const
 {
-    return data.getMediaSense();
+    return clientPersistentData->getMediaSense();
 }
 
 void ICQClient::setMediaSense(bool b)
 {
-    data.setMediaSense(b);
+    clientPersistentData->setMediaSense(b);
 }
 
 //bool ICQClient::addSnacHandler(SnacHandler* handler)
@@ -757,7 +765,7 @@ void ICQClient::setMediaSense(bool b)
 //    QByteArray res = Client::getConfig();
 //    if (res.length())
 //        res += '\n';
-//    return res += data.serialize(); //save_data(icqClientData, &data);
+//    return res += clientPersistentData->serialize(); //save_data(icqClientData, &data);
 //}
 
 QString ICQClient::name()
@@ -765,17 +773,17 @@ QString ICQClient::name()
 //    if(!m_name.isEmpty())
 //        return m_name;
 //    if (m_bAIM) {
-//        m_name = "AIM." + data.owner.getScreen();
+//        m_name = "AIM." + clientPersistentData->owner.getScreen();
 //    }
 //    else {
-//        m_name = "ICQ." + QString::number(data.owner.getUin());
+//        m_name = "ICQ." + QString::number(clientPersistentData->owner.getUin());
 //    }
     return m_name;
 }
 
 SIM::IMContactPtr ICQClient::createIMContact()
 {
-    return SIM::IMContactPtr(new ICQContact(SIM::getClientManager()->client(name())));
+    return SIM::IMContactPtr(new ICQContact(this));
 }
 
 SIM::IMGroupPtr ICQClient::createIMGroup()
@@ -817,12 +825,28 @@ QList<SIM::IMContactPtr> ICQClient::contacts()
 {
 }
 
+void ICQClient::initDefaultStates()
+{
+    ICQStatus* status = new ICQStatus("offline", "Offline", false, QString(), getImageStorage()->pixmap("ICQ_offline"));
+    status->setFlag(IMStatus::flOffline, true);
+    m_defaultStates.append(ICQStatusPtr(status));
+}
+
+ICQStatusPtr ICQClient::getDefaultStatus(const QString& id)
+{
+    foreach(const ICQStatusPtr& status, m_defaultStates)
+    {
+        if(status->id() == id)
+            return status->clone().dynamicCast<ICQStatus>();
+    }
+    return ICQStatusPtr();
+}
 
 //QString ICQClient::getScreen()
 //{
 //    if (m_bAIM)
-//        return data.owner.getScreen();
-//    return QString::number(data.owner.getUin());
+//        return clientPersistentData->owner.getScreen();
+//    return QString::number(clientPersistentData->owner.getUin());
 //}
 
 //QWidget	*ICQClient::setupWnd()
@@ -834,38 +858,38 @@ QList<SIM::IMContactPtr> ICQClient::contacts()
 
 QString ICQClient::getServer() const
 {
-    return data.getServer();
+    return clientPersistentData->getServer();
 }
 
 void ICQClient::setServer(const QString &server)
 {
-    data.setServer(server);
+    clientPersistentData->setServer(server);
 }
 
 unsigned short ICQClient::getPort() const
 {
-    return data.getPort();
+    return clientPersistentData->getPort();
 }
 
 void ICQClient::setPort(unsigned short port)
 {
-    data.setPort(port);
+    clientPersistentData->setPort(port);
 }
 
 
 void ICQClient::setUin(unsigned long uin)
 {
-    data.owner.setUin(uin);
+    clientPersistentData->owner.setUin(uin);
 }
 
 void ICQClient::setScreen(const QString &screen)
 {
-    data.owner.setScreen(screen);
+    clientPersistentData->owner.setScreen(screen);
 }
 
 unsigned long ICQClient::getUin()
 {
-    return data.owner.getUin();
+    return clientPersistentData->owner.getUin();
 }
 
 //void ICQClient::generateCookie(MessageId& id)
@@ -883,11 +907,11 @@ unsigned long ICQClient::getUin()
 //    if (m_bAIM)
 //    {
 //        if (!data->getScreen().isEmpty() &&
-//            !this->data.owner.getScreen().isEmpty() &&
-//            data->getScreen().toLower() == this->data.owner.getScreen().toLower())
+//            !this->clientPersistentData->owner.getScreen().isEmpty() &&
+//            data->getScreen().toLower() == this->clientPersistentData->owner.getScreen().toLower())
 //            return false;
 //    }
-//    else if (data->getUin() == this->data.owner.getUin())
+//    else if (data->getUin() == this->clientPersistentData->owner.getUin())
 //        return false;
 //    ICQUserData *my_data = findContact(screen(data), NULL, false, contact);
 //    if (my_data)
@@ -1393,7 +1417,7 @@ const char *icq_error_codes[] = {I18N_NOOP("Unknown error"),
 //    else if(status->id() == "free_for_chat")
 //        code = ICQ_STATUS_FFC;
 
-//    if(data.owner.getWebAware())
+//    if(clientPersistentData->owner.getWebAware())
 //        code |= ICQ_STATUS_FxWEBxPRESENCE;
 //    if (getHideIP())
 //        code |= ICQ_STATUS_FxHIDExIP | ICQ_STATUS_FxDIRECTxAUTH;
@@ -1436,7 +1460,7 @@ const char *icq_error_codes[] = {I18N_NOOP("Unknown error"),
 //        status = ICQ_STATUS_FFC;
 //        break;
 //    }
-//    if(data.owner.getWebAware())
+//    if(clientPersistentData->owner.getWebAware())
 //        status |= ICQ_STATUS_FxWEBxPRESENCE;
 //    if (getHideIP())
 //        status |= ICQ_STATUS_FxHIDExIP | ICQ_STATUS_FxDIRECTxAUTH;
@@ -1812,9 +1836,9 @@ const char *icq_error_codes[] = {I18N_NOOP("Unknown error"),
 //        bool bBirthday = false;
 //        if (!m_bAIM)
 //        {
-//            int year  = data.owner.getBirthYear();
-//            int month = data.owner.getBirthMonth();
-//            int day   = data.owner.getBirthDay();
+//            int year  = clientPersistentData->owner.getBirthYear();
+//            int month = clientPersistentData->owner.getBirthMonth();
+//            int day   = clientPersistentData->owner.getBirthDay();
 //            if (day && month && year)
 //            {
 //				QDate tNow = QDate::currentDate();
@@ -2910,10 +2934,10 @@ const char *icq_error_codes[] = {I18N_NOOP("Unknown error"),
 //    name += ' ';
 //    if (m_bAIM)
 //    {
-//        name += data.owner.getScreen();
+//        name += clientPersistentData->owner.getScreen();
 //        def = aimConfigWnd;
 //    }
-//    else name += QString::number(data.owner.getUin());
+//    else name += QString::number(clientPersistentData->owner.getUin());
 //    def->text_wrk = name;
 //    return def;
 //}
@@ -2991,7 +3015,7 @@ const char *icq_error_codes[] = {I18N_NOOP("Unknown error"),
 //        return;
 //    }
 //    if (data == NULL)
-//        data = &this->data.owner;
+//        data = &this->clientPersistentData->owner;
 //    if (data->getUin())
 //    {
 //        addFullInfoRequest(data->getUin());
@@ -3213,25 +3237,25 @@ const char *icq_error_codes[] = {I18N_NOOP("Unknown error"),
 //            if (contact == getContacts()->owner())
 //            {
 //                QDateTime now(QDateTime::currentDateTime());
-//                if (getContacts()->owner()->getPhones() != data.owner.getPhoneBook())
+//                if (getContacts()->owner()->getPhones() != clientPersistentData->owner.getPhoneBook())
 //                {
-//                    data.owner.setPhoneBook(getContacts()->owner()->getPhones());
-//                    data.owner.setPluginInfoTime(now.toTime_t());
+//                    clientPersistentData->owner.setPhoneBook(getContacts()->owner()->getPhones());
+//                    clientPersistentData->owner.setPluginInfoTime(now.toTime_t());
 //                    snacService()->sendPluginInfoUpdate(PLUGIN_PHONEBOOK);
 //                }
 //                /*
-//                if (getPicture() != data.owner.Picture.str()){
-//                data.owner.Picture.str() = getPicture();
-//                data.owner.PluginInfoTime.asULong() = now;
+//                if (getPicture() != clientPersistentData->owner.Picture.str()){
+//                clientPersistentData->owner.Picture.str() = getPicture();
+//                clientPersistentData->owner.PluginInfoTime.asULong() = now;
 //                snacService()->sendPluginInfoUpdate(PLUGIN_PICTURE);
 //                }
 //                */
-//                if (getContacts()->owner()->getPhoneStatus() == (int)data.owner.getFollowMe())
+//                if (getContacts()->owner()->getPhoneStatus() == (int)clientPersistentData->owner.getFollowMe())
 //                    return false;
 
-//                data.owner.setFollowMe(getContacts()->owner()->getPhoneStatus());
-//                data.owner.setPluginStatusTime(now.toTime_t());
-//                snacService()->sendPluginStatusUpdate(PLUGIN_FOLLOWME, data.owner.getFollowMe());
+//                clientPersistentData->owner.setFollowMe(getContacts()->owner()->getPhoneStatus());
+//                clientPersistentData->owner.setPluginStatusTime(now.toTime_t());
+//                snacService()->sendPluginStatusUpdate(PLUGIN_FOLLOWME, clientPersistentData->owner.getFollowMe());
 //                return false;
 //            }
 //            ICQUserData *data;
@@ -3656,7 +3680,7 @@ const char *icq_error_codes[] = {I18N_NOOP("Unknown error"),
 //        if ((dc == NULL) &&
 //                !data->getNoDirect() &&
 //                (data->getStatus() != ICQ_STATUS_OFFLINE) &&
-//                ((data->getIP()) == (this->data.owner.getIP())))
+//                ((data->getIP()) == (this->clientPersistentData->owner.getIP())))
 //            bCreateDirect = true;
 //        if (!bCreateDirect &&
 //                (msg->type() == MessageGeneric) &&
@@ -3840,7 +3864,7 @@ const char *icq_error_codes[] = {I18N_NOOP("Unknown error"),
 //    Contact *contact;
 //    ICQUserData *data = findContact(uin, NULL, false, contact);
 //    if (data && !data->getNoDirect() &&
-//            (data->getIP()) && ((data->getIP()) == (this->data.owner.getIP())) &&
+//            (data->getIP()) && ((data->getIP()) == (this->clientPersistentData->owner.getIP())) &&
 //            ((getInvisible() && data->getVisibleId()) ||
 //             (!getInvisible() && (data->getInvisibleId() == 0)))){
 //        switch (plugin_index){
@@ -3944,7 +3968,7 @@ const char *icq_error_codes[] = {I18N_NOOP("Unknown error"),
 
 //QImage ICQClient::userPicture(ICQUserData *d)
 //{
-//    QImage img = QImage(d ? pictureFile(d) : data.owner.getPicture());
+//    QImage img = QImage(d ? pictureFile(d) : clientPersistentData->owner.getPicture());
 
 //    if(img.isNull())
 //        return img;
@@ -4000,9 +4024,9 @@ const char *icq_error_codes[] = {I18N_NOOP("Unknown error"),
 //{
 //    if (screen.isEmpty())
 //        return false;
-//    if(data.owner.getUin())
-//        return (data.owner.getUin() == screen.toULong());
-//    return (screen.toLower() == data.owner.getScreen().toLower());
+//    if(clientPersistentData->owner.getUin())
+//        return (clientPersistentData->owner.getUin() == screen.toULong());
+//    return (screen.toLower() == clientPersistentData->owner.getScreen().toLower());
 //}
 
 //QString ICQClient::addCRLF(const QString &str)

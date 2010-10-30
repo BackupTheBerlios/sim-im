@@ -92,7 +92,7 @@ using namespace SIM;
 //#endif
 //};
 
-Plugin *createCorePlugin(unsigned base, bool, Buffer *config)
+Plugin *createCorePlugin(unsigned /*base*/, bool, Buffer */*config*/)
 {
     Plugin *plugin = new CorePlugin();
     return plugin;
@@ -3177,7 +3177,7 @@ bool CorePlugin::init()
     foreach(const QString& clname, clients)
     {
         ClientPtr client = getClientManager()->client(clname);
-        client->changeStatus(client->savedStatus(SIM::Protocol::DefaultGroup), SIM::Protocol::DefaultGroup);
+        client->changeStatus(client->savedStatus());
     }
 
     getContactList()->load();

@@ -8,14 +8,14 @@ namespace StubObjects
 class StubIMContact : public SIM::IMContact
 {
 public:
-    StubIMContact(const SIM::ClientWeakPtr& client) : m_client(client) {}
+    StubIMContact(SIM::Client* client) : m_client(client) {}
 
-    virtual SIM::ClientWeakPtr client()
+    virtual SIM::Client* client()
     {
         return m_client;
     }
 
-    virtual SIM::IMStatusPtr status()
+    virtual SIM::IMStatusPtr status() const
     {
         return SIM::IMStatusPtr();
     }
@@ -24,6 +24,11 @@ public:
     {
         Q_UNUSED(message);
         return true;
+    }
+
+    QString name() const
+    {
+        return "StubContact";
     }
 
     virtual bool hasUnreadMessages()
@@ -68,7 +73,7 @@ public:
     }
 
 private:
-    SIM::ClientWeakPtr m_client;
+    SIM::Client* m_client;
 };
 }
 

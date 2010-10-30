@@ -1,7 +1,11 @@
 #include "icqcontact.h"
 #include "buffer.h"
+#include "log.h"
+#include "icqclient.h"
 
-ICQContact::ICQContact(const SIM::ClientPtr& cl) : SIM::IMContact(), m_uin(0),
+using namespace SIM;
+
+ICQContact::ICQContact(ICQClient* client) : SIM::IMContact(), m_uin(0),
     m_status(0),
     m_class(0),
     m_statusTime(0),
@@ -48,13 +52,14 @@ ICQContact::ICQContact(const SIM::ClientPtr& cl) : SIM::IMContact(), m_uin(0),
     m_direct(0),
     m_directPluginInfo(0),
     m_directPluginStatus(0),
-    m_client(cl)
+    m_client(client)
 {
-
+    m_icqstatus = client->getDefaultStatus("offline");
 }
 
 void ICQContact::deserializeLine(const QString& key, const QString& value)
 {
+    //log(L_DEBUG, "%s=%s", qPrintable(key), qPrintable(value));
     QString val = value;
     if(val.startsWith('\"') && val.endsWith('\"'))
         val = val.mid(1, val.length() - 2);
@@ -287,95 +292,9 @@ void ICQContact::deserializeLine(const QString& key, const QString& value)
 
 bool ICQContact::deserialize(const QString& data)
 {
-    return true;
-}
-
-QByteArray ICQContact::serialize()
-{
-    QString result;
-    result += QString("Alias=%1\n").arg(getAlias());
-    result += QString("Cellular=\"%1\"\n").arg(getCellular());
-    result += QString("StatusTime=%1\n").arg(getStatusTime());
-    result += QString("WarningLevel=%1\n").arg(getWarningLevel());
-    result += QString("IP=%1\n").arg(getIP());
-    result += QString("RealIP=%1\n").arg(getRealIP());
-    result += QString("Port=%1\n").arg(getPort());
-    result += QString("Caps=%1\n").arg(getCaps());
-    result += QString("Caps2=%1\n").arg(getCaps2());
-    result += QString("Uin=%1\n").arg(getUin());
-    result += QString("Screen=%1\n").arg(getScreen());
-    result += QString("ID=%1\n").arg(getIcqID());
-    result += QString("GroupID=%1\n").arg(getGrpID());
-    result += QString("Ignore=%1\n").arg(getIgnoreId());
-    result += QString("Visible=%1\n").arg(getVisibleId());
-    result += QString("Invisible=%1\n").arg(getInvisibleId());
-    result += QString("WaitAuth=%1\n").arg(getWaitAuth() ? "true" : "false");
-    result += QString("WantAuth=%1\n").arg(getWantAuth() ? "true" : "false");
-    result += QString("WebAware=%1\n").arg(getWebAware() ? "true" : "false");
-    result += QString("InfoUpdateTime=%1\n").arg(getInfoUpdateTime());
-    result += QString("PluginInfoTime=%1\n").arg(getPluginInfoTime());
-    result += QString("PluginStatusTime=%1\n").arg(getPluginStatusTime());
-    result += QString("InfoFetchTime=%1\n").arg(getInfoFetchTime());
-    result += QString("PluginInfoFetchTime=%1\n").arg(getPluginInfoFetchTime());
-    result += QString("PluginStatusFetchTime=%1\n").arg(getPluginStatusFetchTime());
-    result += QString("Mode=%1\n").arg(getMode());
-    result += QString("Version=%1\n").arg(getVersion());
-    result += QString("Build=%1\n").arg(getBuild());
-    result += QString("Nick=%1\n").arg(getNick());
-    result += QString("FirstName=%1\n").arg(getFirstName());
-    result += QString("LastName=%1\n").arg(getLastName());
-    result += QString("MiddleName=%1\n").arg(getMiddleName());
-    result += QString("Maiden=%1\n").arg(getMaiden());
-    result += QString("EMail=%1\n").arg(getEmail());
-    result += QString("HiddenEMail=%1\n").arg(getHiddenEmail() ? "true" : "false");
-    result += QString("City=%1\n").arg(getCity());
-    result += QString("State=%1\n").arg(getState());
-    result += QString("HomePhone=%1\n").arg(getHomePhone());
-    result += QString("HomeFax=%1\n").arg(getHomeFax());
-    result += QString("Address=\"%1\"\n").arg(getAddress());
-    result += QString("PrivateCellular=%1\n").arg(getPrivateCellular());
-    result += QString("Zip=%1\n").arg(getZip());
-    result += QString("Country=%1\n").arg(getCountry());
-    result += QString("TimeZone=%1\n").arg(getTimeZone());
-    result += QString("Age=%1\n").arg(getAge());
-    result += QString("Gender=%1\n").arg(getGender());
-    result += QString("Homepage=%1\n").arg(getHomepage());
-    result += QString("BirthYear=%1\n").arg(getBirthYear());
-    result += QString("BirthMonth=%1\n").arg(getBirthMonth());
-    result += QString("BirthDay=%1\n").arg(getBirthDay());
-    result += QString("Language=%1\n").arg(getLanguage());
-    result += QString("WorkCity=%1\n").arg(getWorkCity());
-    result += QString("WorkState=%1\n").arg(getWorkState());
-    result += QString("WorkAddress=%1\n").arg(getWorkAddress());
-    result += QString("WorkZip=%1\n").arg(getWorkZip());
-    result += QString("WorkCountry=%1\n").arg(getWorkCountry());
-    result += QString("WorkName=%1\n").arg(getWorkName());
-    result += QString("WorkDepartment=%1\n").arg(getWorkDepartment());
-    result += QString("WorkPosition=%1\n").arg(getWorkPosition());
-    result += QString("Occupation=%1\n").arg(getOccupation());
-    result += QString("WorkHomepage=%1\n").arg(getWorkHomepage());
-    result += QString("About=%1\n").arg(getAbout());
-    result += QString("Interests=%1\n").arg(getInterests());
-    result += QString("Backgrounds=%1\n").arg(getBackgrounds());
-    result += QString("Affilations=%1\n").arg(getAffilations());
-    result += QString("FollowMe=%1\n").arg(getFollowMe());
-    result += QString("SharedFiles=%1\n").arg(getSharedFiles() ? "true" : "false");
-    result += QString("Picture=\"%1\"\n").arg(getPicture());
-    result += QString("PictureWidth=%1\n").arg(getPictureWidth());
-    result += QString("PictureHeight=%1\n").arg(getPictureHeight());
-    result += QString("PhoneBook=\"%1\"\n").arg(getPhoneBook());
-    result += QString("ProfileFetch=%1\n").arg(getProfileFetch() ? "true" : "false");
-    result += QString("buddyID=%1\n").arg(getBuddyID());
-    result += QString("buddyHash=%1\n").arg(QString(getBuddyHash().toHex()));
-
-    return result.toLocal8Bit();
-}
-
-void ICQContact::deserialize(Buffer* cfg)
-{
-    for(;;)
+    QStringList strings = data.split("\n");
+    foreach(const QString& line, strings)
     {
-        const QString line = QString::fromUtf8(cfg->getLine());
         if (line.isEmpty())
             break;
         QStringList keyval = line.split('=');
@@ -383,6 +302,7 @@ void ICQContact::deserialize(Buffer* cfg)
             continue;
         deserializeLine(keyval.at(0), keyval.at(1));
     }
+    return true;
 }
 
 void ICQContact::serialize(QDomElement& element)
@@ -553,9 +473,31 @@ void ICQContact::deserialize(QDomElement& element)
     setUnknown(5, hub->value("unknown5").toByteArray());
 }
 
-SIM::IMStatusPtr ICQContact::status()
+SIM::Client* ICQContact::client()
 {
-    return SIM::IMStatusPtr();
+    return m_client;
+}
+
+SIM::IMStatusPtr ICQContact::status() const
+{
+    return m_icqstatus;
+}
+
+ICQStatusPtr ICQContact::icqStatus() const
+{
+    return m_icqstatus;
+}
+
+void ICQContact::statusChanged()
+{
+
+}
+
+QString ICQContact::name() const
+{
+    if(getNick().isEmpty())
+        return QString::number(getUin());
+    return getNick();
 }
 
 bool ICQContact::sendMessage(const SIM::MessagePtr& message)

@@ -9,10 +9,9 @@ GenericMessage::GenericMessage(const IMContactPtr& contact)
 {
     m_contact = contact.toWeakRef();
     m_client = contact->client();
-    ClientPtr cl = m_client.toStrongRef();
-    if(cl)
+    if(m_client)
     {
-        m_originatingClientId = cl->name();
+        m_originatingClientId = m_client->name();
     }
 }
 
@@ -25,7 +24,7 @@ QIcon GenericMessage::icon()
     return QIcon();
 }
 
-ClientWeakPtr GenericMessage::client()
+Client* GenericMessage::client()
 {
     return m_client;
 }

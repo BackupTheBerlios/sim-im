@@ -74,6 +74,14 @@ namespace
         EXPECT_FALSE(getContactList()->contactExists(42));
     }
 
+    TEST_F(TestStandardContactList, contactCount)
+    {
+        ContactPtr contact = getContactList()->createContact(42);
+        getContactList()->addContact(contact);
+
+        EXPECT_EQ(1, getContactList()->contactIds().size());
+    }
+
     TEST_F(TestStandardContactList, addGroup_NoGroupWithGivenIdAdded_AddsGroup)
     {
         GroupPtr group = getContactList()->createGroup(56);
@@ -137,5 +145,23 @@ namespace
 
         EXPECT_TRUE(contacts.contains(contact1));
         EXPECT_FALSE(contacts.contains(contact2));
+    }
+
+    TEST_F(TestStandardContactList, contactIds_filtersIgnoredContacts)
+    {
+        int ignoredContactId = 43;
+        ContactPtr contact1 = getContactList()->createContact(42);
+        ContactPtr contact2 = getContactList()->createContact(ignoredContactId);
+        contact2->setFlag(Contact::flIgnore, true);
+        ContactPtr contact3 = getContactList()->createContact(44);
+        getContactList()->addContact(contact1);
+        getContactList()->addContact(contact2);
+        getContactList()->addContact(contact3);
+
+        QList<int> ids = getContactList()->contactIds();
+
+        ASSERT_FALSE(ids.contains(ignoredContactId));
+
+
     }
 }

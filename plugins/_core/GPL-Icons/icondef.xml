@@ -31,6 +31,12 @@
     <!-- Licence: GNU/GPL -->
     <!-- Origin: http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/oscar/icons/cr16-action-icq_online.png -->
   </icon>
+  
+  <icon name="ICQ_offline" flags="65340">
+    <object mime="image/png">icq_offline.png</object>
+    <!-- Licence: GNU/GPL -->
+    <!-- Origin: http://websvn.kde.org/trunk/KDE/kdenetwork/kopete/protocols/oscar/icons/cr16-action-icq_online.png -->
+  </icon>
     
   <icon name="MSN" flags="512">
     <object mime="image/png">msn_online.png</object>

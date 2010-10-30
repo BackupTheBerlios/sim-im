@@ -9,13 +9,16 @@
 #include "stubs/stubimcontact.h"
 #include "stubs/stubclient.h"
 #include "mocks/mockimcontact.h"
+#include "mocks/mockimstatus.h"
 #include "clientmanager.h"
 #include "messaging/genericmessage.h"
 
 namespace
 {
     using namespace SIM;
+    using namespace MockObjects;
     using ::testing::Return;
+    using ::testing::_;
 
     class TestContact : public ::testing::Test
     {
@@ -28,7 +31,7 @@ namespace
 
         IMContactPtr createStubIMContact(const ClientPtr& client)
         {
-            return IMContactPtr(new StubObjects::StubIMContact(client));
+            return IMContactPtr(new StubObjects::StubIMContact(client.data()));
         }
 
         MessagePtr createGenericMessage(const IMContactPtr& contact)
@@ -79,7 +82,7 @@ namespace
     TEST_F(TestContact, hasUnreadMessages)
     {
         ClientPtr client =  createStubClient("ICQ.123456");
-        QSharedPointer<MockObjects::MockIMContact> imContact = QSharedPointer<MockObjects::MockIMContact>(new MockObjects::MockIMContact());
+        MockObjects::MockIMContactPtr imContact = MockObjects::MockIMContactPtr(new MockObjects::MockIMContact());
         EXPECT_CALL(*imContact.data(), hasUnreadMessages()).WillOnce(Return(true));
         Contact contact(1);
         contact.addClientContact(imContact);
@@ -108,6 +111,25 @@ namespace
         EXPECT_TRUE(deserializedContact.groupId() == 42);
         EXPECT_TRUE(deserializedContact.lastActive() == 112);
         EXPECT_TRUE(deserializedContact.flag(Contact::flIgnore));
+    }
+
+    TEST_F(TestContact, isOnline_emptyContact_offline)
+    {
+        Contact contact(1);
+
+        ASSERT_FALSE(contact.isOnline());
+    }
+
+    TEST_F(TestContact, isOnline_subcontactOnline)
+    {
+        MockIMStatusPtr imStatus = MockIMStatusPtr(new MockIMStatus());
+        MockIMContactPtr imContact = MockIMContactPtr(new MockObjects::MockIMContact());
+        ON_CALL(*imContact.data(), status()).WillByDefault(Return(imStatus));
+        ON_CALL(*imStatus.data(), flag(IMStatus::flOffline)).WillByDefault(Return(false));
+        Contact contact(1);
+        contact.addClientContact(imContact);
+
+        ASSERT_TRUE(contact.isOnline());
     }
 }
 
