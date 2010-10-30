@@ -25,6 +25,7 @@
 #include <QDateTime>
 #include <QList>
 #include <QByteArray>
+#include <QTcpSocket>
 #include <climits>
 
 #include "misc.h"
@@ -473,24 +474,9 @@ class DirectSocket;
 class ServiceSocket;
 class ICQClientSocket;
 
-class OscarSocket
+class OscarSocket : public QTcpSocket
 {
-public:
-    OscarSocket();
-    virtual ~OscarSocket(){}
 
-    void snac(unsigned short food, unsigned short type, bool msgId=false, bool bType=true);
-    void sendPacket(bool bSend = true);
-protected:
-    virtual ICQClientSocket *socket() = 0;
-    virtual void packet(unsigned long size) = 0;
-    void flap(char channel);
-    void connect_ready();
-    void packet_ready();
-    bool m_bHeader;
-    char m_nChannel;
-    unsigned short m_nFlapSequence;
-    unsigned short m_nMsgSequence;
 };
 
 struct alias_group
@@ -646,6 +632,7 @@ public:
 
     void initDefaultStates();
     ICQStatusPtr getDefaultStatus(const QString& id);
+
     // reimplement socket() to get correct Buffer
 //    virtual ICQClientSocket *socket() { return static_cast<ICQClientSocket*>(TCPClient::socket()); }
 //    virtual ICQClientSocket *createClientSocket() { return new ICQClientSocket(this, createSocket()); }
@@ -700,8 +687,6 @@ public:
 //    static QString addCRLF(const QString &str);
 //    void uploadBuddy(const ICQUserData *data);
 //    ICQUserData * toICQUserData(SIM::IMContact*);  // More safely type conversion from generic SIM::clientData into ICQUserData
-
-//    virtual void changeStatus(const SIM::IMStatusPtr& status);
 
 //    unsigned long getFullStatus();
 
@@ -900,9 +885,11 @@ public:
 
 private:
     void initialize(bool bAIM);
+
     SIM::PropertyHubPtr m_propertyHub;
     QList<ICQStatusPtr> m_defaultStates;
     QString m_name;
+
     //bool m_bBirthdayInfoDisplayed;
 };
 

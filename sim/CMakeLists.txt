@@ -59,6 +59,9 @@ SET(sim_LIB_SRCS
         contacts/imcontact.cpp
         contacts/imgroup.cpp
 
+        network/asyncsocket.cpp
+        network/tcpasyncsocket.cpp
+
         simgui/ballonmsg.cpp
 		simgui/linklabel.cpp
 		simgui/preview.cpp
@@ -127,6 +130,9 @@ SET(sim_LIB_HDRS
 		contacts/imstatus.h
         contacts/imcontact.h
         contacts/imgroup.h
+
+        network/asyncsocket.h
+        network/tcpasyncsocket.h
 
 		simgui/ballonmsg.h
 		simgui/linklabel.h
@@ -233,6 +239,7 @@ SET(sim_tests_hdrs
     tests/stubs/stubimgroup.h
     tests/mocks/mockcontactlist.h
     tests/mocks/mockimcontact.h
+    tests/mocks/mockasyncsocket.h
     tests/testuicommand.h
     tests/gtest-qt.h
 )

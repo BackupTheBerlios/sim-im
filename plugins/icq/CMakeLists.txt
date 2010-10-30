@@ -32,6 +32,7 @@ SET(icq_SRCS
 #        icqservice.cpp
 #        icqssbi.cpp
         icqstatus.cpp
+        oscarsocket.cpp
 #        icqvarious.cpp
 #        interestsinfo.cpp
 #        moreinfo.cpp
@@ -71,6 +72,7 @@ SET(icq_HDRS
 #        icqsecure.h
 #        icqssbi.h
         icqstatus.h
+        oscarsocket.h
 #        interestsinfo.h
 #        moreinfo.h
 #        pastinfo.h
@@ -116,6 +118,7 @@ SET(icq_test_sources
     tests/testicqclient.cpp
     tests/testicqstatus.cpp
     tests/testicqcontact.cpp
+    tests/testoscarsocket.cpp
 )
 
 ADD_EXECUTABLE(test_icq ${icq_test_sources})

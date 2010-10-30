@@ -414,11 +414,50 @@ SIM::IMStatusPtr ICQClient::currentStatus()
 void ICQClient::changeStatus(const SIM::IMStatusPtr& status)
 {
     Q_UNUSED(status);
+    //    if (status->id() == "offline")
+    //    {
+    //        flap(ICQ_CHNxCLOSE);
+    //        return;
+    //    }
+    //    if (m_bAIM)
+    //    {
+    //        if (status->id() == "online")
+    //        {
+    //            IMStatusPtr newstatus = protocol()->status("away");
+    //            // TODO obtain AR
+
+    //            /*
+    //            ar_request req;
+    //            req.bDirect = true;
+    //            arRequests.push_back(req);
+
+    //            ARRequest ar;
+    //            ar.contact  = NULL;
+    //            ar.param    = &arRequests.back();
+    //            ar.receiver = this;
+    //            ar.status   = status;
+    //            EventARRequest(&ar).process();
+    //            EventClientChanged(this).process();
+    //            */
+    //        }
+    //        else if (m_status != STATUS_ONLINE)
+    //        {
+    //            setAwayMessage();
+    //        }
+    //    }
+    //    else
+    //    {
+    //        if (status->id() == currentStatus()->id())
+    //            return;
+
+    //        snacService()->sendStatus(fullStatus(status));
+    //    }
+    //    TCPClient::changeStatus(status);
 }
 
 SIM::IMStatusPtr ICQClient::savedStatus()
 {
-    return SIM::IMStatusPtr();
+    return getDefaultStatus("offline");
 }
 
 //void ICQClient::setOwnerContact(SIM::IMContact* contact)
@@ -876,7 +915,6 @@ void ICQClient::setPort(unsigned short port)
     clientPersistentData->setPort(port);
 }
 
-
 void ICQClient::setUin(unsigned long uin)
 {
     clientPersistentData->owner.setUin(uin);
@@ -1015,49 +1053,6 @@ unsigned long ICQClient::getUin()
 //            setIdleTime(QDateTime::currentDateTime().toTime_t());
 //    }
 //    TCPClient::setStatus(status, bCommon);
-//}
-
-//void ICQClient::changeStatus(const SIM::IMStatusPtr& status)
-//{
-//    if (status->id() == "offline")
-//    {
-//        flap(ICQ_CHNxCLOSE);
-//        return;
-//    }
-//    if (m_bAIM)
-//    {
-//        if (status->id() == "online")
-//        {
-//            IMStatusPtr newstatus = protocol()->status("away");
-//            // TODO obtain AR
-
-//            /*
-//            ar_request req;
-//            req.bDirect = true;
-//            arRequests.push_back(req);
-
-//            ARRequest ar;
-//            ar.contact  = NULL;
-//            ar.param    = &arRequests.back();
-//            ar.receiver = this;
-//            ar.status   = status;
-//            EventARRequest(&ar).process();
-//            EventClientChanged(this).process();
-//            */
-//        }
-//        else if (m_status != STATUS_ONLINE)
-//        {
-//            setAwayMessage();
-//        }
-//    }
-//    else
-//    {
-//        if (status->id() == currentStatus()->id())
-//            return;
-
-//        snacService()->sendStatus(fullStatus(status));
-//    }
-//    TCPClient::changeStatus(status);
 //}
 
 //void ICQClient::setStatus(unsigned status)
