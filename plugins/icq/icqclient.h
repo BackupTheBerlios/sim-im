@@ -510,7 +510,6 @@ class ICQ_EXPORT ICQClient : public QObject, public SIM::Client
 {
     Q_OBJECT
 public:
-    ICQClient(SIM::Protocol*, Buffer *cfg, bool bAIM);
     ICQClient(SIM::Protocol*, const QString& name, bool bAIM);
     virtual ~ICQClient();
     virtual QString name();
@@ -518,9 +517,11 @@ public:
     SIM::IMContactPtr createIMContact();
     SIM::IMGroupPtr createIMGroup();
 
-    QWidget* createSetupWidget(const QString& id, QWidget* parent);
-    void destroySetupWidget();
-    QStringList availableSetupWidgets() const;
+    virtual QWidget* createSetupWidget(const QString& id, QWidget* parent);
+    virtual void destroySetupWidget();
+    virtual QStringList availableSetupWidgets() const;
+
+    virtual QWidget* getStatusWidget();
 
     virtual SIM::IMStatusPtr currentStatus();
     virtual void changeStatus(const SIM::IMStatusPtr& status);

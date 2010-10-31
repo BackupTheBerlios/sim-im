@@ -75,24 +75,10 @@ QString ICQProtocol::helpLink()
     return QString("http://www.icq.com");
 }
 
-ClientPtr ICQProtocol::createClient(Buffer *cfg)
-{
-    ClientPtr icq = ClientPtr(new ICQClient(this, cfg, false));
-    return icq;
-}
-
 SIM::ClientPtr ICQProtocol::createClient(const QString& name)
 {
     ClientPtr icq = ClientPtr(new ICQClient(this, name, false));
     return icq;
-}
-
-IMContact* ICQProtocol::createIMContact(const QSharedPointer<Client>& client)
-{
-    QSharedPointer<ICQClient> icqclient = client.dynamicCast<ICQClient>();
-    if(!icqclient)
-        return 0;
-    return new ICQContact(icqclient.data());
 }
 
 void ICQProtocol::initStatuses()

@@ -247,12 +247,6 @@ ICQClient::ICQClient(SIM::Protocol* protocol, const QString& name, bool bAIM) : 
     clientPersistentData = new ICQClientData(this);
 }
 
-ICQClient::ICQClient(Protocol *protocol, Buffer */*cfg*/, bool bAIM) : SIM::Client(protocol)
-{
-    initialize(bAIM);
-    clientPersistentData = new ICQClientData(this);
-}
-
 ICQClient::~ICQClient()
 {
     delete clientPersistentData;
@@ -827,7 +821,7 @@ SIM::IMContactPtr ICQClient::createIMContact()
 
 SIM::IMGroupPtr ICQClient::createIMGroup()
 {
-    return SIM::IMGroupPtr(new ICQGroup(SIM::getClientManager()->client(name())));
+    return SIM::IMGroupPtr(new ICQGroup(this));
 }
 
 QWidget* ICQClient::createSetupWidget(const QString& id, QWidget* parent)
@@ -842,6 +836,10 @@ QStringList ICQClient::availableSetupWidgets() const
 {
 }
 
+QWidget* ICQClient::getStatusWidget()
+{
+    return 0;
+}
 
 SIM::IMContactPtr ICQClient::ownerContact()
 {

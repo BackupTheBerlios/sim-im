@@ -24,7 +24,6 @@ namespace SIM
         virtual QString name() = 0;
         virtual QString iconId() = 0;
         virtual QString helpLink() = 0;
-        virtual QSharedPointer<Client> createClient(Buffer *cfg) = 0;
         virtual QSharedPointer<Client> createClient(const QString& name) = 0;
 
         enum Flag

@@ -30,7 +30,6 @@ namespace SIM
         virtual void setText(const QString& t) = 0;
         virtual QString text() const = 0;
         virtual QPixmap icon() const = 0;
-        virtual int group() const = 0;
 
         virtual bool flag(Flag fl) const = 0;
         virtual void setFlag(Flag fl, bool val) = 0;

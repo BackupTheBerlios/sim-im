@@ -1,10 +1,11 @@
 #include "icqgroup.h"
+#include "icqclient.h"
 
-ICQGroup::ICQGroup(const SIM::ClientPtr& cl) : m_client(cl)
+ICQGroup::ICQGroup(ICQClient* cl) : m_client(cl)
 {
 }
 
-SIM::ClientWeakPtr ICQGroup::client()
+SIM::Client* ICQGroup::client()
 {
     return m_client;
 }

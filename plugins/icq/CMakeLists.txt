@@ -112,6 +112,11 @@ SET(icq_UICS
 SIM_ADD_PLUGIN(icq)
 SET_TARGET_PROPERTIES(icq PROPERTIES DEFINE_SYMBOL ICQ_EXPORTS)
 
+SET(icq_test_headers
+    tests/testoscarsocket.h
+)
+
+QT4_WRAP_CPP(testmocs ${icq_test_headers})
 
 SET(icq_test_sources
     tests/test.cpp
@@ -121,6 +126,6 @@ SET(icq_test_sources
     tests/testoscarsocket.cpp
 )
 
-ADD_EXECUTABLE(test_icq ${icq_test_sources})
+ADD_EXECUTABLE(test_icq ${icq_test_sources} ${testmocs})
 TARGET_LINK_LIBRARIES(test_icq simlib ${QT_LIBRARIES} gtest gmock icq)
 

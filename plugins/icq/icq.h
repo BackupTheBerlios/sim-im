@@ -48,9 +48,7 @@ public:
     virtual QString name();
     virtual QString iconId();
     virtual QString helpLink();
-    virtual SIM::ClientPtr createClient(Buffer *cfg);
     virtual SIM::ClientPtr createClient(const QString& name);
-    virtual SIM::IMContact* createIMContact(const QSharedPointer<SIM::Client>& client);
 
 private:
 	void initStatuses();

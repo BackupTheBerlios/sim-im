@@ -1,14 +1,14 @@
-#ifndef ICQGROUP_H
-#define ICQGROUP_H
+#ifndef JABBERGROUP_H
+#define JABBERGROUP_H
 
 #include "contacts/imgroup.h"
-#include "contacts/client.h"
 
-class ICQClient;
-class ICQGroup : public SIM::IMGroup
+class JabberClient;
+class JabberGroup : public SIM::IMGroup
 {
 public:
-    ICQGroup(ICQClient* cl);
+    JabberGroup(JabberClient* cl);
+
     virtual SIM::Client* client();
     virtual QList<SIM::IMContactPtr> contacts();
 
@@ -17,7 +17,7 @@ public:
     virtual bool deserialize(const QString& data);
 
 private:
-    ICQClient* m_client;
+    JabberClient* m_client;
 };
 
-#endif // ICQGROUP_H
+#endif // JABBERGROUP_H

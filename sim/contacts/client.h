@@ -28,6 +28,8 @@ namespace SIM
         virtual void destroySetupWidget() = 0;
         virtual QStringList availableSetupWidgets() const = 0;
 
+        virtual QWidget* getStatusWidget() = 0;
+
         virtual IMStatusPtr currentStatus() = 0;
         virtual void changeStatus(const IMStatusPtr& status) = 0;
         virtual IMStatusPtr savedStatus() = 0;
@@ -40,12 +42,11 @@ namespace SIM
         virtual bool deserialize(Buffer* buf) = 0;
 
         virtual QWidget* createSearchWidow(QWidget *parent) = 0;
+        virtual QList<IMGroupPtr> groups() = 0;
+        virtual QList<IMContactPtr> contacts() = 0;
 
         QString password() const;
         void setPassword(const QString& password);
-
-        virtual QList<IMGroupPtr> groups() = 0;
-        virtual QList<IMContactPtr> contacts() = 0;
 
         PropertyHubPtr properties() { return m_data; }
 

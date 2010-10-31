@@ -23,7 +23,7 @@ namespace
 
         IMGroupPtr createStubIMGroup(const ClientPtr& client)
         {
-            return IMGroupPtr(new StubObjects::StubIMGroup(client));
+            return IMGroupPtr(new StubObjects::StubIMGroup(client.data()));
         }
     };
 

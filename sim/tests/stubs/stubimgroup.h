@@ -10,12 +10,12 @@ namespace StubObjects
     class StubIMGroup : public SIM::IMGroup
     {
     public:
-        StubIMGroup(const SIM::ClientPtr& cl)
+        StubIMGroup(SIM::Client* cl)
         {
-            m_client = cl.toWeakRef();
+            m_client = cl;
         }
 
-        virtual SIM::ClientWeakPtr client()
+        virtual SIM::Client* client()
         {
             return m_client;
         }
@@ -41,7 +41,7 @@ namespace StubObjects
         }
 
     private:
-        SIM::ClientWeakPtr m_client;
+        SIM::Client* m_client;
     };
 }
 

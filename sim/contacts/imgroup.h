@@ -17,7 +17,7 @@ class IMGroup
 {
 public:
     virtual ~IMGroup() {}
-    virtual ClientWeakPtr client() = 0;
+    virtual Client* client() = 0;
     virtual QList<IMContactPtr> contacts() = 0;
 
     virtual bool serialize(QDomElement& element) = 0;

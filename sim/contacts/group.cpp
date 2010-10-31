@@ -38,7 +38,7 @@ namespace SIM
     {
         foreach(const IMGroupPtr& group, m_imGroups)
         {
-            ClientPtr client = group->client().toStrongRef();
+            Client* client = group->client();
             if(!client)
                 continue;
             if(client->name() == clientId)
@@ -52,7 +52,7 @@ namespace SIM
         QStringList result;
         foreach(const IMGroupPtr& group, m_imGroups)
         {
-            ClientPtr client = group->client().toStrongRef();
+            Client* client = group->client();
             if(!client)
                 continue;
             result.append(client->name());
@@ -80,7 +80,7 @@ namespace SIM
         foreach(const QString& clname, clients) {
             IMGroupPtr imgr = clientGroup(clname);
             QDomElement clientElement = element.ownerDocument().createElement("clientdata");
-            ClientPtr client = imgr->client().toStrongRef();
+            Client* client = imgr->client();
             clientElement.setAttribute("clientname", client->name());
             imgr->serialize(clientElement);
             element.appendChild(clientElement);

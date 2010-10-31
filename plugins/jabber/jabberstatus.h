@@ -3,11 +3,12 @@
 #define JABBERSTATUS_H
 
 #include "contacts/imstatus.h"
+#include "jabber_api.h"
 
-class JabberStatus : public SIM::IMStatus
+class JABBER_EXPORT JabberStatus : public SIM::IMStatus
 {
 public:
-    JabberStatus(const QString& id, const QString& name, bool hasText, const QString& defaultText, const QIcon& icon,
+    JabberStatus(const QString& id, const QString& name, bool hasText, const QString& defaultText, const QPixmap& icon,
                  const QString& show, const QString& type);
     virtual ~JabberStatus();
 
@@ -16,10 +17,11 @@ public:
     virtual bool hasText() const;
     virtual void setText(const QString& t);
     virtual QString text() const;
-    virtual QIcon icon() const;
+    virtual QPixmap icon() const;
 
-    virtual QStringList substates();
-    virtual SIM::IMStatusPtr substatus(const QString& id);
+    virtual bool flag(Flag fl) const;
+    virtual void setFlag(Flag fl, bool val);
+
     virtual SIM::IMStatusPtr clone();
 
     QString show();
@@ -30,9 +32,10 @@ private:
     QString m_name;
     bool m_hasText;
     QString m_text;
-    QIcon m_icon;
+    QPixmap m_icon;
     QString m_show;
     QString m_type;
+    unsigned int m_flags;
 };
 
 typedef QSharedPointer<JabberStatus> JabberStatusPtr;

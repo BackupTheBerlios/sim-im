@@ -43,6 +43,11 @@ namespace StubObjects
             return QStringList();
         }
 
+        virtual QWidget* getStatusWidget()
+        {
+            return 0;
+        }
+
         virtual SIM::IMStatusPtr currentStatus()
         {
             return SIM::IMStatusPtr();
