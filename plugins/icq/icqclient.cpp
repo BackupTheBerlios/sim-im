@@ -36,8 +36,10 @@
 #include "contacts/group.h"
 
 #include "icq.h"
-#include "icqconfig.h"
+#include "icqclient.h"
+//#include "icqconfig.h"
 #include "icqgroup.h"
+#include "icqstatuswidget.h"
 #include "imagestorage/imagestorage.h"
 
 //#include "aimconfig.h"
@@ -255,6 +257,7 @@ ICQClient::~ICQClient()
 void ICQClient::initialize(bool /*bAIM*/)
 {
     initDefaultStates();
+    m_currentStatus = getDefaultStatus("offline");
     //m_bAIM = bAIM;
 
 //    clientPersistentData->owner.setDCcookie(rand());
@@ -402,7 +405,7 @@ bool ICQClient::deserialize(Buffer* cfg)
 
 SIM::IMStatusPtr ICQClient::currentStatus()
 {
-    return SIM::IMStatusPtr();
+    return m_currentStatus;
 }
 
 void ICQClient::changeStatus(const SIM::IMStatusPtr& status)
@@ -836,9 +839,11 @@ QStringList ICQClient::availableSetupWidgets() const
 {
 }
 
-QWidget* ICQClient::getStatusWidget()
+QWidget* ICQClient::createStatusWidget()
 {
-    return 0;
+    ICQStatusWidget* widget = new ICQStatusWidget(this);
+    connect(this, SIGNAL(setStatusWidgetsBlinking(bool)), widget, SLOT(setBlinking(bool)));
+    return widget;
 }
 
 SIM::IMContactPtr ICQClient::ownerContact()

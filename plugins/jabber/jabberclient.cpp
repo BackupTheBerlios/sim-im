@@ -32,6 +32,7 @@
 
 #include "jabberclient.h"
 #include "jabber.h"
+#include "jabberstatuswidget.h"
 
 //#include "jabberconfig.h"
 //#include "jabber_ssl.h"
@@ -416,14 +417,14 @@ QStringList JabberClient::availableSetupWidgets() const
     return QStringList();
 }
 
-QWidget* JabberClient::getStatusWidget()
+QWidget* JabberClient::createStatusWidget()
 {
-    return 0;
+    return new JabberStatusWidget(this);
 }
 
 IMStatusPtr JabberClient::currentStatus()
 {
-    return IMStatusPtr();
+    return m_currentStatus;
 }
 
 void JabberClient::changeStatus(const IMStatusPtr& status)
@@ -1178,6 +1179,7 @@ void JabberClient::init()
 //    m_id_seed = 0xAAAA;
 //    m_bSSL = false;
     addDefaultStates();
+    m_currentStatus = getDefaultStatus("offline");
 }
 
 void JabberClient::addDefaultStates()

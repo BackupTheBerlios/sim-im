@@ -24,6 +24,7 @@
 #include "simgui/toolbar.h"
 
 #include <QMainWindow>
+#include <QList>
 
 using namespace std;
 
@@ -57,8 +58,9 @@ protected:
 
 //    void focusInEvent(QFocusEvent*);
 //    void quit();
-//    void addStatus(QWidget *w, bool);
-//    list<QWidget*> statusWidgets;
+
+    void refreshStatusWidgets();
+
 //    QString	m_icon;
 
 //    virtual void closeEvent(QCloseEvent *e);
@@ -74,6 +76,7 @@ private:
     SIM::ToolBar* m_bar;
     QVBoxLayout* m_layout;
     QWidget* m_centralWidget;
+    QList<QWidget*> m_statusWidgets;
     CorePlugin* m_core;
     bool m_noresize;
 };

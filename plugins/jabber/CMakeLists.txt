@@ -24,6 +24,7 @@ SET(jabber_SRCS
 #        jabberpicture.cpp
 #        jabbersearch.cpp
         jabberstatus.cpp
+        jabberstatuswidget.cpp
 #        jabberworkinfo.cpp
 #        jidadvsearch.cpp
 #        jidsearch.cpp
@@ -50,6 +51,7 @@ SET(jabber_HDRS
 #        jabberpicture.h
 #        jabbersearch.h
         jabberstatus.h
+        jabberstatuswidget.h
 #        jabberworkinfo.h
 #        jidadvsearch.h
 #        jidsearch.h

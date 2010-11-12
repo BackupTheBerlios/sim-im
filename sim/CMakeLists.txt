@@ -73,6 +73,7 @@ SET(sim_LIB_SRCS
         simgui/toolbar.cpp
         simgui/toolbaractionfactory.cpp
         simgui/standardtoolbaractionfactory.cpp
+        simgui/statuswidget.cpp
         simgui/toolitem.cpp
 	)
 
@@ -145,6 +146,7 @@ SET(sim_LIB_HDRS
         simgui/toolbar.h
         simgui/toolbaractionfactory.h
         simgui/standardtoolbaractionfactory.h
+        simgui/statuswidget.h
         simgui/toolitem.h
 	)
 

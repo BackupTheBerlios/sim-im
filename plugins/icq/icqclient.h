@@ -521,7 +521,7 @@ public:
     virtual void destroySetupWidget();
     virtual QStringList availableSetupWidgets() const;
 
-    virtual QWidget* getStatusWidget();
+    virtual QWidget* createStatusWidget();
 
     virtual SIM::IMStatusPtr currentStatus();
     virtual void changeStatus(const SIM::IMStatusPtr& status);
@@ -719,7 +719,10 @@ public:
 //    void retry(int n, void*);
 //    void interfaceDown(QString);
 //    void interfaceUp(QString);
-//protected:
+signals:
+    void setStatusWidgetsBlinking(bool b);
+
+protected:
 //    void generateCookie(MessageId& id);
 
 //    virtual void setInvisible(bool bState);
@@ -890,6 +893,7 @@ private:
     SIM::PropertyHubPtr m_propertyHub;
     QList<ICQStatusPtr> m_defaultStates;
     QString m_name;
+    ICQStatusPtr m_currentStatus;
 
     //bool m_bBirthdayInfoDisplayed;
 };

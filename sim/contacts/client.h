@@ -28,7 +28,7 @@ namespace SIM
         virtual void destroySetupWidget() = 0;
         virtual QStringList availableSetupWidgets() const = 0;
 
-        virtual QWidget* getStatusWidget() = 0;
+        virtual QWidget* createStatusWidget() = 0;
 
         virtual IMStatusPtr currentStatus() = 0;
         virtual void changeStatus(const IMStatusPtr& status) = 0;

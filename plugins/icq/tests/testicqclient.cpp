@@ -22,4 +22,14 @@ namespace
         ASSERT_FALSE(status.isNull());
         ASSERT_TRUE(status->flag(IMStatus::flOffline));
     }
+
+    TEST_F(TestIcqClient, onCreation_statusIsOffline)
+    {
+        ICQClient client(0, "ICQ.123456", false);
+
+        IMStatusPtr status = client.currentStatus();
+
+        ASSERT_FALSE(status.isNull());
+        ASSERT_TRUE(status->flag(IMStatus::flOffline));
+    }
 }

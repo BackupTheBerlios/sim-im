@@ -29,4 +29,12 @@ namespace
         ASSERT_TRUE(status);
         ASSERT_TRUE(status->flag(SIM::IMStatus::flOffline));
     }
+
+    TEST_F(TestJabberClient, onCreation_statusIsOffline)
+    {
+        SIM::IMStatusPtr status = client->currentStatus();
+
+        ASSERT_TRUE(status);
+        ASSERT_TRUE(status->flag(SIM::IMStatus::flOffline));
+    }
 }

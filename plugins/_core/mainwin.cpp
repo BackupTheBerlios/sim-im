@@ -26,6 +26,7 @@
 #include "commands/commandhub.h"
 #include "commands/uicommand.h"
 #include "imagestorage/imagestorage.h"
+#include "clientmanager.h"
 
 #include <QApplication>
 #include <QPixmap>
@@ -60,11 +61,13 @@ MainWindow::MainWindow(CorePlugin* core)
     m_layout->setMargin(0);
 
     statusBar()->show();
+    statusBar()->setSizeGripEnabled(false);
     statusBar()->installEventFilter(this);
 
     m_view = new UserView(core);
     m_view->init();
     addWidget(m_view);
+
 }
 
 MainWindow::~MainWindow()
@@ -126,6 +129,7 @@ void MainWindow::init()
     log(L_DEBUG, "MainWindow::init()");
     updateTitle();
     populateMainToolbar();
+    refreshStatusWidgets();
 }
 
 //bool MainWindow::processEvent(Event *e)
@@ -199,6 +203,24 @@ void MainWindow::addWidget(QWidget *w)
     m_layout->addWidget(w);
     if(isVisible())
         w->show();
+}
+
+void MainWindow::refreshStatusWidgets()
+{
+    qDeleteAll(m_statusWidgets);
+    m_statusWidgets.clear();
+    QList<ClientPtr> clients = getClientManager()->allClients();
+    foreach(const ClientPtr& client, clients)
+    {
+        QWidget* statusWidget = client->createStatusWidget();
+        if(statusWidget)
+        {
+            m_statusWidgets.append(statusWidget);
+            statusWidget->setParent(statusBar());
+            statusBar()->addWidget(statusWidget);
+            statusWidget->show();
+        }
+    }
 }
 
 //void MainWindow::addStatus(QWidget *w, bool)

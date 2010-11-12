@@ -17,6 +17,7 @@ SET(icq_SRCS
         icqclient.cpp
         icqcontact.cpp
         icqgroup.cpp
+        icqstatuswidget.cpp
 #        icqconfig.cpp
 #        icqdirect.cpp
 #        icqicmb.cpp
@@ -60,6 +61,7 @@ SET(icq_HDRS
         icqclient.h
         icqcontact.h
         icqgroup.h
+        icqstatuswidget.h
         icq_defines.h
 #        icqconfig.h
 #        icqinfo.h
@@ -124,6 +126,7 @@ SET(icq_test_sources
     tests/testicqstatus.cpp
     tests/testicqcontact.cpp
     tests/testoscarsocket.cpp
+    tests/testicqstatuswidget.cpp
 )
 
 ADD_EXECUTABLE(test_icq ${icq_test_sources} ${testmocs})

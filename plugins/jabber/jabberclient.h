@@ -52,8 +52,8 @@ public:
     JabberClientData(JabberClient* client);
     virtual QByteArray serialize();
     virtual void deserialize(Buffer* cfg);
-    virtual void serialize(QDomElement& element) {}
-    virtual void deserialize(QDomElement& element) {}
+    virtual void serialize(QDomElement& /*element*/) {}
+    virtual void deserialize(QDomElement& /*element*/) {}
 
     virtual SIM::Client* client() { Q_ASSERT_X(false, "ICQClientData::client", "Shouldn't be called"); return 0; }
 
@@ -361,7 +361,7 @@ public:
     virtual void destroySetupWidget();
     virtual QStringList availableSetupWidgets() const;
 
-    virtual QWidget* getStatusWidget();
+    virtual QWidget* createStatusWidget();
 
     virtual SIM::IMStatusPtr currentStatus();
     virtual void changeStatus(const SIM::IMStatusPtr& status);
@@ -575,6 +575,7 @@ protected:
 private:
     QString m_name;
     QList<JabberStatusPtr> m_defaultStates;
+    JabberStatusPtr m_currentStatus;
 };
 
 //class JabberFileTransfer : public SIM::FileTransfer, public SIM::ClientSocketNotify, public SIM::ServerSocketNotify

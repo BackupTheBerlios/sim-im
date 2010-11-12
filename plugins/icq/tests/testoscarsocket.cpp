@@ -48,6 +48,8 @@ namespace
         QByteArray makeValidPacket(int type, int subtype, int requestId, const QByteArray& snacData)
         {
             QByteArray packet = QByteArray("\x2a\x02\x00\x00\x00\x00", 6);
+            packet[2] = (StartingFlapSqNum >> 8) & 0xff;
+            packet[3] = (StartingFlapSqNum >> 0) & 0xff;
             packet.append(type >> 8);
             packet.append(type & 0xff);
             packet.append(subtype >> 8);
@@ -65,6 +67,8 @@ namespace
         }
 
         static const int SizeOfSnacHeader = 10;
+
+        static const int StartingFlapSqNum = 8984;
 
         OscarSocket* socket;
         MockObjects::MockAsyncSocket* asyncSocket;
@@ -84,6 +88,8 @@ namespace
 
         QByteArray arr = asyncSocket->getWriteBuffer();
         QByteArray expected = QByteArray("\x2a\x02\x00\x00\x00\x0c", 6);
+        expected[2] = (StartingFlapSqNum >> 8) & 0xff;
+        expected[3] = (StartingFlapSqNum >> 0) & 0xff;
         ASSERT_EQ(expected, arr);
     }
 
@@ -96,6 +102,8 @@ namespace
 
         QByteArray arr = asyncSocket->getWriteBuffer();
         QByteArray expected = QByteArray("\x2a\x02\x00\x01\x00\x0c", 6);
+        expected[2] = ((StartingFlapSqNum + 1) >> 8) & 0xff;
+        expected[3] = ((StartingFlapSqNum + 1) >> 0) & 0xff;
         ASSERT_EQ(expected, arr);
     }
 
@@ -105,6 +113,8 @@ namespace
 
         QByteArray arr = asyncSocket->getWriteBuffer();
         QByteArray expected = QByteArray("\x2a\x02\x00\x00\x00\x0a\x00\x11\x00\x22\x00\x00\x12\x34\x56\x78", 16);
+        expected[2] = (StartingFlapSqNum >> 8) & 0xff;
+        expected[3] = (StartingFlapSqNum >> 0) & 0xff;
         ASSERT_EQ(expected, arr);
     }
 

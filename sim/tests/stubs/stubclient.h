@@ -43,7 +43,7 @@ namespace StubObjects
             return QStringList();
         }
 
-        virtual QWidget* getStatusWidget()
+        virtual QWidget* createStatusWidget()
         {
             return 0;
         }
