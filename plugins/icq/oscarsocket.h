@@ -13,14 +13,11 @@ public:
     explicit OscarSocket(QObject *parent = 0);
     virtual ~OscarSocket();
 
-    void connectToHost(const QString& host, int port);
-    void disconnectFromHost();
+    virtual void connectToHost(const QString& host, int port) = 0;
+    virtual void disconnectFromHost() = 0;
 
-    // takes ownership of socket
-    void setSocket(SIM::AsyncSocket* socket);
-
-    void flap(int channel, int length);
-    void snac(int type, int subtype, int requestId, const QByteArray& data);
+    virtual void flap(int channel, int length) = 0;
+    virtual void snac(int type, int subtype, int requestId, const QByteArray& data) = 0;
 
     static const char FlapChannelNewConnection = 0x01;
     static const char FlapChannelSnac = 0x02;
@@ -28,30 +25,9 @@ public:
     static const char FlapChannelCloseConnection = 0x04;
     static const char FlapChannelKeepAlive = 0x05;
 
-protected:
-    QByteArray makeFlapPacket(int channel, int length);
-    QByteArray makeSnacHeader(int type, int subtype, int requestId);
-
 signals:
-    void packet(const QByteArray& arr);
-    void error(const QString& msg);
-
-protected slots:
-    void readyRead();
-
-private:
-    static const char FlapId = 0x2a;
-
-    static const int SizeOfFlapHeader = 6;
-    static const int SizeOfSnacHeader = 10;
-
-    bool m_bHeader;
-    QByteArray m_packet;
-    int m_packetLength;
-    char m_nChannel;
-    unsigned short m_nFlapSequence;
-    unsigned short m_nMsgSequence;
-    SIM::AsyncSocket* m_socket;
+    void error(const QString& errmsg);
+    void packet(const QByteArray& data);
 };
 
 #endif // OSCARSOCKET_H

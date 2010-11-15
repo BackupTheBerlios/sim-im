@@ -3,7 +3,7 @@
 #include <gmock/gmock.h>
 
 #include "testoscarsocket.h"
-#include "oscarsocket.h"
+#include "standardoscarsocket.h"
 
 #include "tests/mocks/mockasyncsocket.h"
 
@@ -35,7 +35,7 @@ namespace
     protected:
         virtual void SetUp()
         {
-            socket = new OscarSocket();
+            socket = new StandardOscarSocket();
             asyncSocket = new MockObjects::MockAsyncSocket();
             socket->setSocket(asyncSocket);
         }
@@ -70,7 +70,7 @@ namespace
 
         static const int StartingFlapSqNum = 8984;
 
-        OscarSocket* socket;
+        StandardOscarSocket* socket;
         MockObjects::MockAsyncSocket* asyncSocket;
     };
 

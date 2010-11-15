@@ -41,6 +41,7 @@
 #include "icqgroup.h"
 #include "icqstatuswidget.h"
 #include "imagestorage/imagestorage.h"
+#include "standardoscarsocket.h"
 
 //#include "aimconfig.h"
 //#include "icqinfo.h"
@@ -247,6 +248,7 @@ ICQClient::ICQClient(SIM::Protocol* protocol, const QString& name, bool bAIM) : 
 {
     initialize(bAIM);
     clientPersistentData = new ICQClientData(this);
+    m_oscarSocket = new StandardOscarSocket(this);
 }
 
 ICQClient::~ICQClient()
@@ -411,6 +413,7 @@ SIM::IMStatusPtr ICQClient::currentStatus()
 void ICQClient::changeStatus(const SIM::IMStatusPtr& status)
 {
     Q_UNUSED(status);
+    emit setStatusWidgetsBlinking(true);
     //    if (status->id() == "offline")
     //    {
     //        flap(ICQ_CHNxCLOSE);
@@ -931,6 +934,18 @@ void ICQClient::setScreen(const QString &screen)
 unsigned long ICQClient::getUin()
 {
     return clientPersistentData->owner.getUin();
+}
+
+void ICQClient::setOscarSocket(OscarSocket* socket)
+{
+    if(m_oscarSocket)
+        delete m_oscarSocket;
+    m_oscarSocket = socket;
+}
+
+OscarSocket* ICQClient::oscarSocket() const
+{
+    return m_oscarSocket;
 }
 
 //void ICQClient::generateCookie(MessageId& id)

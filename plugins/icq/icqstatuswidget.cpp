@@ -55,7 +55,9 @@ void ICQStatusWidget::paintEvent(QPaintEvent* event)
 
 void ICQStatusWidget::drawBlink()
 {
-
+    QPixmap p = getImageStorage()->pixmap(blinkState() ? "ICQ_online" : "ICQ_offline");
+    QPainter painter(this);
+    painter.drawPixmap(rect(), p);
 }
 
 void ICQStatusWidget::drawStatus()

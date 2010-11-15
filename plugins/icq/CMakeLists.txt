@@ -34,6 +34,7 @@ SET(icq_SRCS
 #        icqssbi.cpp
         icqstatus.cpp
         oscarsocket.cpp
+        standardoscarsocket.cpp
 #        icqvarious.cpp
 #        interestsinfo.cpp
 #        moreinfo.cpp
@@ -75,6 +76,7 @@ SET(icq_HDRS
 #        icqssbi.h
         icqstatus.h
         oscarsocket.h
+        standardoscarsocket.h
 #        interestsinfo.h
 #        moreinfo.h
 #        pastinfo.h
@@ -116,6 +118,7 @@ SET_TARGET_PROPERTIES(icq PROPERTIES DEFINE_SYMBOL ICQ_EXPORTS)
 
 SET(icq_test_headers
     tests/testoscarsocket.h
+    tests/mocks/mockoscarsocket.h
 )
 
 QT4_WRAP_CPP(testmocs ${icq_test_headers})

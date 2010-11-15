@@ -634,6 +634,9 @@ public:
     void initDefaultStates();
     ICQStatusPtr getDefaultStatus(const QString& id);
 
+    void setOscarSocket(OscarSocket* socket);
+    OscarSocket* oscarSocket() const;
+
     // reimplement socket() to get correct Buffer
 //    virtual ICQClientSocket *socket() { return static_cast<ICQClientSocket*>(TCPClient::socket()); }
 //    virtual ICQClientSocket *createClientSocket() { return new ICQClientSocket(this, createSocket()); }
@@ -894,6 +897,7 @@ private:
     QList<ICQStatusPtr> m_defaultStates;
     QString m_name;
     ICQStatusPtr m_currentStatus;
+    OscarSocket* m_oscarSocket;
 
     //bool m_bBirthdayInfoDisplayed;
 };
