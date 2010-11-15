@@ -30,7 +30,7 @@ email                : vovan@shutoff.ru
 #include "event.h"
 #include "log.h"
 #include "misc.h"
-#include "unquot.h"
+//#include "unquot.h"
 #include "profilemanager.h"
 
 #include "contacts.h"

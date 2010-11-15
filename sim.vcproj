@@ -523,41 +523,7 @@
 				Filter="*base.cpp;moc_*.cpp"
 				>
 				<File
-					RelativePath="sim\html.cpp"
-					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=""
-							PreprocessorDefinitions=""
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=""
-							PreprocessorDefinitions=""
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\sim\moc_clientlist.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\sim\moc_exec.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\sim\moc_fetchclientprivate.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\sim\moc_icons.cpp"
 					>
 				</File>
 				<File
@@ -1189,28 +1155,6 @@
 					>
 				</File>
 				<File
-					RelativePath="sim\simgui\toolbtn.cpp"
-					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=""
-							PreprocessorDefinitions=""
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=""
-							PreprocessorDefinitions=""
-						/>
-					</FileConfiguration>
-				</File>
-				<File
 					RelativePath=".\sim\simgui\toolitem.cpp"
 					>
 				</File>
@@ -1223,27 +1167,11 @@
 						>
 					</File>
 					<File
-						RelativePath=".\sim\simgui\moc_datepicker.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\sim\simgui\moc_editfile.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\sim\simgui\moc_fontedit.cpp"
-						>
-					</File>
-					<File
 						RelativePath=".\sim\simgui\moc_intedit.cpp"
 						>
 					</File>
 					<File
 						RelativePath=".\sim\simgui\moc_linklabel.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\sim\simgui\moc_listview.cpp"
 						>
 					</File>
 					<File
@@ -1256,14 +1184,6 @@
 					</File>
 					<File
 						RelativePath=".\sim\simgui\moc_qkeybutton.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\sim\simgui\moc_textshow.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\sim\simgui\moc_toolbtn.cpp"
 						>
 					</File>
 				</Filter>
@@ -1443,30 +1363,6 @@
 				<File
 					RelativePath=".\sim\simgui\toolbarcombobox.h"
 					>
-				</File>
-				<File
-					RelativePath="sim\simgui\toolbtn.h"
-					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-							Description="Moc&apos;ing $(InputName).h ..."
-							CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h&#x0D;&#x0A;"
-							Outputs="$(InputDir)moc_$(InputName).cpp"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-							Description="Moc&apos;ing $(InputName).h ..."
-							CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h&#x0D;&#x0A;"
-							Outputs="$(InputDir)moc_$(InputName).cpp"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\sim\simgui\toolitem.h"

@@ -38,6 +38,7 @@
 #include "events/eventhub.h"
 #include "events/ievent.h"
 #include "log.h"
+#include "paths.h"
 #include "contacts/contactlist.h"
 
 #include <ctype.h>
@@ -291,7 +292,7 @@ namespace SIM
         else
         {
 #if defined( WIN32 ) || defined( __OS2__ )
-            QString pluginDir(app_file("plugins"));
+			QString pluginDir(PathManager::appFile(QString("plugins")));
 #else
             QString pluginDir(PLUGIN_PATH);
 #endif
