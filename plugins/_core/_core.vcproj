@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="9,00"
 	Name="_core"
 	ProjectGUID="{438ECB60-E207-4DB8-A46A-1EC2EA9A714A}"
 	RootNamespace="_core"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -90,6 +91,8 @@
 				AdditionalDependencies="$(SolutionDir)$(ConfigurationName)\sim.lib"
 				OutputFile="$(OutDir)\plugins\$(ProjectName).dll"
 				SuppressStartupBanner="true"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -109,9 +112,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -190,6 +190,8 @@
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				GenerateDebugInformation="true"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -209,9 +211,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -315,6 +314,28 @@
 			</File>
 			<File
 				RelativePath="commands.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="commonstatus.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -624,10 +645,6 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="logindlg.cpp"
-				>
 			</File>
 			<File
 				RelativePath="maininfo.cpp"
@@ -1052,6 +1069,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\profileselectdialog.cpp"
+				>
+			</File>
+			<File
 				RelativePath="search.cpp"
 				>
 				<FileConfiguration
@@ -1097,28 +1118,6 @@
 			</File>
 			<File
 				RelativePath="smscfg.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="status.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1364,6 +1363,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\moc_commonstatus.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\moc_connectionsettings.cpp"
 					>
 				</File>
@@ -1505,10 +1508,6 @@
 				</File>
 				<File
 					RelativePath=".\moc_smscfg.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\moc_status.cpp"
 					>
 				</File>
 				<File
@@ -1671,6 +1670,30 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="commonstatus.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputName).h ..."
+						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h&#x0D;&#x0A;"
+						Outputs="$(InputDir)moc_$(InputName).cpp"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing $(InputName).h ..."
+						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h&#x0D;&#x0A;"
+						Outputs="$(InputDir)moc_$(InputName).cpp"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="connectionsettings.h"
 				>
 				<FileConfiguration
@@ -1751,7 +1774,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputName).h ..."
-						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h"
+						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h&#x0D;&#x0A;"
 						Outputs="$(InputDir)moc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
@@ -1761,7 +1784,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputName).h ..."
-						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h"
+						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h&#x0D;&#x0A;"
 						Outputs="$(InputDir)moc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
@@ -1789,6 +1812,10 @@
 						Outputs="$(InputDir)moc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\core_api.h"
+				>
 			</File>
 			<File
 				RelativePath=".\core_consts.h"
@@ -1992,30 +2019,6 @@
 			</File>
 			<File
 				RelativePath="interfacecfg.h"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing $(InputName).h ..."
-						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h&#x0D;&#x0A;"
-						Outputs="$(InputDir)moc_$(InputName).cpp"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing $(InputName).h ..."
-						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h&#x0D;&#x0A;"
-						Outputs="$(InputDir)moc_$(InputName).cpp"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\logindlg.h"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -2499,6 +2502,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\profileselectdialog.h"
+				>
+			</File>
+			<File
 				RelativePath="search.h"
 				>
 				<FileConfiguration
@@ -2548,30 +2555,6 @@
 			</File>
 			<File
 				RelativePath="smscfg.h"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing $(InputName).h ..."
-						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h&#x0D;&#x0A;"
-						Outputs="$(InputDir)moc_$(InputName).cpp"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing $(InputName).h ..."
-						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h&#x0D;&#x0A;"
-						Outputs="$(InputDir)moc_$(InputName).cpp"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="status.h"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -2984,10 +2967,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\logindlgbase.ui"
-				>
-			</File>
-			<File
 				RelativePath="maininfobase.ui"
 				>
 			</File>
@@ -3021,6 +3000,10 @@
 			</File>
 			<File
 				RelativePath="prefcfgbase.ui"
+				>
+			</File>
+			<File
+				RelativePath=".\profileselectdialog.ui"
 				>
 			</File>
 			<File
@@ -4160,6 +4143,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\GPL-Icons\icq_offline.png"
+				>
+			</File>
+			<File
 				RelativePath=".\GPL-Icons\icq_online.png"
 				>
 			</File>
@@ -4406,6 +4393,10 @@
 						/>
 					</FileConfiguration>
 				</File>
+				<File
+					RelativePath=".\roster\userviewmodel.cpp"
+					>
+				</File>
 				<Filter
 					Name="generated"
 					>
@@ -4427,7 +4418,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing $(InputName).h ..."
-							CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h"
+							CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h&#x0D;&#x0A;"
 							Outputs="$(InputDir)moc_$(InputName).cpp"
 						/>
 					</FileConfiguration>
@@ -4437,7 +4428,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Moc&apos;ing $(InputName).h ..."
-							CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h"
+							CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h&#x0D;&#x0A;"
 							Outputs="$(InputDir)moc_$(InputName).cpp"
 						/>
 					</FileConfiguration>
@@ -4446,7 +4437,31 @@
 					RelativePath=".\roster\userviewdelegate.h"
 					>
 				</File>
+				<File
+					RelativePath=".\roster\userviewmodel.h"
+					>
+				</File>
 			</Filter>
+		</Filter>
+		<Filter
+			Name="tests"
+			>
+			<File
+				RelativePath=".\tests\test.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\tests\testcommonstatus.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\tests\testcoreplugin.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\tests\testuserviewmodel.cpp"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="9,00"
 	Name="icq"
 	ProjectGUID="{BDA90145-2871-4832-AB64-87C20F0CD526}"
 	RootNamespace="icq"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -84,6 +85,8 @@
 				AdditionalDependencies="$(SolutionDir)$(ConfigurationName)\sim.lib"
 				OutputFile="$(OutDir)\plugins\$(ProjectName).dll"
 				SuppressStartupBanner="true"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -103,9 +106,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -181,6 +181,8 @@
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				GenerateDebugInformation="true"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -200,9 +202,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -507,6 +506,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\icqcontact.cpp"
+				>
+			</File>
+			<File
 				RelativePath="icqdirect.cpp"
 				>
 				<FileConfiguration
@@ -527,6 +530,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\icqgroup.cpp"
+				>
 			</File>
 			<File
 				RelativePath="icqicmb.cpp"
@@ -779,6 +786,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\icqstatuswidget.cpp"
+				>
+			</File>
+			<File
 				RelativePath="icqvarious.cpp"
 				>
 				<FileConfiguration
@@ -843,6 +854,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\oscarsocket.cpp"
+				>
 			</File>
 			<File
 				RelativePath="pastinfo.cpp"
@@ -980,6 +995,10 @@
 			</File>
 			<File
 				RelativePath=".\snac.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\standardoscarsocket.cpp"
 				>
 			</File>
 			<File
@@ -1730,6 +1749,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\icq_defines.h"
+				>
+			</File>
+			<File
 				RelativePath=".\icq_events.h"
 				>
 			</File>
@@ -1810,6 +1833,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\icqcontact.h"
+				>
+			</File>
+			<File
 				RelativePath=".\icqdirect.h"
 				>
 				<FileConfiguration
@@ -1832,6 +1859,10 @@
 						Outputs="$(InputDir)moc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\icqgroup.h"
+				>
 			</File>
 			<File
 				RelativePath=".\icqicmb.h"
@@ -2022,6 +2053,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\icqstatuswidget.h"
+				>
+			</File>
+			<File
 				RelativePath="interestsinfo.h"
 				>
 				<FileConfiguration
@@ -2068,6 +2103,10 @@
 						Outputs="$(InputDir)moc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\oscarsocket.h"
+				>
 			</File>
 			<File
 				RelativePath="pastinfo.h"
@@ -2143,6 +2182,10 @@
 			</File>
 			<File
 				RelativePath=".\snac.h"
+				>
+			</File>
+			<File
+				RelativePath=".\standardoscarsocket.h"
 				>
 			</File>
 			<File
@@ -2404,6 +2447,62 @@
 				RelativePath="workinfobase.ui"
 				>
 			</File>
+		</Filter>
+		<Filter
+			Name="tests"
+			>
+			<Filter
+				Name="Source Files"
+				>
+				<File
+					RelativePath=".\tests\test.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\tests\testicqclient.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\tests\testicqcontact.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\tests\testicqstatus.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\tests\testicqstatuswidget.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\tests\testoscarsocket.cpp"
+					>
+				</File>
+				<Filter
+					Name="generated"
+					>
+				</Filter>
+			</Filter>
+			<Filter
+				Name="Header Files"
+				>
+				<File
+					RelativePath=".\tests\testoscarsocket.h"
+					>
+				</File>
+				<Filter
+					Name="generated"
+					>
+				</Filter>
+			</Filter>
+			<Filter
+				Name="mocks"
+				>
+				<File
+					RelativePath=".\tests\mocks\mockoscarsocket.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>
