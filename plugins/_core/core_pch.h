@@ -37,6 +37,7 @@
 #include <qsignalslotimp.h>
 #endif*/
 
+/*
 #include "arcfg.h"
 #include "ui_arcfgbase.h"
 #include "autoreply.h"
@@ -118,3 +119,5 @@
 #include "userwnd.h"
 #include "logindlg.h"
 #include "ui_logindlgbase.h"
+
+*/

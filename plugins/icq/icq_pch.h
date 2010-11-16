@@ -35,6 +35,7 @@
 //#include <qsignalslotimp.h>
 #endif
 
+/*
 #include "aboutinfo.h"
 #include "advsearch.h"
 #include "aimconfig.h"
@@ -59,3 +60,4 @@
 #include "warndlg.h"
 #include "workinfo.h"
 #include "xml.h"
+*/
