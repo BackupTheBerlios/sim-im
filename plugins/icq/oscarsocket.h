@@ -4,8 +4,6 @@
 #include "network/asyncsocket.h"
 #include "icq_defines.h"
 
-#include "stdint.h"
-
 class ICQ_EXPORT OscarSocket : public QObject
 {
     Q_OBJECT

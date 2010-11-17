@@ -16,7 +16,7 @@ SimApp::~SimApp()
 
 void SimApp::commitData(QSessionManager&)
 {
-	SIM::save_state();
+	//SIM::save_state();
 }
 
 void SimApp::saveState(QSessionManager &sm)
