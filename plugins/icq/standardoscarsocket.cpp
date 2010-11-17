@@ -100,8 +100,8 @@ void StandardOscarSocket::readyRead()
             emit error(I18N_NOOP("Protocol error"));
             return;
         }
-        uint8_t channel;
-        uint16_t sequence, size;
+        quint8 channel;
+        quint16 sequence, size;
         channel = header.at(1);
         sequence = header.at(2) * 0x100 + header.at(3);
         size = header.at(4) * 0x100 + header.at(5);

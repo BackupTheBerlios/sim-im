@@ -837,6 +837,7 @@ SIM::IMGroupPtr ICQClient::createIMGroup()
 
 QWidget* ICQClient::createSetupWidget(const QString& id, QWidget* parent)
 {
+	return new QWidget();
 }
 
 void ICQClient::destroySetupWidget()
@@ -845,6 +846,7 @@ void ICQClient::destroySetupWidget()
 
 QStringList ICQClient::availableSetupWidgets() const
 {
+	return QStringList();
 }
 
 QWidget* ICQClient::createStatusWidget()
@@ -856,6 +858,7 @@ QWidget* ICQClient::createStatusWidget()
 
 SIM::IMContactPtr ICQClient::ownerContact()
 {
+	return SIM::IMContactPtr();
 }
 
 void ICQClient::setOwnerContact(SIM::IMContactPtr contact)
@@ -865,14 +868,17 @@ void ICQClient::setOwnerContact(SIM::IMContactPtr contact)
 
 QWidget* ICQClient::createSearchWidow(QWidget *parent)
 {
+	return new QWidget();
 }
 
 QList<SIM::IMGroupPtr> ICQClient::groups()
 {
+	return QList<SIM::IMGroupPtr>();
 }
 
 QList<SIM::IMContactPtr> ICQClient::contacts()
 {
+	return QList<SIM::IMContactPtr>();
 }
 
 void ICQClient::initDefaultStates()
