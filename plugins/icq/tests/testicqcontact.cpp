@@ -1,7 +1,7 @@
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include "tests/gtest-qt.h"
+#include "qt-gtest.h"
 
 #include "icqcontact.h"
 #include "icqclient.h"

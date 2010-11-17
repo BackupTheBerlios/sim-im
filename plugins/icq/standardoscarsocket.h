@@ -16,7 +16,7 @@ public:
     // takes ownership of socket
     void setSocket(SIM::AsyncSocket* socket);
 
-    void flap(int channel, int length);
+    void flap(int channel, int length, const QByteArray& data);
     void snac(int type, int subtype, int requestId, const QByteArray& data);
 
     static const char FlapChannelNewConnection = 0x01;
@@ -31,6 +31,7 @@ protected:
 
 protected slots:
     void readyRead();
+    void slot_connected();
 
 private:
     static const char FlapId = 0x2a;

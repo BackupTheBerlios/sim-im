@@ -8,6 +8,7 @@ using namespace SIM;
 StandardOscarSocket::StandardOscarSocket(QObject *parent) : OscarSocket(parent), m_nFlapSequence(8984)
 {
     m_socket = new SIM::TcpAsyncSocket(this);
+    connect(m_socket, SIGNAL(connected()), this, SLOT(slot_connected()));
     connect(m_socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
     m_bHeader = true;
 }
@@ -23,6 +24,8 @@ void StandardOscarSocket::setSocket(SIM::AsyncSocket* socket)
     if(m_socket)
         delete m_socket;
     m_socket = socket;
+    connect(m_socket, SIGNAL(connected()), this, SLOT(slot_connected()));
+    connect(m_socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
 }
 
 void StandardOscarSocket::connectToHost(const QString& host, int port)
@@ -35,9 +38,10 @@ void StandardOscarSocket::disconnectFromHost()
     m_socket->disconnectFromHost();
 }
 
-void StandardOscarSocket::flap(int channel, int length)
+void StandardOscarSocket::flap(int channel, int length, const QByteArray& data)
 {
     QByteArray arr = makeFlapPacket(channel, length);
+    arr += data;
     m_socket->write(arr);
 }
 
@@ -112,4 +116,9 @@ void StandardOscarSocket::readyRead()
         m_bHeader = true;
         emit packet(m_packet);
     }
+}
+
+void StandardOscarSocket::slot_connected()
+{
+    emit connected();
 }

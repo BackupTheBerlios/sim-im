@@ -61,6 +61,11 @@ namespace MockObjects
             m_write.open(QIODevice::WriteOnly);
         }
 
+        void provokeConnectedSignal()
+        {
+            emit connected();
+        }
+
         MOCK_METHOD2(connectToHost, void(const QString& host, int port));
         MOCK_METHOD0(disconnectFromHost, void());
 

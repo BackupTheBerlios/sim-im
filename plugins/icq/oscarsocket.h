@@ -16,7 +16,7 @@ public:
     virtual void connectToHost(const QString& host, int port) = 0;
     virtual void disconnectFromHost() = 0;
 
-    virtual void flap(int channel, int length) = 0;
+    virtual void flap(int channel, int length, const QByteArray& data) = 0;
     virtual void snac(int type, int subtype, int requestId, const QByteArray& data) = 0;
 
     static const char FlapChannelNewConnection = 0x01;
@@ -28,6 +28,7 @@ public:
 signals:
     void error(const QString& errmsg);
     void packet(const QByteArray& data);
+    void connected();
 };
 
 #endif // OSCARSOCKET_H

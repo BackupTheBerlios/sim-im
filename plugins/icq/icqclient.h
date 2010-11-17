@@ -32,6 +32,7 @@
 #include "snac.h"
 #include "icqstatus.h"
 #include "icq_defines.h"
+#include "oscarsocket.h"
 //#include "icqbuddy.h"
 //#include "icqservice.h"
 //#include "icqicmb.h"
@@ -474,11 +475,6 @@ class DirectSocket;
 class ServiceSocket;
 class ICQClientSocket;
 
-class OscarSocket : public QTcpSocket
-{
-
-};
-
 struct alias_group
 {
     QString     alias;
@@ -717,7 +713,8 @@ public:
 //    SnacIcqBuddy* snacBuddy() { return m_snacBuddy; }
 //    SnacIcqICBM* snacICBM() { return m_snacICBM; }
 
-//protected slots:
+protected slots:
+    void oscarSocketConnected();
 //    void ping();
 //    void retry(int n, void*);
 //    void interfaceDown(QString);
@@ -898,6 +895,15 @@ private:
     QString m_name;
     ICQStatusPtr m_currentStatus;
     OscarSocket* m_oscarSocket;
+
+    enum State
+    {
+        sOffline,
+        sConnecting,
+        sConnected
+    };
+
+    State m_state;
 
     //bool m_bBirthdayInfoDisplayed;
 };

@@ -7,8 +7,15 @@
 
 #include "tests/mocks/mockasyncsocket.h"
 
+#include "qt-gtest.h"
+
 namespace Helper
 {
+    SignalSpy::SignalSpy() : connectedCalls(0)
+    {
+
+    }
+
     void SignalSpy::provokeSignal()
     {
         emit justSignal();
@@ -23,12 +30,16 @@ namespace Helper
     {
         errorString = str;
     }
+
+    void SignalSpy::connected()
+    {
+        connectedCalls++;
+    }
 }
 
 namespace
 {
     using namespace Helper;
-#include "tests/gtest-qt.h"
 
     class TestOscarSocket : public ::testing::Test
     {
@@ -82,9 +93,19 @@ namespace
         socket->connectToHost("testhost", 1234);
     }
 
+    TEST_F(TestOscarSocket, signal_Connected)
+    {
+        SignalSpy spy;
+        socket->connect(socket, SIGNAL(connected()), &spy, SLOT(connected()));
+
+        asyncSocket->provokeConnectedSignal();
+
+        ASSERT_EQ(1, spy.connectedCalls);
+    }
+
     TEST_F(TestOscarSocket, flap)
     {
-        socket->flap(0x02, 12);
+        socket->flap(0x02, 12, QByteArray());
 
         QByteArray arr = asyncSocket->getWriteBuffer();
         QByteArray expected = QByteArray("\x2a\x02\x00\x00\x00\x0c", 6);
@@ -95,10 +116,10 @@ namespace
 
     TEST_F(TestOscarSocket, flap_sequenceNumberIncrement)
     {
-        socket->flap(0x02, 12);
+        socket->flap(0x02, 12, QByteArray());
         asyncSocket->resetWriteBuffer();
 
-        socket->flap(0x02, 12);
+        socket->flap(0x02, 12, QByteArray());
 
         QByteArray arr = asyncSocket->getWriteBuffer();
         QByteArray expected = QByteArray("\x2a\x02\x00\x01\x00\x0c", 6);

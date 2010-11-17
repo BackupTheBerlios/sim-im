@@ -244,7 +244,7 @@ unsigned long ICQClientData::getSign()
 }
 
 ICQClient::ICQClient(SIM::Protocol* protocol, const QString& name, bool bAIM) : SIM::Client(protocol),
-    m_name(name)
+    m_name(name), m_state(ICQClient::sOffline)
 {
     initialize(bAIM);
     clientPersistentData = new ICQClientData(this);
@@ -253,6 +253,8 @@ ICQClient::ICQClient(SIM::Protocol* protocol, const QString& name, bool bAIM) : 
 
 ICQClient::~ICQClient()
 {
+    if(m_oscarSocket)
+        delete m_oscarSocket;
     delete clientPersistentData;
 }
 
@@ -412,8 +414,11 @@ SIM::IMStatusPtr ICQClient::currentStatus()
 
 void ICQClient::changeStatus(const SIM::IMStatusPtr& status)
 {
-    Q_UNUSED(status);
-    emit setStatusWidgetsBlinking(true);
+    if((m_state == sOffline) && !status->flag(SIM::IMStatus::flOffline))
+    {
+        emit setStatusWidgetsBlinking(true);
+        oscarSocket()->connectToHost(clientPersistentData->getServer(), clientPersistentData->getPort());
+    }
     //    if (status->id() == "offline")
     //    {
     //        flap(ICQ_CHNxCLOSE);
@@ -875,6 +880,9 @@ void ICQClient::initDefaultStates()
     ICQStatus* status = new ICQStatus("offline", "Offline", false, QString(), getImageStorage()->pixmap("ICQ_offline"));
     status->setFlag(IMStatus::flOffline, true);
     m_defaultStates.append(ICQStatusPtr(status));
+
+    status = new ICQStatus("online", "Online", false, QString(), getImageStorage()->pixmap("ICQ_online"));
+    m_defaultStates.append(ICQStatusPtr(status));
 }
 
 ICQStatusPtr ICQClient::getDefaultStatus(const QString& id)
@@ -946,6 +954,11 @@ void ICQClient::setOscarSocket(OscarSocket* socket)
 OscarSocket* ICQClient::oscarSocket() const
 {
     return m_oscarSocket;
+}
+
+void ICQClient::oscarSocketConnected()
+{
+
 }
 
 //void ICQClient::generateCookie(MessageId& id)

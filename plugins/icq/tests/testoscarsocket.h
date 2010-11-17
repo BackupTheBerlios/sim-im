@@ -11,8 +11,12 @@ namespace Helper
         Q_OBJECT
     public:
 
+        SignalSpy();
+
         QByteArray receivedPacket;
         QString errorString;
+
+        int connectedCalls;
 
         void provokeSignal();
 
@@ -22,6 +26,8 @@ namespace Helper
     public slots:
         void packet(const QByteArray& arr);
         void error(const QString& str);
+
+        void connected();
     };
 }
 
