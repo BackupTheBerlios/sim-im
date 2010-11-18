@@ -278,7 +278,7 @@
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputName).h ..."
 						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h&#x0D;&#x0A;"
-						Outputs="C:\libraries\gmock-1.5.0\include"
+						Outputs="$(InputDir)moc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -288,7 +288,7 @@
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing $(InputName).h ..."
 						CommandLine="%qtdir%\bin\moc.exe -o $(InputDir)moc_$(InputName).cpp $(InputDir)$(InputName).h&#x0D;&#x0A;"
-						Outputs="C:\libraries\gmock-1.5.0\include"
+						Outputs="$(InputDir)moc_$(InputName).cpp"
 					/>
 				</FileConfiguration>
 			</File>
