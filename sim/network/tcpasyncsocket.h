@@ -8,7 +8,7 @@
 
 namespace SIM {
 
-class SIM_EXPORT TcpAsyncSocket : public AsyncSocket
+class EXPORT TcpAsyncSocket : public AsyncSocket
 {
     Q_OBJECT
 public:

@@ -2,8 +2,9 @@
 #ifndef ICQSTATUS_H
 #define ICQSTATUS_H
 
-#include "contacts/imstatus.h"
+
 #include "contacts/protocol.h"
+#include "contacts/imstatus.h"
 #include "icq_defines.h"
 
 class ICQ_EXPORT ICQStatus : public SIM::IMStatus

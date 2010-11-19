@@ -33,7 +33,7 @@
 //#include <private/qucomextra_p.h>
 //#include <qsignalslotimp.h>
 #endif
-
+/*
 #include "discoinfo.h"
 #include "infoproxy.h"
 #include "jabber.h"
@@ -51,5 +51,5 @@
 #include "jabberworkinfo.h"
 #include "jidadvsearch.h"
 #include "jidsearch.h"
-
+*/
 #endif // JABBER_PCH_H

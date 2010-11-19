@@ -40,6 +40,7 @@
 #include "icq.h"
 #include "icqbuffer.h"
 #include "icqcontact.h"
+#include "oscarsocket.h"
 #include "contacts/imcontact.h"
 
 
@@ -475,21 +476,6 @@ class DirectSocket;
 class ServiceSocket;
 class ICQClientSocket;
 
-struct alias_group
-{
-    QString     alias;
-    unsigned    grp;
-};
-
-struct RateInfo
-{
-    Buffer				delayed;
-    QDateTime			m_lastSend;
-    unsigned			m_curLevel;
-    unsigned			m_maxLevel;
-    unsigned			m_minLevel;
-    unsigned			m_winSize;
-};
 
 struct InfoRequest
 {
@@ -498,7 +484,7 @@ struct InfoRequest
     unsigned	start_time;
 };
 
-typedef std::map<SIM::my_string, alias_group>	CONTACTS_MAP;
+//typedef std::map<SIM::my_string, alias_group>	CONTACTS_MAP;
 typedef std::map<unsigned, unsigned>			RATE_MAP;
 typedef std::map<unsigned short, SnacHandler*> mapSnacHandlers;
 
