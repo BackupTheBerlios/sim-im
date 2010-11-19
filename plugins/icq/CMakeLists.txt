@@ -10,6 +10,7 @@ SET(icq_SRCS
 #        aimservices.cpp
 #        encodingdlg.cpp
 #        homeinfo.cpp
+        authorizationsnachandler.cpp
         bytearraybuilder.cpp
         bytearrayparser.cpp
         icq.cpp
@@ -48,7 +49,9 @@ SET(icq_SRCS
 #        warndlg.cpp
 #        workinfo.cpp
 #        xml.cpp
-#        snac.cpp
+        snac.cpp
+        tlv.cpp
+        tlvlist.cpp
 )
 
 SET(icq_HDRS
@@ -59,6 +62,7 @@ SET(icq_HDRS
 #        aimsearch.h
 #        encodingdlg.h
 #        homeinfo.h
+        authorizationsnachandler.h
         bytearraybuilder.h
         bytearrayparser.h
         icq.h
@@ -90,7 +94,9 @@ SET(icq_HDRS
 #        warndlg.h
 #        workinfo.h
 #        xml.h
-#        snac.h
+        snac.h
+        tlv.h
+        tlvlist.h
 )
 
 SET(icq_UICS
@@ -139,6 +145,9 @@ SET(icq_test_sources
     tests/testicqstatuswidget.cpp
     tests/testbytearraybuilder.cpp
     tests/testbytearrayparser.cpp
+    tests/testauthorizationsnachandler.cpp
+    tests/testtlv.cpp
+    tests/testtlvlist.cpp
 )
 
 ADD_EXECUTABLE(test_icq ${icq_test_sources} ${testmocs})

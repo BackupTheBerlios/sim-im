@@ -27,6 +27,11 @@ void ByteArrayBuilder::appendDword(quint32 value)
     m_array.append(v & 0xff);
 }
 
+void ByteArrayBuilder::appendBytes(const QByteArray& bytes)
+{
+    m_array.append(bytes);
+}
+
 QByteArray ByteArrayBuilder::getArray() const
 {
     return m_array;

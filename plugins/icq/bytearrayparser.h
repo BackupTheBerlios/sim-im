@@ -19,6 +19,9 @@ public:
     quint8 readByte();
     quint16 readWord();
     quint32 readDword();
+    QByteArray readBytes(int count);
+
+    bool atEnd();
 
 private:
     QByteArray m_array;

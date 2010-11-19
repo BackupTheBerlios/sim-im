@@ -105,10 +105,10 @@ namespace
 
     TEST_F(TestOscarSocket, flap)
     {
-        socket->flap(0x02, 12, QByteArray());
+        socket->flap(0x02, QByteArray(2, 0x55));
 
         QByteArray arr = asyncSocket->getWriteBuffer();
-        QByteArray expected = QByteArray("\x2a\x02\x00\x00\x00\x0c", 6);
+        QByteArray expected = QByteArray("\x2a\x02\x00\x00\x00\x02\x55\x55", 8);
         expected[2] = (StartingFlapSqNum >> 8) & 0xff;
         expected[3] = (StartingFlapSqNum >> 0) & 0xff;
         ASSERT_EQ(expected, arr);
@@ -116,13 +116,13 @@ namespace
 
     TEST_F(TestOscarSocket, flap_sequenceNumberIncrement)
     {
-        socket->flap(0x02, 12, QByteArray());
+        socket->flap(0x02, QByteArray());
         asyncSocket->resetWriteBuffer();
 
-        socket->flap(0x02, 12, QByteArray());
+        socket->flap(0x02, QByteArray());
 
         QByteArray arr = asyncSocket->getWriteBuffer();
-        QByteArray expected = QByteArray("\x2a\x02\x00\x01\x00\x0c", 6);
+        QByteArray expected = QByteArray("\x2a\x02\x00\x01\x00\x00", 6);
         expected[2] = ((StartingFlapSqNum + 1) >> 8) & 0xff;
         expected[3] = ((StartingFlapSqNum + 1) >> 0) & 0xff;
         ASSERT_EQ(expected, arr);

@@ -55,4 +55,16 @@ namespace
 
         ASSERT_EQ(QByteArray("\x78\x56\x34\x12", 4), builder.getArray());
     }
+
+    TEST_F(TestByteArrayBuilder, appendBytes)
+    {
+        ByteArrayBuilder builder;
+        QByteArray first("\x12\x34");
+        QByteArray second("\x56\x78");
+
+        builder.appendBytes(first);
+        builder.appendBytes(second);
+
+        ASSERT_EQ(first + second, builder.getArray());
+    }
 }

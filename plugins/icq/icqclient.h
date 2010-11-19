@@ -867,7 +867,6 @@ protected:
 //    SnacIcqBuddy* m_snacBuddy;
 //    SnacIcqService* m_snacService;
 //    SnacIcqICBM* m_snacICBM;
-//    mapSnacHandlers m_snacHandlers;
 //    bool m_bconnectionLost;
 
 //    friend class ListServerRequest;
@@ -904,6 +903,8 @@ private:
     };
 
     State m_state;
+
+    mapSnacHandlers m_snacHandlers;
 
     //bool m_bBirthdayInfoDisplayed;
 };
