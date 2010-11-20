@@ -21,9 +21,10 @@ namespace Helper
         emit justSignal();
     }
 
-    void SignalSpy::packet(const QByteArray& arr)
+    void SignalSpy::packet(int channel, const QByteArray& arr)
     {
         receivedPacket = arr;
+        receivedChannel = channel;
     }
 
     void SignalSpy::error(const QString& str)
@@ -54,6 +55,13 @@ namespace
         virtual void TearDown()
         {
             delete socket;
+        }
+
+        QByteArray makeEmptyFlapPacket(int channel)
+        {
+            QByteArray packet = QByteArray("\x2a\x00\x00\x00\x00\x00", 6);
+            packet[1] = channel;
+            return packet;
         }
 
         QByteArray makeValidPacket(int type, int subtype, int requestId, const QByteArray& snacData)
@@ -153,7 +161,7 @@ namespace
     {
         SignalSpy spy;
         spy.connect(&spy, SIGNAL(justSignal()), socket, SLOT(readyRead()));
-        spy.connect(socket, SIGNAL(packet(QByteArray)), &spy, SLOT(packet(QByteArray)));
+        spy.connect(socket, SIGNAL(packet(int, QByteArray)), &spy, SLOT(packet(int, QByteArray)));
         QByteArray packet = makeValidPacket(0x11, 0x22, 0x12345678, QByteArray("datadatadata"));
         asyncSocket->setReadBuffer(packet);
 
@@ -166,7 +174,7 @@ namespace
     {
         SignalSpy spy;
         spy.connect(&spy, SIGNAL(justSignal()), socket, SLOT(readyRead()));
-        spy.connect(socket, SIGNAL(packet(QByteArray)), &spy, SLOT(packet(QByteArray)));
+        spy.connect(socket, SIGNAL(packet(int, QByteArray)), &spy, SLOT(packet(int, QByteArray)));
         asyncSocket->setReadBuffer(makeValidPacket(0x11, 0x22, 0x12345678, QByteArray("first packet")));
         spy.provokeSignal();
         QByteArray packet = makeValidPacket(0x11, 0x22, 0x12345678, QByteArray("second packet"));
@@ -181,7 +189,7 @@ namespace
     {
         SignalSpy spy;
         spy.connect(&spy, SIGNAL(justSignal()), socket, SLOT(readyRead()));
-        spy.connect(socket, SIGNAL(packet(QByteArray)), &spy, SLOT(packet(QByteArray)));
+        spy.connect(socket, SIGNAL(packet(int, QByteArray)), &spy, SLOT(packet(int, QByteArray)));
         spy.connect(socket, SIGNAL(error(QString)), &spy, SLOT(error(QString)));
         QByteArray packet = makeValidPacket(0x11, 0x22, 0x12345678, QByteArray("datadatadata"));
         packet[0] = 12;
@@ -191,5 +199,18 @@ namespace
         spy.provokeSignal();
 
         ASSERT_TRUE(!spy.errorString.isNull());
+    }
+
+    TEST_F(TestOscarSocket, readyRead_channel)
+    {
+        SignalSpy spy;
+        spy.connect(&spy, SIGNAL(justSignal()), socket, SLOT(readyRead()));
+        spy.connect(socket, SIGNAL(packet(int, QByteArray)), &spy, SLOT(packet(int, QByteArray)));
+        QByteArray packet = makeEmptyFlapPacket(0x02);
+        asyncSocket->setReadBuffer(packet);
+
+        spy.provokeSignal();
+
+        ASSERT_EQ(0x02, spy.receivedChannel);
     }
 }

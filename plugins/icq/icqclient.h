@@ -36,6 +36,7 @@
 //#include "icqbuddy.h"
 //#include "icqservice.h"
 //#include "icqicmb.h"
+#include "authorizationsnachandler.h"
 
 #include "icq.h"
 #include "icqbuffer.h"
@@ -486,7 +487,7 @@ struct InfoRequest
 
 //typedef std::map<SIM::my_string, alias_group>	CONTACTS_MAP;
 typedef std::map<unsigned, unsigned>			RATE_MAP;
-typedef std::map<unsigned short, SnacHandler*> mapSnacHandlers;
+typedef QMap<unsigned short, SnacHandler*> mapSnacHandlers;
 
 class ICQ_EXPORT ICQClient : public QObject, public SIM::Client
 {
@@ -619,6 +620,8 @@ public:
     void setOscarSocket(OscarSocket* socket);
     OscarSocket* oscarSocket() const;
 
+    SnacHandler* snacHandler(int type);
+
     // reimplement socket() to get correct Buffer
 //    virtual ICQClientSocket *socket() { return static_cast<ICQClientSocket*>(TCPClient::socket()); }
 //    virtual ICQClientSocket *createClientSocket() { return new ICQClientSocket(this, createSocket()); }
@@ -701,6 +704,7 @@ public:
 
 protected slots:
     void oscarSocketConnected();
+    void oscarSocketPacket(int channel, const QByteArray& data);
 //    void ping();
 //    void retry(int n, void*);
 //    void interfaceDown(QString);
@@ -733,7 +737,6 @@ protected:
 //    virtual SIM::Socket  *createSocket();
 //    virtual QString contactName(void *clientData);
 //    QString dataName(const QString &screen);
-//    QByteArray  m_cookie;
 //    virtual void packet(unsigned long size);
 //    void snac_location(unsigned short, unsigned short);
 //    void snac_bos(unsigned short, unsigned short);
@@ -743,8 +746,8 @@ protected:
 //    void snac_login(unsigned short, unsigned short);
 //    void parseRosterItem(unsigned short type, const QString &str,unsigned short grp_id,
 //                         unsigned short id, TlvList *inf, bool &bIgnoreTime);
-//    void chn_login();
-//    void chn_close();
+    void chn_login(const QByteArray& data);
+    void chn_close(const QByteArray& data);
 //    void listsRequest();
 //    void locationRequest();
 //    void buddyRequest();
@@ -761,7 +764,7 @@ protected:
 //    class SSBISocket *getSSBISocket();
 //    unsigned long fullStatus(unsigned status);
 //    unsigned long fullStatus(const SIM::IMStatusPtr& status);
-//    QByteArray cryptPassword();
+    QByteArray cryptPassword();
 //    virtual void connect_ready();
 //    virtual void packet_ready();
 //    const char* error_message(unsigned short error);
@@ -874,6 +877,7 @@ protected:
 
 private:
     void initialize(bool bAIM);
+    void initSnacHandlers();
 
     SIM::PropertyHubPtr m_propertyHub;
     QList<ICQStatusPtr> m_defaultStates;
@@ -890,7 +894,9 @@ private:
 
     State m_state;
 
+    AuthorizationSnacHandler* m_authSnac;
     mapSnacHandlers m_snacHandlers;
+    QByteArray m_authCookie;
 
     //bool m_bBirthdayInfoDisplayed;
 };

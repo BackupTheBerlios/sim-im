@@ -13,7 +13,7 @@ public:
 	virtual ~SnacHandler();
 
     unsigned short getType() { return m_snac; }
-    virtual bool process(unsigned short subtype, const QByteArray& data, unsigned short seq) = 0;
+    virtual bool process(unsigned short subtype, const QByteArray& data, int flags, unsigned int requestId) = 0;
 
     ICQClient* client() const;
 protected:

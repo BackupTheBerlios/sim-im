@@ -27,7 +27,7 @@ SET(icq_SRCS
 #        icqinfo.cpp
 #        icqlists.cpp
 #        icqlocation.cpp
-#        icqlogin.cpp
+        icqlogin.cpp
 #        icqmessage.cpp
 #        icqpicture.cpp
 #        icqping.cpp
@@ -130,6 +130,7 @@ SET(icq_test_headers
     tests/qt-gtest.h
     tests/testicqclient.h
     tests/testoscarsocket.h
+    tests/testauthorizationsnachandler.h
     tests/mocks/mockoscarsocket.h
 )
 

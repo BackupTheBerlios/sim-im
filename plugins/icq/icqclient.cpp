@@ -42,6 +42,9 @@
 #include "icqstatuswidget.h"
 #include "imagestorage/imagestorage.h"
 #include "standardoscarsocket.h"
+#include "authorizationsnachandler.h"
+#include "bytearraybuilder.h"
+#include "bytearrayparser.h"
 
 //#include "aimconfig.h"
 //#include "icqinfo.h"
@@ -74,7 +77,8 @@ using namespace SIM;
 
 
 static const char aim_server[] = "login.oscar.aol.com";
-static const char icq_server[] = "login.icq.com";
+//static const char icq_server[] = "login.icq.com";
+static const char icq_server[] = "login.messaging.aol.com";
 
 ICQClientData::ICQClientData(ICQClient* client)
     : m_port(5190)
@@ -249,12 +253,15 @@ ICQClient::ICQClient(SIM::Protocol* protocol, const QString& name, bool bAIM) : 
     initialize(bAIM);
     clientPersistentData = new ICQClientData(this);
     m_oscarSocket = new StandardOscarSocket(this);
+    connect(m_oscarSocket, SIGNAL(connected()), this, SLOT(oscarSocketConnected()));
+    connect(m_oscarSocket, SIGNAL(packet(int, QByteArray)), this, SLOT(oscarSocketPacket(int, QByteArray)));
 }
 
 ICQClient::~ICQClient()
 {
     if(m_oscarSocket)
         delete m_oscarSocket;
+    qDeleteAll(m_snacHandlers);
     delete clientPersistentData;
 }
 
@@ -262,6 +269,7 @@ void ICQClient::initialize(bool /*bAIM*/)
 {
     initDefaultStates();
     m_currentStatus = getDefaultStatus("offline");
+    initSnacHandlers();
     //m_bAIM = bAIM;
 
 //    clientPersistentData->owner.setDCcookie(rand());
@@ -407,6 +415,12 @@ bool ICQClient::deserialize(Buffer* cfg)
     return true;
 }
 
+void ICQClient::initSnacHandlers()
+{
+    m_authSnac = new AuthorizationSnacHandler(this);
+    m_snacHandlers.insert(m_authSnac->getType(), m_authSnac);
+}
+
 SIM::IMStatusPtr ICQClient::currentStatus()
 {
     return m_currentStatus;
@@ -414,6 +428,7 @@ SIM::IMStatusPtr ICQClient::currentStatus()
 
 void ICQClient::changeStatus(const SIM::IMStatusPtr& status)
 {
+    log(L_DEBUG, "changestatus: %d/%d", m_state, status->flag(SIM::IMStatus::flOffline));
     if((m_state == sOffline) && !status->flag(SIM::IMStatus::flOffline))
     {
         emit setStatusWidgetsBlinking(true);
@@ -888,6 +903,7 @@ void ICQClient::initDefaultStates()
     m_defaultStates.append(ICQStatusPtr(status));
 
     status = new ICQStatus("online", "Online", false, QString(), getImageStorage()->pixmap("ICQ_online"));
+    status->setFlag(IMStatus::flOffline, false);
     m_defaultStates.append(ICQStatusPtr(status));
 }
 
@@ -955,6 +971,7 @@ void ICQClient::setOscarSocket(OscarSocket* socket)
     if(m_oscarSocket)
         delete m_oscarSocket;
     m_oscarSocket = socket;
+    connect(m_oscarSocket, SIGNAL(packet(int,QByteArray)), this, SLOT(oscarSocketPacket(int,QByteArray)));
 }
 
 OscarSocket* ICQClient::oscarSocket() const
@@ -964,7 +981,7 @@ OscarSocket* ICQClient::oscarSocket() const
 
 void ICQClient::oscarSocketConnected()
 {
-
+    log(L_DEBUG, "Connected, waiting for server to initiate login sequence");
 }
 
 //void ICQClient::generateCookie(MessageId& id)
@@ -1273,37 +1290,27 @@ const char *icq_error_codes[] = {I18N_NOOP("Unknown error"),
 //    OscarSocket::packet_ready();
 //}
 
-//void ICQClient::packet(unsigned long size)
-//{
-//	ICQPlugin *plugin = static_cast<ICQPlugin*>(protocol()->plugin());
-//	EventLog::log_packet(socket()->readBuffer(), false, plugin->OscarPacket);
-//    if (m_nChannel == ICQ_CHNxNEW)
-//        chn_login();
-//    else if (m_nChannel == ICQ_CHNxCLOSE)
-//        chn_close();
-//    else if (m_nChannel == ICQ_CHNxDATA)
-//    {
-//        unsigned short food, type;
-//        unsigned short flags, seq, cmd;
-//        socket()->readBuffer() >> food >> type >> flags >> cmd >> seq;
-//        unsigned short unknown_length = 0;
-//        if (flags & 0x8000)
-//        {
-//            // some unknown data before real snac data
-//            // just read the length and forget it ;-)
-//            socket()->readBuffer() >> unknown_length;
-//            socket()->readBuffer().incReadPos(unknown_length);
-//        }
-//        // now just take a look at the type because 0x0001 == error
-//        // in all foodgroups
-//        if (type == 0x0001)
-//        {
-//            unsigned short err_code;
-//            socket()->readBuffer() >> err_code;
-//            log(L_DEBUG, "Error! foodgroup: %04X reason: %s", food, error_message(err_code));
-//            // now decrease for icqicmb & icqvarious
-//            socket()->readBuffer().decReadPos(sizeof(unsigned short));
-//        }
+SnacHandler* ICQClient::snacHandler(int type)
+{
+    return m_snacHandlers.value(type);
+}
+
+void ICQClient::oscarSocketPacket(int channel, const QByteArray& data)
+{
+    //ICQPlugin *plugin = static_cast<ICQPlugin*>(protocol()->plugin());
+    //EventLog::log_packet(socket()->readBuffer(), false, plugin->OscarPacket);
+
+    if (channel == ICQ_CHNxNEW)
+        chn_login(data);
+    else if (channel == ICQ_CHNxCLOSE)
+        chn_close(data);
+    else if (channel == ICQ_CHNxDATA)
+    {
+        ByteArrayParser parser(data);
+        int food = parser.readWord();
+        int type = parser.readWord();
+        int flags = parser.readWord();
+        unsigned int requestId = parser.readDword();
 //        if (food == ICQ_SNACxFOOD_LOCATION)
 //            snac_location(type, seq);
 //        else if (food == ICQ_SNACxFOOD_BOS)
@@ -1317,26 +1324,27 @@ const char *icq_error_codes[] = {I18N_NOOP("Unknown error"),
 //        else if (food == ICQ_SNACxFOOD_LOGIN)
 //            snac_login(type, seq);
 //        else
-//        {
-//            mapSnacHandlers::iterator it = m_snacHandlers.find(food);
-//            if (it == m_snacHandlers.end())
-//                log(L_WARN, "Unknown foodgroup %04X", food);
-//            else
-//            {
+        {
+            mapSnacHandlers::iterator it = m_snacHandlers.find(food);
+            if (it == m_snacHandlers.end())
+                log(L_WARN, "Unknown foodgroup %04X", food);
+            else
+            {
 //                ICQBuffer b;
 //                b.resize(size - unknown_length);
 //                b.setReadPos(0);
 //                b.setWritePos(size - unknown_length);
-//                socket()->readBuffer().unpack(b.data(), size - unknown_length);
-//                it->second->process(type, &b, seq);
-//            }
-//        }
-//    }
-//    else log(L_ERROR, "Unknown channel %u", m_nChannel & 0xFF);
-//	socket()->readBuffer().init(6);
-//	socket()->readBuffer().packetStart();
-//	m_bHeader = true;
-//}
+                QByteArray snacData = parser.readAll();
+                it.value()->process(type, snacData, flags, requestId);
+            }
+        }
+    }
+    else
+        log(L_ERROR, "Unknown channel %u", channel & 0xFF);
+//    socket()->readBuffer().init(6);
+//    socket()->readBuffer().packetStart();
+//    m_bHeader = true;
+}
 
 //void OscarSocket::flap(char channel)
 //{
@@ -1406,28 +1414,29 @@ const char *icq_error_codes[] = {I18N_NOOP("Unknown error"),
 //    m_processTimer->start(delay);
 //}
 
-//QByteArray ICQClient::cryptPassword()
-//{
-//    unsigned char xor_table[] =
-//        {
-//            0xf3, 0x26, 0x81, 0xc4, 0x39, 0x86, 0xdb, 0x92,
-//            0x71, 0xa3, 0xb9, 0xe6, 0x53, 0x7a, 0x95, 0x7c
-//        };
-//    QByteArray pswd = getContacts()->fromUnicode(NULL, getPassword());
-//    char buf[8];
-//    int len=0;
-//    for (int j = 0; j < 8; j++)
-//    {
-//        char c = pswd[j];
-//        if (c == 0)
-//            break;
-//        c = (char)(c ^ xor_table[j]);
-//        buf[j] = c;
-//        len++;
-//    }
-//    QByteArray res( buf,len );
-//    return res;
-//}
+QByteArray ICQClient::cryptPassword()
+{
+    unsigned char xor_table[] =
+        {
+            0xf3, 0x26, 0x81, 0xc4, 0x39, 0x86, 0xdb, 0x92,
+            0x71, 0xa3, 0xb9, 0xe6, 0x53, 0x7a, 0x95, 0x7c
+        };
+    QByteArray pswd = password().toAscii();
+    char buf[8];
+    int len=0;
+    for (int j = 0; j < 8; j++)
+    {
+        char c = pswd[j];
+        if (c == 0)
+            break;
+        c = (char)(c ^ xor_table[j]);
+        buf[j] = c;
+        len++;
+    }
+    QByteArray res( buf,len );
+    return res;
+}
+
 //unsigned long ICQClient::getFullStatus()
 //{
 //	return fullStatus(m_status);

@@ -94,4 +94,25 @@ namespace
 
         ASSERT_EQ(makeRawTlvList(), rawdata);
     }
+
+    TEST_F(TestTlvList, contains)
+    {
+        TlvList list;
+
+        list.append(Tlv(0x01, "testdata"));
+
+        ASSERT_TRUE(list.contains(0x01));
+        ASSERT_FALSE(list.contains(0x12));
+    }
+
+    TEST_F(TestTlvList, firstTlv)
+    {
+        TlvList list;
+
+        list.append(Tlv(0x01, "testdata"));
+
+        Tlv tlv = list.firstTlv(0x01);
+        ASSERT_TRUE(tlv.isValid());
+        ASSERT_EQ(QByteArray("testdata"), tlv.data());
+    }
 }

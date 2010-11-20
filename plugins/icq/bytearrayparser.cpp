@@ -45,6 +45,11 @@ QByteArray ByteArrayParser::readBytes(int count)
     return m_buffer.read(count);
 }
 
+QByteArray ByteArrayParser::readAll()
+{
+    return m_buffer.readAll();
+}
+
 bool ByteArrayParser::atEnd()
 {
     return m_buffer.atEnd();

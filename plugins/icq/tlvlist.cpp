@@ -16,9 +16,29 @@ Tlv TlvList::at(int index) const
     return m_tlvs.at(index);
 }
 
+Tlv TlvList::firstTlv(int id) const
+{
+    foreach(const Tlv& tlv, m_tlvs)
+    {
+        if(tlv.id() == id)
+            return tlv;
+    }
+    return Tlv();
+}
+
 int TlvList::size() const
 {
     return m_tlvs.size();
+}
+
+bool TlvList::contains(int id) const
+{
+    foreach(const Tlv& tlv, m_tlvs)
+    {
+        if(tlv.id() == id)
+            return true;
+    }
+    return false;
 }
 
 TlvList TlvList::fromByteArray(const QByteArray& data)

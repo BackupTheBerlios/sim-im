@@ -100,9 +100,8 @@ void StandardOscarSocket::readyRead()
             emit error(I18N_NOOP("Protocol error"));
             return;
         }
-        quint8 channel;
         quint16 sequence, size;
-        channel = header.at(1);
+        m_nChannel = header.at(1);
         sequence = header.at(2) * 0x100 + header.at(3);
         size = header.at(4) * 0x100 + header.at(5);
         m_bHeader = false;
@@ -114,9 +113,10 @@ void StandardOscarSocket::readyRead()
     if(m_packet.size() == m_packetLength)
     {
         m_bHeader = true;
-        emit packet(m_packet);
+        emit packet(m_nChannel, m_packet);
     }
 }
+
 
 void StandardOscarSocket::slot_connected()
 {

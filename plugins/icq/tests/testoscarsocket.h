@@ -13,6 +13,7 @@ namespace Helper
 
         SignalSpy();
 
+        int receivedChannel;
         QByteArray receivedPacket;
         QString errorString;
 
@@ -24,7 +25,7 @@ namespace Helper
         void justSignal();
 
     public slots:
-        void packet(const QByteArray& arr);
+        void packet(int channel, const QByteArray& arr);
         void error(const QString& str);
 
         void connected();

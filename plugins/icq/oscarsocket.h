@@ -25,7 +25,7 @@ public:
 
 signals:
     void error(const QString& errmsg);
-    void packet(const QByteArray& data);
+    void packet(int channel, const QByteArray& data);
     void connected();
 };
 

@@ -84,4 +84,14 @@ namespace
 
         ASSERT_TRUE(parser.atEnd());
     }
+
+    TEST_F(TestByteArrayParser, readAll)
+    {
+        ByteArrayParser parser(arr);
+        parser.readByte();
+
+        QByteArray arr = parser.readAll();
+
+        ASSERT_EQ(QByteArray("\x34\xab\xcd"), arr);
+    }
 }

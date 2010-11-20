@@ -20,6 +20,7 @@ public:
     quint16 readWord();
     quint32 readDword();
     QByteArray readBytes(int count);
+    QByteArray readAll();
 
     bool atEnd();
 

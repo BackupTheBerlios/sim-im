@@ -13,6 +13,7 @@ namespace
     using namespace SIM;
     using namespace MockObjects;
     using ::testing::_;
+    using ::testing::InSequence;
     class TestIcqClient : public ::testing::Test
     {
     protected:
@@ -71,14 +72,13 @@ namespace
         client->changeStatus(client->getDefaultStatus("online"));
     }
 
-    TEST_F(TestIcqClient, DISABLED_loginSequence)
-    {
-        Helper::SignalEmitter emitter;
-        emitter.connect(&emitter, SIGNAL(connected()), client, SLOT(oscarSocketConnected()));
-        MockOscarSocket* oscarSocket = new MockObjects::MockOscarSocket();
-        client->setOscarSocket(oscarSocket);
-        EXPECT_CALL(*oscarSocket, flap(OscarSocket::FlapChannelNewConnection, QByteArray("\x00\x00\x00\x01", 4)));
+//    TEST_F(TestIcqClient, loginSequence)
+//    {
+//        Helper::SignalEmitter emitter;
+//        emitter.connect(&emitter, SIGNAL(connected()), client, SLOT(oscarSocketConnected()));
+//        MockOscarSocket* oscarSocket = new MockObjects::MockOscarSocket();
+//        client->setOscarSocket(oscarSocket);
 
-        emitter.emitConnectedSignal();
-    }
+//        emitter.emitConnectedSignal();
+//    }
 }
