@@ -19,6 +19,7 @@ public:
     void appendByte(quint8 value);
     void appendWord(quint16 value);
     void appendDword(quint32 value);
+    void appendBytes(const QByteArray& bytes);
 
     QByteArray getArray() const;
 

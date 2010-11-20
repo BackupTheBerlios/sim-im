@@ -38,9 +38,9 @@ void StandardOscarSocket::disconnectFromHost()
     m_socket->disconnectFromHost();
 }
 
-void StandardOscarSocket::flap(int channel, int length, const QByteArray& data)
+void StandardOscarSocket::flap(int channel, const QByteArray& data)
 {
-    QByteArray arr = makeFlapPacket(channel, length);
+    QByteArray arr = makeFlapPacket(channel, data.length());
     arr += data;
     m_socket->write(arr);
 }

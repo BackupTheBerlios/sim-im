@@ -2,6 +2,8 @@
 #ifndef _SNAC_H
 #define _SNAC_H
 
+#include <QByteArray>
+
 class ICQClient;
 class ICQBuffer;
 class SnacHandler
@@ -10,12 +12,10 @@ public:
 	SnacHandler(ICQClient* client, unsigned short snac);
 	virtual ~SnacHandler();
 
-	unsigned short getType() { return m_snac; };
-	virtual bool process(unsigned short subtype, ICQBuffer* buf, unsigned short seq) = 0;
+    unsigned short getType() { return m_snac; }
+    virtual bool process(unsigned short subtype, const QByteArray& data, unsigned short seq) = 0;
 
-	void snac(const unsigned short subtype, bool bMsgID = true, bool bType = false);
-
-	ICQClient* client();
+    ICQClient* client() const;
 protected:
 	unsigned short m_snac;
 	ICQClient* m_client;

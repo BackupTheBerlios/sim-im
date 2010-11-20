@@ -71,14 +71,14 @@ namespace
         client->changeStatus(client->getDefaultStatus("online"));
     }
 
-    TEST_F(TestIcqClient, loginSequence)
+    TEST_F(TestIcqClient, DISABLED_loginSequence)
     {
-//        Helper::SignalEmitter emitter;
-//        emitter.connect(&emitter, SIGNAL(connected()), client, SLOT(oscarSocketConnected()));
-//        MockOscarSocket* oscarSocket = new MockObjects::MockOscarSocket();
-//        client->setOscarSocket(oscarSocket);
-//        EXPECT_CALL(*oscarSocket, );
+        Helper::SignalEmitter emitter;
+        emitter.connect(&emitter, SIGNAL(connected()), client, SLOT(oscarSocketConnected()));
+        MockOscarSocket* oscarSocket = new MockObjects::MockOscarSocket();
+        client->setOscarSocket(oscarSocket);
+        EXPECT_CALL(*oscarSocket, flap(OscarSocket::FlapChannelNewConnection, QByteArray("\x00\x00\x00\x01", 4)));
 
-//        emitter.emitConnectedSignal();
+        emitter.emitConnectedSignal();
     }
 }

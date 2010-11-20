@@ -39,3 +39,13 @@ quint32 ByteArrayParser::readDword()
         result = htonl(result);
     return result;
 }
+
+QByteArray ByteArrayParser::readBytes(int count)
+{
+    return m_buffer.read(count);
+}
+
+bool ByteArrayParser::atEnd()
+{
+    return m_buffer.atEnd();
+}

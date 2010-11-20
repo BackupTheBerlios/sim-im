@@ -25,7 +25,7 @@ namespace
         ASSERT_EQ(0x12, b);
     }
 
-    TEST_F(TestByteArrayParser, getWord_bigEndian)
+    TEST_F(TestByteArrayParser, readWord_bigEndian)
     {
         ByteArrayParser parser(arr);
 
@@ -36,7 +36,7 @@ namespace
         ASSERT_EQ(0xabcd, word2);
     }
 
-    TEST_F(TestByteArrayParser, getWord_littleEndian)
+    TEST_F(TestByteArrayParser, readWord_littleEndian)
     {
         ByteArrayParser parser(arr, ByteArrayParser::LittleEndian);
 
@@ -47,7 +47,7 @@ namespace
         ASSERT_EQ(0xcdab, word2);
     }
 
-    TEST_F(TestByteArrayParser, getDword_bigEndian)
+    TEST_F(TestByteArrayParser, readDword_bigEndian)
     {
         ByteArrayParser parser(arr);
 
@@ -56,12 +56,32 @@ namespace
         ASSERT_EQ(0x1234abcd, dword);
     }
 
-    TEST_F(TestByteArrayParser, getDword_littleEndian)
+    TEST_F(TestByteArrayParser, readDword_littleEndian)
     {
         ByteArrayParser parser(arr, ByteArrayParser::LittleEndian);
 
         quint32 dword = parser.readDword();
 
         ASSERT_EQ(0xcdab3412, dword);
+    }
+
+    TEST_F(TestByteArrayParser, readBytes)
+    {
+        ByteArrayParser parser(arr);
+
+        QByteArray arr = parser.readBytes(2);
+
+        ASSERT_EQ(arr.size(), 2);
+        ASSERT_EQ(arr, QByteArray("\x12\x34"));
+    }
+
+    TEST_F(TestByteArrayParser, atEnd)
+    {
+        ByteArrayParser parser(arr);
+        ASSERT_FALSE(parser.atEnd());
+
+        parser.readDword();
+
+        ASSERT_TRUE(parser.atEnd());
     }
 }
