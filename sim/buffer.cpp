@@ -75,6 +75,12 @@ void Buffer::init(unsigned size)
     resize(size);
 }
 
+void Buffer::clear()
+{
+	init(0);
+	QByteArray::clear();
+}
+
 void Buffer::incReadPos(int n)
 {
     m_posRead += n;
