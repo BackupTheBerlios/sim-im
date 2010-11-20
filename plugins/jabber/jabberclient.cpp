@@ -331,6 +331,7 @@ void JabberClient::setOwnerContact(SIM::IMContactPtr contact)
 bool JabberClient::serialize(QDomElement& element)
 {
     SIM::PropertyHubPtr hub = SIM::PropertyHub::create();
+	hub->setValue("ID", getID());
     hub->setValue("Server", getServer());
     hub->setValue("Port", getPort());
     hub->setValue("UseSSL", getUseSSL());
@@ -361,6 +362,7 @@ bool JabberClient::deserialize(QDomElement& element)
     SIM::PropertyHubPtr hub = SIM::PropertyHub::create();
     if(!hub->deserialize(element))
         return false;
+	setID(hub->value("ID").toString());
     setServer(hub->value("Server").toString());
     setPort(hub->value("Port").toUInt());
     setUseSSL(hub->value("UseSSL").toBool());

@@ -669,7 +669,7 @@ public:
 //    static QString screen(const ICQUserData*);
 //    static unsigned long warnLevel(unsigned long);
 //    static unsigned clearTags(QString &text);
-//    bool m_bAIM;
+	bool m_bAIM;
 //    static QString addCRLF(const QString &str);
 //    void uploadBuddy(const ICQUserData *data);
 //    ICQUserData * toICQUserData(SIM::IMContact*);  // More safely type conversion from generic SIM::clientData into ICQUserData

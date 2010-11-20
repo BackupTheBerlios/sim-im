@@ -258,11 +258,11 @@ ICQClient::~ICQClient()
     delete clientPersistentData;
 }
 
-void ICQClient::initialize(bool /*bAIM*/)
+void ICQClient::initialize(bool bAIM)
 {
     initDefaultStates();
     m_currentStatus = getDefaultStatus("offline");
-    //m_bAIM = bAIM;
+    m_bAIM = bAIM;
 
 //    clientPersistentData->owner.setDCcookie(rand());
 
@@ -814,14 +814,13 @@ void ICQClient::setMediaSense(bool b)
 
 QString ICQClient::name()
 {
-//    if(!m_name.isEmpty())
-//        return m_name;
-//    if (m_bAIM) {
-//        m_name = "AIM." + clientPersistentData->owner.getScreen();
-//    }
-//    else {
-//        m_name = "ICQ." + QString::number(clientPersistentData->owner.getUin());
-//    }
+	if(!m_name.isEmpty())
+        return m_name;
+	if (m_bAIM) 
+		m_name = "AIM." + clientPersistentData->owner.getScreen();
+	else
+		m_name = "ICQ." + QString::number(clientPersistentData->owner.getUin());
+	
     return m_name;
 }
 

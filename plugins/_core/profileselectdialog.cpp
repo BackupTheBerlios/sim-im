@@ -104,7 +104,7 @@ void ProfileSelectDialog::profileChanged(int index)
         return;
     }
     m_ui->buttonOk->setEnabled(true);
-    if (index >= (int)m_ui->cmbProfile->count() - 1)
+    if (index >= m_ui->cmbProfile->count() - 1)
     {
         m_ui->groupBoxPasswords->hide();
         clearInputs();
@@ -129,7 +129,7 @@ void ProfileSelectDialog::profileChanged(int index)
 
         foreach(const QString& clientName, clients)
         {
-            log(L_DEBUG, "client: %s", qPrintable(clientName));
+            log(L_DEBUG, "building profileselect dialog for client: %s", qPrintable(clientName));
             ClientPtr client = getClientManager()->client(clientName);
             if (client->protocol()->flag(Protocol::flNoAuth))
                 continue;

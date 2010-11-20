@@ -146,6 +146,8 @@ bool StandardClientManager::load_old()
             if(!getPluginManager()->isPluginProtocol(pluginName))
             {
                 log(L_DEBUG, "Plugin %s is not a protocol plugin", qPrintable(pluginName));
+				cfg.clear();    //Fixme: Make sure here, the dropped configuration converted later, if plugin is available again...
+				client.clear(); 
                 continue;
             }
             PluginPtr plugin = getPluginManager()->plugin(pluginName);
@@ -159,7 +161,10 @@ bool StandardClientManager::load_old()
             ProtocolIterator it;
             while ((protocol = ++it) != NULL)
                 if (protocol->name() == clientName)
+				{
+					cfg.clear();
                     client = protocol->createClient(0);
+				}
         }
         else {
             if(!l.isEmpty()) {
@@ -177,11 +182,11 @@ bool StandardClientManager::load_old()
     return m_clients.count() > 0;
 }
 
+
 bool StandardClientManager::save()
 {
-    if(!ProfileManager::instance())
-        return false;
-    if(m_clients.isEmpty())
+    if(!ProfileManager::instance() ||
+		m_clients.isEmpty() )
         return false;
     log(L_DEBUG, "ClientManager::save(): %d", m_clients.count());
     QDomDocument doc;

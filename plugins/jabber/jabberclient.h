@@ -57,6 +57,9 @@ public:
 
     virtual SIM::Client* client() { Q_ASSERT_X(false, "ICQClientData::client", "Shouldn't be called"); return 0; }
 
+	QString getID() const { return m_ID;}
+    void setID(const QString& ID) { m_ID = ID; }
+
     QString getServer() const { return m_server;}
     void setServer(const QString& server) { m_server = server; }
 
@@ -128,6 +131,7 @@ public:
     virtual void deserializeLine(const QString& key, const QString& value);
 public:
 
+	QString m_ID;
     QString m_server;
     unsigned long m_port;
     bool m_useSSL;
