@@ -55,7 +55,7 @@ public:
     virtual void serialize(QDomElement& /*element*/) {}
     virtual void deserialize(QDomElement& /*element*/) {}
 
-    virtual SIM::Client* client() { Q_ASSERT_X(false, "ICQClientData::client", "Shouldn't be called"); return 0; }
+    virtual SIM::Client* client() { Q_ASSERT_X(false, "JabberClientData::client", "Shouldn't be called"); return 0; }
 
 	QString getID() const { return m_ID;}
     void setID(const QString& ID) { m_ID = ID; }
@@ -358,6 +358,7 @@ public:
     JabberClient(JabberProtocol*, const QString& name);
     ~JabberClient();
     virtual QString name();
+	virtual QString retrievePasswordLink();
     virtual SIM::IMContactPtr createIMContact();
     virtual SIM::IMGroupPtr createIMGroup();
 

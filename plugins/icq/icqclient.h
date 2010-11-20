@@ -494,6 +494,7 @@ class ICQ_EXPORT ICQClient : public QObject, public SIM::Client
 public:
     ICQClient(SIM::Protocol*, const QString& name, bool bAIM);
     virtual ~ICQClient();
+	virtual QString retrievePasswordLink();
     virtual QString name();
 
     SIM::IMContactPtr createIMContact();

@@ -167,12 +167,12 @@ void ProfileSelectDialog::makeInputs(const ClientPtr& client)
     connect(entry.passwordEdit, SIGNAL(textChanged(const QString&)), this, SLOT(pswdChanged(const QString&)));
     layout->addWidget(entry.passwordEdit);
 
-    QString helpUrl = client->protocol()->helpLink();
-    if (!helpUrl.isEmpty())
+    QString retrievePasswordLink = client->retrievePasswordLink();
+    if (!retrievePasswordLink.isEmpty())
     {
         entry.link = new LinkLabel(m_ui->groupBoxPasswords);
         entry.link->setTextFormat(Qt::RichText);
-        entry.link->setText(QString("<a href=\"%1\">").arg(helpUrl) + i18n("Forgot password?") + QString("</a>"));
+        entry.link->setText(QString("<a href=\"%1\">").arg(retrievePasswordLink) + i18n("Forgot password?") + QString("</a>"));
         layout->addWidget(entry.link);
     }
     else

@@ -195,6 +195,9 @@ void JabberClientData::deserializeLine(const QString& key, const QString& value)
     if(val == "Server") {
         setServer(key);
     }
+    if(key == "Password") {
+		owner->client()->setCryptedPassword(val);
+    }
     else if(val == "Port") {
         setPort(val.toUInt());
     }
@@ -722,6 +725,11 @@ QString JabberClient::name()
         return res;
     }
     return m_name;
+}
+
+QString JabberClient::retrievePasswordLink()
+{
+	return QString("www.google.de/search?q=forgot+password+%1").arg(getServer());
 }
 
 //void JabberClient::connect_ready()
