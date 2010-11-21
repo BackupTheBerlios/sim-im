@@ -40,6 +40,7 @@ bool StandardClientManager::load()
 {
     log(L_DEBUG, "ClientManager::load()");
     m_clients.clear();
+	m_sortedClientNamesList.clear();
     if(!load_new())
     {
         if(!load_old())
