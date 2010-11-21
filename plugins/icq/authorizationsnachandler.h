@@ -9,6 +9,8 @@ class ICQ_EXPORT AuthorizationSnacHandler : public SnacHandler
 public:
     AuthorizationSnacHandler(ICQClient* client);
 
+    bool handleLoginAndCloseChannels(int channel, const QByteArray& data);
+
     virtual bool process(unsigned short subtype, const QByteArray& data, int flags, unsigned int requestId);
 
     static QByteArray magicHashString();
@@ -20,6 +22,11 @@ public:
 private:
     bool handleAuthKeyResponse(const QByteArray& data);
     bool handleLoginRedirect(const QByteArray& data);
+
+    bool handleNewConnection(const QByteArray& data);
+    bool handleCloseConnection(const QByteArray& data);
+
+    void emitError(int errorCode);
 
     QByteArray m_authCookie;
 

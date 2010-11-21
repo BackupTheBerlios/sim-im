@@ -898,6 +898,8 @@ private:
     AuthorizationSnacHandler* m_authSnac;
     mapSnacHandlers m_snacHandlers;
 
+    friend class AuthorizationSnacHandler;
+
     //bool m_bBirthdayInfoDisplayed;
 };
 

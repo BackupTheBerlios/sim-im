@@ -13,5 +13,5 @@ SnacHandler::~SnacHandler()
 
 ICQClient* SnacHandler::client() const
 {
-	return m_client;
+    return m_client;
 }
