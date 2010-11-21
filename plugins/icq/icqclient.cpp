@@ -129,6 +129,8 @@ void ICQClientData::deserialize(Buffer* cfg)
         QStringList keyval = line.split('=');
         if(keyval.size() < 2)
             continue;
+		//if (keyval.at(0) == QString("Password"))
+		//	__asm int 3;
         deserializeLine(keyval.at(0), keyval.at(1));
     }
 }
@@ -142,6 +144,9 @@ void ICQClientData::deserializeLine(const QString& key, const QString& value)
     if(key == "Server") {
         setServer(val);
         return;
+    }
+	if(key == "Password") {
+		owner.client()->setCryptedPassword(val);
     }
     if(key == "ServerPort") {
         setPort(val.toULong());
@@ -265,12 +270,13 @@ ICQClient::~ICQClient()
     delete clientPersistentData;
 }
 
-void ICQClient::initialize(bool /*bAIM*/)
+void ICQClient::initialize(bool bAIM)
 {
     initDefaultStates();
     m_currentStatus = getDefaultStatus("offline");
+	m_bAIM = bAIM;
     initSnacHandlers();
-    //m_bAIM = bAIM;
+    
 
 //    clientPersistentData->owner.setDCcookie(rand());
 
@@ -340,6 +346,11 @@ void ICQClient::initialize(bool /*bAIM*/)
 //{
 //    return &clientPersistentData->owner;
 //}
+
+QString ICQClient::retrievePasswordLink()
+{
+    return QString("http://www.icq.com");
+}
 
 bool ICQClient::serialize(QDomElement& element)
 {
@@ -829,14 +840,13 @@ void ICQClient::setMediaSense(bool b)
 
 QString ICQClient::name()
 {
-//    if(!m_name.isEmpty())
-//        return m_name;
-//    if (m_bAIM) {
-//        m_name = "AIM." + clientPersistentData->owner.getScreen();
-//    }
-//    else {
-//        m_name = "ICQ." + QString::number(clientPersistentData->owner.getUin());
-//    }
+	if(!m_name.isEmpty())
+        return m_name;
+	if (m_bAIM) 
+		m_name = "AIM." + clientPersistentData->owner.getScreen();
+	else
+		m_name = "ICQ." + QString::number(clientPersistentData->owner.getUin());
+	
     return m_name;
 }
 

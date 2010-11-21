@@ -22,7 +22,7 @@
    </property>
    <item>
     <widget class="QTabWidget" name="tabWnd">
-     <widget class="QWidget" name="tab">
+     <widget class="QWidget" name="tab1">
       <attribute name="title">
        <string>&amp;Names</string>
       </attribute>
@@ -197,7 +197,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab">
+     <widget class="QWidget" name="tab2">
       <attribute name="title">
        <string>&amp;Status</string>
       </attribute>

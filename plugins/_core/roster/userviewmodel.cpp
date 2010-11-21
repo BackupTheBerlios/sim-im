@@ -108,7 +108,7 @@ QModelIndex UserViewModel::index(int row, int column, const QModelIndex& parent)
 
         return createIndex(row, column, (quint32)parentId);
     }
-    return QModelIndex();
+    return QModelIndex(); //Fixme Unreachable
 }
 
 QModelIndex UserViewModel::parent(const QModelIndex& index) const

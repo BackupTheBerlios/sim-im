@@ -23,7 +23,6 @@ namespace SIM
         Plugin  *plugin() { return m_plugin; }
         virtual QString name() = 0;
         virtual QString iconId() = 0;
-        virtual QString helpLink() = 0;
         virtual QSharedPointer<Client> createClient(const QString& name) = 0;
 
         enum Flag

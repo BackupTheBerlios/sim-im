@@ -495,6 +495,7 @@ class ICQ_EXPORT ICQClient : public QObject, public SIM::Client
 public:
     ICQClient(SIM::Protocol*, const QString& name, bool bAIM);
     virtual ~ICQClient();
+	virtual QString retrievePasswordLink();
     virtual QString name();
 
     SIM::IMContactPtr createIMContact();
@@ -672,7 +673,7 @@ public:
 //    static QString screen(const ICQUserData*);
 //    static unsigned long warnLevel(unsigned long);
 //    static unsigned clearTags(QString &text);
-//    bool m_bAIM;
+	bool m_bAIM;
 //    static QString addCRLF(const QString &str);
 //    void uploadBuddy(const ICQUserData *data);
 //    ICQUserData * toICQUserData(SIM::IMContact*);  // More safely type conversion from generic SIM::clientData into ICQUserData

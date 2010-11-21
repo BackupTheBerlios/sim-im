@@ -47,8 +47,11 @@ namespace SIM
 
         QString password() const;
         void setPassword(const QString& password);
+		void setCryptedPassword(const QString& password) { setPassword(uncryptPassword(password)); }
 
-        PropertyHubPtr properties() { return m_data; }
+        virtual QString retrievePasswordLink() = 0;
+        
+		PropertyHubPtr properties() { return m_data; }
 
     protected:
         static QString cryptPassword(const QString& passwd);
