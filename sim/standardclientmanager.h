@@ -12,6 +12,8 @@ public:
     virtual ~StandardClientManager();
 
     virtual void addClient(ClientPtr client);
+	virtual ClientPtr deleteClient(const QString& name);
+	ClientPtr getClientByProfileName(const QString& name);
     virtual ClientPtr client(const QString& name);
     virtual QStringList clientList();
     virtual QList<ClientPtr> allClients() const;
@@ -27,6 +29,7 @@ private:
     ClientPtr createClient(const QString& name);
     typedef QMap<QString, ClientPtr> ClientMap;
     ClientMap m_clients;
+	QStringList m_sortedClientNamesList;
 };
 
 } // namespace SIM

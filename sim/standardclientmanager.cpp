@@ -20,6 +20,7 @@ void StandardClientManager::addClient(ClientPtr client)
 {
     log(L_DEBUG, "Adding client: %s", qPrintable(client->name()));
     m_clients.insert(client->name(), client);
+	m_sortedClientNamesList << client->name();
 }
 
 ClientPtr StandardClientManager::client(const QString& name)
@@ -39,6 +40,7 @@ bool StandardClientManager::load()
 {
     log(L_DEBUG, "ClientManager::load()");
     m_clients.clear();
+	m_sortedClientNamesList.clear();
     if(!load_new())
     {
         if(!load_old())
@@ -138,6 +140,7 @@ bool StandardClientManager::load_old()
                 client->deserialize(&cfg);
                 addClient(client);
                 cfg.clear();
+				client.clear();
             }
             QString clientName = line.mid(1, line.length() - 2);
             QString pluginName = getToken(clientName, '/');
@@ -146,6 +149,8 @@ bool StandardClientManager::load_old()
             if(!getPluginManager()->isPluginProtocol(pluginName))
             {
                 log(L_DEBUG, "Plugin %s is not a protocol plugin", qPrintable(pluginName));
+				cfg.clear();    //Fixme: Make sure here, the dropped configuration converted later, if plugin is available again...
+				client.clear(); 
                 continue;
             }
             PluginPtr plugin = getPluginManager()->plugin(pluginName);
@@ -159,7 +164,10 @@ bool StandardClientManager::load_old()
             ProtocolIterator it;
             while ((protocol = ++it) != NULL)
                 if (protocol->name() == clientName)
+				{
+					cfg.clear();
                     client = protocol->createClient(0);
+				}
         }
         else {
             if(!l.isEmpty()) {
@@ -173,15 +181,16 @@ bool StandardClientManager::load_old()
         client->deserialize(&cfg);
         addClient(client);
         cfg.clear();
+		client.clear();
     }
     return m_clients.count() > 0;
 }
 
+
 bool StandardClientManager::save()
 {
-    if(!ProfileManager::instance())
-        return false;
-    if(m_clients.isEmpty())
+    if(!ProfileManager::instance() ||
+		m_clients.isEmpty() )
         return false;
     log(L_DEBUG, "ClientManager::save(): %d", m_clients.count());
     QDomDocument doc;
@@ -239,8 +248,23 @@ ClientPtr StandardClientManager::createClient(const QString& name)
 
 QStringList StandardClientManager::clientList()
 {
-    return m_clients.keys();
+	//m_clients.keys();
+    return m_sortedClientNamesList;
+	
 }
 
+ClientPtr StandardClientManager::getClientByProfileName(const QString& name)
+{
+	return m_clients[name];
+}
+
+ClientPtr StandardClientManager::deleteClient(const QString& name)
+{
+
+	ClientPtr delClient(getClientByProfileName(name));
+	m_clients.erase(m_clients.find(name));
+	m_sortedClientNamesList.removeOne(QString(name));
+	return delClient;
+}
 
 } // namespace SIM

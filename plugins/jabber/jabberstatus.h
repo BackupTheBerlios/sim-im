@@ -35,7 +35,7 @@ private:
     QPixmap m_icon;
     QString m_show;
     QString m_type;
-    unsigned int m_flags;
+    int m_flags;
 };
 
 typedef QSharedPointer<JabberStatus> JabberStatusPtr;

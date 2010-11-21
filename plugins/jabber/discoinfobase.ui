@@ -24,7 +24,7 @@
     <number>11</number>
    </property>
    <item>
-    <widget class="QTabWidget" name="tabInfo">
+    <widget class="QTabWidget" name="tabInfoWidget">
      <widget class="QWidget" name="tabInfo">
       <attribute name="title">
        <string>&amp;Info</string>

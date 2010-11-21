@@ -41,11 +41,11 @@ email                : vovan@shutoff.ru
 
 using namespace SIM;
 
-ProfileSelectDialog::ProfileSelectDialog() : QDialog(NULL)
+ProfileSelectDialog::ProfileSelectDialog() 
+	: QDialog(NULL)
+	, m_ui ( new Ui::ProfileSelectDialog )
 {
-    m_ui = new Ui::ProfileSelectDialog;
     m_ui->setupUi(this);
-
     QSettings settings;
     m_profile = settings.value("Profile").toString();
 
@@ -104,7 +104,7 @@ void ProfileSelectDialog::profileChanged(int index)
         return;
     }
     m_ui->buttonOk->setEnabled(true);
-    if (index >= (int)m_ui->cmbProfile->count() - 1)
+    if (index >= m_ui->cmbProfile->count() - 1)
     {
         m_ui->groupBoxPasswords->hide();
         clearInputs();
@@ -124,12 +124,15 @@ void ProfileSelectDialog::profileChanged(int index)
         ProfileManager::instance()->selectProfile(m_ui->cmbProfile->currentText());
         getClientManager()->load();
         QStringList clients = getClientManager()->clientList();
+		
+		for (int i=0;i<clients.count();++i)
+			log(L_DEBUG, "printing client %s", qPrintable(clients.at(i)));
 
         m_ui->groupBoxPasswords->show();
 
         foreach(const QString& clientName, clients)
         {
-            log(L_DEBUG, "client: %s", qPrintable(clientName));
+            log(L_DEBUG, "building profileselect dialog for client: %s", qPrintable(clientName));
             ClientPtr client = getClientManager()->client(clientName);
             if (client->protocol()->flag(Protocol::flNoAuth))
                 continue;
@@ -167,12 +170,12 @@ void ProfileSelectDialog::makeInputs(const ClientPtr& client)
     connect(entry.passwordEdit, SIGNAL(textChanged(const QString&)), this, SLOT(pswdChanged(const QString&)));
     layout->addWidget(entry.passwordEdit);
 
-    QString helpUrl = client->protocol()->helpLink();
-    if (!helpUrl.isEmpty())
+    QString retrievePasswordLink = client->retrievePasswordLink();
+    if (!retrievePasswordLink.isEmpty())
     {
         entry.link = new LinkLabel(m_ui->groupBoxPasswords);
         entry.link->setTextFormat(Qt::RichText);
-        entry.link->setText(QString("<a href=\"%1\">").arg(helpUrl) + i18n("Forgot password?") + QString("</a>"));
+        entry.link->setText(QString("<a href=\"%1\">").arg(retrievePasswordLink) + i18n("Forgot password?") + QString("</a>"));
         layout->addWidget(entry.link);
     }
     else

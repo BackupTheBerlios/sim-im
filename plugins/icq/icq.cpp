@@ -70,11 +70,6 @@ QString ICQProtocol::iconId()
     return "ICQ";
 }
 
-QString ICQProtocol::helpLink()
-{
-    return QString("http://www.icq.com");
-}
-
 SIM::ClientPtr ICQProtocol::createClient(const QString& name)
 {
     ClientPtr icq = ClientPtr(new ICQClient(this, name, false));
