@@ -63,7 +63,6 @@ public:
     ~JabberProtocol();
     virtual QString name();
     virtual QString iconId();
-    virtual QString helpLink();
     virtual SIM::ClientPtr createClient(const QString& name);
 
 private:

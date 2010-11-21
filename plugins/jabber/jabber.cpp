@@ -81,11 +81,6 @@ QString JabberProtocol::iconId()
     return "Jabber";
 }
 
-QString JabberProtocol::helpLink()
-{
-    return QString();
-}
-
 SIM::ClientPtr JabberProtocol::createClient(const QString& name)
 {
     ClientPtr jabber = ClientPtr(new JabberClient(this, name));

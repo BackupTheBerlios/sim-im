@@ -195,6 +195,9 @@ void JabberClientData::deserializeLine(const QString& key, const QString& value)
     if(val == "Server") {
         setServer(key);
     }
+    if(key == "Password") {
+		owner->client()->setCryptedPassword(val);
+    }
     else if(val == "Port") {
         setPort(val.toUInt());
     }
@@ -331,6 +334,7 @@ void JabberClient::setOwnerContact(SIM::IMContactPtr contact)
 bool JabberClient::serialize(QDomElement& element)
 {
     SIM::PropertyHubPtr hub = SIM::PropertyHub::create();
+	hub->setValue("ID", getID());
     hub->setValue("Server", getServer());
     hub->setValue("Port", getPort());
     hub->setValue("UseSSL", getUseSSL());
@@ -361,6 +365,7 @@ bool JabberClient::deserialize(QDomElement& element)
     SIM::PropertyHubPtr hub = SIM::PropertyHub::create();
     if(!hub->deserialize(element))
         return false;
+	setID(hub->value("ID").toString());
     setServer(hub->value("Server").toString());
     setPort(hub->value("Port").toUInt());
     setUseSSL(hub->value("UseSSL").toBool());
@@ -720,6 +725,11 @@ QString JabberClient::name()
         return res;
     }
     return m_name;
+}
+
+QString JabberClient::retrievePasswordLink()
+{
+	return QString("www.google.de/search?q=forgot+password+%1").arg(getServer());
 }
 
 //void JabberClient::connect_ready()

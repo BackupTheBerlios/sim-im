@@ -84,7 +84,7 @@ public:
     bool scan(const char *substr, QByteArray &res);
 
     void init(unsigned size);
-
+	void clear();
     QByteArray	getSection(bool bSkip=false);
     unsigned	startSection() { return m_startSection; }
     QByteArray	getLine();
