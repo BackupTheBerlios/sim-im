@@ -896,7 +896,6 @@ private:
 
     AuthorizationSnacHandler* m_authSnac;
     mapSnacHandlers m_snacHandlers;
-    QByteArray m_authCookie;
 
     //bool m_bBirthdayInfoDisplayed;
 };

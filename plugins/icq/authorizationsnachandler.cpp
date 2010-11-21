@@ -19,6 +19,9 @@ bool AuthorizationSnacHandler::process(unsigned short subtype, const QByteArray&
     case SnacAuthKeyResponse:
         return handleAuthKeyResponse(data);
         break;
+    case SnacAuthLoginReply:
+        return handleLoginRedirect(data);
+        break;
     }
 
     return true;
@@ -76,6 +79,32 @@ bool AuthorizationSnacHandler::handleAuthKeyResponse(const QByteArray& data)
         }
         socket->snac(ICQ_SNACxFOOD_LOGIN, SnacAuthMd5Login, 0, tlvs.toByteArray());
     }
+    return true;
+}
+
+bool AuthorizationSnacHandler::handleLoginRedirect(const QByteArray& data)
+{
+    TlvList tlvs = TlvList::fromByteArray(data);
+    Tlv tlv_host = tlvs.firstTlv(5);
+    Tlv tlv_cookie = tlvs.firstTlv(6);
+    if((!tlv_host.isValid()) || (!tlv_cookie.isValid())) {
+        //socket()->error_state(I18N_NOOP("Close packet from server"));
+        return false;
+    }
+    QString host = tlv_host.data();
+    int idx = host.indexOf(':');
+    if(idx == -1) {
+        log(L_ERROR, "Bad host address %s", qPrintable(host));
+        //socket()->error_state(I18N_NOOP("Bad host address"));
+        return false;
+    }
+    unsigned short port = host.mid(idx + 1).toUShort();
+    host = host.left(idx);
+
+    client()->oscarSocket()->disconnectFromHost();
+    client()->oscarSocket()->connectToHost(host, port);
+    m_authCookie = tlv_cookie.data();
+    m_authCookie.resize(m_authCookie.size());
     return true;
 }
 

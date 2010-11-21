@@ -192,15 +192,15 @@ const unsigned ICQ_LOGIN_ERRxTOO_YOUNG				= 0x0022;
 void ICQClient::chn_login(const QByteArray& data)
 {
 //    m_bconnectionLost = false;
-    if(m_authCookie.size()) {
+    if(m_authSnac->m_authCookie.size()) {
         ByteArrayBuilder builder;
         builder.appendDword(1);
         TlvList list;
-        list.append(Tlv(6, m_authCookie));
+        list.append(Tlv(6, m_authSnac->m_authCookie));
         builder.appendBytes(list.toByteArray());
 
         m_oscarSocket->flap(OscarSocket::FlapChannelNewConnection, builder.getArray());
-        m_authCookie.clear();
+        m_authSnac->m_authCookie.clear();
         return;
     }
     if(clientPersistentData->owner.getUin() && !getUseMD5()) {
@@ -403,7 +403,7 @@ void ICQClient::chn_close(const QByteArray& data)
 
     oscarSocket()->disconnectFromHost();
     oscarSocket()->connectToHost(host, port);
-    m_authCookie = tlv_cookie.data();
-    m_authCookie.resize(m_authCookie.size());
+    m_authSnac->m_authCookie = tlv_cookie.data();
+    m_authSnac->m_authCookie.resize(m_authSnac->m_authCookie.size());
 }
 
