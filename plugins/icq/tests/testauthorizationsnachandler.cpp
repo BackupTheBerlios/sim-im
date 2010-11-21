@@ -72,6 +72,39 @@ namespace
             return cookie;
         }
 
+        TlvList makeAuthCookieTlvList(const QByteArray& authCookie)
+        {
+            TlvList authCookieTlv;
+            authCookieTlv.append(Tlv(0x06, authCookie));
+            return authCookieTlv;
+        }
+
+        QByteArray makeSaltArray()
+        {
+            ByteArrayBuilder builder;
+            builder.appendWord(m_salt.size());
+            builder.appendBytes(m_salt);
+            return builder.getArray();
+        }
+
+        TlvList makeUinTlvList(const QString& uin)
+        {
+            TlvList uinTlv;
+            uinTlv.append(Tlv(0x01, uin.toAscii()));
+            uinTlv.append(Tlv(0x4b, QByteArray()));
+            uinTlv.append(Tlv(0x5a, QByteArray()));
+            return uinTlv;
+        }
+
+        TlvList makeCloseConnectionTlvList(const QString& uin, const QByteArray& authCookie)
+        {
+            TlvList closeConnectionTlvs;
+            closeConnectionTlvs.append(Tlv(0x01, uin.toAscii()));
+            closeConnectionTlvs.append(Tlv(0x05, m_bosServer.toAscii()));
+            closeConnectionTlvs.append(Tlv(0x06, authCookie));
+            return closeConnectionTlvs;
+        }
+
         static bool isValidSignonPacket(const QByteArray& packet)
         {
             ByteArrayParser parser(packet);
@@ -130,14 +163,10 @@ namespace
     {
         client->setUseMD5(false);
         QByteArray authCookie = makeAuthCookie();
-        TlvList authCookieTlv;
-        authCookieTlv.append(Tlv(0x06, authCookie));
+        TlvList authCookieTlv = makeAuthCookieTlvList(authCookie);
 
         QByteArray firstPacketData = QByteArray("\x00\x00\x00\x01", 4);
-        TlvList secondPacketTlvs;
-        secondPacketTlvs.append(Tlv(0x01, "123456"));
-        secondPacketTlvs.append(Tlv(0x05, m_bosServer.toAscii()));
-        secondPacketTlvs.append(Tlv(0x06, authCookie));
+        TlvList secondPacketTlvs = makeCloseConnectionTlvList("123456", authCookie);
 
         {
             InSequence seq;
@@ -158,43 +187,25 @@ namespace
         client->setUseMD5(true);
 
         QByteArray authCookie = makeAuthCookie();
-        TlvList authCookieTlv;
-        authCookieTlv.append(Tlv(0x06, authCookie));
-
+        TlvList authCookieTlv = makeAuthCookieTlvList(authCookie);
         QByteArray firstPacketData = QByteArray("\x00\x00\x00\x01", 4);
+        TlvList uinTlv = makeUinTlvList("123456");
+        TlvList closeConnectionTlvs = makeCloseConnectionTlvList("123456", authCookie);
+        QByteArray saltArray = makeSaltArray();
 
         {
             InSequence seq;
             EXPECT_CALL(*socket, flap(0x01, firstPacketData));
-
-            TlvList uinTlv;
-            uinTlv.append(Tlv(0x01, "123456"));
-            uinTlv.append(Tlv(0x4b, QByteArray()));
-            uinTlv.append(Tlv(0x5a, QByteArray()));
             EXPECT_CALL(*socket, snac(ICQ_SNACxFOOD_LOGIN, AuthorizationSnacHandler::SnacAuthKeyRequest, _, uinTlv.toByteArray()));
-
             EXPECT_CALL(*socket, snac(ICQ_SNACxFOOD_LOGIN, AuthorizationSnacHandler::SnacAuthMd5Login, _, Truly(IsPacketMd5Correct(m_salt, m_password))));
-
             EXPECT_CALL(*socket, disconnectFromHost());
             EXPECT_CALL(*socket, connectToHost(m_bosHost, m_bosPort));
             EXPECT_CALL(*socket, flap(0x01, firstPacketData + authCookieTlv.toByteArray()));
         }
 
         socket->provokePacketSignal(0x01, firstPacketData);
-
-        ByteArrayBuilder builder;
-        builder.appendWord(m_salt.size());
-        builder.appendBytes(m_salt);
-
-        socket->provokePacketSignal(0x02, makeSnacPacket(0x02, ICQ_SNACxFOOD_LOGIN, AuthorizationSnacHandler::SnacAuthKeyResponse, 0, 0, builder.getArray()));
-
-
-        TlvList closeConnectionTlvs;
-        closeConnectionTlvs.append(Tlv(0x01, "123456"));
-        closeConnectionTlvs.append(Tlv(0x05, m_bosServer.toAscii()));
-        closeConnectionTlvs.append(Tlv(0x06, authCookie));
+        socket->provokePacketSignal(0x02, makeSnacPacket(0x02, ICQ_SNACxFOOD_LOGIN, AuthorizationSnacHandler::SnacAuthKeyResponse, 0, 0, saltArray));
         socket->provokePacketSignal(0x02, makeSnacPacket(0x02, ICQ_SNACxFOOD_LOGIN, AuthorizationSnacHandler::SnacAuthLoginReply, 0, 0, closeConnectionTlvs.toByteArray()));
-
         socket->provokePacketSignal(0x04, QByteArray());
         socket->provokePacketSignal(0x01, firstPacketData);
     }
