@@ -41,11 +41,11 @@ email                : vovan@shutoff.ru
 
 using namespace SIM;
 
-ProfileSelectDialog::ProfileSelectDialog() : QDialog(NULL)
+ProfileSelectDialog::ProfileSelectDialog() 
+	: QDialog(NULL)
+	, m_ui ( new Ui::ProfileSelectDialog )
 {
-    m_ui = new Ui::ProfileSelectDialog;
     m_ui->setupUi(this);
-
     QSettings settings;
     m_profile = settings.value("Profile").toString();
 
@@ -124,6 +124,9 @@ void ProfileSelectDialog::profileChanged(int index)
         ProfileManager::instance()->selectProfile(m_ui->cmbProfile->currentText());
         getClientManager()->load();
         QStringList clients = getClientManager()->clientList();
+		
+		for (int i=0;i<clients.count();++i)
+			log(L_DEBUG, "printing client %s", qPrintable(clients.at(i)));
 
         m_ui->groupBoxPasswords->show();
 

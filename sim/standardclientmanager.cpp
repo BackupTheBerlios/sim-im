@@ -20,6 +20,7 @@ void StandardClientManager::addClient(ClientPtr client)
 {
     log(L_DEBUG, "Adding client: %s", qPrintable(client->name()));
     m_clients.insert(client->name(), client);
+	m_sortedClientNamesList << client->name();
 }
 
 ClientPtr StandardClientManager::client(const QString& name)
@@ -138,6 +139,7 @@ bool StandardClientManager::load_old()
                 client->deserialize(&cfg);
                 addClient(client);
                 cfg.clear();
+				client.clear();
             }
             QString clientName = line.mid(1, line.length() - 2);
             QString pluginName = getToken(clientName, '/');
@@ -178,6 +180,7 @@ bool StandardClientManager::load_old()
         client->deserialize(&cfg);
         addClient(client);
         cfg.clear();
+		client.clear();
     }
     return m_clients.count() > 0;
 }
@@ -244,8 +247,23 @@ ClientPtr StandardClientManager::createClient(const QString& name)
 
 QStringList StandardClientManager::clientList()
 {
-    return m_clients.keys();
+	//m_clients.keys();
+    return m_sortedClientNamesList;
+	
 }
 
+ClientPtr StandardClientManager::getClientByProfileName(const QString& name)
+{
+	return m_clients[name];
+}
+
+ClientPtr StandardClientManager::deleteClient(const QString& name)
+{
+
+	ClientPtr delClient(getClientByProfileName(name));
+	m_clients.erase(m_clients.find(name));
+	m_sortedClientNamesList.removeOne(QString(name));
+	return delClient;
+}
 
 } // namespace SIM

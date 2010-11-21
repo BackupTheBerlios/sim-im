@@ -33,7 +33,7 @@ private:
     QString m_text;
     QPixmap m_icon;
     int m_group;
-    unsigned int m_flags;
+    int m_flags;
 };
 
 typedef QSharedPointer<ICQStatus> ICQStatusPtr;
