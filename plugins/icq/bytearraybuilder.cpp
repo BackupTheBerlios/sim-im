@@ -1,7 +1,11 @@
 #include "bytearraybuilder.h"
 
-#include <arpa/inet.h>
-
+#ifdef WIN32
+	#include <winsock2.h>
+	#include <ws2tcpip.h>
+#else
+	#include <arpa/inet.h>
+#endif
 ByteArrayBuilder::ByteArrayBuilder(Endianness endianness) : m_endianness(endianness)
 {
 }
