@@ -261,11 +261,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "transparent", "plugins\tran
 		{9204D5B1-55E6-4F3B-B373-8C3B04C53F1A} = {9204D5B1-55E6-4F3B-B373-8C3B04C53F1A}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gmock_coretest", "C:\libraries\gmock-1.5.0\msvc\gmock_coretest.vcproj", "{F10D22F8-AC7B-4213-8720-608E7D878CD2}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gmock", "testing\gmock.vcproj", "{34681F0D-CE45-415D-B5F2-5C662DFE3BD5}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gmock_main", "testing\gmock_main.vcproj", "{E4EF614B-30DF-4954-8C53-580A0BF6B589}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gmock_coretest", "testing\gmock_coretest.vcproj", "{F10D22F8-AC7B-4213-8720-608E7D878CD2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gmock_simtest", "testing\gmock_simtest.vcproj", "{8BBCEA02-4F54-461C-9287-BCF3AD0A2DF0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -553,14 +555,6 @@ Global
 		{39127936-1D9E-419F-94D5-6F4230D62191}.Release|Win32.ActiveCfg = Release|Win32
 		{39127936-1D9E-419F-94D5-6F4230D62191}.Release|Win32.Build.0 = Release|Win32
 		{39127936-1D9E-419F-94D5-6F4230D62191}.RelWithDebInfo|Win32.ActiveCfg = Release|Win32
-		{F10D22F8-AC7B-4213-8720-608E7D878CD2}.Debug|Win32.ActiveCfg = Debug|Win32
-		{F10D22F8-AC7B-4213-8720-608E7D878CD2}.Debug|Win32.Build.0 = Debug|Win32
-		{F10D22F8-AC7B-4213-8720-608E7D878CD2}.MinSizeRel|Win32.ActiveCfg = Release|Win32
-		{F10D22F8-AC7B-4213-8720-608E7D878CD2}.MinSizeRel|Win32.Build.0 = Release|Win32
-		{F10D22F8-AC7B-4213-8720-608E7D878CD2}.Release|Win32.ActiveCfg = Release|Win32
-		{F10D22F8-AC7B-4213-8720-608E7D878CD2}.Release|Win32.Build.0 = Release|Win32
-		{F10D22F8-AC7B-4213-8720-608E7D878CD2}.RelWithDebInfo|Win32.ActiveCfg = Release|Win32
-		{F10D22F8-AC7B-4213-8720-608E7D878CD2}.RelWithDebInfo|Win32.Build.0 = Release|Win32
 		{34681F0D-CE45-415D-B5F2-5C662DFE3BD5}.Debug|Win32.ActiveCfg = Debug|Win32
 		{34681F0D-CE45-415D-B5F2-5C662DFE3BD5}.Debug|Win32.Build.0 = Debug|Win32
 		{34681F0D-CE45-415D-B5F2-5C662DFE3BD5}.MinSizeRel|Win32.ActiveCfg = Release|Win32
@@ -577,6 +571,22 @@ Global
 		{E4EF614B-30DF-4954-8C53-580A0BF6B589}.Release|Win32.Build.0 = Release|Win32
 		{E4EF614B-30DF-4954-8C53-580A0BF6B589}.RelWithDebInfo|Win32.ActiveCfg = Release|Win32
 		{E4EF614B-30DF-4954-8C53-580A0BF6B589}.RelWithDebInfo|Win32.Build.0 = Release|Win32
+		{F10D22F8-AC7B-4213-8720-608E7D878CD2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F10D22F8-AC7B-4213-8720-608E7D878CD2}.Debug|Win32.Build.0 = Debug|Win32
+		{F10D22F8-AC7B-4213-8720-608E7D878CD2}.MinSizeRel|Win32.ActiveCfg = Release|Win32
+		{F10D22F8-AC7B-4213-8720-608E7D878CD2}.MinSizeRel|Win32.Build.0 = Release|Win32
+		{F10D22F8-AC7B-4213-8720-608E7D878CD2}.Release|Win32.ActiveCfg = Release|Win32
+		{F10D22F8-AC7B-4213-8720-608E7D878CD2}.Release|Win32.Build.0 = Release|Win32
+		{F10D22F8-AC7B-4213-8720-608E7D878CD2}.RelWithDebInfo|Win32.ActiveCfg = Release|Win32
+		{F10D22F8-AC7B-4213-8720-608E7D878CD2}.RelWithDebInfo|Win32.Build.0 = Release|Win32
+		{8BBCEA02-4F54-461C-9287-BCF3AD0A2DF0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8BBCEA02-4F54-461C-9287-BCF3AD0A2DF0}.Debug|Win32.Build.0 = Debug|Win32
+		{8BBCEA02-4F54-461C-9287-BCF3AD0A2DF0}.MinSizeRel|Win32.ActiveCfg = Release|Win32
+		{8BBCEA02-4F54-461C-9287-BCF3AD0A2DF0}.MinSizeRel|Win32.Build.0 = Release|Win32
+		{8BBCEA02-4F54-461C-9287-BCF3AD0A2DF0}.Release|Win32.ActiveCfg = Release|Win32
+		{8BBCEA02-4F54-461C-9287-BCF3AD0A2DF0}.Release|Win32.Build.0 = Release|Win32
+		{8BBCEA02-4F54-461C-9287-BCF3AD0A2DF0}.RelWithDebInfo|Win32.ActiveCfg = Release|Win32
+		{8BBCEA02-4F54-461C-9287-BCF3AD0A2DF0}.RelWithDebInfo|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
