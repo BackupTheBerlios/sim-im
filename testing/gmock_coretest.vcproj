@@ -76,7 +76,7 @@
 			/>
 			<Tool
 				Name="VCManifestTool"
-				AdditionalManifestFiles="E:\sim-icq\simsim\sim-im\sim-td\Debug\sim.exe.intermediate.manifest"
+				AdditionalManifestFiles="$(SolutionDir)$(ConfigurationName)\sim.exe.intermediate.manifest;$(SolutionDir)plugins\_core\$(ConfigurationName)\_core.dll.intermediate.manifest"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -153,6 +153,7 @@
 			/>
 			<Tool
 				Name="VCManifestTool"
+				AdditionalManifestFiles="$(SolutionDir)$(ConfigurationName)\sim.exe.intermediate.manifest;$(SolutionDir)plugins\_core\$(ConfigurationName)\_core.dll.intermediate.manifest"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -174,11 +175,9 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{34681F0D-CE45-415D-B5F2-5C662DFE3BD5}"
-			RelativePathToProject=".\testing\gmock.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{E4EF614B-30DF-4954-8C53-580A0BF6B589}"
-			RelativePathToProject=".\testing\gmock_main.vcproj"
 		/>
 	</References>
 	<Files>
@@ -200,7 +199,7 @@
 				>
 			</File>
 			<File
-				RelativePath="E:\sim-icq\simsim\sim-im\sim-td\plugins\_core\tests\testuserviewmodel.cpp"
+				RelativePath="..\plugins\_core\tests\testuserviewmodel.cpp"
 				>
 			</File>
 		</Filter>
