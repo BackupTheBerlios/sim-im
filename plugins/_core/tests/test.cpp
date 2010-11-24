@@ -20,17 +20,22 @@ void registerEvents()
     SIM::getEventHub()->registerEvent(SIM::LogEvent::create());
 }
 
+StubObjects::StubImageStorage* imagestorage;
+
 int main(int argc, char** argv)
 {
     QApplication app(argc, argv);
     ::testing::InitGoogleTest(&argc, argv);
     ::testing::InitGoogleMock(&argc, argv);
     SIM::createEventHub();
-    StubObjects::StubImageStorage imagestorage;
-    SIM::setImageStorage(&imagestorage);
+	SIM::setImageStorage(imagestorage);
+    //SIM::setImageStorage(&imagestorage);
     SIM::createCommandHub();
     SIM::createContactList();
     registerEvents();
-    return RUN_ALL_TESTS();
+	int ret = RUN_ALL_TESTS();
+	printf("Press Enter...");
+	gets(new char [2]);
+    return ret;
 }
 

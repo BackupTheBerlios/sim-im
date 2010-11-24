@@ -107,7 +107,7 @@ namespace StubObjects
             return QList<SIM::IMContactPtr>();
         }
 
-        virtual QString retrievePasswordLink()
+		virtual QString retrievePasswordLink()
         {
             return QString();
         }
