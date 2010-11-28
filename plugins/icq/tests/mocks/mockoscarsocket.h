@@ -3,6 +3,7 @@
 
 #include <gmock/gmock.h>
 #include "oscarsocket.h"
+#include "bytearraybuilder.h"
 
 namespace MockObjects
 {
@@ -18,6 +19,17 @@ namespace MockObjects
         void provokeConnectedSignal()
         {
             emit connected();
+        }
+
+        QByteArray makeSnacPacket(int type, int subtype, int requestId, const QByteArray& payload)
+        {
+            ByteArrayBuilder builder;
+            builder.appendWord(type);
+            builder.appendWord(subtype);
+            builder.appendWord(0); // Flags
+            builder.appendDword(requestId);
+            builder.appendBytes(payload);
+            return builder.getArray();
         }
 
         void provokePacketSignal(int channel, const QByteArray& arr)

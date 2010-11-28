@@ -20,6 +20,8 @@ public:
     static const int SnacAuthKeyResponse = 0x07;
 
 private:
+    QByteArray cryptPassword(const QString& password);
+
     bool handleAuthKeyResponse(const QByteArray& data);
     bool handleLoginRedirect(const QByteArray& data);
 

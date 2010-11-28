@@ -71,14 +71,4 @@ namespace
 
         client->changeStatus(client->getDefaultStatus("online"));
     }
-
-//    TEST_F(TestIcqClient, loginSequence)
-//    {
-//        Helper::SignalEmitter emitter;
-//        emitter.connect(&emitter, SIGNAL(connected()), client, SLOT(oscarSocketConnected()));
-//        MockOscarSocket* oscarSocket = new MockObjects::MockOscarSocket();
-//        client->setOscarSocket(oscarSocket);
-
-//        emitter.emitConnectedSignal();
-//    }
 }
