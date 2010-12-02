@@ -63,7 +63,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(SolutionDir)$(ConfigurationName)\sim.lib"
+				AdditionalDependencies="$(SolutionDir)$(ConfigurationName)\sim.lib C:\libraries\gmock-1.5.0\msvc\Debug\gmock.lib C:\libraries\gtest-1.5.0\msvc\gtest-md\Debug\gtestd.lib"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="1"
