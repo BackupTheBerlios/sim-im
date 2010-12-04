@@ -6,7 +6,6 @@
 	ProjectGUID="{F10D22F8-AC7B-4213-8720-608E7D878CD2}"
 	RootNamespace="gmock_test"
 	Keyword="Win32Proj"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -42,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../include"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)testing\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -67,8 +66,6 @@
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="1"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -89,6 +86,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -120,7 +120,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="../include"
+				AdditionalIncludeDirectories="$(SolutionDir)testing\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
@@ -144,8 +144,6 @@
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -168,6 +166,9 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -175,9 +176,11 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{34681F0D-CE45-415D-B5F2-5C662DFE3BD5}"
+			RelativePathToProject="..\..\..\libraries\gmock-1.5.0\msvc\gmock.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{E4EF614B-30DF-4954-8C53-580A0BF6B589}"
+			RelativePathToProject="..\..\..\libraries\gmock-1.5.0\msvc\gmock_main.vcproj"
 		/>
 	</References>
 	<Files>
@@ -187,16 +190,52 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="E:\sim-icq\simsim\sim-im\sim-td\plugins\_core\tests\test.cpp"
+				RelativePath="..\plugins\_core\tests\test.cpp"
 				>
 			</File>
 			<File
-				RelativePath="E:\sim-icq\simsim\sim-im\sim-td\plugins\_core\tests\testcommonstatus.cpp"
+				RelativePath="..\plugins\_core\tests\testcommonstatus.cpp"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="E:\sim-icq\simsim\sim-im\sim-td\plugins\_core\tests\testcoreplugin.cpp"
+				RelativePath="..\plugins\_core\tests\testcoreplugin.cpp"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\plugins\_core\tests\testuserviewmodel.cpp"

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="9,00"
 	Name="ALL_BUILD"
 	ProjectGUID="{5EA3473D-F924-4481-98AF-E64EEEFA1649}"
 	RootNamespace="simall"

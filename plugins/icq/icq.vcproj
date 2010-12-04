@@ -349,10 +349,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\moc_icqlocation.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\moc_icqstatus.cpp"
 					>
 				</File>
