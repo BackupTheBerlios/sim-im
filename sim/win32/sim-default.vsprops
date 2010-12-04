@@ -11,6 +11,6 @@
 	/>
 	<Tool
 		Name="VCLinkerTool"
-		AdditionalDependencies="advapi32.lib gdi32.lib kernel32.lib odbc32.lib odbccp32.lib shell32.lib user32.lib winmm.lib wsock32.lib $(QTDIR)\lib\QtCore$(Debugd)4.lib $(QTDIR)\lib\QtGui$(Debugd)4.lib $(QTDIR)\lib\qtmain$(Debugd).lib $(QTDIR)\lib\QtNetwork$(Debugd)4.lib $(QTDIR)\lib\QtSql$(Debugd)4.lib $(QTDIR)\lib\QtSvg$(Debugd)4.lib $(QTDIR)\lib\QtTest$(Debugd)4.lib $(QTDIR)\lib\QtUiTools$(Debugd).lib $(QTDIR)\lib\QtXml$(Debugd)4.lib $(QTDIR)\lib\QtXmlPatterns$(Debugd)4.lib $(QTDIR)\lib\phonon$(Debugd)4.lib"
+		AdditionalDependencies="advapi32.lib gdi32.lib kernel32.lib shell32.lib user32.lib winmm.lib wsock32.lib $(QTDIR)\lib\QtCore$(Debugd)4.lib $(QTDIR)\lib\QtGui$(Debugd)4.lib $(QTDIR)\lib\qtmain$(Debugd).lib $(QTDIR)\lib\QtNetwork$(Debugd)4.lib $(QTDIR)\lib\QtSql$(Debugd)4.lib $(QTDIR)\lib\QtSvg$(Debugd)4.lib $(QTDIR)\lib\QtTest$(Debugd)4.lib $(QTDIR)\lib\QtUiTools$(Debugd).lib $(QTDIR)\lib\QtXml$(Debugd)4.lib $(QTDIR)\lib\QtXmlPatterns$(Debugd)4.lib $(QTDIR)\lib\phonon$(Debugd)4.lib"
 	/>
 </VisualStudioPropertySheet>
