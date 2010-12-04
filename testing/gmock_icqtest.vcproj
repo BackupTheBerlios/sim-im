@@ -63,7 +63,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(SolutionDir)$(ConfigurationName)\sim.lib $(SolutionDir)$(ConfigurationName)\plugins\icq.lib"
+				AdditionalDependencies="$(SolutionDir)$(ConfigurationName)\sim.lib $(SolutionDir)$(ConfigurationName)\plugins\icq.lib C:\libraries\gmock-1.5.0\msvc\Debug\gmock.lib C:\libraries\gtest-1.5.0\msvc\gtest-md\Debug\gtestd.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
@@ -226,6 +226,10 @@
 			</File>
 			<File
 				RelativePath="..\plugins\icq\tests\testoscarsocket.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\plugins\icq\tests\testservicesnachandler.cpp"
 				>
 			</File>
 			<File
