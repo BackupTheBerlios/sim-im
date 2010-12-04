@@ -33,9 +33,10 @@ int main(int argc, char** argv)
     SIM::createCommandHub();
     SIM::createContactList();
     registerEvents();
-	int ret = RUN_ALL_TESTS();
-	printf("Press Enter...");
-	gets(new char [2]);
-    return ret;
+    int ret = RUN_ALL_TESTS();
+#ifdef WIN32
+    getchar();
+#endif
+	return ret;
 }
 
