@@ -234,7 +234,6 @@ SET(sim_tests_srcs
 
 SET(sim_tests_hdrs
     tests/mocks/mockclient.h
-    tests/mockprotocol.h
     tests/stubs/stubclient.h
     tests/stubs/stubimagestorage.h
     tests/stubs/stubimcontact.h

@@ -37,6 +37,7 @@
 //#include "icqservice.h"
 //#include "icqicmb.h"
 #include "authorizationsnachandler.h"
+#include "servicesnachandler.h"
 
 #include "icq.h"
 #include "icqbuffer.h"
@@ -623,6 +624,8 @@ public:
 
     SnacHandler* snacHandler(int type);
 
+    bool isAim() const;
+
     // reimplement socket() to get correct Buffer
 //    virtual ICQClientSocket *socket() { return static_cast<ICQClientSocket*>(TCPClient::socket()); }
 //    virtual ICQClientSocket *createClientSocket() { return new ICQClientSocket(this, createSocket()); }
@@ -747,8 +750,6 @@ protected:
 //    void snac_login(unsigned short, unsigned short);
 //    void parseRosterItem(unsigned short type, const QString &str,unsigned short grp_id,
 //                         unsigned short id, TlvList *inf, bool &bIgnoreTime);
-    void chn_login(const QByteArray& data);
-    void chn_close(const QByteArray& data);
 //    void listsRequest();
 //    void locationRequest();
 //    void buddyRequest();
@@ -765,7 +766,6 @@ protected:
 //    class SSBISocket *getSSBISocket();
 //    unsigned long fullStatus(unsigned status);
 //    unsigned long fullStatus(const SIM::IMStatusPtr& status);
-    QByteArray cryptPassword();
 //    virtual void connect_ready();
 //    virtual void packet_ready();
 //    const char* error_message(unsigned short error);
@@ -896,9 +896,10 @@ private:
     State m_state;
 
     AuthorizationSnacHandler* m_authSnac;
+    ServiceSnacHandler* m_serviceSnac;
     mapSnacHandlers m_snacHandlers;
 
-    friend class AuthorizationSnacHandler;
+    //friend class AuthorizationSnacHandler;
 
     //bool m_bBirthdayInfoDisplayed;
 };

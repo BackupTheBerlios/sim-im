@@ -6,7 +6,8 @@ ICQStatus::ICQStatus(const QString& id, const QString& name, bool hasText, const
     m_name(name),
     m_hasText(hasText),
     m_text(defaultText),
-    m_icon(icon)
+    m_icon(icon),
+    m_flags(0)
 {
 }
 

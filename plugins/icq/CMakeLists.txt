@@ -27,7 +27,6 @@ SET(icq_SRCS
 #        icqinfo.cpp
 #        icqlists.cpp
 #        icqlocation.cpp
-        icqlogin.cpp
 #        icqmessage.cpp
 #        icqpicture.cpp
 #        icqping.cpp
@@ -37,6 +36,8 @@ SET(icq_SRCS
 #        icqssbi.cpp
         icqstatus.cpp
         oscarsocket.cpp
+        rateinfo.cpp
+        servicesnachandler.cpp
         standardoscarsocket.cpp
 #        icqvarious.cpp
 #        interestsinfo.cpp
@@ -84,6 +85,8 @@ SET(icq_HDRS
 #        icqssbi.h
         icqstatus.h
         oscarsocket.h
+        rateinfo.h
+        servicesnachandler.h
         standardoscarsocket.h
 #        interestsinfo.h
 #        moreinfo.h
@@ -147,6 +150,7 @@ SET(icq_test_sources
     tests/testbytearraybuilder.cpp
     tests/testbytearrayparser.cpp
     tests/testauthorizationsnachandler.cpp
+    tests/testservicesnachandler.cpp
     tests/testtlv.cpp
     tests/testtlvlist.cpp
 )

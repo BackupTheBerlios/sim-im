@@ -4,10 +4,11 @@
 
 #include <QObject>
 #include <QByteArray>
+#include "icq_defines.h"
 
 class ICQClient;
 class ICQBuffer;
-class SnacHandler : public QObject
+class ICQ_EXPORT SnacHandler : public QObject
 {
     Q_OBJECT
 public:

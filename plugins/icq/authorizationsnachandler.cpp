@@ -238,7 +238,7 @@ bool AuthorizationSnacHandler::handleNewConnection(const QByteArray& data)
         return true;
     }
     if(client()->clientPersistentData->owner.getUin() && !client()->getUseMD5()) {
-        QByteArray pswd = client()->cryptPassword();
+        QByteArray pswd = cryptPassword(client()->password());
         log(L_DEBUG, "Login %lu [%s]", client()->clientPersistentData->owner.getUin(), /*pswd.c_str()*/"");
         QString uin;
         uin.sprintf("%lu", client()->clientPersistentData->owner.getUin());
@@ -292,4 +292,27 @@ bool AuthorizationSnacHandler::handleCloseConnection(const QByteArray& data)
 QByteArray AuthorizationSnacHandler::magicHashString()
 {
     return QByteArray("AOL Instant Messenger (SM)");
+}
+
+QByteArray AuthorizationSnacHandler::cryptPassword(const QString& password)
+{
+    unsigned char xor_table[] =
+        {
+            0xf3, 0x26, 0x81, 0xc4, 0x39, 0x86, 0xdb, 0x92,
+            0x71, 0xa3, 0xb9, 0xe6, 0x53, 0x7a, 0x95, 0x7c
+        };
+    QByteArray pswd = password.toAscii();
+    char buf[8];
+    int len=0;
+    for (int j = 0; j < 8; j++)
+    {
+        char c = pswd[j];
+        if (c == 0)
+            break;
+        c = (char)(c ^ xor_table[j]);
+        buf[j] = c;
+        len++;
+    }
+    QByteArray res( buf,len );
+    return res;
 }
