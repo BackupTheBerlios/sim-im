@@ -2,7 +2,7 @@
 #include <QDir>
 #include "profilemanager.h"
 #include "log.h"
-#include "event.h"
+//#include "event.h"
 
 namespace SIM
 {

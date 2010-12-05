@@ -27,7 +27,7 @@ email                : vovan@shutoff.ru
 #include <QByteArray>
 
 #include "buffer.h"
-#include "event.h"
+//#include "event.h"
 #include "log.h"
 #include "misc.h"
 //#include "unquot.h"

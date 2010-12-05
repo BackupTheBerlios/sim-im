@@ -62,10 +62,12 @@ namespace
     TEST_F(TestCommandHub, CommandSetDeletion)
     {
         CommandSetPtr newcmdset = getCommandHub()->createCommandSet("test_command_set");
+		//getCommandHub()->createCommandSet("test_command_set");
 
-        getCommandHub()->deleteCommandSet("test_command_set");
+        getCommandHub()->deleteCommandSet("test_command_set"); //crashing
         CommandSetPtr cmdset = getCommandHub()->commandSet("test_command_set");
 
         ASSERT_FALSE(cmdset);
+
     }
 }

@@ -1,6 +1,11 @@
 #include "bytearrayparser.h"
 
-#include <arpa/inet.h>
+#ifdef WIN32
+	#include <winsock2.h>
+	#include <ws2tcpip.h>
+#else
+	#include <arpa/inet.h>
+#endif
 
 ByteArrayParser::ByteArrayParser(const QByteArray& arr, Endianness endianness) : m_array(arr), m_buffer(&m_array), m_endianness(endianness)
 {

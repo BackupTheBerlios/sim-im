@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="9,00"
 	Name="idleui"
 	ProjectGUID="{9EB50D04-E1EA-4A27-B587-B0B5523AC7F7}"
 	RootNamespace="idleui"

@@ -16,7 +16,7 @@
  ***************************************************************************/
 
 #include "log.h"
-#include "event.h"
+//#include "event.h"
 #include "events/eventhub.h"
 #include "events/logevent.h"
 

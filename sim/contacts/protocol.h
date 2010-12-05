@@ -6,7 +6,7 @@
 #include <QBitArray>
 #include "simapi.h"
 #include "plugins.h"
-#include "event.h"
+//#include "event.h"
 #include "cfg.h"
 #include "contacts/imstatus.h"
 #include "contacts/imcontact.h"

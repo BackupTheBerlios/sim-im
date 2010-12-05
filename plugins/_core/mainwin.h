@@ -20,7 +20,7 @@
 
 #include <list>
 #include "simapi.h"
-#include "event.h"
+//#include "event.h"
 #include "simgui/toolbar.h"
 
 #include <QMainWindow>
