@@ -38,6 +38,11 @@
 //#include "icqicmb.h"
 #include "authorizationsnachandler.h"
 #include "servicesnachandler.h"
+#include "ssisnachandler.h"
+#include "locationsnachandler.h"
+#include "buddysnachandler.h"
+#include "privacysnachandler.h"
+#include "icbmsnachandler.h"
 
 #include "icq.h"
 #include "icqbuffer.h"
@@ -75,7 +80,7 @@ const unsigned short ICQ_SNACxFOOD_BOS              = 0x0009;
 const unsigned short ICQ_SNACxFOOD_PING             = 0x000B;
 const unsigned short ICQ_SNACxFOOD_CHATxNAVIGATION  = 0x000D;
 const unsigned short ICQ_SNACxFOOD_CHAT			   = 0x000E;
-const unsigned short ICQ_SNACxFOOD_SSBI             = 0x0010;
+const unsigned short ICQ_SNACxFOOD_SSI             = 0x0010;
 const unsigned short ICQ_SNACxFOOD_LISTS            = 0x0013;
 const unsigned short ICQ_SNACxFOOD_VARIOUS          = 0x0015;
 const unsigned short ICQ_SNACxFOOD_LOGIN            = 0x0017;
@@ -193,6 +198,9 @@ public:
 
     virtual unsigned long getSign();
 
+    QString getUin() const { return m_uin; }
+    void setUin(const QString& uin) { m_uin = uin; }
+
     QString getServer() const { return m_server; }
     void setServer(const QString& server) { m_server = server; }
 
@@ -284,7 +292,7 @@ public:
 
     virtual void deserializeLine(const QString& key, const QString& value);
 public:
-
+    QString m_uin;
     QString m_server;
     unsigned long m_port;
     unsigned long m_contactsTime;
@@ -709,6 +717,7 @@ public:
 protected slots:
     void oscarSocketConnected();
     void oscarSocketPacket(int channel, const QByteArray& data);
+    void loginStep2();
 //    void ping();
 //    void retry(int n, void*);
 //    void interfaceDown(QString);
@@ -897,6 +906,11 @@ private:
 
     AuthorizationSnacHandler* m_authSnac;
     ServiceSnacHandler* m_serviceSnac;
+    SsiSnacHandler* m_ssiSnac;
+    LocationSnacHandler* m_locationSnac;
+    BuddySnacHandler* m_buddySnac;
+    PrivacySnacHandler* m_privacySnac;
+    IcbmSnacHandler* m_icbmSnac;
     mapSnacHandlers m_snacHandlers;
 
     //friend class AuthorizationSnacHandler;

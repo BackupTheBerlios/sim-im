@@ -20,6 +20,8 @@ public:
     virtual qint64 read(char* data, qint64 maxSize);
     virtual QByteArray read(qint64 maxSize);
 
+    virtual quint64 bytesAvailable() const;
+
     virtual qint64 write(char* data, qint64 maxSize);
     virtual qint64 write(const QByteArray& arr);
 

@@ -7,12 +7,14 @@
 namespace
 {
     using ::testing::_;
+    using ::testing::AnyNumber;
+    using ::testing::NiceMock;
     class TestServiceSnacHandler : public ::testing::Test
     {
     protected:
         virtual void SetUp()
         {
-            socket = new MockObjects::MockOscarSocket();
+            socket = new NiceMock<MockObjects::MockOscarSocket>();
             client = new ICQClient(0, "ICQ.123456", false);
             client->setOscarSocket(socket);
 
@@ -48,7 +50,7 @@ namespace
             builder.appendWord(rateGroups);
             for(int group = 0; group < rateGroups; group++)
             {
-                builder.appendWord(group);
+                builder.appendWord(group + 1);
                 // More or less arbitrary values:
                 builder.appendDword(0x50);
                 builder.appendDword(0x9c4);
@@ -63,7 +65,7 @@ namespace
 
             for(int group = 0; group < rateGroups; group++)
             {
-                builder.appendWord(group);
+                builder.appendWord(group + 1);
                 builder.appendWord(2); // Two entries below
                 builder.appendDword(0x00010002);
                 builder.appendDword(0x00010004);
@@ -71,8 +73,13 @@ namespace
             return socket->makeSnacPacket(ICQ_SNACxFOOD_SERVICE, ServiceSnacHandler::SnacServiceRateInfo, 0, builder.getArray());
         }
 
+        QByteArray makeAcknowledgedRateInfoClassesPacket()
+        {
+            return QByteArray("\x00\x01\x00\x02\x00\x03\x00\x04\x00\x05", 10);
+        }
+
         ICQClient* client;
-        MockObjects::MockOscarSocket* socket;
+        NiceMock<MockObjects::MockOscarSocket>* socket;
         ServiceSnacHandler* handler;
     };
 
@@ -92,7 +99,9 @@ namespace
 
     TEST_F(TestServiceSnacHandler, negotiation_rateInfoReply)
     {
-        EXPECT_CALL(*socket, snac(ICQ_SNACxFOOD_SERVICE, ServiceSnacHandler::SnacServiceRateInfoAck, _, _));
+        QByteArray acknowledgedRateInfoClasses = makeAcknowledgedRateInfoClassesPacket();
+        EXPECT_CALL(*socket, snac(_, _, _, _)).Times(AnyNumber()); // Lest the gmock fail the test
+        EXPECT_CALL(*socket, snac(ICQ_SNACxFOOD_SERVICE, ServiceSnacHandler::SnacServiceRateInfoAck, _, acknowledgedRateInfoClasses));
         QByteArray rateInfoReply = makeRateInfoReply();
         socket->provokePacketSignal(0x02, rateInfoReply);
     }
@@ -104,5 +113,6 @@ namespace
 
         RateInfoPtr info = handler->rateInfo(1);
         ASSERT_TRUE(info);
+        ASSERT_TRUE(info->hasSnac(0x0001, 0x0002));
     }
 }

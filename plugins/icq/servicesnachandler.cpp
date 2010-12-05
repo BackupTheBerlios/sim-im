@@ -5,6 +5,7 @@
 #include "log.h"
 
 using SIM::log;
+using SIM::L_DEBUG;
 using SIM::L_ERROR;
 
 ServiceSnacHandler::ServiceSnacHandler(ICQClient* client) : SnacHandler(client, ICQ_SNACxFOOD_SERVICE)
@@ -23,7 +24,8 @@ bool ServiceSnacHandler::process(unsigned short subtype, const QByteArray& data,
 
     case SnacServiceRateInfo:
         parseRateInfo(data);
-        return requestRights();
+        emit initiateLoginStep2();
+        return requestSelfInfo();
     }
 
     return true;
@@ -79,49 +81,73 @@ bool ServiceSnacHandler::parseRateInfo(const QByteArray& data)
     int classes = parser.readWord();
     for(int i = 0; i < classes; i++)
     {
-        int id = parser.readWord();
-        int windowSize = parser.readDword();
-        int clearLevel = parser.readDword();
-        int alertLevel = parser.readDword();
-        int limitLevel = parser.readDword();
-        int disconnectLevel = parser.readDword();
-        int currentLevel = parser.readDword();
-        int maxLevel = parser.readDword();
-        int lastTime = parser.readDword();
-        int currentState = parser.readByte();
-
-        RateInfoPtr info = RateInfoPtr(new RateInfo(id));
-        info->setWindowSize(windowSize);
-        info->setLevels(clearLevel, alertLevel, limitLevel, disconnectLevel, maxLevel);
-        info->setCurrentLevel(currentLevel);
+        RateInfoPtr info = readNextRateInfoClass(parser);
         m_rateInfoList.append(info);
     }
 
+    ByteArrayBuilder builder;
     for(int classnum = 0; classnum < classes; classnum++)
     {
-        int id = parser.readWord();
-        int entries = parser.readWord();
-        RateInfoPtr info = rateInfo(id);
-        if(!info)
-        {
-            log(L_ERROR, "Invalid rate info packet");
+        int classid = readNextRateInfoGroup(parser);
+        if(classid < 0)
             return false;
-        }
-        for(int entrynum = 0; entrynum < entries; entrynum++)
-        {
-            int type = parser.readWord();
-            int subtype = parser.readWord();
-            info->addSnac(type, subtype);
-        }
+        builder.appendWord(classid);
     }
 
-    socket->snac(getType(), SnacServiceRateInfoAck, 0, QByteArray());
+    socket->snac(getType(), SnacServiceRateInfoAck, 0, builder.getArray());
     return true;
 }
 
-bool ServiceSnacHandler::requestRights()
+RateInfoPtr ServiceSnacHandler::readNextRateInfoClass(ByteArrayParser& parser)
 {
+    int id = parser.readWord();
+    int windowSize = parser.readDword();
+    int clearLevel = parser.readDword();
+    int alertLevel = parser.readDword();
+    int limitLevel = parser.readDword();
+    int disconnectLevel = parser.readDword();
+    int currentLevel = parser.readDword();
+    int maxLevel = parser.readDword();
+    int lastTime = parser.readDword();
+    Q_UNUSED(lastTime);
+    int currentState = parser.readByte();
+    Q_UNUSED(currentState);
+    log(L_DEBUG, "Rate info class: %04x", id);
 
+    RateInfoPtr info = RateInfoPtr(new RateInfo(id));
+    info->setWindowSize(windowSize);
+    info->setLevels(clearLevel, alertLevel, limitLevel, disconnectLevel, maxLevel);
+    info->setCurrentLevel(currentLevel);
+    return info;
+}
+
+int ServiceSnacHandler::readNextRateInfoGroup(ByteArrayParser& parser)
+{
+    int id = parser.readWord();
+    int entries = parser.readWord();
+    log(L_DEBUG, "Rate info group: %04x, entries: %04x", id, entries);
+    RateInfoPtr info = rateInfo(id);
+    if(!info)
+    {
+        log(L_ERROR, "Invalid rate info packet: %d/%d", id, entries);
+        return -1;
+    }
+    for(int entrynum = 0; entrynum < entries; entrynum++)
+    {
+        int type = parser.readWord();
+        int subtype = parser.readWord();
+        info->addSnac(type, subtype);
+        log(L_DEBUG, "  type: %04x, subtype: %04x", type, subtype);
+    }
+    return id;
+}
+
+bool ServiceSnacHandler::requestSelfInfo()
+{
+    OscarSocket* socket = client()->oscarSocket();
+    Q_ASSERT(socket);
+
+    socket->snac(ICQ_SNACxFOOD_SERVICE, SnacServiceSelfInfoRequest, 0, QByteArray());
     return true;
 }
 

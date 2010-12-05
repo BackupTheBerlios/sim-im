@@ -62,27 +62,23 @@ bool AuthorizationSnacHandler::handleAuthKeyResponse(const QByteArray& data)
 
     ByteArrayParser parser(data);
     log(L_DEBUG, "Sending MD5 key");
-    if(!client()->clientPersistentData->owner.getScreen().isEmpty() || client()->clientPersistentData->owner.getUin()) {
+    if(!client()->clientPersistentData->owner.getScreen().isEmpty() || !client()->clientPersistentData->getUin().isEmpty()) {
         int keylength = parser.readWord();
         QByteArray md5_key = parser.readBytes(keylength);
 
         TlvList tlvs;
 
-        if (client()->clientPersistentData->owner.getUin()){
-            QString uin;
-            uin.sprintf("%lu", client()->clientPersistentData->owner.getUin());
-            tlvs.append(Tlv(0x01, uin.toAscii()));
-        }
-        else
-        {
-            tlvs.append(Tlv(0x01, client()->clientPersistentData->owner.getScreen().toUtf8()));
-        }
+        if(client()->clientPersistentData->getUin().isEmpty())
+            return false;
+
+        tlvs.append(Tlv(0x01, client()->clientPersistentData->getUin().toAscii()));
+
         QByteArray hash = QCryptographicHash::hash(md5_key +
                                                    client()->password().toAscii() +
                                                    magicHashString(), QCryptographicHash::Md5);
         tlvs.append(Tlv(0x25, hash));
 
-        if(client()->clientPersistentData->owner.getUin()) {
+        if(!client()->clientPersistentData->getUin().isEmpty()) {
             tlvs.append(Tlv(0x03, "ICQBasic"));
             tlvs.append(Tlv::fromUint16(0x16, 0x010a));
             tlvs.append(Tlv::fromUint16(0x17, 0x0014)); // major
@@ -237,16 +233,13 @@ bool AuthorizationSnacHandler::handleNewConnection(const QByteArray& data)
         m_authCookie.clear();
         return true;
     }
-    if(client()->clientPersistentData->owner.getUin() && !client()->getUseMD5()) {
+    if(!client()->clientPersistentData->getUin().isEmpty() && !client()->getUseMD5()) {
         QByteArray pswd = cryptPassword(client()->password());
-        log(L_DEBUG, "Login %lu [%s]", client()->clientPersistentData->owner.getUin(), /*pswd.c_str()*/"");
-        QString uin;
-        uin.sprintf("%lu", client()->clientPersistentData->owner.getUin());
 
         ByteArrayBuilder builder;
         builder.appendDword(1);
         TlvList list;
-        list.append(Tlv(0x01, uin.toAscii()));
+        list.append(Tlv(0x01, client()->clientPersistentData->getUin().toAscii()));
         list.append(Tlv(0x02, pswd));
         list.append(Tlv(0x03, QByteArray("ICQBasic")));
         list.append(Tlv::fromUint16(0x0016, 0x10a));
@@ -270,12 +263,8 @@ bool AuthorizationSnacHandler::handleNewConnection(const QByteArray& data)
 
         TlvList list;
 
-        if(client()->clientPersistentData->owner.getUin()) {
-            QString uin = QString::number(client()->clientPersistentData->owner.getUin());
-            list.append(Tlv(0x0001, uin.toUtf8()));
-        } else {
-            list.append(Tlv(0x0001, client()->clientPersistentData->owner.getScreen().toUtf8()));
-        }
+        list.append(Tlv(0x0001, client()->clientPersistentData->getUin().toAscii()));
+
         list.append(Tlv(0x004B, QByteArray()));
         list.append(Tlv(0x005A, QByteArray()));
         client()->oscarSocket()->snac(ICQ_SNACxFOOD_LOGIN, SnacAuthKeyRequest, 0, list.toByteArray());

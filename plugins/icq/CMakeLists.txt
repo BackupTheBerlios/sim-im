@@ -11,8 +11,10 @@ SET(icq_SRCS
 #        encodingdlg.cpp
 #        homeinfo.cpp
         authorizationsnachandler.cpp
+        buddysnachandler.cpp
         bytearraybuilder.cpp
         bytearrayparser.cpp
+        icbmsnachandler.cpp
         icq.cpp
 #        icqbos.cpp
 #        icqbuddy.cpp
@@ -35,10 +37,13 @@ SET(icq_SRCS
 #        icqservice.cpp
 #        icqssbi.cpp
         icqstatus.cpp
+        locationsnachandler.cpp
         oscarsocket.cpp
+        privacysnachandler.cpp
         rateinfo.cpp
         servicesnachandler.cpp
         standardoscarsocket.cpp
+        ssisnachandler.cpp
 #        icqvarious.cpp
 #        interestsinfo.cpp
 #        moreinfo.cpp
@@ -64,8 +69,10 @@ SET(icq_HDRS
 #        encodingdlg.h
 #        homeinfo.h
         authorizationsnachandler.h
+        buddysnachandler.h
         bytearraybuilder.h
         bytearrayparser.h
+        icbmsnachandler.h
         icq.h
 #        icqbuffer.h
         icqclient.h
@@ -84,10 +91,13 @@ SET(icq_HDRS
 #        icqsecure.h
 #        icqssbi.h
         icqstatus.h
+        locationsnachandler.h
         oscarsocket.h
+        privacysnachandler.h
         rateinfo.h
         servicesnachandler.h
         standardoscarsocket.h
+        ssisnachandler.cpp
 #        interestsinfo.h
 #        moreinfo.h
 #        pastinfo.h
@@ -151,6 +161,7 @@ SET(icq_test_sources
     tests/testbytearrayparser.cpp
     tests/testauthorizationsnachandler.cpp
     tests/testservicesnachandler.cpp
+    tests/testloginsequencestep2.cpp
     tests/testtlv.cpp
     tests/testtlvlist.cpp
 )
