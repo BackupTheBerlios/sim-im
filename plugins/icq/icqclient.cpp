@@ -77,8 +77,8 @@ using namespace SIM;
 
 
 static const char aim_server[] = "login.oscar.aol.com";
-//static const char icq_server[] = "login.icq.com";
-static const char icq_server[] = "login.messaging.aol.com";
+static const char icq_server[] = "login.icq.com";
+//static const char icq_server[] = "login.messaging.aol.com";
 
 ICQClientData::ICQClientData(ICQClient* client)
     : m_port(5190)
@@ -144,6 +144,10 @@ void ICQClientData::deserializeLine(const QString& key, const QString& value)
     if(key == "Server") {
         setServer(val);
         return;
+    }
+    if(key == "Uin") {
+        setUin(val);
+        owner.setUin(val.toULong());
     }
 	if(key == "Password") {
 		owner.client()->setCryptedPassword(val);
@@ -429,9 +433,27 @@ bool ICQClient::deserialize(Buffer* cfg)
 void ICQClient::initSnacHandlers()
 {
     m_authSnac = new AuthorizationSnacHandler(this);
+
     m_serviceSnac = new ServiceSnacHandler(this);
+    connect(m_serviceSnac, SIGNAL(initiateLoginStep2()), this, SLOT(loginStep2()));
+
+    m_ssiSnac = new SsiSnacHandler(this);
+
+    m_locationSnac = new LocationSnacHandler(this);
+
+    m_buddySnac = new BuddySnacHandler(this);
+
+    m_privacySnac = new PrivacySnacHandler(this);
+
+    m_icbmSnac = new IcbmSnacHandler(this);
+
     m_snacHandlers.insert(m_authSnac->getType(), m_authSnac);
     m_snacHandlers.insert(m_serviceSnac->getType(), m_serviceSnac);
+    m_snacHandlers.insert(m_ssiSnac->getType(), m_ssiSnac);
+    m_snacHandlers.insert(m_locationSnac->getType(), m_locationSnac);
+    m_snacHandlers.insert(m_buddySnac->getType(), m_buddySnac);
+    m_snacHandlers.insert(m_privacySnac->getType(), m_privacySnac);
+    m_snacHandlers.insert(m_icbmSnac->getType(), m_icbmSnac);
 }
 
 SIM::IMStatusPtr ICQClient::currentStatus()
@@ -444,6 +466,10 @@ void ICQClient::changeStatus(const SIM::IMStatusPtr& status)
     if((m_state == sOffline) && !status->flag(SIM::IMStatus::flOffline))
     {
         emit setStatusWidgetsBlinking(true);
+        if(clientPersistentData->getServer().isEmpty())
+        {
+            clientPersistentData->setServer(icq_server);
+        }
         oscarSocket()->connectToHost(clientPersistentData->getServer(), clientPersistentData->getPort());
     }
     //    if (status->id() == "offline")
@@ -1325,6 +1351,7 @@ void ICQClient::oscarSocketPacket(int channel, const QByteArray& data)
         int type = parser.readWord();
         int flags = parser.readWord();
         unsigned int requestId = parser.readDword();
+        log(L_DEBUG, "Snac: %04x, subtype: %04x", food, type);
 //        if (food == ICQ_SNACxFOOD_LOCATION)
 //            snac_location(type, seq);
 //        else if (food == ICQ_SNACxFOOD_BOS)
@@ -1358,6 +1385,16 @@ void ICQClient::oscarSocketPacket(int channel, const QByteArray& data)
 //    socket()->readBuffer().init(6);
 //    socket()->readBuffer().packetStart();
 //    m_bHeader = true;
+}
+
+void ICQClient::loginStep2()
+{
+    m_ssiSnac->requestRights();
+    m_ssiSnac->requestContactList();
+    m_locationSnac->requestRights();
+    m_buddySnac->requestRights();
+    m_privacySnac->requestRights();
+    m_icbmSnac->requestParametersInfo();
 }
 
 //void OscarSocket::flap(char channel)

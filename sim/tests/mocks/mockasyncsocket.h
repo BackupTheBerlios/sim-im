@@ -31,6 +31,11 @@ namespace MockObjects
             return m_read.read(maxSize);
         }
 
+        virtual quint64 bytesAvailable() const
+        {
+            return m_read.bytesAvailable();
+        }
+
         virtual qint64 write(char* data, qint64 maxSize)
         {
             return m_write.write(data, maxSize);

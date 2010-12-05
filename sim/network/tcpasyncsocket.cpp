@@ -1,4 +1,5 @@
 #include "tcpasyncsocket.h"
+#include "log.h"
 
 namespace SIM {
 
@@ -30,6 +31,11 @@ QByteArray TcpAsyncSocket::read(qint64 maxSize)
     return m_socket.read(maxSize);
 }
 
+quint64 TcpAsyncSocket::bytesAvailable() const
+{
+    return m_socket.bytesAvailable();
+}
+
 qint64 TcpAsyncSocket::write(char* data, qint64 maxSize)
 {
     return m_socket.write(data, maxSize);
@@ -52,6 +58,7 @@ void TcpAsyncSocket::slot_disconnected()
 
 void TcpAsyncSocket::slot_readyRead()
 {
+    log(L_DEBUG, "slot_readyRead");
     emit readyRead();
 }
 

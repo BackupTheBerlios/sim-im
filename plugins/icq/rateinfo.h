@@ -4,8 +4,9 @@
 #include <QList>
 #include <QSharedPointer>
 #include <QDateTime>
+#include "icq_defines.h"
 
-class RateInfo
+class ICQ_EXPORT RateInfo
 {
 public:
     RateInfo(int group);

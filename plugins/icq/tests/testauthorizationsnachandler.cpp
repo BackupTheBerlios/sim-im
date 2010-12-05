@@ -22,7 +22,7 @@ namespace
             socket = new MockObjects::MockOscarSocket();
             client = new ICQClient(0, "ICQ.123456", false);
             client->setOscarSocket(socket);
-            client->clientPersistentData->owner.setUin(123456);
+            client->clientPersistentData->setUin("123456");
             handler = static_cast<AuthorizationSnacHandler*>(client->snacHandler(ICQ_SNACxFOOD_LOGIN));
             ASSERT_TRUE(handler);
 

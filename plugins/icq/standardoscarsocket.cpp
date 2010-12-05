@@ -30,6 +30,7 @@ void StandardOscarSocket::setSocket(SIM::AsyncSocket* socket)
 
 void StandardOscarSocket::connectToHost(const QString& host, int port)
 {
+    log(L_DEBUG, "StandardOscarSocket::connectToHost(%s, %d)", qPrintable(host), port);
     m_socket->connectToHost(host, port);
 }
 
@@ -83,40 +84,46 @@ QByteArray StandardOscarSocket::makeSnacHeader(int type, int subtype, int reques
 
 void StandardOscarSocket::readyRead()
 {
-    if(m_bHeader)
+    while(m_socket->bytesAvailable() > 0)
     {
-        QByteArray header = m_socket->read(SizeOfFlapHeader);
-        if(header.size() < SizeOfFlapHeader)
+        if(m_bHeader)
         {
-            log(L_ERROR, "Truncated header");
-            emit error(I18N_NOOP("Protocol error"));
-            return;
-        }
+            QByteArray header = m_socket->read(SizeOfFlapHeader);
+            if(header.size() < SizeOfFlapHeader)
+            {
+                log(L_ERROR, "Truncated header");
+                emit error(I18N_NOOP("Protocol error"));
+                return;
+            }
 
-        char c = header.at(0);
-        if(c != FlapId)
-        {
-            log(L_ERROR, "Server send bad packet start code: %02X", c);
-            emit error(I18N_NOOP("Protocol error"));
-            return;
+            //log(L_DEBUG, "Header: %s", header.toHex().data());
+
+            char c = header.at(0);
+            if(c != FlapId)
+            {
+                log(L_ERROR, "Server send bad packet start code: %02X", c);
+                emit error(I18N_NOOP("Protocol error"));
+                return;
+            }
+            quint16 sequence;
+            m_nChannel = header.at(1);
+            sequence = ((unsigned char)header.at(2)) * 0x100 + (unsigned char)header.at(3);
+            m_bHeader = false;
+            m_packet.clear();
+            m_packetLength = ((unsigned char)header.at(4)) * 0x100 + (unsigned char)header.at(5);
+            //log(L_DEBUG, "packet length :%d (%d:%d)", m_packetLength, (unsigned char)header.at(4), (unsigned char)header.at(5));
         }
-        quint16 sequence, size;
-        m_nChannel = header.at(1);
-        sequence = header.at(2) * 0x100 + header.at(3);
-        size = header.at(4) * 0x100 + header.at(5);
-        m_bHeader = false;
-        m_packet = header;
-        m_packetLength = size + 6; // With FLAP header
-    }
-    QByteArray chunk = m_socket->read(m_packetLength - m_packet.size());
-    m_packet.append(chunk);
-    if(m_packet.size() == m_packetLength)
-    {
-        m_bHeader = true;
-        emit packet(m_nChannel, m_packet);
+        int toread = m_packetLength - m_packet.size();
+        QByteArray chunk = m_socket->read(toread);
+        m_packet.append(chunk);
+        //log(L_DEBUG, "Chunk: (toread: %d, chunksize: %d, packetLength: %d)", toread, chunk.size(), m_packetLength);
+        if(m_packet.size() == m_packetLength)
+        {
+            m_bHeader = true;
+            emit packet(m_nChannel, m_packet);
+        }
     }
 }
-
 
 void StandardOscarSocket::slot_connected()
 {

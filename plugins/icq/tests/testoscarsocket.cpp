@@ -11,7 +11,7 @@
 
 namespace Helper
 {
-    SignalSpy::SignalSpy() : connectedCalls(0)
+    SignalSpy::SignalSpy() : connectedCalls(0), packetCalls(0)
     {
 
     }
@@ -25,6 +25,7 @@ namespace Helper
     {
         receivedPacket = arr;
         receivedChannel = channel;
+        packetCalls++;
     }
 
     void SignalSpy::error(const QString& str)
@@ -167,7 +168,8 @@ namespace
 
         spy.provokeSignal();
 
-        ASSERT_EQ(packet, spy.receivedPacket);
+        QByteArray packetdata = packet.mid(6);
+        ASSERT_EQ(packetdata, spy.receivedPacket);
     }
 
     TEST_F(TestOscarSocket, readyRead_twoValidPackets)
@@ -178,11 +180,39 @@ namespace
         asyncSocket->setReadBuffer(makeValidPacket(0x11, 0x22, 0x12345678, QByteArray("first packet")));
         spy.provokeSignal();
         QByteArray packet = makeValidPacket(0x11, 0x22, 0x12345678, QByteArray("second packet"));
+        QByteArray packetdata = packet.mid(6);
         asyncSocket->setReadBuffer(packet);
 
         spy.provokeSignal();
 
-        ASSERT_EQ(packet, spy.receivedPacket);
+        ASSERT_EQ(packetdata, spy.receivedPacket);
+    }
+
+    TEST_F(TestOscarSocket, readyRead_oneBigPacket)
+    {
+        SignalSpy spy;
+        spy.connect(&spy, SIGNAL(justSignal()), socket, SLOT(readyRead()));
+        spy.connect(socket, SIGNAL(packet(int, QByteArray)), &spy, SLOT(packet(int, QByteArray)));
+        QByteArray packet = makeValidPacket(0x11, 0x22, 0x12345678, QByteArray(0x5f0, 'a'));
+        asyncSocket->setReadBuffer(packet);
+
+        spy.provokeSignal();
+
+        QByteArray packetdata = packet.mid(6);
+        ASSERT_EQ(packetdata, spy.receivedPacket);
+    }
+
+    TEST_F(TestOscarSocket, readyRead_twoValidPacketsOnce)
+    {
+        SignalSpy spy;
+        spy.connect(&spy, SIGNAL(justSignal()), socket, SLOT(readyRead()));
+        spy.connect(socket, SIGNAL(packet(int, QByteArray)), &spy, SLOT(packet(int, QByteArray)));
+        asyncSocket->setReadBuffer(makeValidPacket(0x11, 0x22, 0x12345678, QByteArray("first packet")) +
+                                   makeValidPacket(0x11, 0x22, 0x12345678, QByteArray("second packet")));
+
+        spy.provokeSignal();
+
+        ASSERT_EQ(2, spy.packetCalls);
     }
 
     TEST_F(TestOscarSocket, readyRead_invalidPacket)

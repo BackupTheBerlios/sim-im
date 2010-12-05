@@ -18,6 +18,7 @@ namespace Helper
         QString errorString;
 
         int connectedCalls;
+        int packetCalls;
 
         void provokeSignal();
 

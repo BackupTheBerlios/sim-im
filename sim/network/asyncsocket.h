@@ -18,6 +18,8 @@ namespace SIM
         virtual qint64 read(char* data, qint64 maxSize) = 0;
         virtual QByteArray read(qint64 maxSize) = 0;
 
+        virtual quint64 bytesAvailable() const = 0;
+
         virtual qint64 write(char* data, qint64 maxSize) = 0;
         virtual qint64 write(const QByteArray& arr) = 0;
 

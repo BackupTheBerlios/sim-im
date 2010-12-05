@@ -90,9 +90,6 @@ void ICQContact::deserializeLine(const QString& key, const QString& value)
     else if(key == "Caps2") {
         setCaps2(val.toULong());
     }
-    else if(key == "Uin") {
-        setUin(val.toULong());
-    }
     else if(key == "Screen") {
         setScreen(val);
     }
