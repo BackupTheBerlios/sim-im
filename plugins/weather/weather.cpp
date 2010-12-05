@@ -369,6 +369,7 @@ i18n("weather", "steady")
 i18n("weather", "rising")
 i18n("weather", "falling")
 i18n("weather", "Unlimited")
+i18n("weather", "Unknown Precip")
 
 i18n("weather", "N")
 i18n("weather", "NNW")
