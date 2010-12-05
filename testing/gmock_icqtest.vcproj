@@ -229,11 +229,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\plugins\icq\tests\testloginsequencestep2.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\plugins\icq\tests\testoscarsocket.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\plugins\icq\tests\testservicesnachandler.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\plugins\icq\tests\testssisnachandler.cpp"
 				>
 			</File>
 			<File
