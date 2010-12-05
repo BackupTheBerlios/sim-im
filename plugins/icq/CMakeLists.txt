@@ -161,6 +161,7 @@ SET(icq_test_sources
     tests/testbytearrayparser.cpp
     tests/testauthorizationsnachandler.cpp
     tests/testservicesnachandler.cpp
+    tests/testssisnachandler.cpp
     tests/testloginsequencestep2.cpp
     tests/testtlv.cpp
     tests/testtlvlist.cpp
