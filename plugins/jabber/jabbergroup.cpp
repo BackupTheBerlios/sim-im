@@ -5,6 +5,12 @@ JabberGroup::JabberGroup(JabberClient* cl) : SIM::IMGroup(), m_client(cl)
 {
 }
 
+QString JabberGroup::name()
+{
+    return QString();
+}
+
+
 SIM::Client* JabberGroup::client()
 {
     return m_client;

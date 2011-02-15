@@ -425,4 +425,6 @@ private:
     ICQStatusPtr m_icqstatus;
 };
 
+typedef QSharedPointer<ICQContact> ICQContactPtr;
+
 #endif // ICQCONTACT_H

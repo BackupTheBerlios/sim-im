@@ -21,6 +21,7 @@ SET(icq_SRCS
 #        icqbuffer.cpp
         icqclient.cpp
         icqcontact.cpp
+        icqcontactlist.cpp
         icqgroup.cpp
         icqstatuswidget.cpp
 #        icqconfig.cpp
@@ -77,6 +78,7 @@ SET(icq_HDRS
 #        icqbuffer.h
         icqclient.h
         icqcontact.h
+        icqcontactlist.h
         icqgroup.h
         icqstatuswidget.h
         icq_defines.h
@@ -155,6 +157,7 @@ SET(icq_test_sources
     tests/testicqclient.cpp
     tests/testicqstatus.cpp
     tests/testicqcontact.cpp
+    tests/testicqgroup.cpp
     tests/testoscarsocket.cpp
     tests/testicqstatuswidget.cpp
     tests/testbytearraybuilder.cpp

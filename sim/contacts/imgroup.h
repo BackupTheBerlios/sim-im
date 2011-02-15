@@ -18,6 +18,7 @@ class IMGroup
 public:
     virtual ~IMGroup() {}
     virtual Client* client() = 0;
+    virtual QString name() = 0;
     virtual QList<IMContactPtr> contacts() = 0;
 
     virtual bool serialize(QDomElement& element) = 0;

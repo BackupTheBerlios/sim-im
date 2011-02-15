@@ -76,7 +76,10 @@ static void log_string(unsigned short l, const QString &s)
     m += level_name(l);
     m += QLatin1String("] ");
     m += s;
-    getEventHub()->triggerEvent("log", EventDataPtr(new LogEventData(m, l)));
+    if(getEventHub()) // Event hub may be not created in tests
+        getEventHub()->triggerEvent("log", EventDataPtr(new LogEventData(m, l)));
+
+    //printf("%s\n", qPrintable(m));
 }
 
 void log(unsigned short l, const char *fmt, ...)

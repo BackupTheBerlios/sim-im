@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
+#include "events/eventhub.h"
 #include "contacts/standardcontactlist.h"
 #include "contacts/contactlist.h"
 
@@ -12,12 +13,14 @@ namespace
     protected:
         virtual void SetUp()
         {
+            SIM::createEventHub();
             SIM::createContactList();
         }
 
         virtual void TearDown()
         {
             SIM::destroyContactList();
+            SIM::destroyEventHub();
         }
     };
 

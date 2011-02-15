@@ -37,6 +37,7 @@
 
 #include "icq.h"
 #include "icqclient.h"
+#include "icqcontact.h"
 //#include "icqconfig.h"
 #include "icqgroup.h"
 #include "icqstatuswidget.h"
@@ -262,6 +263,7 @@ ICQClient::ICQClient(SIM::Protocol* protocol, const QString& name, bool bAIM) : 
     initialize(bAIM);
     clientPersistentData = new ICQClientData(this);
     m_oscarSocket = new StandardOscarSocket(this);
+    m_contactList = new ICQContactList(this);
     connect(m_oscarSocket, SIGNAL(connected()), this, SLOT(oscarSocketConnected()));
     connect(m_oscarSocket, SIGNAL(packet(int, QByteArray)), this, SLOT(oscarSocketPacket(int, QByteArray)));
 }
@@ -879,7 +881,9 @@ QString ICQClient::name()
 
 SIM::IMContactPtr ICQClient::createIMContact()
 {
-    return SIM::IMContactPtr(new ICQContact(this));
+    ICQContactPtr contact = ICQContactPtr(new ICQContact(this));
+    //m_contactList->addContact(contact);
+    return contact;
 }
 
 SIM::IMGroupPtr ICQClient::createIMGroup()
@@ -1337,6 +1341,11 @@ SnacHandler* ICQClient::snacHandler(int type)
     return m_snacHandlers.value(type);
 }
 
+ICQContactList* ICQClient::contactList() const
+{
+    return m_contactList;
+}
+
 void ICQClient::oscarSocketPacket(int channel, const QByteArray& data)
 {
     //ICQPlugin *plugin = static_cast<ICQPlugin*>(protocol()->plugin());
@@ -1389,6 +1398,7 @@ void ICQClient::oscarSocketPacket(int channel, const QByteArray& data)
 
 void ICQClient::loginStep2()
 {
+    log(L_DEBUG, "Login, step2");
     m_ssiSnac->requestRights();
     m_ssiSnac->requestContactList();
     m_locationSnac->requestRights();

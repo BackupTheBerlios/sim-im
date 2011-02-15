@@ -22,6 +22,7 @@ public:
     virtual ContactPtr contact(int id) const = 0;
     virtual bool contactExists(int id) const = 0;
     virtual void removeContact(int id) = 0;
+    virtual ContactPtr createContact() = 0;
     virtual ContactPtr createContact(int id) = 0;
     virtual QList<int> contactIds() const = 0;
 

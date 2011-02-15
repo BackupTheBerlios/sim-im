@@ -20,6 +20,11 @@ namespace StubObjects
             return m_client;
         }
 
+        virtual QString name()
+        {
+            return QString();
+        }
+
         virtual QList<SIM::IMContactPtr> contacts()
         {
             return QList<SIM::IMContactPtr>();

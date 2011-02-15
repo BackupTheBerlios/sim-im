@@ -137,7 +137,7 @@ int ServiceSnacHandler::readNextRateInfoGroup(ByteArrayParser& parser)
         int type = parser.readWord();
         int subtype = parser.readWord();
         info->addSnac(type, subtype);
-        log(L_DEBUG, "  type: %04x, subtype: %04x", type, subtype);
+        //log(L_DEBUG, "  type: %04x, subtype: %04x", type, subtype);
     }
     return id;
 }

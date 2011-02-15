@@ -17,6 +17,7 @@ public:
     virtual ContactPtr contact(int id) const;
     virtual bool contactExists(int id) const;
     virtual void removeContact(int id);
+    virtual ContactPtr createContact();
     virtual ContactPtr createContact(int id);
     virtual QList<int> contactIds() const;
 

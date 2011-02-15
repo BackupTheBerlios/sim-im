@@ -68,7 +68,7 @@ namespace
     TEST_F(TestLoginSequenceStep2, rateInfoReply_ssiRequestsRights)
     {
         EXPECT_CALL(*socket, snac(_, _, _, _)).Times(AnyNumber());
-        EXPECT_CALL(*socket, snac(ICQ_SNACxFOOD_SSI, SsiSnacHandler::SnacSsiRightsRequest, _, _));
+        EXPECT_CALL(*socket, snac(ICQ_SNACxFOOD_LISTS, SsiSnacHandler::SnacSsiRightsRequest, _, _));
 
         socket->provokePacketSignal(0x02, makeRateInfoReply());
     }
@@ -108,7 +108,7 @@ namespace
     TEST_F(TestLoginSequenceStep2, rateInfoReply_ssiRequestList)
     {
         EXPECT_CALL(*socket, snac(_, _, _, _)).Times(AnyNumber());
-        EXPECT_CALL(*socket, snac(ICQ_SNACxFOOD_SSI, SsiSnacHandler::SnacSsiContactListRequest, _, _));
+        EXPECT_CALL(*socket, snac(ICQ_SNACxFOOD_LISTS, SsiSnacHandler::SnacSsiContactListRequest, _, _));
 
         socket->provokePacketSignal(0x02, makeRateInfoReply());
     }

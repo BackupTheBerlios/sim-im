@@ -5,11 +5,14 @@
 #include "contacts/client.h"
 #include "clientmanager.h"
 #include "log.h"
+#include "events/eventhub.h"
+#include "events/standardevent.h"
 
 namespace SIM {
 
 StandardContactList::StandardContactList()
 {
+    getEventHub()->registerEvent(SIM::StandardEvent::create("contacts_loaded"));
 }
 
 
@@ -86,6 +89,18 @@ void StandardContactList::removeContact(int id)
     QMap<int, ContactPtr>::iterator it = m_contacts.find(id);
     if(it != m_contacts.end())
         m_contacts.erase(it);
+}
+
+ContactPtr StandardContactList::createContact()
+{
+    int id = 0;
+    QList<int> ids = contactIds();
+    if(ids.size() > 0)
+    {
+        qSort(ids.begin(), ids.end(), qGreater<int>());
+        id = ids.at(0) + 1;
+    }
+    return ContactPtr(new Contact(id));
 }
 
 ContactPtr StandardContactList::createContact(int id)

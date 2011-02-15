@@ -43,6 +43,7 @@
 #include "buddysnachandler.h"
 #include "privacysnachandler.h"
 #include "icbmsnachandler.h"
+#include "icqcontactlist.h"
 
 #include "icq.h"
 #include "icqbuffer.h"
@@ -632,6 +633,8 @@ public:
 
     SnacHandler* snacHandler(int type);
 
+    ICQContactList* contactList() const;
+
     bool isAim() const;
 
     // reimplement socket() to get correct Buffer
@@ -912,6 +915,8 @@ private:
     PrivacySnacHandler* m_privacySnac;
     IcbmSnacHandler* m_icbmSnac;
     mapSnacHandlers m_snacHandlers;
+
+    ICQContactList* m_contactList;
 
     //friend class AuthorizationSnacHandler;
 

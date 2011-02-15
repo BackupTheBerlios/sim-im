@@ -9,6 +9,7 @@ class JabberGroup : public SIM::IMGroup
 public:
     JabberGroup(JabberClient* cl);
 
+    virtual QString name();
     virtual SIM::Client* client();
     virtual QList<SIM::IMContactPtr> contacts();
 
