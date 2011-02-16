@@ -32,6 +32,7 @@ public:
 signals:
 
 public slots:
+    void contactListUpdated();
     void invalidateCache();
 
 private:

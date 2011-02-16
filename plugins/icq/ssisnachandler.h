@@ -15,6 +15,7 @@ public:
 
     void requestRights();
     void requestContactList();
+    void activate();
 
     int maxContacts() const;
     int maxGroups() const;
@@ -30,6 +31,7 @@ public:
     static const int SnacSsiRightsInfo = 0x03;
     static const int SnacSsiContactListRequest = 0x05;
     static const int SnacSsiContactList = 0x06;
+    static const int SnacSsiActivate = 0x07;
 
     static const int EntryContact = 0x0000;
     static const int EntryGroup = 0x0001;

@@ -58,6 +58,14 @@ void SsiSnacHandler::requestContactList()
     socket->snac(getType(), SnacSsiContactListRequest, 0, builder.getArray());
 }
 
+void SsiSnacHandler::activate()
+{
+    OscarSocket* socket = client()->oscarSocket();
+    Q_ASSERT(socket);
+
+    socket->snac(getType(), SnacSsiActivate, 0, QByteArray());
+}
+
 bool SsiSnacHandler::parseRightsInfo(const QByteArray& data)
 {
     TlvList tlvs = TlvList::fromByteArray(data);
@@ -90,6 +98,7 @@ bool SsiSnacHandler::parseContactList(const QByteArray& data)
             return false;
     }
     SIM::getEventHub()->triggerEvent("contact_list_updated");
+    activate();
     return true;
 }
 

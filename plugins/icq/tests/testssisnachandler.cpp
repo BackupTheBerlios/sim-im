@@ -15,6 +15,7 @@
 namespace
 {
     using ::testing::NiceMock;
+    using ::testing::_;
 
     static const int MaxContacts = 0x1000;
     static const int MaxGroups = 0x1001;
@@ -273,5 +274,14 @@ namespace
         ASSERT_TRUE(success);
 
         ASSERT_EQ(1, spy.justSlotCalls);
+    }
+
+    TEST_F(TestSsiSnacHandler, ssiListParsing_sendsActivatePacket)
+    {
+        EXPECT_CALL(*socket, snac(handler->getType(), SsiSnacHandler::SnacSsiActivate, _, _));
+
+        bool success = handler->process(SsiSnacHandler::SnacSsiContactList, makeContactListPacketWithContactEntry(), 0, 0);
+        ASSERT_TRUE(success);
+
     }
 }

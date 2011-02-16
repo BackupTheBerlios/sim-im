@@ -137,6 +137,12 @@ int UserViewModel::rowCount(const QModelIndex& parent) const
     return 0;
 }
 
+void UserViewModel::contactListUpdated()
+{
+    emit beginResetModel();
+    emit endResetModel();
+}
+
 void UserViewModel::invalidateCache()
 {
     m_contactsCacheValid = false;
