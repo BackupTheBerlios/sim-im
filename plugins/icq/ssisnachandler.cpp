@@ -7,6 +7,7 @@
 #include "icqcontact.h"
 #include "contacts/contactlist.h"
 #include "contacts/contact.h"
+#include "events/eventhub.h"
 
 using SIM::log;
 using SIM::L_DEBUG;
@@ -88,6 +89,7 @@ bool SsiSnacHandler::parseContactList(const QByteArray& data)
         if(!parseContactListEntry(parser))
             return false;
     }
+    SIM::getEventHub()->triggerEvent("contact_list_updated");
     return true;
 }
 
@@ -194,6 +196,14 @@ bool SsiSnacHandler::parseEntryGroup(int groupId, const QString& groupName, cons
         group->setIcqId(groupId);
         group->setName(groupName);
         contactList->addGroup(group);
+
+        Tlv membersOfTheGroup = list.firstTlv(TlvSubitems);
+        ByteArrayParser parser(membersOfTheGroup.data());
+        while(!parser.atEnd())
+        {
+            int contactId = parser.readWord();
+            group->addContactId(contactId);
+        }
     }
     return true;
 }

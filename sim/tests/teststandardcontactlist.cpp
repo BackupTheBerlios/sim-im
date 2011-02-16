@@ -164,7 +164,11 @@ namespace
         QList<int> ids = getContactList()->contactIds();
 
         ASSERT_FALSE(ids.contains(ignoredContactId));
+    }
 
-
+    TEST_F(TestStandardContactList, registersEvent_contactListUpdated)
+    {
+        IEventPtr ev = SIM::getEventHub()->getEvent("contact_list_updated");
+        ASSERT_FALSE(ev.isNull());
     }
 }

@@ -1,12 +1,15 @@
 #include <gtest/gtest.h>
 #include <cstdio>
+#include <QSignalSpy>
 
 #include "events/eventhub.h"
+#include "events/ievent.h"
 #include "contacts/contactlist.h"
 #include "tlvlist.h"
 #include "icqclient.h"
 #include "ssisnachandler.h"
 #include "mocks/mockoscarsocket.h"
+#include "signalspy.h"
 #include "qt-gtest.h"
 
 namespace
@@ -33,8 +36,8 @@ namespace
     protected:
         virtual void SetUp()
         {
-            SIM::createEventHub();
-            SIM::createContactList();
+            //SIM::createEventHub();
+            //SIM::createContactList();
             socket = new NiceMock<MockObjects::MockOscarSocket>();
             client = new ICQClient(0, "ICQ.123456", false);
             client->setOscarSocket(socket);
@@ -46,8 +49,8 @@ namespace
         virtual void TearDown()
         {
             delete client;
-            SIM::destroyContactList();
-            SIM::destroyEventHub();
+            //SIM::destroyContactList();
+            //SIM::destroyEventHub();
         }
 
         QByteArray makeRightsInfoPacket()
@@ -245,5 +248,30 @@ namespace
         ICQGroupPtr group = contactList->group(GroupId);
         ASSERT_FALSE(group.isNull());
         ASSERT_EQ(GroupName, group->name());
+    }
+
+    TEST_F(TestSsiSnacHandler, ssiListParsing_groupEntry_GroupMembers)
+    {
+        bool success = handler->process(SsiSnacHandler::SnacSsiContactList, makeContactListPacketWithGroupEntry(), 0, 0);
+        ASSERT_TRUE(success);
+
+        ICQContactList* contactList = client->contactList();
+        ASSERT_EQ(1, contactList->groupCount());
+        ICQGroupPtr group = contactList->group(GroupId);
+        ASSERT_FALSE(group.isNull());
+        ASSERT_TRUE(group->hasContactId(ContactId));
+    }
+
+    TEST_F(TestSsiSnacHandler, ssiListParsing_emitsEvent)
+    {
+        Helper::SignalSpy spy;
+        SIM::IEventPtr event = SIM::getEventHub()->getEvent("contact_list_updated");
+        ASSERT_TRUE(event);
+
+        event->connectTo(&spy, SLOT(justSlot()));
+        bool success = handler->process(SsiSnacHandler::SnacSsiContactList, makeContactListPacketWithContactEntry(), 0, 0);
+        ASSERT_TRUE(success);
+
+        ASSERT_EQ(1, spy.justSlotCalls);
     }
 }

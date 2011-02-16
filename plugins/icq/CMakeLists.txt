@@ -147,6 +147,7 @@ SET(icq_test_headers
     tests/testoscarsocket.h
     tests/testauthorizationsnachandler.h
     tests/mocks/mockoscarsocket.h
+    tests/signalspy.h
 )
 
 QT4_WRAP_CPP(testmocs ${icq_test_headers})
@@ -168,6 +169,7 @@ SET(icq_test_sources
     tests/testloginsequencestep2.cpp
     tests/testtlv.cpp
     tests/testtlvlist.cpp
+    tests/signalspy.cpp
 )
 
 ADD_EXECUTABLE(test_icq ${icq_test_sources} ${testmocs})

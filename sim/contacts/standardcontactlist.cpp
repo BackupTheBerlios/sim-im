@@ -13,6 +13,7 @@ namespace SIM {
 StandardContactList::StandardContactList()
 {
     getEventHub()->registerEvent(SIM::StandardEvent::create("contacts_loaded"));
+    getEventHub()->registerEvent(SIM::StandardEvent::create("contact_list_updated"));
 }
 
 
