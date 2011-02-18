@@ -264,6 +264,7 @@ ICQClient::ICQClient(SIM::Protocol* protocol, const QString& name, bool bAIM) : 
     clientPersistentData = new ICQClientData(this);
     m_oscarSocket = new StandardOscarSocket(this);
     m_contactList = new ICQContactList(this);
+    m_statusConverter = new ICQStatusConverter(this);
     connect(m_oscarSocket, SIGNAL(connected()), this, SLOT(oscarSocketConnected()));
     connect(m_oscarSocket, SIGNAL(packet(int, QByteArray)), this, SLOT(oscarSocketPacket(int, QByteArray)));
 }
@@ -941,9 +942,11 @@ void ICQClient::initDefaultStates()
 {
     ICQStatus* status = new ICQStatus("offline", "Offline", false, QString(), getImageStorage()->pixmap("ICQ_offline"));
     status->setFlag(IMStatus::flOffline, true);
+    status->setIcqId(ICQ_STATUS_OFFLINE);
     m_defaultStates.append(ICQStatusPtr(status));
 
     status = new ICQStatus("online", "Online", false, QString(), getImageStorage()->pixmap("ICQ_online"));
+    status->setIcqId(ICQ_STATUS_ONLINE);
     status->setFlag(IMStatus::flOffline, false);
     m_defaultStates.append(ICQStatusPtr(status));
 }
@@ -1344,6 +1347,11 @@ SnacHandler* ICQClient::snacHandler(int type)
 ICQContactList* ICQClient::contactList() const
 {
     return m_contactList;
+}
+
+ICQStatusConverter* ICQClient::statusConverter() const
+{
+    return m_statusConverter;
 }
 
 void ICQClient::oscarSocketPacket(int channel, const QByteArray& data)

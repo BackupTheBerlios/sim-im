@@ -72,6 +72,16 @@ void ICQStatus::setFlag(Flag fl, bool val)
         m_flags &= ~(1 << fl);
 }
 
+void ICQStatus::setIcqId(unsigned int icqid)
+{
+    m_icqId = icqid;
+}
+
+unsigned int ICQStatus::icqId() const
+{
+    return m_icqId;
+}
+
 
 // vim: set expandtab:
 

@@ -44,6 +44,7 @@
 #include "privacysnachandler.h"
 #include "icbmsnachandler.h"
 #include "icqcontactlist.h"
+#include "icqstatusconverter.h"
 
 #include "icq.h"
 #include "icqbuffer.h"
@@ -634,6 +635,7 @@ public:
     SnacHandler* snacHandler(int type);
 
     ICQContactList* contactList() const;
+    ICQStatusConverter* statusConverter() const;
 
     bool isAim() const;
 
@@ -917,6 +919,7 @@ private:
     mapSnacHandlers m_snacHandlers;
 
     ICQContactList* m_contactList;
+    ICQStatusConverter* m_statusConverter;
 
     //friend class AuthorizationSnacHandler;
 

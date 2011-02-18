@@ -24,6 +24,9 @@ public:
     virtual bool flag(Flag fl) const;
     virtual void setFlag(Flag fl, bool val);
 
+    void setIcqId(unsigned int icqid);
+    unsigned int icqId() const;
+
     virtual SIM::IMStatusPtr clone();
 
 private:
@@ -34,6 +37,7 @@ private:
     QPixmap m_icon;
     int m_group;
     int m_flags;
+    unsigned int m_icqId;
 };
 
 typedef QSharedPointer<ICQStatus> ICQStatusPtr;

@@ -15,6 +15,7 @@ public:
     Tlv firstTlv(int id) const;
 
     int size() const;
+    int tlvCount() const;
 
     bool contains(int id) const;
 

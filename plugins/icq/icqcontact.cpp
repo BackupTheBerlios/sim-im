@@ -480,6 +480,11 @@ SIM::IMStatusPtr ICQContact::status() const
     return m_icqstatus;
 }
 
+void ICQContact::setIcqStatus(const ICQStatusPtr& s)
+{
+    m_icqstatus = s;
+}
+
 ICQStatusPtr ICQContact::icqStatus() const
 {
     return m_icqstatus;
@@ -525,5 +530,31 @@ SIM::IMGroupWeakPtr ICQContact::group()
 QString ICQContact::makeToolTipText()
 {
     return QString("IMPLEMENT ME!!! ICQContact::makeToolTipText");
+}
+
+unsigned long ICQContact::getUin() const
+{
+    return m_uin;
+}
+
+void ICQContact::setUin(unsigned long uin)
+{
+    m_uin = uin;
+    QString screen = QString::number(uin);
+    m_screen = screen;
+}
+
+QString ICQContact::getScreen() const
+{
+    return m_screen;
+}
+
+void ICQContact::setScreen(const QString& screen)
+{
+    m_screen = screen;
+    bool ok;
+    unsigned long uin = screen.toULong(&ok);
+    if(ok)
+        m_uin = ok;
 }
 

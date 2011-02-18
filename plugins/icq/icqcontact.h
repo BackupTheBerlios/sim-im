@@ -21,6 +21,7 @@ public:
 
     virtual SIM::Client* client();
     virtual SIM::IMStatusPtr status() const;
+    void setIcqStatus(const ICQStatusPtr& s);
     virtual ICQStatusPtr icqStatus() const;
 
     virtual bool sendMessage(const SIM::MessagePtr& message);
@@ -37,11 +38,11 @@ public:
     virtual void deserialize(QDomElement& element);
     virtual bool deserialize(const QString& data);
 
-    unsigned long getUin() const { return m_uin; }
-    void setUin(unsigned long uin) { m_uin = uin; }
+    unsigned long getUin() const;
+    void setUin(unsigned long uin);
 
-    QString getScreen() const { return m_screen; }
-    void setScreen(const QString& screen) { m_screen = screen; }
+    QString getScreen() const;
+    void setScreen(const QString& screen);
 
     QString getAlias() const { return m_alias; }
     void setAlias(const QString& alias) { m_alias = alias; }
@@ -49,8 +50,8 @@ public:
     QString getCellular() const { return m_cellular; }
     void setCellular(const QString& cellular) { m_cellular = cellular; }
 
-    unsigned long getStatus() const { return m_status; }
-    void setStatus(unsigned long status) { m_status = status; }
+//    unsigned long getStatus() const { return m_status; }
+//    void setStatus(unsigned long status) { m_status = status; }
 
     unsigned long getClass() const { return m_class; }
     void setClass(unsigned long cl) { m_class = cl; }

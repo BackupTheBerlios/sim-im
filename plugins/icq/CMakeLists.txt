@@ -23,6 +23,7 @@ SET(icq_SRCS
         icqcontact.cpp
         icqcontactlist.cpp
         icqgroup.cpp
+        icqstatusconverter.cpp
         icqstatuswidget.cpp
 #        icqconfig.cpp
 #        icqdirect.cpp
@@ -80,6 +81,7 @@ SET(icq_HDRS
         icqcontact.h
         icqcontactlist.h
         icqgroup.h
+        icqstatusconverter.h
         icqstatuswidget.h
         icq_defines.h
 #        icqconfig.h
@@ -165,10 +167,12 @@ SET(icq_test_sources
     tests/testbytearrayparser.cpp
     tests/testauthorizationsnachandler.cpp
     tests/testservicesnachandler.cpp
+    tests/testbuddysnachandler.cpp
     tests/testssisnachandler.cpp
     tests/testloginsequencestep2.cpp
     tests/testtlv.cpp
     tests/testtlvlist.cpp
+    tests/testicqstatusconverter.cpp
     tests/signalspy.cpp
 )
 

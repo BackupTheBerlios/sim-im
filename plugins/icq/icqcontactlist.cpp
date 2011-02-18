@@ -14,6 +14,16 @@ ICQContactPtr ICQContactList::contact(int icqContactId)
     return m_contacts.value(icqContactId);
 }
 
+ICQContactPtr ICQContactList::contactByScreen(const QString& screen)
+{
+    for(QMap<int, ICQContactPtr>::iterator it = m_contacts.begin(); it != m_contacts.end(); ++it)
+    {
+        if(it.value()->getScreen() == screen)
+            return it.value();
+    }
+    return ICQContactPtr();
+}
+
 int ICQContactList::contactCount() const
 {
     return m_contacts.count();

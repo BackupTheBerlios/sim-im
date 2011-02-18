@@ -70,3 +70,8 @@ QByteArray TlvList::toByteArray()
     }
     return builder.getArray();
 }
+
+int TlvList::tlvCount() const
+{
+    return m_tlvs.count();
+}

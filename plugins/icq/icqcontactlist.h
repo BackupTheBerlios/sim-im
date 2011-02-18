@@ -16,6 +16,7 @@ public:
 
     void addContact(const ICQContactPtr& contact);
     ICQContactPtr contact(int icqContactId);
+    ICQContactPtr contactByScreen(const QString& screen);
     int contactCount() const;
 
     void addGroup(const ICQGroupPtr& group);

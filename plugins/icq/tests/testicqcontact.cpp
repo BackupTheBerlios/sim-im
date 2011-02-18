@@ -31,4 +31,12 @@ namespace
         ASSERT_TRUE(contact.status());
         ASSERT_EQ(contact.status()->id(), "offline");
     }
+
+    TEST_F(TestIcqContact, setUin_setScreenName)
+    {
+        ICQContact contact(m_client);
+
+        contact.setUin(123456);
+        ASSERT_EQ("123456", contact.getScreen());
+    }
 }
