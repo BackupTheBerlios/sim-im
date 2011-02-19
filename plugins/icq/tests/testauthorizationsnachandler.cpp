@@ -53,6 +53,7 @@ namespace
 
         virtual QByteArray makeSnacPacket(int channel, int type, int subtype, int flags, int id, const QByteArray& data)
         {
+            Q_UNUSED(channel);
             ByteArrayBuilder builder;
             builder.appendWord(type);
             builder.appendWord(subtype);

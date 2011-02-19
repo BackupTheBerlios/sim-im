@@ -41,6 +41,8 @@ AuthorizationSnacHandler::AuthorizationSnacHandler(ICQClient* client) : SnacHand
 
 bool AuthorizationSnacHandler::process(unsigned short subtype, const QByteArray& data, int flags, unsigned int requestId)
 {
+    Q_UNUSED(flags);
+    Q_UNUSED(requestId);
     switch(subtype)
     {
     case SnacAuthKeyResponse:

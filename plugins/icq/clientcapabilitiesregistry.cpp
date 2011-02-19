@@ -14,12 +14,20 @@ ClientCapabilitiesRegistry::ClientCapabilitiesRegistry()
     addCapability(QByteArray("\x09\x46\x13\x4a\x4c\x7f\x11\xd1\x82\x22\x44\x45\x53\x54\x00\x00", 16), 0x134a, "games", "");
     addCapability(QByteArray("\x09\x46\x13\x4b\x4c\x7f\x11\xd1\x82\x22\x44\x45\x53\x54\x00\x00", 16), 0x134b, "buddylist", "");
     addCapability(QByteArray("\x09\x46\x13\x4c\x4c\x7f\x11\xd1\x82\x22\x44\x45\x53\x54\x00\x00", 16), 0x134c, "avatar", "");
-    addCapability(QByteArray("\x09\x46\x13\x4d\x4c\x7f\x11\xd1\x82\x22\x44\x45\x53\x54\x00\x00", 16), 0x134d, "support", "");
+    addCapability(QByteArray("\x09\x46\x13\x4d\x4c\x7f\x11\xd1\x82\x22\x44\x45\x53\x54\x00\x00", 16), 0x134d, "aim_support", "");
     addCapability(QByteArray("\x09\x46\x13\x4e\x4c\x7f\x11\xd1\x82\x22\x44\x45\x53\x54\x00\x00", 16), 0x134e, "utf", "");
     addCapability(QByteArray("\x97\xb1\x27\x51\x24\x3c\x43\x34\xad\x22\xd6\xab\xf7\x3f\x14\x92", 16), 0x0000, "rtf", "");
     addCapability(QByteArray("\x56\x3f\xc8\x09\x0b\x6f\x41\xbd\x9f\x79\x42\x26\x09\xdf\xa2\xf3", 16), 0x0000, "typing", "");
     addCapability(QByteArray("SIM client  \x00\x00\x00\x00", 16), 0x0000, "sim", "");
     // TODO moar
+
+    m_nullCapability = new ClientCapability(QByteArray("NULL"), 0, "null", "");
+}
+
+ClientCapabilitiesRegistry::~ClientCapabilitiesRegistry()
+{
+    qDeleteAll(m_capabilites);
+    delete m_nullCapability;
 }
 
 ClientCapability* ClientCapabilitiesRegistry::capabilityByGuid(const QByteArray& guid)
