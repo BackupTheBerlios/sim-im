@@ -164,3 +164,30 @@ void UserViewModel::fillCaches() const
     m_contactsCacheValid = true;
 }
 
+void UserViewModel::contactStatusChanged(int contactId)
+{
+    if(!m_contactsCacheValid)
+        fillCaches();
+
+    int i = 0;
+    for(QList<int>::iterator it = m_onlineContacts.begin(); it != m_onlineContacts.end(); ++it, i++)
+    {
+        if(*it == contactId)
+        {
+            QModelIndex index = this->index(i, 0, m_onlineItemsParent);
+            emit dataChanged(index, index);
+            return;
+        }
+    }
+
+    i = 0;
+    for(QList<int>::iterator it = m_offlineContacts.begin(); it != m_offlineContacts.end(); ++it, i++)
+    {
+        if(*it == contactId)
+        {
+            QModelIndex index = this->index(i, 0, m_offlineItemsParent);
+            emit dataChanged(index, index);
+            return;
+        }
+    }
+}

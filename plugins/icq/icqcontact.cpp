@@ -52,7 +52,8 @@ ICQContact::ICQContact(ICQClient* client) : SIM::IMContact(), m_uin(0),
     m_direct(0),
     m_directPluginInfo(0),
     m_directPluginStatus(0),
-    m_client(client)
+    m_client(client),
+    m_metaContact(0)
 {
     m_icqstatus = client->getDefaultStatus("offline");
 }
@@ -556,5 +557,17 @@ void ICQContact::setScreen(const QString& screen)
     unsigned long uin = screen.toULong(&ok);
     if(ok)
         m_uin = ok;
+}
+
+void ICQContact::setMetaContact(SIM::Contact* c)
+{
+    m_metaContact = c;
+}
+
+int ICQContact::metaContactId() const
+{
+    if(m_metaContact)
+        return m_metaContact->id();
+    return -1;
 }
 

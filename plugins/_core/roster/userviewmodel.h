@@ -34,6 +34,7 @@ signals:
 public slots:
     void contactListUpdated();
     void invalidateCache();
+    void contactStatusChanged(int contactId);
 
 private:
     QVariant contactData(const QModelIndex& index, int role = Qt::DisplayRole) const;

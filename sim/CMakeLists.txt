@@ -21,6 +21,7 @@ SET(sim_LIB_SRCS
         events/eventdata.cpp
         events/eventhub.cpp
         events/nulleventdata.cpp
+        events/contactevent.cpp
         events/standardevent.cpp
         events/ievent.cpp
         events/logevent.cpp
@@ -92,6 +93,7 @@ SET(sim_LIB_HDRS
         events/eventdata.h
         events/eventhub.h
         events/nulleventdata.h
+        events/contactevent.h
         events/standardevent.h
         events/ievent.h
         events/logevent.h

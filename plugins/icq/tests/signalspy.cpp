@@ -3,7 +3,7 @@
 
 namespace Helper
 {
-    SignalSpy::SignalSpy() : connectedCalls(0), packetCalls(0), justSlotCalls(0)
+    SignalSpy::SignalSpy() : connectedCalls(0), packetCalls(0), justSlotCalls(0), intSlotCalls(0), intarg(0)
     {
 
     }
@@ -33,5 +33,11 @@ namespace Helper
     void SignalSpy::justSlot()
     {
         justSlotCalls++;
+    }
+
+    void SignalSpy::intSlot(int arg)
+    {
+        intSlotCalls++;
+        intarg = arg;
     }
 }

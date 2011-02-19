@@ -50,6 +50,7 @@ SIM::IMStatusPtr ICQStatus::clone()
     ICQStatus* status = new ICQStatus(m_id, m_name, m_hasText, m_text, m_icon);
     status->setFlag(flOffline, flag(flOffline));
     status->setFlag(flInvisible, flag(flInvisible));
+    status->setIcqId(icqId());
     return SIM::IMStatusPtr(status);
 }
 

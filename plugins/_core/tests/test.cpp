@@ -11,6 +11,7 @@
 #include "contacts.h"
 #include "tests/stubs/stubimagestorage.h"
 
+#include <QModelIndex>
 
 void registerEvents()
 {
@@ -27,11 +28,11 @@ int main(int argc, char** argv)
     QApplication app(argc, argv);
     ::testing::InitGoogleTest(&argc, argv);
     ::testing::InitGoogleMock(&argc, argv);
+    qRegisterMetaType<QModelIndex>("QModelIndex");
     SIM::createEventHub();
 	SIM::setImageStorage(imagestorage);
     //SIM::setImageStorage(&imagestorage);
     SIM::createCommandHub();
-    SIM::createContactList();
     registerEvents();
     int ret = RUN_ALL_TESTS();
 #ifdef WIN32

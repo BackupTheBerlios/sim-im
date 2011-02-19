@@ -24,6 +24,7 @@ namespace MockObjects
         MOCK_METHOD0(clone, SIM::IMStatusPtr());
     };
     typedef QSharedPointer<MockIMStatus> MockIMStatusPtr;
+    typedef QSharedPointer<testing::NiceMock<MockIMStatus> > NiceMockIMStatusPtr;
 }
 
 #endif // MOCKIMSTATUS_H

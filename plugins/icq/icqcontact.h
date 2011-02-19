@@ -4,6 +4,7 @@
 #include <QByteArray>
 #include <QString>
 
+#include "contacts/contact.h"
 #include "contacts/imcontact.h"
 #include "contacts/client.h"
 #include "icqstatus.h"
@@ -18,6 +19,9 @@ public:
     ICQContact(ICQClient* client);
 
     virtual QString name() const;
+
+    void setMetaContact(SIM::Contact* c);
+    int metaContactId() const;
 
     virtual SIM::Client* client();
     virtual SIM::IMStatusPtr status() const;
@@ -424,6 +428,7 @@ private:
 
     ICQClient* m_client;
     ICQStatusPtr m_icqstatus;
+    SIM::Contact* m_metaContact;
 };
 
 typedef QSharedPointer<ICQContact> ICQContactPtr;

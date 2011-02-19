@@ -4,6 +4,8 @@
 #include "contacts/imcontact.h"
 #include <QSharedPointer>
 
+#include "gmock/gmock.h"
+
 namespace MockObjects
 {
     class MockIMContact : public SIM::IMContact
@@ -23,6 +25,7 @@ namespace MockObjects
         MOCK_METHOD1(deserialize, bool(const QString&));
     };
     typedef QSharedPointer<MockIMContact> MockIMContactPtr;
+    typedef QSharedPointer<testing::NiceMock<MockIMContact> > NiceMockIMContactPtr;
 }
 
 #endif // MOCKIMCONTACT_H

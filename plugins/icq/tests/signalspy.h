@@ -21,6 +21,9 @@ namespace Helper
         int packetCalls;
         int justSlotCalls;
 
+        int intSlotCalls;
+        int intarg;
+
         void provokeSignal();
 
     signals:
@@ -30,6 +33,7 @@ namespace Helper
         void packet(int channel, const QByteArray& arr);
         void error(const QString& str);
         void connected();
+        void intSlot(int arg);
 
         void justSlot();
     };

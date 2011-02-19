@@ -7,6 +7,7 @@
 #include "log.h"
 #include "events/eventhub.h"
 #include "events/standardevent.h"
+#include "events/contactevent.h"
 
 namespace SIM {
 
@@ -14,6 +15,7 @@ StandardContactList::StandardContactList()
 {
     getEventHub()->registerEvent(SIM::StandardEvent::create("contacts_loaded"));
     getEventHub()->registerEvent(SIM::StandardEvent::create("contact_list_updated"));
+    getEventHub()->registerEvent(SIM::ContactEvent::create("contact_change_status"));
 }
 
 

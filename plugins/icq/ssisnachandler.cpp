@@ -154,6 +154,7 @@ bool SsiSnacHandler::parseEntryContact(int contactId, const QString& contactName
         SIM::ContactPtr metacontact = SIM::getContactList()->createContact();
         metacontact->addClientContact(contact);
         metacontact->setName(alias);
+        contact->setMetaContact(metacontact.data());
         SIM::getContactList()->addContact(metacontact);
     }
     if(list.contains(TlvUnknown2))

@@ -45,6 +45,7 @@
 #include "icbmsnachandler.h"
 #include "icqcontactlist.h"
 #include "icqstatusconverter.h"
+#include "clientcapabilitiesregistry.h"
 
 #include "icq.h"
 #include "icqbuffer.h"
@@ -636,6 +637,7 @@ public:
 
     ICQContactList* contactList() const;
     ICQStatusConverter* statusConverter() const;
+    ClientCapabilitiesRegistry* clientCapabilitiesRegistry() const;
 
     bool isAim() const;
 
@@ -920,6 +922,7 @@ private:
 
     ICQContactList* m_contactList;
     ICQStatusConverter* m_statusConverter;
+    ClientCapabilitiesRegistry* m_clientCapabilitiesRegistry;
 
     //friend class AuthorizationSnacHandler;
 

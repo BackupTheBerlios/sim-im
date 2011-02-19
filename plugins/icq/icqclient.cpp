@@ -265,6 +265,7 @@ ICQClient::ICQClient(SIM::Protocol* protocol, const QString& name, bool bAIM) : 
     m_oscarSocket = new StandardOscarSocket(this);
     m_contactList = new ICQContactList(this);
     m_statusConverter = new ICQStatusConverter(this);
+    m_clientCapabilitiesRegistry = new ClientCapabilitiesRegistry();
     connect(m_oscarSocket, SIGNAL(connected()), this, SLOT(oscarSocketConnected()));
     connect(m_oscarSocket, SIGNAL(packet(int, QByteArray)), this, SLOT(oscarSocketPacket(int, QByteArray)));
 }
@@ -1352,6 +1353,11 @@ ICQContactList* ICQClient::contactList() const
 ICQStatusConverter* ICQClient::statusConverter() const
 {
     return m_statusConverter;
+}
+
+ClientCapabilitiesRegistry* ICQClient::clientCapabilitiesRegistry() const
+{
+    return m_clientCapabilitiesRegistry;
 }
 
 void ICQClient::oscarSocketPacket(int channel, const QByteArray& data)

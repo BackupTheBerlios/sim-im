@@ -60,6 +60,8 @@ SET(icq_SRCS
         snac.cpp
         tlv.cpp
         tlvlist.cpp
+        clientcapability.cpp
+        clientcapabilitiesregistry.cpp
 )
 
 SET(icq_HDRS
@@ -114,6 +116,8 @@ SET(icq_HDRS
         snac.h
         tlv.h
         tlvlist.h
+        clientcapability.h
+        clientcapabilitiesregistry.h
 )
 
 SET(icq_UICS

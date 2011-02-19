@@ -4,7 +4,11 @@
 #include "tests/gtest-qt.h"
 
 #include <QPixmap>
+#include <QSignalSpy>
 
+#include "core_api.h"
+#include "events/eventhub.h"
+#include "events/contactevent.h"
 #include "roster/userviewmodel.h"
 #include "contacts/contactlist.h"
 #include "tests/mocks/mockcontactlist.h"
@@ -15,27 +19,32 @@ namespace
 {
     using namespace SIM;
     using namespace MockObjects;
+    using ::testing::NiceMock;
     using ::testing::Return;
+
+    static const int ContactId = 12;
+
     class TestUserViewModel : public ::testing::Test
     {
     protected:
         virtual void SetUp()
         {
-            contactList = new MockObjects::MockContactList();
+            SIM::createContactList();
+            contactList = SIM::getContactList();
         }
 
         virtual void TearDown()
         {
-            delete contactList;
+            SIM::destroyContactList();
         }
 
         ContactPtr makeContact(int id, bool offline, const QPixmap& icon = QPixmap())
         {
-            MockIMStatusPtr imstatus = MockIMStatusPtr(new MockIMStatus());
+            NiceMockIMStatusPtr imstatus = NiceMockIMStatusPtr(new NiceMock<MockIMStatus>());
             ON_CALL(*imstatus.data(), flag(IMStatus::flOffline)).WillByDefault(Return(offline));
             ON_CALL(*imstatus.data(), icon()).WillByDefault(Return(icon));
 
-            MockIMContactPtr imcontact = MockIMContactPtr(new MockIMContact());
+            NiceMockIMContactPtr imcontact = NiceMockIMContactPtr(new NiceMock<MockIMContact>());
             ON_CALL(*imcontact.data(), status()).WillByDefault(Return(imstatus));
 
             ContactPtr contact = ContactPtr(new Contact(id));
@@ -45,23 +54,19 @@ namespace
 
         ContactPtr insertContactToContactList(bool offline)
         {
-            int contactId = 12;
             QList<int> contactIds;
-            contactIds.append(contactId);
-            ContactPtr contact = makeContact(contactId, offline);
-            ON_CALL(*contactList, contactIds()).WillByDefault(Return(contactIds));
-            ON_CALL(*contactList, contact(contactId)).WillByDefault(Return(contact));
+            contactIds.append(ContactId);
+            ContactPtr contact = makeContact(ContactId, offline);
+            contactList->addContact(contact);
             return contact;
         }
 
         ContactPtr insertContactToContactListWithStatusIcon(bool offline, const QPixmap& icon)
         {
-            int contactId = 12;
             QList<int> contactIds;
-            contactIds.append(contactId);
-            ContactPtr contact = makeContact(contactId, offline, icon);
-            ON_CALL(*contactList, contactIds()).WillByDefault(Return(contactIds));
-            ON_CALL(*contactList, contact(contactId)).WillByDefault(Return(contact));
+            contactIds.append(ContactId);
+            ContactPtr contact = makeContact(ContactId, offline, icon);
+            contactList->addContact(contact);
             return contact;
         }
 
@@ -77,7 +82,7 @@ namespace
             return model.index(row, 0, model.index(offline ? UserViewModel::OfflineRow : UserViewModel::OnlineRow, 0));
         }
 
-        MockObjects::MockContactList* contactList;
+        SIM::ContactList* contactList;
     };
 
     TEST_F(TestUserViewModel, columnCount_returns1)
@@ -168,5 +173,22 @@ namespace
         ASSERT_TRUE(currentIconVariant.isValid());
         QPixmap currentIcon = currentIconVariant.value<QPixmap>();
         ASSERT_TRUE(currentIcon.toImage() == icon.toImage());
+    }
+
+    TEST_F(TestUserViewModel, reactsToEvent_contactChangeStatus)
+    {
+        ContactPtr contact = insertContactToContactList(false);
+        contact->setName("Foo");
+        UserViewModel model(contactList);
+        QSignalSpy spy(&model, SIGNAL(dataChanged(QModelIndex, QModelIndex)));
+
+        QModelIndex index = createContactIndex(model, 0, false);
+        SIM::getEventHub()->getEvent("contact_change_status")->connectTo(&model, SLOT(contactStatusChanged(int)));
+
+        SIM::getEventHub()->triggerEvent("contact_change_status", SIM::ContactEventData::create(ContactId));
+
+        ASSERT_EQ(1, spy.count());
+        QModelIndex result = qvariant_cast<QModelIndex>(spy.at(0).at(0));
+        ASSERT_TRUE(result == index);
     }
 }
